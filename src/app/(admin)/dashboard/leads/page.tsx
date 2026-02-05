@@ -10,14 +10,24 @@ import {
 } from "@/components/ui/table";
 import { createClient } from "@/lib/supabase/server";
 import { LeadsTableActions } from "./actions"; // Client component for actions
+import { redirect } from "next/navigation";
 
 export default async function LeadsPage() {
     const supabase = await createClient();
 
-    // Fetch Leads
+    // Get logged-in user
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        redirect("/login");
+    }
+
+    // Fetch ONLY leads captured by this user
     const { data: leads } = await supabase
         .from("leads")
-        .select("*, users(name)");
+        .select("*, users(name)")
+        .eq("captured_by_user_id", user.id)
+        .order("created_at", { ascending: false });
 
     return (
         <div className="space-y-6">

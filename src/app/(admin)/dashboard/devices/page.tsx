@@ -7,20 +7,45 @@ import {
     TableHeader,
     TableRow
 } from "@/components/ui/table";
-import { Edit, Trash } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { AddChipButton } from "./add-chip-button";
-import { Button } from "@/components/ui/button";
+import { ChipActions } from "./chip-actions";
+
+import { redirect } from "next/navigation";
 
 export default async function DevicesPage() {
     const supabase = await createClient();
 
-    // Fetch Chips
-    const { data: devices } = await supabase
+    // Get logged-in user
+    const { data: { user: authUser } } = await supabase.auth.getUser();
+
+    if (!authUser) {
+        redirect("/login");
+    }
+
+    // Get user's profile to check company
+    const { data: userProfile } = await supabase
+        .from("users")
+        .select("id, company_id")
+        .eq("id", authUser.id)
+        .single();
+
+    // Fetch ONLY chips assigned to this user OR belonging to their company
+    let query = supabase
         .from("chips")
         .select("*, assigned_user:users(name)");
 
-    // Fetch Companies for the dropdown
+    if (userProfile?.company_id) {
+        // User belongs to a company - show all company chips
+        query = query.eq("company_id", userProfile.company_id);
+    } else {
+        // Individual user - show only their assigned chips
+        query = query.eq("assigned_user_id", authUser.id);
+    }
+
+    const { data: devices } = await query;
+
+    // Fetch Companies for the dropdown (only user's company if applicable)
     const { data: companies } = await supabase
         .from("companies")
         .select("id, name");
@@ -49,7 +74,9 @@ export default async function DevicesPage() {
                     <TableBody>
                         {devices?.map((device: any) => (
                             <TableRow key={device.id} className="border-white/5 hover:bg-white/5">
-                                <TableCell className="font-mono text-zinc-400">{device.uid}</TableCell>
+                                <TableCell className="font-mono text-zinc-400">
+                                    {device.uid ? `****${device.uid.slice(-4).toUpperCase()}` : "-"}
+                                </TableCell>
                                 <TableCell className="font-medium text-white">{device.assigned_user?.name || "-"}</TableCell>
                                 <TableCell>
                                     <Badge variant="outline" className={`
@@ -60,13 +87,8 @@ export default async function DevicesPage() {
                                     </Badge>
                                 </TableCell>
                                 <TableCell className="text-zinc-500">{device.last_scan ? new Date(device.last_scan).toLocaleDateString() : "Nie"}</TableCell>
-                                <TableCell className="text-right space-x-2">
-                                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                                        <Edit size={16} />
-                                    </Button>
-                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-red-400 hover:text-red-300">
-                                        <Trash size={16} />
-                                    </Button>
+                                <TableCell className="text-right">
+                                    <ChipActions chip={{ id: device.id, uid: device.uid, active_mode: device.active_mode }} />
                                 </TableCell>
                             </TableRow>
                         ))}

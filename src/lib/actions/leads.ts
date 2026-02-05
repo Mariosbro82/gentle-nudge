@@ -23,16 +23,15 @@ export async function captureLead(formData: FormData, ownerId: string): Promise<
 
     try {
         // 1. Insert into leads table
-        // Note: 'notes' field simulates the 'message' for now
+        // Note: 'notes' field holds the message and linkedin
         const { data, error } = await supabase
             .from("leads")
             .insert({
                 lead_name: name,
                 lead_email: email,
                 captured_by_user_id: ownerId,
-                lead_linkedin: linkedin, // If column exists, otherwise put in notes
-                notes: `Message: ${message} | LinkedIn: ${linkedin}`,
-                sentiment: 'pending' // Default sentiment
+                notes: `${message || ''}${linkedin ? ` | LinkedIn: ${linkedin}` : ''}`.trim() || null,
+                sentiment: 'warm' // Default sentiment (valid enum: hot, warm, cold)
             })
             .select()
             .single();

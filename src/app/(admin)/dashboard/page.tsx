@@ -2,21 +2,51 @@ import { Card } from "@/components/ui/card";
 import { Users, ScanLine, ArrowUpRight, DollarSign } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 
+import { redirect } from "next/navigation";
+
 export default async function DashboardPage() {
     const supabase = await createClient();
 
-    // Parallel data fetching
+    // Get logged-in user
+    const { data: { user: authUser } } = await supabase.auth.getUser();
+
+    if (!authUser) {
+        redirect("/login");
+    }
+
+    // Get user's profile to check company
+    const { data: userProfile } = await supabase
+        .from("users")
+        .select("id, company_id")
+        .eq("id", authUser.id)
+        .single();
+
+    // Get user's chip IDs first
+    let chipsQuery = supabase.from("chips").select("id");
+    if (userProfile?.company_id) {
+        chipsQuery = chipsQuery.eq("company_id", userProfile.company_id);
+    } else {
+        chipsQuery = chipsQuery.eq("assigned_user_id", authUser.id);
+    }
+    const { data: userChips } = await chipsQuery;
+    const chipIds = userChips?.map(c => c.id) || [];
+
+    // Now fetch counts filtered by user's chips
     const [
         { count: scansCount },
         { count: leadsCount },
-        { count: chipsCount },
         { data: recentScans }
     ] = await Promise.all([
-        supabase.from("scans").select("*", { count: "exact", head: true }),
-        supabase.from("leads").select("*", { count: "exact", head: true }),
-        supabase.from("chips").select("*", { count: "exact", head: true }),
-        supabase.from("scans").select("*").order("scanned_at", { ascending: false }).limit(5)
+        chipIds.length > 0
+            ? supabase.from("scans").select("*", { count: "exact", head: true }).in("chip_id", chipIds)
+            : Promise.resolve({ count: 0 }),
+        supabase.from("leads").select("*", { count: "exact", head: true }).eq("captured_by_user_id", authUser.id),
+        chipIds.length > 0
+            ? supabase.from("scans").select("*").in("chip_id", chipIds).order("scanned_at", { ascending: false }).limit(5)
+            : Promise.resolve({ data: [] })
     ]);
+
+    const chipsCount = chipIds.length;
 
     return (
         <div className="space-y-8">

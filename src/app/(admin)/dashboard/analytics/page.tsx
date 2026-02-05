@@ -10,11 +10,21 @@ export default async function AnalyticsPage() {
         redirect("/login");
     }
 
-    // 1. Get Chips for User
-    const { data: chips } = await supabase
-        .from("chips") // Assuming 'chips' table is what 'nfc_chips' was in reference
-        .select("id")
-        .eq("assigned_user_id", user.id); // Or 'assigned_to' depending on schema
+    // Get user's profile to check company
+    const { data: userProfile } = await supabase
+        .from("users")
+        .select("id, company_id")
+        .eq("id", user.id)
+        .single();
+
+    // 1. Get Chips for User (same logic as Dashboard/Devices)
+    let chipsQuery = supabase.from("chips").select("id");
+    if (userProfile?.company_id) {
+        chipsQuery = chipsQuery.eq("company_id", userProfile.company_id);
+    } else {
+        chipsQuery = chipsQuery.eq("assigned_user_id", user.id);
+    }
+    const { data: chips } = await chipsQuery;
 
     const chipIds = chips?.map(c => c.id) || [];
 
