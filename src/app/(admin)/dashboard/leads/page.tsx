@@ -17,14 +17,14 @@ export default async function LeadsPage() {
     // Fetch Leads
     const { data: leads } = await supabase
         .from("leads")
-        .select("*, captured_by:users(name)");
+        .select("*, users(name)");
 
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight">Leads</h1>
-                    <p className="text-zinc-500">Captured contacts from Corporate Mode.</p>
+                    <h1 className="text-3xl font-bold tracking-tight">Kontakte</h1>
+                    <p className="text-zinc-500">Erfasste Kontakte aus dem Visitenkarten-Modus.</p>
                 </div>
                 {/* Client actions for Export/Sync */}
                 <LeadsTableActions leads={leads || []} />
@@ -35,10 +35,10 @@ export default async function LeadsPage() {
                     <TableHeader>
                         <TableRow className="border-white/5 hover:bg-white/5">
                             <TableHead>Name</TableHead>
-                            <TableHead>Email</TableHead>
-                            <TableHead>Sentiment</TableHead>
-                            <TableHead>Captured By</TableHead>
-                            <TableHead>Date</TableHead>
+                            <TableHead>E-Mail</TableHead>
+                            <TableHead>Stimmung</TableHead>
+                            <TableHead>Erfasst von</TableHead>
+                            <TableHead>Datum</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -54,14 +54,14 @@ export default async function LeadsPage() {
                                         {lead.sentiment}
                                     </Badge>
                                 </TableCell>
-                                <TableCell className="text-zinc-400">{lead.captured_by?.name || "-"}</TableCell>
+                                <TableCell className="text-zinc-400">{(lead.users as any)?.name || "-"}</TableCell>
                                 <TableCell className="text-zinc-500">{new Date(lead.created_at).toLocaleDateString()}</TableCell>
                             </TableRow>
                         ))}
                         {!leads || leads.length === 0 && (
                             <TableRow>
                                 <TableCell colSpan={5} className="text-center py-10 text-zinc-500">
-                                    No leads captured yet.
+                                    Noch keine Kontakte erfasst.
                                 </TableCell>
                             </TableRow>
                         )}

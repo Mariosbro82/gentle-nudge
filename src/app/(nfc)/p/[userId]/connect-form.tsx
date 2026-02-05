@@ -8,23 +8,47 @@ import { DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/di
 import { Mic, Send, ThumbsUp, ThumbsDown, Meh, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export function ConnectForm({ ownerName }: { ownerName: string }) {
+import { captureLead, updateLeadSentiment } from "@/lib/actions/leads";
+
+// ... other imports
+
+export function ConnectForm({ ownerId, ownerName }: { ownerId: string, ownerName: string }) {
     const [step, setStep] = useState<"visitor_form" | "owner_feedback">("visitor_form");
     const [isRecording, setIsRecording] = useState(false);
     const [sentiment, setSentiment] = useState<"hot" | "warm" | "cold" | null>(null);
+    const [loading, setLoading] = useState(false);
 
-    const handleVisitorSubmit = () => {
-        // Simulate API call
-        setTimeout(() => {
-            setStep("owner_feedback");
-        }, 500);
-    };
+    // State to store the lead ID after capture, so we can update it with sentiment later
+    const [currentLeadId, setCurrentLeadId] = useState<string | null>(null);
 
-    const handleOwnerSubmit = () => {
-        // Finish
-        // Close dialog (in real app, use callback)
-        alert("Lead saved with Sentiment & Voice Note!");
-    };
+    async function handleVisitorSubmit(formData: FormData) {
+        setLoading(true);
+        const res = await captureLead(formData, ownerId);
+        setLoading(false);
+
+        if (res.error) {
+            alert(res.error); // Simple alert for now
+            return;
+        }
+
+        if (res.data?.id) {
+            setCurrentLeadId(res.data.id);
+        }
+
+        // Move to feedback step (Simulation of "Push Notification" happening on Owner's side)
+        setStep("owner_feedback");
+    }
+
+    async function handleOwnerSubmit() {
+        if (!currentLeadId) return;
+
+        if (sentiment) {
+            await updateLeadSentiment(currentLeadId, sentiment, isRecording ? "Voice note captured (simulated)" : undefined);
+        }
+
+        alert("Lead & Sentiment saved to Supabase!");
+        setStep("visitor_form");
+    }
 
     if (step === "visitor_form") {
         return (
@@ -35,13 +59,15 @@ export function ConnectForm({ ownerName }: { ownerName: string }) {
                         Teile deine Kontaktdaten direkt mit {ownerName}.
                     </DialogDescription>
                 </DialogHeader>
-                <div className="space-y-4 py-4">
-                    <Input placeholder="Dein Name" className="bg-black/50 border-white/10" />
-                    <Input placeholder="Deine E-Mail" className="bg-black/50 border-white/10" />
-                    <Input placeholder="LinkedIn URL (optional)" className="bg-black/50 border-white/10" />
-                    <Textarea placeholder="Nachricht..." className="bg-black/50 border-white/10" />
-                    <Button className="w-full bg-blue-600 hover:bg-blue-500" onClick={handleVisitorSubmit}>Senden</Button>
-                </div>
+                <form action={handleVisitorSubmit} className="space-y-4 py-4">
+                    <Input name="name" placeholder="Dein Name" className="bg-black/50 border-white/10" required />
+                    <Input name="email" type="email" placeholder="Deine E-Mail" className="bg-black/50 border-white/10" required />
+                    <Input name="linkedin" placeholder="LinkedIn URL (optional)" className="bg-black/50 border-white/10" />
+                    <Textarea name="message" placeholder="Nachricht..." className="bg-black/50 border-white/10" />
+                    <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-500" disabled={loading}>
+                        {loading ? "Senden..." : "Senden"}
+                    </Button>
+                </form>
             </>
         );
     }
@@ -105,10 +131,8 @@ export function ConnectForm({ ownerName }: { ownerName: string }) {
                     </div>
                 </div>
 
-                <Button className="w-full bg-white text-black hover:bg-zinc-200" onClick={handleOwnerSubmit}>
-                    <Check size={18} className="mr-2" /> Save Context
-                </Button>
             </div>
         </>
     )
 }
+

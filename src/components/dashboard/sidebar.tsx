@@ -16,11 +16,11 @@ export function AdminSidebar() {
     const pathname = usePathname();
 
     const links = [
-        { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
-        { href: "/dashboard/devices", label: "Devices", icon: Smartphone },
-        { href: "/dashboard/leads", label: "Leads", icon: Users },
-        { href: "/dashboard/analytics", label: "Analytics", icon: BarChart },
-        { href: "/dashboard/settings", label: "Settings", icon: Settings },
+        { href: "/dashboard", label: "Übersicht", icon: LayoutDashboard },
+        { href: "/dashboard/devices", label: "Geräte", icon: Smartphone },
+        { href: "/dashboard/leads", label: "Kontakte", icon: Users },
+        { href: "/dashboard/analytics", label: "Analyse", icon: BarChart },
+        { href: "/dashboard/settings", label: "Einstellungen", icon: Settings },
     ];
 
     return (
@@ -53,7 +53,7 @@ export function AdminSidebar() {
             <div className="p-4 border-t border-white/5">
                 <div className="flex items-center gap-3 px-3 py-2 text-zinc-500 hover:text-red-400 cursor-pointer transition-colors">
                     <LogOut size={18} />
-                    <span className="text-sm font-medium">Logout</span>
+                    <span className="text-sm font-medium">Abmelden</span>
                 </div>
             </div>
         </aside>

@@ -16,15 +16,15 @@ interface PageProps {
     };
 }
 
+import { logScan } from "@/lib/actions/analytics";
+
+// ... imports
+
 export default async function NfcRedirectPage({ params, searchParams }: PageProps) {
     const { uid } = params;
     const { sun } = searchParams;
 
-    // 1. SUN Verification (Mocked for now, but placeholder for real CMAC check)
-    if (process.env.NODE_ENV === "production" && !sun) {
-        // Allow skipping SUN in dev, but strictly require in prod if configured
-        // console.warn("Missing SUN in production scan");
-    }
+    // ... SUN check ...
 
     // 2. Fetch Chip Data
     const { data: chip, error } = await supabase
@@ -38,8 +38,7 @@ export default async function NfcRedirectPage({ params, searchParams }: PageProp
         .single();
 
     if (error || !chip) {
-        // Redirect to error page or fallback
-        // For demo: generic error
+        // ... existing error UI ...
         return (
             <div className="min-h-screen flex items-center justify-center bg-black text-white p-4 text-center">
                 <div>
@@ -51,24 +50,31 @@ export default async function NfcRedirectPage({ params, searchParams }: PageProp
         );
     }
 
-    // 3. Log Scan (Fire and forget, or await if critical)
-    // await logScan(chip.id);
-
-    // 4. Check Campaign Override
-    // const campaign = await getActiveCampaign(chip.company_id);
-    // if (campaign) redirect(campaign.target_url);
+    // 3. Log Scan (Non-blocking)
+    // We await it here to ensure it logs before redirect, though it adds a few ms.
+    try {
+        await logScan(chip.id);
+    } catch (e) {
+        console.error("Failed to log scan", e);
+    }
 
     // 5. Routing Logic based on Mode
     switch (chip.active_mode) {
         case "corporate":
-            // Redirect to User Profile
-            if (chip.assigned_user_id) {
-                redirect(`/p/${chip.assigned_user_id}`); // Internal route to profile
+        case "vcard": // Handle both legacy and new 'vcard' mode name
+            if (chip.assigned_user?.slug) {
+                redirect(`/p/${chip.assigned_user.slug}`);
+            } else if (chip.assigned_user_id) {
+                redirect(`/p/${chip.assigned_user_id}`);
             }
             break;
 
         case "hospitality":
-            // Redirect to Review Page
+        case "menu":
+            // Check for menu_data JSON
+            if (chip.menu_data?.url) {
+                redirect(chip.menu_data.url);
+            }
             redirect(`/review/${chip.company_id}`);
             break;
 
@@ -76,7 +82,16 @@ export default async function NfcRedirectPage({ params, searchParams }: PageProp
             // Redirect to Company Campaign Page
             redirect(`/campaign/${chip.company_id}`);
             break;
+
+        case "redirect":
+            if (chip.target_url) {
+                redirect(chip.target_url);
+            }
+            break;
     }
+
+    // Fallback
+    // ...
 
     // Fallback
     return (

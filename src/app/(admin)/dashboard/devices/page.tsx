@@ -29,8 +29,8 @@ export default async function DevicesPage() {
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight">Devices</h1>
-                    <p className="text-zinc-500">Manage all NFC chips and their current modes.</p>
+                    <h1 className="text-3xl font-bold tracking-tight">Geräte</h1>
+                    <p className="text-zinc-500">Verwalten Sie alle NFC-Chips und deren aktive Modi.</p>
                 </div>
                 <AddChipButton companies={companies || []} />
             </div>
@@ -40,10 +40,10 @@ export default async function DevicesPage() {
                     <TableHeader>
                         <TableRow className="border-white/5 hover:bg-white/5">
                             <TableHead>UID</TableHead>
-                            <TableHead>Assigned User</TableHead>
-                            <TableHead>Active Mode</TableHead>
-                            <TableHead>Last Scan</TableHead>
-                            <TableHead className="text-right">Actions</TableHead>
+                            <TableHead>Zugewiesen an</TableHead>
+                            <TableHead>Aktiver Modus</TableHead>
+                            <TableHead>Letzter Scan</TableHead>
+                            <TableHead className="text-right">Aktionen</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -59,7 +59,7 @@ export default async function DevicesPage() {
                                         {device.active_mode}
                                     </Badge>
                                 </TableCell>
-                                <TableCell className="text-zinc-500">{device.last_scan ? new Date(device.last_scan).toLocaleDateString() : "Never"}</TableCell>
+                                <TableCell className="text-zinc-500">{device.last_scan ? new Date(device.last_scan).toLocaleDateString() : "Nie"}</TableCell>
                                 <TableCell className="text-right space-x-2">
                                     <Button variant="ghost" size="icon" className="h-8 w-8">
                                         <Edit size={16} />
@@ -74,7 +74,7 @@ export default async function DevicesPage() {
                         {!devices || devices.length === 0 && (
                             <TableRow>
                                 <TableCell colSpan={5} className="text-center py-10 text-zinc-500">
-                                    No devices found. Add one in Supabase or here.
+                                    Keine Geräte gefunden. Fügen Sie eines hinzu.
                                 </TableCell>
                             </TableRow>
                         )}

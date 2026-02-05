@@ -46,14 +46,14 @@ export function AddChipButton({ companies }: { companies: any[] }) {
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button className="bg-white text-black hover:bg-zinc-200">
-                    <Plus size={18} className="mr-2" /> Add Chip
+                    <Plus size={18} className="mr-2" /> Chip hinzufügen
                 </Button>
             </DialogTrigger>
             <DialogContent className="bg-zinc-900 border-zinc-800 text-white">
                 <DialogHeader>
-                    <DialogTitle>Add New NFC Chip</DialogTitle>
+                    <DialogTitle>Neuen NFC-Chip registrieren</DialogTitle>
                     <DialogDescription className="text-zinc-400">
-                        Enter the UID of the NTAG424 DNA chip.
+                        Geben Sie die UID des NTAG424 DNA Chips ein.
                     </DialogDescription>
                 </DialogHeader>
 
@@ -64,10 +64,10 @@ export function AddChipButton({ companies }: { companies: any[] }) {
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="company_id">Assign Company</Label>
+                        <Label htmlFor="company_id">Firma zuweisen</Label>
                         <Select name="company_id">
                             <SelectTrigger className="bg-black/50 border-white/10">
-                                <SelectValue placeholder="Select a company" />
+                                <SelectValue placeholder="Firma wählen" />
                             </SelectTrigger>
                             <SelectContent className="bg-zinc-900 border-zinc-800 text-white">
                                 {companies.map((c) => (
@@ -82,9 +82,9 @@ export function AddChipButton({ companies }: { companies: any[] }) {
                     )}
 
                     <div className="flex justify-end gap-2 pt-2">
-                        <Button type="button" variant="ghost" onClick={() => setOpen(false)} disabled={loading}>Cancel</Button>
+                        <Button type="button" variant="ghost" onClick={() => setOpen(false)} disabled={loading}>Abbrechen</Button>
                         <Button type="submit" className="bg-blue-600 hover:bg-blue-500" disabled={loading}>
-                            {loading ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : "Create Chip"}
+                            {loading ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : "Chip erstellen"}
                         </Button>
                     </div>
                 </form>

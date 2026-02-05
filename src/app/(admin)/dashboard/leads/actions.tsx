@@ -17,16 +17,16 @@ export function LeadsTableActions({ leads }: { leads: any[] }) {
     };
 
     const handleCRMSync = () => {
-        alert("Syncing with configured CRM (Salesforce/HubSpot)...");
+        alert("Synchronisiere mit konfiguriertem CRM (Salesforce/HubSpot)...");
     };
 
     return (
         <div className="flex gap-2">
             <Button variant="outline" className="border-white/10" onClick={handleExportCSV}>
-                <Download size={18} className="mr-2" /> Export CSV
+                <Download size={18} className="mr-2" /> CSV Exportieren
             </Button>
             <Button className="bg-blue-600 hover:bg-blue-500 text-white" onClick={handleCRMSync}>
-                <RefreshCw size={18} className="mr-2" /> Sync to CRM
+                <RefreshCw size={18} className="mr-2" /> CRM Synchronisieren
             </Button>
         </div>
     );
