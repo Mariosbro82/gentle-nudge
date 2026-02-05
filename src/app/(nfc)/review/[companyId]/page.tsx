@@ -1,5 +1,6 @@
 "use client";
 
+import { use } from "react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Star, MapPin, Utensils, DollarSign, ChefHat } from "lucide-react";
@@ -12,7 +13,8 @@ const MOCK_COMPANY = {
     tripadvisor_url: "https://tripadvisor.com",
 };
 
-export default function HospitalityPage({ params }: { params: { companyId: string } }) {
+export default function HospitalityPage({ params }: { params: Promise<{ companyId: string }> }) {
+    const { companyId } = use(params);
     return (
         <main className="relative min-h-screen bg-black pb-10">
 

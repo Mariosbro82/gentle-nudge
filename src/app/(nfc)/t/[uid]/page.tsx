@@ -1,19 +1,20 @@
 import { createClient } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";
 
-// Initialize Supabase Client (Admin/Service Role needed for secure reads if RLS is strict, or just Anon if policy allows)
-// For redirect, we usually need read access to chips table.
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabase = createClient(supabaseUrl, supabaseKey);
+// Lazy initialize Supabase Client to avoid build-time errors
+function getSupabaseClient() {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+    return createClient(supabaseUrl, supabaseKey);
+}
 
 interface PageProps {
-    params: {
+    params: Promise<{
         uid: string;
-    };
-    searchParams: {
+    }>;
+    searchParams: Promise<{
         sun?: string; // Secure Unique NFC message
-    };
+    }>;
 }
 
 import { logScan } from "@/lib/actions/analytics";
@@ -21,8 +22,9 @@ import { logScan } from "@/lib/actions/analytics";
 // ... imports
 
 export default async function NfcRedirectPage({ params, searchParams }: PageProps) {
-    const { uid } = params;
-    const { sun } = searchParams;
+    const { uid } = await params;
+    const { sun } = await searchParams;
+    const supabase = getSupabaseClient();
 
     // ... SUN check ...
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { use } from "react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Timer, ArrowRight, Tag } from "lucide-react";
@@ -13,7 +14,8 @@ const MOCK_CAMPAIGN = {
     brand: "SNIPES"
 };
 
-export default function CampaignPage({ params }: { params: { companyId: string } }) {
+export default function CampaignPage({ params }: { params: Promise<{ companyId: string }> }) {
+    const { companyId } = use(params);
     return (
         <main className="relative min-h-screen bg-black flex flex-col">
 
