@@ -8,11 +8,11 @@ import { useAuth } from "@/contexts/auth-context";
 
 interface Lead {
     id: string;
-    lead_name: string;
-    lead_email: string;
-    sentiment: string;
-    created_at: string;
-    users?: { name: string } | null;
+    lead_name: string | null;
+    lead_email: string | null;
+    sentiment: string | null;
+    created_at: string | null;
+    users?: { name: string | null } | null;
 }
 
 export default function LeadsPage() {
@@ -24,10 +24,22 @@ export default function LeadsPage() {
         async function fetchLeads() {
             if (!user) return;
 
+            // First get the user's profile ID
+            const { data: profile } = await supabase
+                .from("users")
+                .select("id")
+                .eq("auth_user_id", user.id)
+                .single();
+
+            if (!profile) {
+                setLoading(false);
+                return;
+            }
+
             const { data } = await supabase
                 .from("leads")
                 .select("*, users(name)")
-                .eq("captured_by_user_id", user.id)
+                .eq("captured_by_user_id", profile.id)
                 .order("created_at", { ascending: false });
 
             setLeads(data || []);
@@ -46,7 +58,7 @@ export default function LeadsPage() {
             lead.lead_email,
             lead.sentiment,
             (lead.users as any)?.name || "-",
-            new Date(lead.created_at).toLocaleDateString(),
+            new Date(lead.created_at || '').toLocaleDateString(),
         ]);
 
         const csvContent = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
@@ -119,7 +131,7 @@ export default function LeadsPage() {
                                     </Badge>
                                 </TableCell>
                                 <TableCell className="text-zinc-400">{(lead.users as any)?.name || "-"}</TableCell>
-                                <TableCell className="text-zinc-500">{new Date(lead.created_at).toLocaleDateString()}</TableCell>
+                                <TableCell className="text-zinc-500">{new Date(lead.created_at || '').toLocaleDateString()}</TableCell>
                             </TableRow>
                         ))}
                         {leads.length === 0 && (

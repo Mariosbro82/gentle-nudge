@@ -2,15 +2,16 @@ import { supabase } from "@/lib/supabase/client";
 
 export interface Lead {
     id: string;
-    lead_name: string;
-    lead_email: string;
-    lead_phone?: string;
-    sentiment?: string;
-    notes?: string;
-    captured_by_user_id: string;
-    chip_id?: string;
-    created_at: string;
-    users?: { name: string } | null;
+    lead_name: string | null;
+    lead_email: string | null;
+    lead_phone?: string | null;
+    sentiment?: string | null;
+    notes?: string | null;
+    captured_by_user_id: string | null;
+    chip_id?: string | null;
+    created_at: string | null;
+    follow_up_sent?: boolean | null;
+    users?: { name: string | null } | null;
 }
 
 /**
@@ -41,7 +42,7 @@ export async function createLead(lead: {
 }) {
     const { data, error } = await supabase
         .from("leads")
-        .insert(lead)
+        .insert([lead as any])
         .select()
         .single();
 
@@ -63,7 +64,7 @@ export function exportLeadsToCSV(leads: Lead[]): string {
         lead.lead_phone || "",
         lead.sentiment || "",
         lead.notes || "",
-        new Date(lead.created_at).toLocaleDateString(),
+        new Date(lead.created_at || '').toLocaleDateString(),
     ]);
 
     return [

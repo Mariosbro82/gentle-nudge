@@ -3,13 +3,13 @@ import { supabase } from "@/lib/supabase/client";
 export interface Chip {
     id: string;
     uid: string;
-    active_mode: string;
+    active_mode: string | null;
     company_id?: string | null;
     assigned_user_id?: string | null;
     target_url?: string | null;
     menu_data?: any;
     last_scan?: string | null;
-    assigned_user?: { name: string } | null;
+    assigned_user?: { name: string | null } | null;
 }
 
 /**
@@ -43,11 +43,12 @@ export async function addChip(chip: {
 
     const { data, error } = await supabase
         .from("chips")
-        .insert({
-            ...chip,
+        .insert([{
             uid: cleanUid,
-            active_mode: chip.active_mode || "corporate",
-        })
+            company_id: chip.company_id || null,
+            assigned_user_id: chip.assigned_user_id,
+            active_mode: (chip.active_mode || "corporate") as "corporate" | "hospitality" | "campaign",
+        }])
         .select()
         .single();
 
@@ -64,10 +65,10 @@ export async function addChip(chip: {
 /**
  * Update a chip (requires password verification first)
  */
-export async function updateChip(chipId: string, updates: Partial<Chip>) {
+export async function updateChip(chipId: string, updates: Record<string, any>) {
     const { error } = await supabase
         .from("chips")
-        .update(updates)
+        .update(updates as any)
         .eq("id", chipId);
 
     if (error) {

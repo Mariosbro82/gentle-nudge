@@ -82,7 +82,7 @@ export async function getAnalyticsData(chipIds: string[], daysBack: number = 30)
     // Group by date
     const scansByDate: Record<string, number> = {};
     scans.forEach(scan => {
-        const date = new Date(scan.scanned_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        const date = new Date(scan.scanned_at || '').toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
         scansByDate[date] = (scansByDate[date] || 0) + 1;
     });
 

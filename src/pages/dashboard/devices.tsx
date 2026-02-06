@@ -20,9 +20,9 @@ import { useAuth } from "@/contexts/auth-context";
 interface Chip {
     id: string;
     uid: string;
-    active_mode: string;
+    active_mode: string | null;
     last_scan: string | null;
-    assigned_user?: { name: string } | null;
+    assigned_user?: { name: string | null } | null;
 }
 
 export default function DevicesPage() {
@@ -40,13 +40,13 @@ export default function DevicesPage() {
     async function fetchDevices() {
         if (!user) return;
 
-        const { data: userProfile } = await supabase.from("users").select("id, company_id").eq("id", user.id).single();
+        const { data: userProfile } = await supabase.from("users").select("id, company_id").eq("auth_user_id", user.id).single();
 
         let query = supabase.from("chips").select("*, assigned_user:users(name)");
         if (userProfile?.company_id) {
             query = query.eq("company_id", userProfile.company_id);
         } else {
-            query = query.eq("assigned_user_id", user.id);
+            query = query.eq("assigned_user_id", userProfile?.id || "");
         }
 
         const { data } = await query;
@@ -71,10 +71,17 @@ export default function DevicesPage() {
         const uid = formData.get("uid") as string;
         const company_id = formData.get("company_id") as string;
 
+        // Get the user's profile ID for assignment
+        const { data: profile } = await supabase
+            .from("users")
+            .select("id")
+            .eq("auth_user_id", user?.id || "")
+            .single();
+
         const { error: insertError } = await supabase.from("chips").insert({
             uid: uid.replace(/:/g, "").toUpperCase(),
             company_id: company_id || null,
-            assigned_user_id: user?.id,
+            assigned_user_id: profile?.id || null,
             active_mode: "corporate",
         });
 
@@ -111,9 +118,9 @@ export default function DevicesPage() {
             .from("chips")
             .update({
                 uid: formData.get("uid") as string,
-                active_mode: formData.get("active_mode") as string,
+                active_mode: (formData.get("active_mode") as string) as "corporate" | "hospitality" | "campaign",
             })
-            .eq("id", selectedChip?.id);
+            .eq("id", selectedChip?.id || "");
 
         if (updateError) {
             setError(updateError.message);
@@ -144,7 +151,7 @@ export default function DevicesPage() {
             return;
         }
 
-        const { error: deleteError } = await supabase.from("chips").delete().eq("id", selectedChip?.id);
+        const { error: deleteError } = await supabase.from("chips").delete().eq("id", selectedChip?.id || "");
 
         if (deleteError) {
             setError(deleteError.message);
@@ -322,7 +329,7 @@ export default function DevicesPage() {
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="active_mode">Aktiver Modus</Label>
-                            <Select name="active_mode" defaultValue={selectedChip?.active_mode}>
+                            <Select name="active_mode" defaultValue={selectedChip?.active_mode || undefined}>
                                 <SelectTrigger className="bg-black/50 border-white/10">
                                     <SelectValue />
                                 </SelectTrigger>
