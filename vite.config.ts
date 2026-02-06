@@ -7,9 +7,12 @@ import { componentTagger } from "lovable-tagger";
 export default defineConfig(({ mode }) => ({
     // Base path for GitHub Pages - use repo name for project pages
     // Change to "/" if using custom domain or user/org pages
-    // "deep dive": dynamically detect if running in GitHub Actions to set the correct base path,
-    // otherwise fallback to "/" for other environments (like Lovable or Vercel).
-    base: mode === "production" && process.env.GITHUB_ACTIONS === "true" ? "/hello-there/" : "/",
+    // "deep dive": dynamically detect if running in GitHub Actions to set the correct base path.
+    // We use GITHUB_REPOSITORY (e.g. "owner/repo") to extract the repo name for the base path.
+    // If not in GH Actions (e.g. Lovable/Local), fallback to "/".
+    base: mode === "production" && process.env.GITHUB_ACTIONS === "true"
+        ? "/" + (process.env.GITHUB_REPOSITORY?.split('/')[1] || "") + "/"
+        : "/",
     server: {
         host: "::",
         port: 8080,
