@@ -7,7 +7,9 @@ import { componentTagger } from "lovable-tagger";
 export default defineConfig(({ mode }) => ({
     // Base path for GitHub Pages - use repo name for project pages
     // Change to "/" if using custom domain or user/org pages
-    base: mode === "production" ? "/nfc-website/" : "/",
+    // "deep dive": dynamically detect if running in GitHub Actions to set the correct base path,
+    // otherwise fallback to "/" for other environments (like Lovable or Vercel).
+    base: mode === "production" && process.env.GITHUB_ACTIONS === "true" ? "/nfc-website/" : "/",
     server: {
         host: "::",
         port: 8080,
