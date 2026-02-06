@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => ({
     // Change to "/" if using custom domain or user/org pages
     // "deep dive": dynamically detect if running in GitHub Actions to set the correct base path,
     // otherwise fallback to "/" for other environments (like Lovable or Vercel).
-    base: mode === "production" && process.env.GITHUB_ACTIONS === "true" ? "/nfc-website/" : "/",
+    base: mode === "production" && process.env.GITHUB_ACTIONS === "true" ? "/hello-there/" : "/",
     server: {
         host: "::",
         port: 8080,
