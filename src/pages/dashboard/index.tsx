@@ -45,7 +45,7 @@ export default function DashboardPage() {
             const { data: userProfile } = await supabase
                 .from("users")
                 .select("id, company_id")
-                .eq("id", user.id)
+                .eq("auth_user_id", user.id)
                 .single();
 
             // Get user's chip IDs
@@ -53,7 +53,7 @@ export default function DashboardPage() {
             if (userProfile?.company_id) {
                 chipsQuery = chipsQuery.eq("company_id", userProfile.company_id);
             } else {
-                chipsQuery = chipsQuery.eq("assigned_user_id", user.id);
+                chipsQuery = chipsQuery.eq("assigned_user_id", userProfile?.id || "");
             }
             const { data: userChips } = await chipsQuery;
             const chipIds = userChips?.map((c) => c.id) || [];
@@ -73,7 +73,7 @@ export default function DashboardPage() {
             const { count: leads } = await supabase
                 .from("leads")
                 .select("*", { count: "exact", head: true })
-                .eq("captured_by_user_id", user.id);
+                .eq("captured_by_user_id", userProfile?.id || "");
             setLeadsCount(leads || 0);
 
             setLoading(false);

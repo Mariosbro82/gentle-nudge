@@ -38,7 +38,7 @@ export default function AnalyticsPage() {
             const { data: userProfile } = await supabase
                 .from("users")
                 .select("id, company_id")
-                .eq("id", user.id)
+                .eq("auth_user_id", user.id)
                 .single();
 
             // Get chips
@@ -46,7 +46,7 @@ export default function AnalyticsPage() {
             if (userProfile?.company_id) {
                 chipsQuery = chipsQuery.eq("company_id", userProfile.company_id);
             } else {
-                chipsQuery = chipsQuery.eq("assigned_user_id", user.id);
+                chipsQuery = chipsQuery.eq("assigned_user_id", userProfile?.id || "");
             }
             const { data: chips } = await chipsQuery;
             const chipIds = chips?.map((c) => c.id) || [];
@@ -76,14 +76,14 @@ export default function AnalyticsPage() {
             const { count: leadsCount } = await supabase
                 .from("leads")
                 .select("*", { count: "exact", head: true })
-                .eq("captured_by_user_id", user.id);
+                .eq("captured_by_user_id", userProfile?.id || "");
 
             const conversionRate = totalScans > 0 ? Math.round(((leadsCount || 0) / totalScans) * 100) / 10 : 0;
 
             // Process scan data by date
             const scansByDate: Record<string, number> = {};
             recentScans.forEach((scan) => {
-                const date = new Date(scan.scanned_at).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+                const date = new Date(scan.scanned_at || '').toLocaleDateString("en-US", { month: "short", day: "numeric" });
                 scansByDate[date] = (scansByDate[date] || 0) + 1;
             });
             const processedScanData = Object.entries(scansByDate).map(([date, count]) => ({ date, scans: count }));

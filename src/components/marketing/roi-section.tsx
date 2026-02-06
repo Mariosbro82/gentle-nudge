@@ -1,7 +1,6 @@
-"use client";
 
 import { motion } from "framer-motion";
-import { BarChart3, Users, Zap } from "lucide-react";
+import { BarChart3, Zap } from "lucide-react";
 
 export function RoiSection() {
     return (

@@ -21,7 +21,7 @@ export default function SettingsPage() {
             const { data: profile } = await supabase
                 .from("users")
                 .select("*")
-                .eq("id", authUser.id)
+                .eq("auth_user_id", authUser.id)
                 .single();
 
             setUser(profile || { name: "", email: authUser.email, id: authUser.id });
@@ -45,7 +45,7 @@ export default function SettingsPage() {
             linkedin_url: formData.get("linkedin") as string,
         };
 
-        const { error } = await supabase.from("users").update(updates).eq("id", authUser?.id);
+        const { error } = await supabase.from("users").update(updates).eq("auth_user_id", authUser?.id || "");
 
         if (error) {
             alert(error.message);

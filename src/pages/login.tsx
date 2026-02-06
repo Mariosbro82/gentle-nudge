@@ -108,13 +108,6 @@ export default function LoginPage() {
                 </CardContent>
             </Card>
 
-            <div className="fixed bottom-4 right-4 bg-zinc-900/80 p-4 rounded text-xs text-zinc-500 font-mono border border-zinc-800">
-                <p>Debug Info:</p>
-                <p>URL: {import.meta.env.VITE_SUPABASE_URL ? import.meta.env.VITE_SUPABASE_URL.substring(0, 15) + "..." : "MISSING"}</p>
-                <p>Key: {import.meta.env.VITE_SUPABASE_ANON_KEY ? "PRESENT" : "MISSING"}</p>
-                <p>Base: {import.meta.env.BASE_URL}</p>
-                <p>Mode: {import.meta.env.MODE}</p>
-            </div>
         </div>
     );
 }

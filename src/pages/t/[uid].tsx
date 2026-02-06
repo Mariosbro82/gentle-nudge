@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
-import { useParams, useSearchParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabase/client";
 
 export default function NfcTapPage() {
     const { uid } = useParams<{ uid: string }>();
-    const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [_loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function handleTap() {
@@ -43,18 +42,16 @@ export default function NfcTapPage() {
             // Route based on mode
             switch (chip.active_mode) {
                 case "corporate":
-                case "vcard":
-                    if (chip.assigned_user?.slug) {
-                        navigate(`/p/${chip.assigned_user.slug}`, { replace: true });
+                    if ((chip.assigned_user as any)?.slug) {
+                        navigate(`/p/${(chip.assigned_user as any).slug}`, { replace: true });
                     } else if (chip.assigned_user_id) {
                         navigate(`/p/${chip.assigned_user_id}`, { replace: true });
                     }
                     break;
 
                 case "hospitality":
-                case "menu":
-                    if (chip.menu_data?.url) {
-                        window.location.href = chip.menu_data.url;
+                    if ((chip.menu_data as any)?.url) {
+                        window.location.href = (chip.menu_data as any).url;
                     } else {
                         navigate(`/review/${chip.company_id}`, { replace: true });
                     }
@@ -64,15 +61,12 @@ export default function NfcTapPage() {
                     navigate(`/campaign/${chip.company_id}`, { replace: true });
                     break;
 
-                case "redirect":
+                default:
                     if (chip.target_url) {
                         window.location.href = chip.target_url;
+                    } else {
+                        setError("Unbekannter Modus");
                     }
-                    break;
-
-                default:
-                    setError("Unbekannter Modus");
-                    setLoading(false);
             }
         }
 

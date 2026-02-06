@@ -32,7 +32,7 @@ export default function ProfilePage() {
                     email: data.email || "",
                     phone: data.phone || "",
                     website: data.website || "",
-                    linkedin: data.social_links?.linkedin || data.linkedin_url || "",
+                    linkedin: (data.social_links as any)?.linkedin || data.linkedin_url || "",
                     avatar: data.profile_pic || "",
                     id: data.id,
                 });
