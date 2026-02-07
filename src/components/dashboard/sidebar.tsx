@@ -19,6 +19,7 @@ export function AdminSidebar() {
     const links = [
         { href: "/dashboard", label: "Übersicht", icon: LayoutDashboard },
         { href: "/dashboard/devices", label: "Geräte", icon: Smartphone },
+        { href: "/dashboard/chips", label: "Chips", icon: Smartphone },
         { href: "/dashboard/leads", label: "Kontakte", icon: Users },
         { href: "/dashboard/analytics", label: "Analyse", icon: BarChart },
         { href: "/dashboard/settings", label: "Einstellungen", icon: Settings },

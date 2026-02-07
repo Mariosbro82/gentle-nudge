@@ -2,8 +2,12 @@ import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/mode-toggle";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
 
 export function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <motion.nav
       initial={{ y: -100 }}
@@ -17,21 +21,45 @@ export function Navbar() {
         <span className="font-bold text-lg tracking-tight text-zinc-900 dark:text-white">NFCwear</span>
       </div>
 
+      {/* Desktop Menu */}
       <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-600 dark:text-zinc-400">
-        <a href="#features" className="hover:text-blue-500 transition-colors">Features</a>
-        <a href="#idea" className="hover:text-blue-500 transition-colors">Unsere Idee</a>
-        <a href="#history" className="hover:text-blue-500 transition-colors">Geschichte</a>
-        <a href="#tech" className="hover:text-blue-500 transition-colors">NFC Technik</a>
+        <Link to="/products" className="hover:text-blue-500 transition-colors">Produkte</Link>
+        <Link to="/pricing" className="hover:text-blue-500 transition-colors">Preise</Link>
+        <Link to="/company" className="hover:text-blue-500 transition-colors">Unternehmen</Link>
+        <a href="/#features" className="hover:text-blue-500 transition-colors">Features</a>
+        <a href="/#tech" className="hover:text-blue-500 transition-colors">NFC Technik</a>
       </div>
 
       <div className="flex items-center gap-4">
         <ModeToggle />
-        <Link to="/login">
+        <Link to="/login" className="hidden md:block">
           <Button className="bg-blue-600 hover:bg-blue-500 text-white rounded-full px-6 shadow-[0_0_20px_rgba(37,99,235,0.3)]">
             Login
           </Button>
         </Link>
+
+        {/* Mobile Menu Toggle */}
+        <button onClick={() => setIsOpen(!isOpen)} className="md:hidden text-zinc-600 dark:text-zinc-300">
+          {isOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
       </div>
+
+      {/* Mobile Menu Overlay */}
+      {isOpen && (
+        <div className="absolute top-16 left-0 right-0 bg-white dark:bg-black border-b border-white/10 p-6 flex flex-col gap-4 shadow-2xl md:hidden">
+          <Link to="/products" className="text-lg font-medium text-zinc-600 dark:text-zinc-300" onClick={() => setIsOpen(false)}>Produkte</Link>
+          <Link to="/pricing" className="text-lg font-medium text-zinc-600 dark:text-zinc-300" onClick={() => setIsOpen(false)}>Preise</Link>
+          <Link to="/company" className="text-lg font-medium text-zinc-600 dark:text-zinc-300" onClick={() => setIsOpen(false)}>Unternehmen</Link>
+          <a href="/#features" className="text-lg font-medium text-zinc-600 dark:text-zinc-300" onClick={() => setIsOpen(false)}>Features</a>
+          <a href="/#tech" className="text-lg font-medium text-zinc-600 dark:text-zinc-300" onClick={() => setIsOpen(false)}>NFC Technik</a>
+          <div className="h-px bg-white/10 my-2" />
+          <Link to="/login" onClick={() => setIsOpen(false)}>
+            <Button className="w-full bg-blue-600 hover:bg-blue-500 text-white rounded-full">
+              Login
+            </Button>
+          </Link>
+        </div>
+      )}
     </motion.nav>
   );
 }

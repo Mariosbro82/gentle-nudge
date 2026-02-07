@@ -24,7 +24,12 @@ const CampaignPage = lazy(() => import("@/pages/campaign/[companyId]"));
 const ReviewPage = lazy(() => import("@/pages/review/[companyId]"));
 
 // Marketing
+// Marketing
 const MarketingPage = lazy(() => import("@/pages/marketing"));
+const ProductsPage = lazy(() => import("@/pages/products"));
+const PricingPage = lazy(() => import("@/pages/pricing"));
+const CompanyPage = lazy(() => import("@/pages/company"));
+const ClaimPage = lazy(() => import("@/pages/claim/[uid]"));
 
 // Loader component
 function PageLoader() {
@@ -70,6 +75,9 @@ export default function App() {
                 <Routes>
                     {/* Public routes */}
                     <Route path="/" element={<Suspense fallback={<PageLoader />}><MarketingPage /></Suspense>} />
+                    <Route path="/products" element={<Suspense fallback={<PageLoader />}><ProductsPage /></Suspense>} />
+                    <Route path="/pricing" element={<Suspense fallback={<PageLoader />}><PricingPage /></Suspense>} />
+                    <Route path="/company" element={<Suspense fallback={<PageLoader />}><CompanyPage /></Suspense>} />
                     <Route path="/login" element={<Suspense fallback={<PageLoader />}><LoginPage /></Suspense>} />
 
                     {/* NFC public routes */}
@@ -78,6 +86,7 @@ export default function App() {
                         <Route path="/t/:uid" element={<NfcTapPage />} />
                         <Route path="/campaign/:companyId" element={<CampaignPage />} />
                         <Route path="/review/:companyId" element={<ReviewPage />} />
+                        <Route path="/claim/:uid" element={<ClaimPage />} />
                     </Route>
 
                     {/* Protected admin routes */}

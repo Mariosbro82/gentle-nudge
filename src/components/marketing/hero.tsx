@@ -1,48 +1,78 @@
 "use client";
 
+import { useScroll, useTransform } from "framer-motion";
+import React from "react";
+import { GoogleGeminiEffect } from "@/components/ui/google-gemini-effect";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
 
 export function Hero() {
+    const ref = React.useRef(null);
+    const { scrollYProgress } = useScroll({
+        target: ref,
+        offset: ["start start", "end start"],
+    });
+
+    const pathLengthFirst = useTransform(scrollYProgress, [0, 0.8], [0.2, 1.2]);
+    const pathLengthSecond = useTransform(scrollYProgress, [0, 0.8], [0.15, 1.2]);
+    const pathLengthThird = useTransform(scrollYProgress, [0, 0.8], [0.1, 1.2]);
+    const pathLengthFourth = useTransform(scrollYProgress, [0, 0.8], [0.05, 1.2]);
+    const pathLengthFifth = useTransform(scrollYProgress, [0, 0.8], [0, 1.2]);
+
     return (
-        <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
-            {/* Background Effects */}
-            <div className="absolute inset-0 bg-[url('/noise.png')] opacity-20 pointer-events-none" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[150px] pointer-events-none" />
-
-            <div className="container mx-auto px-6 text-center relative z-10">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                >
-                    <span className="px-4 py-1.5 rounded-full border border-yellow-500/30 bg-yellow-500/10 backdrop-blur-md text-sm text-yellow-200 inline-flex items-center gap-2 mb-8">
-                        <Sparkles size={14} className="text-yellow-400" />
-                        Sonderpreis U21 Gewinner 2025 🏆
-                    </span>
-
-                    <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white mb-8">
-                        Kleidung, die <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-white animate-gradient">
-                            verbindet.
+        <div
+            className="h-[400vh] bg-black w-full dark:border dark:border-white/[0.1] relative pt-0 overflow-clip"
+            ref={ref}
+        >
+            <GoogleGeminiEffect
+                pathLengths={[
+                    pathLengthFirst,
+                    pathLengthSecond,
+                    pathLengthThird,
+                    pathLengthFourth,
+                    pathLengthFifth,
+                ]}
+            >
+                <div className="container mx-auto px-6 text-center relative z-20 pt-32">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                    >
+                        <span className="px-4 py-1.5 rounded-full border border-yellow-500/30 bg-yellow-500/10 backdrop-blur-md text-sm text-yellow-200 inline-flex items-center gap-2 mb-8">
+                            <Sparkles size={14} className="text-yellow-400" />
+                            Sonderpreis U21 Gewinner 2025 🏆
                         </span>
-                    </h1>
 
-                    <p className="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-                        Verwandle Mitarbeiter in Markenbotschafter. NFCwear integriert unsichtbare Technologie in hochwertige Textilien für intelligentes Networking und Lead-Erfassung.
-                    </p>
+                        <h1 className="text-4xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white mb-8">
+                            Kleidung, die <br />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-white animate-gradient">
+                                verbindet.
+                            </span>
+                        </h1>
 
-                    <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-                        <Button size="lg" className="h-14 px-8 rounded-full bg-white text-black hover:bg-zinc-200 text-base font-semibold">
-                            Demo buchen
-                        </Button>
-                        <Button size="lg" variant="outline" className="h-14 px-8 rounded-full border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 text-white">
-                            Mehr erfahren <ArrowRight className="ml-2 w-4 h-4" />
-                        </Button>
-                    </div>
-                </motion.div>
-            </div>
-        </section>
+                        <p className="text-xl md:text-3xl font-light text-zinc-300 max-w-2xl mx-auto mb-24 leading-relaxed tracking-wide">
+                            Das Betriebssystem für Corporate Fashion.
+                        </p>
+
+
+
+                        {/* Scroll Indicator */}
+
+
+
+                        <div className="flex flex-col md:flex-row items-center justify-center gap-6 w-full md:w-auto mt-40 relative z-50">
+                            <Button size="lg" className="h-16 px-10 rounded-full bg-white text-black hover:bg-zinc-200 text-lg font-semibold shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)] transition-all hover:scale-105" onClick={() => window.location.href = 'mailto:contact@nfcwear.com'}>
+                                Demo buchen
+                            </Button>
+                            <Button size="lg" variant="outline" className="h-16 px-10 rounded-full border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 text-white text-lg transition-all hover:scale-105" onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}>
+                                Mehr erfahren <ArrowRight className="ml-2 w-5 h-5" />
+                            </Button>
+                        </div>
+                    </motion.div>
+                </div>
+            </GoogleGeminiEffect>
+        </div>
     );
 }

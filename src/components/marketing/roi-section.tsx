@@ -56,45 +56,45 @@ export function RoiSection() {
                         {/* Interactive Chart Visualization */}
                         <div className="flex items-end gap-4 sm:gap-8 h-64 w-full max-w-md px-2 sm:px-6 pb-6 border-b border-l border-white/10 relative z-10">
 
-                            {/* Bar 1: Papier */}
+                            {/* Bar 1: Papier (4.4% -> ~26% height) */}
                             <div className="w-1/4 h-full flex flex-col justify-end group items-center relative">
                                 <motion.div
                                     initial={{ height: 0 }}
-                                    whileInView={{ height: "30%" }}
-                                    whileHover={{ height: "32%", backgroundColor: "rgba(82, 82, 91, 0.8)" }}
+                                    whileInView={{ height: "26%" }}
+                                    whileHover={{ height: "28%", backgroundColor: "rgba(82, 82, 91, 0.8)" }}
                                     transition={{ duration: 0.8 }}
                                     className="w-full bg-zinc-800/50 rounded-t-md relative cursor-pointer"
                                 >
                                     {/* Tooltip */}
                                     <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-zinc-900 border border-white/10 px-2 py-1 rounded text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-20">
-                                        ~1.5% Rate
+                                        4.4% Rate
                                     </div>
                                 </motion.div>
                                 <span className="absolute -bottom-8 text-xs text-zinc-500 font-medium tracking-wide">Papier</span>
                             </div>
 
-                            {/* Bar 2: QR Code */}
+                            {/* Bar 2: QR Code (6.4% -> ~38% height) */}
                             <div className="w-1/4 h-full flex flex-col justify-end group items-center relative">
                                 <motion.div
                                     initial={{ height: 0 }}
-                                    whileInView={{ height: "55%" }}
-                                    whileHover={{ height: "58%", backgroundColor: "rgba(30, 58, 138, 0.6)" }}
+                                    whileInView={{ height: "38%" }}
+                                    whileHover={{ height: "40%", backgroundColor: "rgba(30, 58, 138, 0.6)" }}
                                     transition={{ duration: 0.8, delay: 0.2 }}
                                     className="w-full bg-blue-900/30 rounded-t-md relative cursor-pointer"
                                 >
                                     {/* Tooltip */}
                                     <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-zinc-900 border border-white/10 px-2 py-1 rounded text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-20">
-                                        ~4.2% Rate
+                                        6.4% Rate
                                     </div>
                                 </motion.div>
                                 <span className="absolute -bottom-8 text-xs text-zinc-500 font-medium tracking-wide">QR Code</span>
                             </div>
 
-                            {/* Bar 3: NFCwear */}
+                            {/* Bar 3: NFCwear (13.2% -> ~80% height to leave room for badge) */}
                             <div className="w-1/4 h-full flex flex-col justify-end group items-center relative">
                                 <motion.div
                                     initial={{ height: 0 }}
-                                    whileInView={{ height: "90%" }}
+                                    whileInView={{ height: "80%" }}
                                     whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(168,85,247,0.6)" }}
                                     transition={{ duration: 0.8, delay: 0.4 }}
                                     className="w-full bg-gradient-to-t from-purple-600 to-blue-500 rounded-t-md relative shadow-[0_0_30px_rgba(168,85,247,0.3)] cursor-pointer z-10"
@@ -104,8 +104,13 @@ export function RoiSection() {
                                         whileHover={{ y: -5, scale: 1.1 }}
                                         className="absolute -top-12 left-1/2 -translate-x-1/2 bg-white text-black text-xs font-bold px-3 py-1.5 rounded-full shadow-lg whitespace-nowrap border border-white/20"
                                     >
-                                        +240% Conv.
+                                        +300% Conv.
                                     </motion.div>
+
+                                    {/* Tooltip for NFC - new requirement */}
+                                    <div className="absolute -top-24 left-1/2 -translate-x-1/2 bg-zinc-900 border border-white/10 px-2 py-1 rounded text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-20">
+                                        ~13.2% Rate
+                                    </div>
 
                                     <div className="absolute top-4 left-1/2 -translate-x-1/2 font-bold text-white text-sm tracking-wide bg-black/20 px-2 rounded backdrop-blur-sm">
                                         NFCwear
