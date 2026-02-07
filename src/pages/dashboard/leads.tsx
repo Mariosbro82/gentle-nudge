@@ -54,14 +54,22 @@ export default function LeadsPage() {
     function exportToCSV() {
         if (!leads.length) return;
 
-        const headers = ["Name", "Email", "Stimmung", "Erfasst von", "Datum"];
-        const rows = leads.map((lead) => [
-            lead.lead_name,
-            lead.lead_email,
-            lead.sentiment,
-            (lead.users as any)?.name || "-",
-            new Date(lead.created_at || '').toLocaleDateString(),
-        ]);
+        const headers = ["Name", "Email", "Telefon", "Stimmung", "Nachricht", "Links", "Datum"];
+        const rows = leads.map((lead) => {
+            const notes = lead.notes || "";
+            const lines = notes.split("\n").filter(Boolean);
+            const message = lines.find((l: string) => l.startsWith("Nachricht: "))?.replace("Nachricht: ", "") || "";
+            const links = lines.filter((l: string) => !l.startsWith("Nachricht: ")).join("; ");
+            return [
+                lead.lead_name,
+                lead.lead_email,
+                lead.lead_phone || "",
+                lead.sentiment,
+                message,
+                links,
+                new Date(lead.created_at || '').toLocaleDateString(),
+            ].map(v => `"${(v || '').replace(/"/g, '""')}"`);
+        });
 
         const csvContent = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
         const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
