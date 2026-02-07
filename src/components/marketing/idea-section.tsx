@@ -116,12 +116,14 @@ export function IdeaSection() {
 
                         {/* Technical Drawing Placeholder */}
                         <div className="relative aspect-[4/5] bg-white/5 rounded-3xl border border-white/10 flex items-center justify-center overflow-hidden">
-                            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
-                            <div className="relative z-10 text-center">
-                                <ScanLine className="w-16 h-16 text-zinc-700 mx-auto mb-4" />
-                                <span className="text-zinc-600 font-mono text-sm block">TECHNICAL DRAWING</span>
-                                <span className="text-zinc-700 text-xs mt-2 block">Sleeve Integration Detail</span>
-                            </div>
+                            <video
+                                src="/assets/MyComp.mp4"
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                                className="w-full h-full object-cover"
+                            />
                         </div>
                     </div>
                 </div>
