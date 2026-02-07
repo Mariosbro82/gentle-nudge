@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, BarChart3 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export function AnalyticsSection() {
     return (
@@ -42,7 +43,7 @@ export function AnalyticsSection() {
                     </div>
 
                     {/* Dashboard Content Mock */}
-                    <div className="p-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="p-4 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-6">
 
                         {/* Sidebar */}
                         <div className="hidden md:block col-span-1 space-y-4">
@@ -62,7 +63,7 @@ export function AnalyticsSection() {
 
                         {/* Main Content */}
                         <div className="col-span-2 space-y-6">
-                            <div className="flex gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                 <div className="h-28 flex-1 bg-black/20 rounded-xl border border-white/5 p-4 relative overflow-hidden group">
                                     <div className="absolute inset-0 bg-blue-500/5 group-hover:bg-blue-500/10 transition-colors" />
                                     <p className="text-zinc-500 text-xs uppercase font-bold mb-2">Total Scans</p>
@@ -112,9 +113,11 @@ export function AnalyticsSection() {
                 </motion.div>
 
                 <div className="mt-12">
-                    <Button variant="link" className="text-zinc-400 hover:text-white">
-                        Alle Analytics Features ansehen <ArrowRight size={16} className="ml-1" />
-                    </Button>
+                    <Link to="/analytics">
+                        <Button variant="link" className="text-zinc-400 hover:text-white">
+                            Alle Analytics Features ansehen <ArrowRight size={16} className="ml-1" />
+                        </Button>
+                    </Link>
                 </div>
 
             </div>

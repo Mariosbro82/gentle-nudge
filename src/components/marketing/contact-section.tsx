@@ -30,17 +30,34 @@ export function ContactSection() {
                             Starten Sie noch heute mit NFCwear und revolutionieren Sie Ihre Corporate Fashion. Vereinbaren Sie eine Demo oder schreiben Sie uns.
                         </p>
 
-                        <div className="p-6 rounded-xl bg-zinc-900 border border-white/10 hover:border-blue-500/30 transition-colors">
-                            <div className="flex items-center gap-4 mb-4">
-                                <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400">
-                                    <Calendar size={20} />
+                        <div className="flex gap-6 flex-col sm:flex-row">
+                            <div className="flex-1 p-6 rounded-xl bg-zinc-900 border border-white/10 hover:border-blue-500/30 transition-colors">
+                                <div className="flex items-center gap-4 mb-4">
+                                    <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400">
+                                        <Calendar size={20} />
+                                    </div>
+                                    <h3 className="text-white font-semibold">Direkt Termin buchen</h3>
                                 </div>
-                                <h3 className="text-white font-semibold">Direkt Termin buchen</h3>
+                                <p className="text-sm text-zinc-400 mb-6">Wählen Sie einen passenden Slot für eine 15-minütige Demo.</p>
+                                <Button className="w-full bg-white text-black hover:bg-zinc-200" onClick={() => window.open('https://calendly.com', '_blank')}>
+                                    Calendly öffnen
+                                </Button>
                             </div>
-                            <p className="text-sm text-zinc-400 mb-6">Wählen Sie einen passenden Slot für eine 15-minütige Demo.</p>
-                            <Button className="w-full bg-white text-black hover:bg-zinc-200" onClick={() => window.open('https://calendly.com', '_blank')}>
-                                Calendly öffnen
-                            </Button>
+
+                            {/* Digital Handshake Image - 2:3 Ratio */}
+                            <div className="hidden sm:block relative w-[200px] aspect-[2/3] rounded-2xl overflow-hidden border border-white/10 shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-500 group">
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10" />
+                                <img
+                                    src="/assets/digital-handshake.png"
+                                    alt="Digital Handshake"
+                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                />
+                                <div className="absolute bottom-4 left-4 z-20">
+                                    <div className="bg-blue-500/20 backdrop-blur-md border border-blue-500/30 text-blue-400 text-[10px] font-bold px-2 py-1 rounded-full inline-block">
+                                        NFC CONNECT
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 

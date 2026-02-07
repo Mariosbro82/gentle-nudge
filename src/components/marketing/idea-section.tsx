@@ -1,9 +1,11 @@
 
 
 
+import { UserX, BarChart3, Keyboard, Cpu, Circle, Layers, ScanLine } from "lucide-react";
+
 export function IdeaSection() {
     return (
-        <section id="idea" className="py-24 relative overflow-hidden">
+        <section id="idea" className="py-24 relative overflow-hidden bg-black z-20">
             {/* Background Gradients */}
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px] pointer-events-none" />
 
@@ -18,18 +20,129 @@ export function IdeaSection() {
                     </p>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-8">
-                    <div className="p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md hover:bg-white/10 transition-all group">
-                        <h3 className="text-xl font-bold text-white mb-4 group-hover:text-blue-400 transition-colors">Das Problem</h3>
-                        <p className="text-zinc-500">
-                            Herkömmliche Visitenkarten landen im Müll. Links auf Flyern werden nie abgetippt. Corporate Merch verstaubt im Schrank, weil er keinen echten Nutzen hat.
-                        </p>
+                {/* The Problem Grid */}
+                <div className="mb-24">
+                    <h3 className="text-2xl font-bold text-white mb-8 text-center">Das Problem</h3>
+                    <div className="grid md:grid-cols-3 gap-8">
+                        {/* Problem 1 */}
+                        <div className="p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md hover:bg-white/10 transition-all group flex flex-col items-center text-center">
+                            <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center mb-6 group-hover:bg-red-500/30 transition-colors">
+                                <UserX className="w-6 h-6 text-red-400" />
+                            </div>
+                            <h4 className="text-xl font-bold text-white mb-3">Leads gehen verloren</h4>
+                            <p className="text-zinc-500 text-sm">
+                                Wertvolle Kontakte auf Messen und Events werden oft vergessen oder gehen im Chaos unter.
+                            </p>
+                        </div>
+
+                        {/* Problem 2 */}
+                        <div className="p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md hover:bg-white/10 transition-all group flex flex-col items-center text-center">
+                            <div className="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center mb-6 group-hover:bg-orange-500/30 transition-colors">
+                                <BarChart3 className="w-6 h-6 text-orange-400" />
+                            </div>
+                            <h4 className="text-xl font-bold text-white mb-3">Keine Messbarkeit</h4>
+                            <p className="text-zinc-500 text-sm">
+                                Print-Werbung und herkömmliches Merch liefern keine Daten. Du weißt nicht, was funktioniert.
+                            </p>
+                        </div>
+
+                        {/* Problem 3 */}
+                        <div className="p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md hover:bg-white/10 transition-all group flex flex-col items-center text-center">
+                            <div className="w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center mb-6 group-hover:bg-yellow-500/30 transition-colors">
+                                <Keyboard className="w-6 h-6 text-yellow-400" />
+                            </div>
+                            <h4 className="text-xl font-bold text-white mb-3">Manueller Aufwand</h4>
+                            <p className="text-zinc-500 text-sm">
+                                Visitenkarten müssen mühsam abgetippt werden. Ein fehleranfälliger und zeitfressender Prozess.
+                            </p>
+                        </div>
                     </div>
-                    <div className="p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md hover:bg-white/10 transition-all group">
-                        <h3 className="text-xl font-bold text-white mb-4 group-hover:text-purple-400 transition-colors">Die Lösung</h3>
-                        <p className="text-zinc-500">
-                            Integration von NTAG424 DNA Chips direkt in hochwertige Kleidung. Ein Tap mit dem Smartphone genügt, und die digitale Welt öffnet sich – sicher, schnell und ohne App.
-                        </p>
+                </div>
+
+                {/* Engineering Section */}
+                <div className="relative mb-32">
+                    <div className="absolute inset-0 bg-gradient-to-b from-purple-500/5 to-blue-500/5 rounded-[3rem] blur-3xl -z-10" />
+
+                    <div className="grid lg:grid-cols-2 gap-12 items-center">
+                        <div className="text-left">
+                            <h3 className="text-3xl md:text-4xl font-bold text-white mb-6">
+                                Engineering trifft Fashion.
+                            </h3>
+                            <p className="text-lg text-zinc-400 mb-12">
+                                Jedes Stück wird mit obsessiver Liebe zum Detail entwickelt. Von der Platzierung des NFC-Chips bis zum Gewicht des Stoffes – nichts wird dem Zufall überlassen.
+                            </p>
+
+                            <div className="space-y-8">
+                                {/* Feature 1 */}
+                                <div className="flex gap-4">
+                                    <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center flex-shrink-0">
+                                        <Cpu className="w-6 h-6 text-blue-400" />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-white font-bold mb-1">NTAG424 DNA</h4>
+                                        <p className="text-zinc-500 text-sm">
+                                            NFC-Chips mit militärischer Sicherheit und SUN-Authentifizierung. Die sicherste Consumer-NFC-Technologie.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Feature 2 */}
+                                <div className="flex gap-4">
+                                    <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center flex-shrink-0">
+                                        <Circle className="w-6 h-6 text-purple-400" />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-white font-bold mb-1">35mm Runde Tags</h4>
+                                        <p className="text-zinc-500 text-sm">
+                                            Premium NFC-Tags nahtlos in den Stoff integriert. Unsichtbar, aber immer erreichbar.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Feature 3 */}
+                                <div className="flex gap-4">
+                                    <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center flex-shrink-0">
+                                        <Layers className="w-6 h-6 text-pink-400" />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-white font-bold mb-1">Double-Woven Tech</h4>
+                                        <p className="text-zinc-500 text-sm">
+                                            Proprietäre Doppelwebtechnologie für Haltbarkeit über 500+ Waschzyklen.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Technical Drawing Placeholder */}
+                        <div className="relative aspect-[4/5] bg-white/5 rounded-3xl border border-white/10 flex items-center justify-center overflow-hidden">
+                            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
+                            <div className="relative z-10 text-center">
+                                <ScanLine className="w-16 h-16 text-zinc-700 mx-auto mb-4" />
+                                <span className="text-zinc-600 font-mono text-sm block">TECHNICAL DRAWING</span>
+                                <span className="text-zinc-700 text-xs mt-2 block">Sleeve Integration Detail</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Motion Graphic Section */}
+                <div className="relative max-w-5xl mx-auto text-center">
+                    <h3 className="text-3xl font-bold text-white mb-6">Wie funktioniert das alles?</h3>
+                    <p className="text-lg text-zinc-400 mb-12 max-w-2xl mx-auto">
+                        Ein Tap. Sofortige Verbindung. Keine App nötig.
+                    </p>
+
+                    <div className="aspect-video rounded-3xl bg-white/5 border border-white/10 relative overflow-hidden group">
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors cursor-pointer">
+                            <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 group-hover:scale-110 transition-transform duration-300">
+                                <div className="w-0 h-0 border-t-[12px] border-t-transparent border-l-[20px] border-l-white border-b-[12px] border-b-transparent ml-1" />
+                            </div>
+                        </div>
+                        <div className="absolute bottom-8 left-8 text-left">
+                            <span className="block text-white font-medium mb-1">Motion Graphic</span>
+                            <span className="text-zinc-400 text-sm">Tap. Connect. Sync.</span>
+                        </div>
                     </div>
                 </div>
             </div>

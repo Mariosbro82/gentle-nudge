@@ -20,13 +20,13 @@ export function TechHighlights() {
                     <h2 className="text-3xl md:text-5xl font-bold text-white">High-End Technologie</h2>
                 </div>
 
-                <div className="grid md:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {features.map((f, i) => (
                         <div key={i} className="p-6 rounded-2xl bg-zinc-900/50 border border-white/5 hover:border-blue-500/30 transition-all hover:-translate-y-1">
                             <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 mb-4">
                                 {f.icon}
                             </div>
-                            <h3 className="text-lg font-bold text-white mb-2">{f.title}</h3>
+                            <h3 className="text-lg font-bold text-white mb-2 hyphens-auto">{f.title}</h3>
                             <p className="text-zinc-500 text-sm leading-relaxed">{f.desc}</p>
                         </div>
                     ))}

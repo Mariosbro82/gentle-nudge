@@ -2,7 +2,7 @@ import { Routes, Route, Outlet } from "react-router-dom";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/contexts/auth-context";
 import { ProtectedRoute } from "@/components/auth/protected-route";
-import { AdminSidebar } from "@/components/dashboard/sidebar";
+import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
 
 // Page imports - will be lazy loaded
 import { Suspense, lazy } from "react";
@@ -29,6 +29,7 @@ const MarketingPage = lazy(() => import("@/pages/marketing"));
 const ProductsPage = lazy(() => import("@/pages/products"));
 const PricingPage = lazy(() => import("@/pages/pricing"));
 const CompanyPage = lazy(() => import("@/pages/company"));
+const AnalyticsPublicPage = lazy(() => import("@/pages/analytics"));
 const ClaimPage = lazy(() => import("@/pages/claim/[uid]"));
 
 // Loader component
@@ -43,19 +44,7 @@ function PageLoader() {
     );
 }
 
-// Admin layout wrapper
-function AdminLayout() {
-    return (
-        <div className="min-h-screen bg-black text-white selection:bg-blue-500/30 font-sans antialiased pl-64">
-            <AdminSidebar />
-            <main className="p-8">
-                <Suspense fallback={<PageLoader />}>
-                    <Outlet />
-                </Suspense>
-            </main>
-        </div>
-    );
-}
+// NFC layout wrapper (minimal, for public pages)
 
 // NFC layout wrapper (minimal, for public pages)
 function NfcLayout() {
@@ -78,6 +67,7 @@ export default function App() {
                     <Route path="/products" element={<Suspense fallback={<PageLoader />}><ProductsPage /></Suspense>} />
                     <Route path="/pricing" element={<Suspense fallback={<PageLoader />}><PricingPage /></Suspense>} />
                     <Route path="/company" element={<Suspense fallback={<PageLoader />}><CompanyPage /></Suspense>} />
+                    <Route path="/analytics" element={<Suspense fallback={<PageLoader />}><AnalyticsPublicPage /></Suspense>} />
                     <Route path="/login" element={<Suspense fallback={<PageLoader />}><LoginPage /></Suspense>} />
 
                     {/* NFC public routes */}
@@ -94,7 +84,7 @@ export default function App() {
                         path="/dashboard"
                         element={
                             <ProtectedRoute>
-                                <AdminLayout />
+                                <DashboardLayout />
                             </ProtectedRoute>
                         }
                     >
