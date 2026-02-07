@@ -32,6 +32,12 @@
   --offset: 10px;
   --slide-up-fade: slide-up-fade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   --fade-in: fade-in 0.2s ease-in-out forwards;
+
+  /* Custom Colors */
+  --deep-blue: 225 50% 8%; /* #0A0F1E */
+  --electric-blue: 199 89% 48%; /* #0EA5E9 */
+  --yellow-accent: 42 96% 56%; /* #FBBF24 */
+  --stark-white: 0 0% 100%; /* #FFFFFF */
 }
 
 .dark {
@@ -96,6 +102,12 @@
   --fade-in: var(----fade-in);
   --slide-up-fade: var(----slide-up-fade);
   --offset: var(----offset);
+
+  /* Custom Colors */
+  --color-deep-blue: hsl(var(--deep-blue));
+  --color-electric-blue: hsl(var(--electric-blue));
+  --color-yellow-accent: hsl(var(--yellow-accent));
+  --color-stark-white: hsl(var(--stark-white));
 
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;

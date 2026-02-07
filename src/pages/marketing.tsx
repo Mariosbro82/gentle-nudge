@@ -1,5 +1,5 @@
 import { Navbar } from "@/components/marketing/navbar";
-import { Hero } from "@/components/marketing/hero";
+import { HeroScroll } from "@/components/marketing/hero-scroll";
 import { IdeaSection } from "@/components/marketing/idea-section";
 import { FoundersSection } from "@/components/marketing/founders-section";
 import { AnalyticsSection } from "@/components/marketing/analytics-section";
@@ -13,7 +13,7 @@ export default function MarketingPage() {
     return (
         <main className="min-h-screen bg-black selection:bg-blue-500/30">
             <Navbar />
-            <Hero />
+            <HeroScroll />
             <IdeaSection />
 
             {/* Visual Divider */}
