@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { supabase } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Mail, Phone, Globe, Linkedin } from "lucide-react";
+import { ContactForm } from "@/components/profile/contact-form";
 
 export default function ProfilePage() {
     const { userId } = useParams<{ userId: string }>();
@@ -124,6 +125,9 @@ export default function ProfilePage() {
                             </Button>
                         )}
                     </div>
+
+                    {/* Contact Exchange */}
+                    <ContactForm recipientUserId={user.id} recipientName={user.name} />
                 </div>
             </div>
         </div>

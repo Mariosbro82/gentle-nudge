@@ -10,7 +10,9 @@ interface Lead {
     id: string;
     lead_name: string | null;
     lead_email: string | null;
+    lead_phone: string | null;
     sentiment: string | null;
+    notes: string | null;
     created_at: string | null;
     users?: { name: string | null } | null;
 }
@@ -100,43 +102,76 @@ export default function LeadsPage() {
                 </div>
             </div>
 
-            <div className="rounded-md border border-white/5 bg-zinc-900/50">
+            <div className="rounded-md border border-border bg-card">
                 <Table>
                     <TableHeader>
-                        <TableRow className="border-white/5 hover:bg-white/5">
+                        <TableRow className="border-border hover:bg-muted/50">
                             <TableHead>Name</TableHead>
                             <TableHead>E-Mail</TableHead>
+                            <TableHead>Telefon</TableHead>
                             <TableHead>Stimmung</TableHead>
-                            <TableHead>Erfasst von</TableHead>
+                            <TableHead>Nachricht & Links</TableHead>
                             <TableHead>Datum</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {leads.map((lead) => (
-                            <TableRow key={lead.id} className="border-white/5 hover:bg-white/5">
-                                <TableCell className="font-medium text-white">{lead.lead_name}</TableCell>
-                                <TableCell className="text-zinc-400">{lead.lead_email}</TableCell>
-                                <TableCell>
-                                    <Badge
-                                        variant="outline"
-                                        className={
-                                            lead.sentiment === "hot"
-                                                ? "border-green-500 text-green-400 bg-green-500/10"
-                                                : lead.sentiment === "warm"
-                                                    ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
-                                                    : "border-red-500 text-red-400 bg-red-500/10"
-                                        }
-                                    >
-                                        {lead.sentiment}
-                                    </Badge>
-                                </TableCell>
-                                <TableCell className="text-zinc-400">{(lead.users as any)?.name || "-"}</TableCell>
-                                <TableCell className="text-zinc-500">{new Date(lead.created_at || '').toLocaleDateString()}</TableCell>
-                            </TableRow>
-                        ))}
+                        {leads.map((lead) => {
+                            const notes = lead.notes || "";
+                            const lines = notes.split("\n").filter(Boolean);
+                            const message = lines.find(l => l.startsWith("Nachricht: "))?.replace("Nachricht: ", "") || "";
+                            const links = lines.filter(l => !l.startsWith("Nachricht: "));
+
+                            return (
+                                <TableRow key={lead.id} className="border-border hover:bg-muted/50">
+                                    <TableCell className="font-medium text-foreground">{lead.lead_name}</TableCell>
+                                    <TableCell className="text-muted-foreground">{lead.lead_email}</TableCell>
+                                    <TableCell className="text-muted-foreground">{lead.lead_phone || "-"}</TableCell>
+                                    <TableCell>
+                                        <Badge
+                                            variant="outline"
+                                            className={
+                                                lead.sentiment === "hot"
+                                                    ? "border-green-500 text-green-400 bg-green-500/10"
+                                                    : lead.sentiment === "warm"
+                                                        ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
+                                                        : "border-red-500 text-red-400 bg-red-500/10"
+                                            }
+                                        >
+                                            {lead.sentiment}
+                                        </Badge>
+                                    </TableCell>
+                                    <TableCell className="max-w-xs">
+                                        {message && (
+                                            <p className="text-sm text-foreground mb-1 truncate" title={message}>
+                                                {message}
+                                            </p>
+                                        )}
+                                        {links.length > 0 && (
+                                            <div className="flex flex-wrap gap-1">
+                                                {links.map((link, i) => (
+                                                    <a
+                                                        key={i}
+                                                        href={link.split(": ")[1]}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="text-xs text-blue-400 hover:underline"
+                                                    >
+                                                        {link.split(": ")[0]}
+                                                    </a>
+                                                ))}
+                                            </div>
+                                        )}
+                                        {!message && links.length === 0 && (
+                                            <span className="text-muted-foreground">-</span>
+                                        )}
+                                    </TableCell>
+                                    <TableCell className="text-muted-foreground">{new Date(lead.created_at || '').toLocaleDateString()}</TableCell>
+                                </TableRow>
+                            );
+                        })}
                         {leads.length === 0 && (
                             <TableRow>
-                                <TableCell colSpan={5} className="text-center py-10 text-zinc-500">
+                                <TableCell colSpan={6} className="text-center py-10 text-muted-foreground">
                                     Noch keine Kontakte erfasst.
                                 </TableCell>
                             </TableRow>
