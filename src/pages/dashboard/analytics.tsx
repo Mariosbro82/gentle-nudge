@@ -28,6 +28,7 @@ export default function AnalyticsPage() {
         uniqueVisitors: 0,
         avgDaily: 0,
         conversionRate: 0,
+        totalViews: 0,
     });
 
     useEffect(() => {
@@ -37,7 +38,7 @@ export default function AnalyticsPage() {
             // Get user's profile to check company
             const { data: userProfile } = await supabase
                 .from("users")
-                .select("id, company_id")
+                .select("id, company_id, view_count")
                 .eq("auth_user_id", user.id)
                 .single();
 
@@ -101,7 +102,9 @@ export default function AnalyticsPage() {
                 .filter(([_, val]) => val > 0)
                 .map(([name, value]) => ({ name, value }));
 
-            setMetrics({ totalScans, uniqueVisitors, avgDaily, conversionRate });
+            const totalViews = userProfile?.view_count || 0;
+
+            setMetrics({ totalScans, uniqueVisitors, avgDaily, conversionRate, totalViews });
             setScanData(processedScanData);
             setDeviceData(processedDeviceData);
             setLoading(false);
@@ -121,6 +124,7 @@ export default function AnalyticsPage() {
     const statCards = [
         { title: "Total Scans", value: metrics.totalScans, icon: BarChart3, color: "text-sky-500" },
         { title: "Unique Visitors", value: metrics.uniqueVisitors, icon: Users, color: "text-teal-500" },
+        { title: "Profile Views", value: metrics.totalViews, icon: Users, color: "text-purple-500" },
         { title: "Avg. Daily Scans", value: metrics.avgDaily, icon: TrendingUp, color: "text-indigo-500" },
         { title: "Conversion Rate", value: `${metrics.conversionRate}%`, icon: Target, color: "text-amber-500" },
     ];

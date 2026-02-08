@@ -58,8 +58,8 @@ export type Database = {
           id: string
           last_scan: string | null
           menu_data: Json | null
+          mode: string | null
           review_data: Json | null
-          target_url: string | null
           uid: string
           vcard_data: Json | null
         }
@@ -71,8 +71,8 @@ export type Database = {
           id?: string
           last_scan?: string | null
           menu_data?: Json | null
+          mode?: string | null
           review_data?: Json | null
-          target_url?: string | null
           uid: string
           vcard_data?: Json | null
         }
@@ -84,8 +84,8 @@ export type Database = {
           id?: string
           last_scan?: string | null
           menu_data?: Json | null
+          mode?: string | null
           review_data?: Json | null
-          target_url?: string | null
           uid?: string
           vcard_data?: Json | null
         }
@@ -105,39 +105,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
-      profile_templates: {
-        Row: {
-          id: string
-          name: string
-          description: string | null
-          preview_image: string | null
-          config: Json | null
-          is_active: boolean | null
-          sort_order: number | null
-          created_at: string | null
-        }
-        Insert: {
-          id: string
-          name: string
-          description?: string | null
-          preview_image?: string | null
-          config?: Json | null
-          is_active?: boolean | null
-          sort_order?: number | null
-          created_at?: string | null
-        }
-        Update: {
-          id?: string
-          name?: string
-          description?: string | null
-          preview_image?: string | null
-          config?: Json | null
-          is_active?: boolean | null
-          sort_order?: number | null
-          created_at?: string | null
-        }
-        Relationships: []
       }
       companies: {
         Row: {
@@ -217,14 +184,49 @@ export type Database = {
           },
         ]
       }
+      profile_templates: {
+        Row: {
+          config: Json | null
+          created_at: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          preview_image: string | null
+          sort_order: number | null
+        }
+        Insert: {
+          config?: Json | null
+          created_at?: string | null
+          description?: string | null
+          id: string
+          is_active?: boolean | null
+          name: string
+          preview_image?: string | null
+          sort_order?: number | null
+        }
+        Update: {
+          config?: Json | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          preview_image?: string | null
+          sort_order?: number | null
+        }
+        Relationships: []
+      }
       scans: {
         Row: {
           chip_id: string | null
           device_type: string | null
           id: string
           ip_address: string | null
+          location: Json | null
           location_data: Json | null
           mode_at_scan: Database["public"]["Enums"]["chip_mode"] | null
+          scan_time: string | null
           scanned_at: string | null
           user_agent: string | null
         }
@@ -233,8 +235,10 @@ export type Database = {
           device_type?: string | null
           id?: string
           ip_address?: string | null
+          location?: Json | null
           location_data?: Json | null
           mode_at_scan?: Database["public"]["Enums"]["chip_mode"] | null
+          scan_time?: string | null
           scanned_at?: string | null
           user_agent?: string | null
         }
@@ -243,8 +247,10 @@ export type Database = {
           device_type?: string | null
           id?: string
           ip_address?: string | null
+          location?: Json | null
           location_data?: Json | null
           mode_at_scan?: Database["public"]["Enums"]["chip_mode"] | null
+          scan_time?: string | null
           scanned_at?: string | null
           user_agent?: string | null
         }
@@ -278,9 +284,11 @@ export type Database = {
           profile_pic: string | null
           slug: string | null
           social_links: Json | null
+          updated_at: string | null
           vcard_data: Json | null
-          website: string | null
+          view_count: number | null
           webhook_url: string | null
+          website: string | null
         }
         Insert: {
           active_template?: string | null
@@ -301,9 +309,11 @@ export type Database = {
           profile_pic?: string | null
           slug?: string | null
           social_links?: Json | null
+          updated_at?: string | null
           vcard_data?: Json | null
-          website?: string | null
+          view_count?: number | null
           webhook_url?: string | null
+          website?: string | null
         }
         Update: {
           active_template?: string | null
@@ -324,9 +334,11 @@ export type Database = {
           profile_pic?: string | null
           slug?: string | null
           social_links?: Json | null
+          updated_at?: string | null
           vcard_data?: Json | null
-          website?: string | null
+          view_count?: number | null
           webhook_url?: string | null
+          website?: string | null
         }
         Relationships: [
           {
@@ -338,12 +350,61 @@ export type Database = {
           },
         ]
       }
+      webhook_logs: {
+        Row: {
+          created_at: string | null
+          error_message: string | null
+          id: string
+          lead_id: string | null
+          status_code: number | null
+          success: boolean | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          lead_id?: string | null
+          status_code?: number | null
+          success?: boolean | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          lead_id?: string | null
+          status_code?: number | null
+          success?: boolean | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "webhook_logs_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "webhook_logs_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      get_user_id_from_auth: { Args: never; Returns: string }
+      increment_view_count: {
+        Args: { page_user_id: string }
+        Returns: undefined
+      }
+      test_webhook: { Args: { url: string }; Returns: Json }
     }
     Enums: {
       chip_mode: "corporate" | "hospitality" | "campaign"
@@ -482,3 +543,24 @@ export const Constants = {
     },
   },
 } as const
+
+
+// Helper types for easier usage
+export type Tables<T extends keyof Database["public"]["Tables"]> = Database["public"]["Tables"][T]["Row"]
+export type TablesInsert<T extends keyof Database["public"]["Tables"]> = Database["public"]["Tables"][T]["Insert"]
+export type TablesUpdate<T extends keyof Database["public"]["Tables"]> = Database["public"]["Tables"][T]["Update"]
+export type Enums<T extends keyof Database["public"]["Enums"]> = Database["public"]["Enums"][T]
+
+// Convenience types
+export type User = Tables<"users">
+export type Chip = Tables<"chips">
+export type Company = Tables<"companies">
+export type Lead = Tables<"leads">
+export type Scan = Tables<"scans">
+export type CampaignOverride = Tables<"campaign_overrides">
+export type WebhookLog = Tables<"webhook_logs">
+export type ProfileTemplate = Tables<"profile_templates">
+
+export type ChipMode = Enums<"chip_mode">
+export type PlanType = Enums<"plan_type">
+export type SentimentType = Enums<"sentiment_type">

@@ -37,6 +37,12 @@ Stores user profile information, separate from `auth.users`.
 | `ghost_mode` | Boolean | Status | If true, profile returns 404/Ghost page. |
 | `ghost_mode_until` | TIMESTAMPTZ | Status | Timestamp until which ghost mode is active. |
 | `webhook_url` | Text | URL | URL for sending lead capture events (Integrations). |
+| `view_count` | Integer | Analytics | Total number of profile views. Defaults to 0. Incremented via RPC. |
+
+### `functions` (RPC)
+| Function | Parameters | Logic | Permissions |
+| :--- | :--- | :--- | :--- |
+| `increment_view_count` | `page_user_id` (UUID) | Increments `view_count` by 1 for the specified user. | `anon`, `authenticated`, `service_role` |
 
 ### `leads` Table
 Stores leads captured via the NFC profile "Connect" feature.
@@ -51,6 +57,7 @@ Stores leads captured via the NFC profile "Connect" feature.
 
 ### Profile Updates (`src/pages/dashboard/settings.tsx`)
 - **Fetch**: On load, fetches `users` row where `auth_user_id` matches the current session user.
+- **Analytics**: Both `dashboard/index.tsx` and `dashboard/analytics.tsx` fetch `view_count` from `users` table to display profile traffic stats.
 - **Save**: Updates the `users` table.
   - **Logic**: 
     - `handleSave` collects form data (Slug, Name, Title, Bio, **Email**, **Phone**, Website, LinkedIn).
@@ -61,6 +68,7 @@ Stores leads captured via the NFC profile "Connect" feature.
 ### Public Profile (`src/pages/p/[userId].tsx`)
 - **Fetch**: Looks up user by `slug` first. If not found, tries by `id`.
 - **Display**: Renders the profile using the `active_template`.
+- **View Value**: Increments `view_count` via `increment_view_count` RPC on mount (fire-and-forget).
 - **Ghost Mode**: Checks `ghost_mode` and `ghost_mode_until`. If active, shows Ghost page.
 
 ## 4. RLS Component (Row Level Security)
@@ -71,3 +79,4 @@ Stores leads captured via the NFC profile "Connect" feature.
 - **Feature**: Added `email` and `phone` inputs to the Settings page.
 - **Backend Fix**: Added missing columns (`phone`, `slug`, `bio`, `website`, `linkedin_url`, `active_template`, `banner_pic`, `webhook_url`, `ghost_mode_until`) to the `users` table via migration `add_missing_user_columns`.
 - **Logic**: Updated `handleSave` in `settings.tsx` to persist these fields to the `users` table.
+- **Analytics**: Added `view_count` column and `increment_view_count` RPC. Frontend now tracks views on profile mount and displays stats in Dashboard.

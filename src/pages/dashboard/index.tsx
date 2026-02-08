@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Card } from "@/components/ui/card";
-import { Users, ScanLine, ArrowUpRight, DollarSign } from "lucide-react";
+import { Users, ScanLine, ArrowUpRight } from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
 import { useAuth } from "@/contexts/auth-context";
 
@@ -35,6 +35,7 @@ export default function DashboardPage() {
     const [scansCount, setScansCount] = useState(0);
     const [leadsCount, setLeadsCount] = useState(0);
     const [chipsCount, setChipsCount] = useState(0);
+    const [viewsCount, setViewsCount] = useState(0);
     const [recentScans, setRecentScans] = useState<any[]>([]);
 
     useEffect(() => {
@@ -44,9 +45,13 @@ export default function DashboardPage() {
             // Get user's profile to check company
             const { data: userProfile } = await supabase
                 .from("users")
-                .select("id, company_id")
+                .select("id, company_id, view_count")
                 .eq("auth_user_id", user.id)
                 .single();
+
+            if (userProfile) {
+                setViewsCount(userProfile.view_count || 0);
+            }
 
             // Get user's chip IDs
             let chipsQuery = supabase.from("chips").select("id");
@@ -106,7 +111,8 @@ export default function DashboardPage() {
                 <StatsCard title="Gesamt Scans" value={scansCount} change="Gesamtzeit" icon={ScanLine} />
                 <StatsCard title="Aktive Kontakte" value={leadsCount} change="Erfasste Kontakte" icon={Users} />
                 <StatsCard title="Aktive Chips" value={chipsCount} change="Verteilte Geräte" icon={ArrowUpRight} />
-                <StatsCard title="Umsatz" value="0€" change="Platzhalter" icon={DollarSign} />
+                <StatsCard title="Aktive Chips" value={chipsCount} change="Verteilte Geräte" icon={ArrowUpRight} />
+                <StatsCard title="Profil Aufrufe" value={viewsCount} change="Besucher Gesamt" icon={Users} />
             </div>
 
             {/* Charts Section */}

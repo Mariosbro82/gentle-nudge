@@ -1,7 +1,7 @@
 
 
 
-import { UserX, BarChart3, Keyboard, Cpu, Circle, Layers, ScanLine } from "lucide-react";
+import { UserX, BarChart3, Keyboard, Cpu, Circle, Layers } from "lucide-react";
 
 export function IdeaSection() {
     return (
@@ -128,25 +128,7 @@ export function IdeaSection() {
                     </div>
                 </div>
 
-                {/* Motion Graphic Section */}
-                <div className="relative max-w-5xl mx-auto text-center">
-                    <h3 className="text-3xl font-bold text-white mb-6">Wie funktioniert das alles?</h3>
-                    <p className="text-lg text-zinc-400 mb-12 max-w-2xl mx-auto">
-                        Ein Tap. Sofortige Verbindung. Keine App nötig.
-                    </p>
 
-                    <div className="aspect-video rounded-3xl bg-white/5 border border-white/10 relative overflow-hidden group">
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors cursor-pointer">
-                            <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 group-hover:scale-110 transition-transform duration-300">
-                                <div className="w-0 h-0 border-t-[12px] border-t-transparent border-l-[20px] border-l-white border-b-[12px] border-b-transparent ml-1" />
-                            </div>
-                        </div>
-                        <div className="absolute bottom-8 left-8 text-left">
-                            <span className="block text-white font-medium mb-1">Motion Graphic</span>
-                            <span className="text-zinc-400 text-sm">Tap. Connect. Sync.</span>
-                        </div>
-                    </div>
-                </div>
             </div>
         </section>
     );

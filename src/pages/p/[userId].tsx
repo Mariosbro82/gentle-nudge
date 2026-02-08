@@ -24,6 +24,12 @@ export default function ProfilePage() {
                 data = result.data;
             }
 
+            // Increment view count
+            if (data) {
+                // Fire and forget - don't await this to keep page load fast
+                supabase.rpc("increment_view_count", { page_user_id: data.id });
+            }
+
             if (data) {
                 setUser({
                     id: data.id,
