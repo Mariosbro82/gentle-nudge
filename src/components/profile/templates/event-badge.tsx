@@ -1,0 +1,126 @@
+import { Mail, Phone, Globe, Linkedin, Briefcase } from "lucide-react";
+import { ContactForm } from "@/components/profile/contact-form";
+import type { TemplateProps } from "@/types/profile";
+
+export function EventBadgeTemplate({ user }: TemplateProps) {
+    return (
+        <div className="min-h-screen bg-zinc-950 text-white">
+            {/* Event Header Bar */}
+            <div className="bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 px-4 py-3">
+                <div className="max-w-lg mx-auto flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-sm">
+                        <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                        <span className="font-medium">Live Event</span>
+                    </div>
+                    <span className="text-xs text-white/70">Powered by Severmore</span>
+                </div>
+            </div>
+
+            {/* Banner */}
+            {user.banner ? (
+                <div
+                    className="h-28 bg-cover bg-center"
+                    style={{ backgroundImage: `url(${user.banner})` }}
+                />
+            ) : (
+                <div className="h-28 bg-gradient-to-b from-indigo-600/30 to-transparent" />
+            )}
+
+            {/* Badge Card */}
+            <div className="max-w-lg mx-auto px-4 -mt-12">
+                <div className="bg-zinc-900 rounded-xl border border-white/10 overflow-hidden">
+                    {/* Top accent line */}
+                    <div className="h-1 bg-gradient-to-r from-violet-500 via-indigo-500 to-blue-500" />
+
+                    <div className="p-6">
+                        {/* Avatar + Info row */}
+                        <div className="flex items-start gap-4 mb-5">
+                            <div className="w-20 h-20 rounded-xl bg-zinc-800 flex-shrink-0 flex items-center justify-center text-xl font-bold overflow-hidden border border-white/10">
+                                {user.avatar ? (
+                                    <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
+                                ) : (
+                                    user.name.charAt(0).toUpperCase()
+                                )}
+                            </div>
+                            <div className="min-w-0">
+                                <h1 className="text-xl font-bold truncate">{user.name}</h1>
+                                {user.title && (
+                                    <p className="text-zinc-400 text-sm flex items-center gap-1.5 mt-0.5">
+                                        <Briefcase className="h-3.5 w-3.5 flex-shrink-0" />
+                                        {user.title}
+                                    </p>
+                                )}
+                                {user.company && (
+                                    <p className="text-zinc-500 text-xs mt-0.5">{user.company}</p>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Bio */}
+                        {user.bio && (
+                            <p className="text-zinc-400 text-sm mb-5 leading-relaxed">{user.bio}</p>
+                        )}
+
+                        {/* Quick Contact Icons */}
+                        <div className="flex gap-2 mb-5">
+                            {user.email && (
+                                <a
+                                    href={`mailto:${user.email}`}
+                                    className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition-colors text-sm"
+                                >
+                                    <Mail className="h-4 w-4" />
+                                    E-Mail
+                                </a>
+                            )}
+                            {user.phone && (
+                                <a
+                                    href={`tel:${user.phone}`}
+                                    className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition-colors text-sm"
+                                >
+                                    <Phone className="h-4 w-4" />
+                                    Anrufen
+                                </a>
+                            )}
+                            {user.linkedin && (
+                                <a
+                                    href={user.linkedin}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition-colors text-sm"
+                                >
+                                    <Linkedin className="h-4 w-4" />
+                                    LinkedIn
+                                </a>
+                            )}
+                        </div>
+
+                        {user.website && (
+                            <a
+                                href={user.website}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition-colors text-sm mb-5"
+                            >
+                                <Globe className="h-4 w-4" />
+                                Website besuchen
+                            </a>
+                        )}
+
+                        {/* CTA - Contact Exchange */}
+                        <ContactForm recipientUserId={user.id} recipientName={user.name} />
+                    </div>
+                </div>
+            </div>
+
+            {/* Footer */}
+            <div className="max-w-lg mx-auto px-4 py-6 text-center">
+                <a
+                    href="https://nfc.severmore.de"
+                    className="text-xs text-zinc-600 hover:text-zinc-400 transition-colors"
+                >
+                    Auch so eine Karte? &rarr; nfc.severmore.de
+                </a>
+            </div>
+        </div>
+    );
+}

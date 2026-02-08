@@ -4,25 +4,61 @@ export const LaptopDashboard = () => {
     const frame = useCurrentFrame();
     const { fps } = useVideoConfig();
 
-    // New lead row animation
-    const rowProgress = spring({
-        frame: frame - 30,
+    // Window entrance — subtle scale-up
+    const windowProgress = spring({
+        frame,
         fps,
         from: 0,
         to: 1,
-        config: { damping: 15 }
+        config: { damping: 25, stiffness: 100 }
+    });
+    const windowScale = interpolate(windowProgress, [0, 1], [0.95, 1]);
+    const windowOpacity = interpolate(windowProgress, [0, 1], [0, 1]);
+
+    // New lead row animation — delayed spring entrance
+    const rowProgress = spring({
+        frame: frame - 40,
+        fps,
+        from: 0,
+        to: 1,
+        config: { damping: 18, stiffness: 80 }
     });
 
     const rowOpacity = interpolate(rowProgress, [0, 1], [0, 1]);
-    const rowTranslateX = interpolate(rowProgress, [0, 1], [-30, 0]);
+    const rowTranslateX = interpolate(rowProgress, [0, 1], [-20, 0]);
+    const rowTranslateY = interpolate(rowProgress, [0, 1], [-8, 0]);
 
-    // Highlight pulse
-    const highlightOpacity = interpolate(frame, [30, 50, 80], [0, 0.5, 0], { extrapolateRight: 'clamp' });
+    // Highlight pulse — sweeps across the row
+    const highlightOpacity = interpolate(frame, [40, 55, 90], [0, 0.5, 0], {
+        extrapolateRight: 'clamp',
+        extrapolateLeft: 'clamp',
+    });
+
+    // Green dot pulse (replaces CSS animate-pulse)
+    const dotCycle = frame % 45;
+    const dotOpacity = interpolate(dotCycle, [0, 22, 45], [0.6, 1, 0.6]);
+    const dotScale = interpolate(dotCycle, [0, 22, 45], [0.8, 1.2, 0.8]);
+
+    // Notification badge pop-in
+    const badgeProgress = spring({
+        frame: frame - 35,
+        fps,
+        from: 0,
+        to: 1,
+        config: { damping: 12, stiffness: 200 }
+    });
+    const badgeScale = interpolate(badgeProgress, [0, 1], [0, 1]);
 
     return (
         <AbsoluteFill className="bg-gradient-to-br from-zinc-700 via-zinc-800 to-zinc-900 flex items-center justify-center p-8">
             {/* macOS Window - Full Browser Look */}
-            <div className="relative w-full max-w-5xl">
+            <div
+                className="relative w-full max-w-5xl"
+                style={{
+                    transform: `scale(${windowScale})`,
+                    opacity: windowOpacity,
+                }}
+            >
                 {/* Window Shadow */}
                 <div className="absolute inset-0 bg-black/40 rounded-xl blur-2xl translate-y-6 scale-[0.98]" />
 
@@ -59,7 +95,18 @@ export const LaptopDashboard = () => {
                                 <div className="w-7 h-7 bg-gradient-to-br from-blue-400 to-blue-600 rounded flex items-center justify-center text-white text-[10px] font-bold">SF</div>
                                 <span className="text-white font-semibold text-sm">Salesforce</span>
                             </div>
-                            <div className="px-3 py-1.5 bg-blue-600/30 text-blue-400 rounded text-xs font-medium">Leads</div>
+                            <div className="px-3 py-1.5 bg-blue-600/30 text-blue-400 rounded text-xs font-medium relative">
+                                Leads
+                                {/* Notification badge */}
+                                <div
+                                    className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center"
+                                    style={{
+                                        transform: `scale(${badgeScale})`,
+                                    }}
+                                >
+                                    <span className="text-white text-[8px] font-bold">1</span>
+                                </div>
+                            </div>
                             <div className="px-3 py-1.5 text-zinc-400 text-xs">Contacts</div>
                             <div className="px-3 py-1.5 text-zinc-400 text-xs">Opportunities</div>
                             <div className="px-3 py-1.5 text-zinc-400 text-xs">Reports</div>
@@ -88,13 +135,19 @@ export const LaptopDashboard = () => {
                                     className="grid grid-cols-5 gap-2 px-3 py-2 border-b border-zinc-100 items-center relative"
                                     style={{
                                         opacity: rowOpacity,
-                                        transform: `translateX(${rowTranslateX}px)`
+                                        transform: `translateX(${rowTranslateX}px) translateY(${rowTranslateY}px)`
                                     }}
                                 >
                                     <div className="absolute inset-0 bg-gradient-to-r from-blue-100 to-transparent" style={{ opacity: highlightOpacity }} />
 
                                     <div className="flex items-center gap-1.5 relative z-10">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                                        <div
+                                            className="w-1.5 h-1.5 rounded-full bg-green-500"
+                                            style={{
+                                                opacity: dotOpacity,
+                                                transform: `scale(${dotScale})`,
+                                            }}
+                                        />
                                         <span className="font-semibold text-zinc-900 text-xs">Max Mustermann</span>
                                     </div>
                                     <div className="text-zinc-600 text-xs relative z-10">Corporate Fashion</div>

@@ -1,4 +1,4 @@
-import { AbsoluteFill, useCurrentFrame, interpolate, Img } from 'remotion';
+import { AbsoluteFill, useCurrentFrame, interpolate, Img, Easing, useVideoConfig } from 'remotion';
 import { NFCChip } from './NFCChip';
 import hoodieImg from '../assets/hoodie.png';
 
@@ -6,51 +6,66 @@ export const SleeveCloseUp = () => {
     const frame = useCurrentFrame();
 
     // Animation: Start with full hoodie, zoom to RIGHT sleeve cuff
-    // Frame 0-90: Zoom animation
-
+    // Frame 0-90: Zoom animation with cinematic ease-out
     const zoomProgress = interpolate(frame, [0, 90], [0, 1], {
         extrapolateRight: 'clamp',
+        easing: Easing.out(Easing.cubic),
     });
 
-    // Scale: Start at 1 (full hoodie), zoom to 12x for extreme close-up on cuff
-    const scale = interpolate(zoomProgress, [0, 1], [1, 12]);
+    // Scale: Start at 1.8 (to fill vertical height), zoom to 15x for extreme close-up on cuff
+    const scale = interpolate(zoomProgress, [0, 1], [1.8, 15]);
 
-    // EVEN MORE: to the RIGHT and DOWNWARDS for cuff edge
-    // translateX negative = moves image LEFT, shows RIGHT side
-    // translateY negative = moves image UP, shows BOTTOM
-    const translateX = interpolate(zoomProgress, [0, 1], [0, -850]); // Max right
-    const translateY = interpolate(zoomProgress, [0, 1], [0, -600]); // Max down
+    // Pan to center on the chip position 
+    // Pan to center on the chip position 
+    // Adjusted: Move significantly more RIGHT (more negative X) and DOWN (more negative Y)
+    const translateX = interpolate(zoomProgress, [0, 1], [0, -2200]);
+    const translateY = interpolate(zoomProgress, [0, 1], [200, -2100]);
+
+    // X-Ray / Tech Reveal Effect (Frame 60-120)
+    // Turns image dark/blue/grayscale to simulate scanning
+    const xrayProgress = interpolate(frame, [60, 90], [0, 1], { extrapolateRight: 'clamp' });
+    const grayscale = xrayProgress * 100;
+    const brightness = interpolate(xrayProgress, [0, 1], [1, 0.4]);
+    const xrayColor = interpolate(xrayProgress, [0, 1], [0, 0.3]); // Blue tint opacity
 
     // Chip fades in
     const chipOpacity = interpolate(frame, [70, 100], [0, 1], {
         extrapolateRight: 'clamp',
+        easing: Easing.out(Easing.cubic),
     });
-    const chipScale = interpolate(frame, [70, 100], [0.3, 0.7], {
+    const chipScale = interpolate(frame, [70, 100], [0.5, 1], {
         extrapolateRight: 'clamp',
+        easing: Easing.out(Easing.back(1.5)),
     });
-
-    // Chip position - BOTTOM RIGHT CORNER (cuff area)
-    const chipOffsetX = 180;  // Far right
-    const chipOffsetY = 200;  // Far down
 
     return (
-        <AbsoluteFill className="bg-zinc-100 overflow-hidden">
+        <AbsoluteFill className="bg-zinc-900 overflow-hidden">
             {/* Hoodie Image - zooming to right sleeve cuff */}
             <AbsoluteFill style={{
                 transform: `translateX(${translateX}px) translateY(${translateY}px) scale(${scale})`,
                 transformOrigin: 'center center',
             }}>
-                <Img src={hoodieImg} className="w-full h-full object-contain" />
+                <Img
+                    src={hoodieImg}
+                    className="w-full h-full object-contain"
+                    style={{
+                        filter: `grayscale(${grayscale}%) brightness(${brightness}) contrast(1.2)`,
+                    }}
+                />
             </AbsoluteFill>
 
-            {/* NFC Chip - positioned at cuff edge (bottom-right) */}
+            {/* X-Ray Blue Tint Overlay */}
+            <AbsoluteFill
+                style={{ backgroundColor: '#3b82f6', opacity: xrayColor, mixBlendMode: 'overlay' }}
+            />
+
+            {/* NFC Chip */}
             <AbsoluteFill className="flex items-center justify-center">
                 <div style={{
                     opacity: chipOpacity,
-                    transform: `scale(${chipScale}) translate(${chipOffsetX}px, ${chipOffsetY}px)`,
+                    transform: `scale(${chipScale})`,
                 }}>
                     <NFCChip />
-                    <div className="absolute inset-0 -z-10 animate-ping opacity-20 bg-blue-500 rounded-full blur-xl" />
                 </div>
             </AbsoluteFill>
         </AbsoluteFill>

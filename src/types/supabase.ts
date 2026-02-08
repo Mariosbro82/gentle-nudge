@@ -101,6 +101,39 @@ export type Database = {
                     },
                 ]
             }
+            profile_templates: {
+                Row: {
+                    id: string
+                    name: string
+                    description: string | null
+                    preview_image: string | null
+                    config: Json | null
+                    is_active: boolean | null
+                    sort_order: number | null
+                    created_at: string | null
+                }
+                Insert: {
+                    id: string
+                    name: string
+                    description?: string | null
+                    preview_image?: string | null
+                    config?: Json | null
+                    is_active?: boolean | null
+                    sort_order?: number | null
+                    created_at?: string | null
+                }
+                Update: {
+                    id?: string
+                    name?: string
+                    description?: string | null
+                    preview_image?: string | null
+                    config?: Json | null
+                    is_active?: boolean | null
+                    sort_order?: number | null
+                    created_at?: string | null
+                }
+                Relationships: []
+            }
             companies: {
                 Row: {
                     created_at: string | null
@@ -226,15 +259,63 @@ export type Database = {
                     },
                 ]
             }
+            webhook_logs: {
+                Row: {
+                    id: string
+                    user_id: string | null
+                    lead_id: string | null
+                    status_code: number | null
+                    success: boolean | null
+                    error_message: string | null
+                    created_at: string | null
+                }
+                Insert: {
+                    id?: string
+                    user_id?: string | null
+                    lead_id?: string | null
+                    status_code?: number | null
+                    success?: boolean | null
+                    error_message?: string | null
+                    created_at?: string | null
+                }
+                Update: {
+                    id?: string
+                    user_id?: string | null
+                    lead_id?: string | null
+                    status_code?: number | null
+                    success?: boolean | null
+                    error_message?: string | null
+                    created_at?: string | null
+                }
+                Relationships: [
+                    {
+                        foreignKeyName: "webhook_logs_user_id_fkey"
+                        columns: ["user_id"]
+                        isOneToOne: false
+                        referencedRelation: "users"
+                        referencedColumns: ["id"]
+                    },
+                    {
+                        foreignKeyName: "webhook_logs_lead_id_fkey"
+                        columns: ["lead_id"]
+                        isOneToOne: false
+                        referencedRelation: "leads"
+                        referencedColumns: ["id"]
+                    },
+                ]
+            }
             users: {
                 Row: {
+                    active_template: string | null
                     auth_user_id: string | null
+                    banner_pic: string | null
                     bio: string | null
                     company_id: string | null
                     company_name: string | null
                     created_at: string | null
                     email: string
                     ghost_mode: boolean | null
+                    ghost_mode_until: string | null
                     id: string
                     job_title: string | null
                     linkedin_url: string | null
@@ -244,15 +325,19 @@ export type Database = {
                     social_links: Json | null
                     vcard_data: Json | null
                     website: string | null
+                    webhook_url: string | null
                 }
                 Insert: {
+                    active_template?: string | null
                     auth_user_id?: string | null
+                    banner_pic?: string | null
                     bio?: string | null
                     company_id?: string | null
                     company_name?: string | null
                     created_at?: string | null
                     email: string
                     ghost_mode?: boolean | null
+                    ghost_mode_until?: string | null
                     id?: string
                     job_title?: string | null
                     linkedin_url?: string | null
@@ -262,15 +347,19 @@ export type Database = {
                     social_links?: Json | null
                     vcard_data?: Json | null
                     website?: string | null
+                    webhook_url?: string | null
                 }
                 Update: {
+                    active_template?: string | null
                     auth_user_id?: string | null
+                    banner_pic?: string | null
                     bio?: string | null
                     company_id?: string | null
                     company_name?: string | null
                     created_at?: string | null
                     email?: string
                     ghost_mode?: boolean | null
+                    ghost_mode_until?: string | null
                     id?: string
                     job_title?: string | null
                     linkedin_url?: string | null
@@ -280,6 +369,7 @@ export type Database = {
                     social_links?: Json | null
                     vcard_data?: Json | null
                     website?: string | null
+                    webhook_url?: string | null
                 }
                 Relationships: [
                     {
@@ -322,6 +412,8 @@ export type Company = Tables<"companies">
 export type Lead = Tables<"leads">
 export type Scan = Tables<"scans">
 export type CampaignOverride = Tables<"campaign_overrides">
+export type WebhookLog = Tables<"webhook_logs">
+export type ProfileTemplate = Tables<"profile_templates">
 
 export type ChipMode = Enums<"chip_mode">
 export type PlanType = Enums<"plan_type">

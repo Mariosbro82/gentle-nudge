@@ -117,7 +117,7 @@ export function IdeaSection() {
                         {/* Technical Drawing Placeholder */}
                         <div className="relative aspect-[4/5] bg-white/5 rounded-3xl border border-white/10 flex items-center justify-center overflow-hidden">
                             <video
-                                src="/assets/MyComp.mp4"
+                                src="/assets/best-render-vid.mp4"
                                 autoPlay
                                 loop
                                 muted

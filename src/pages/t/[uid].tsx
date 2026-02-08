@@ -39,6 +39,21 @@ export default function NfcTapPage() {
                 console.error("Failed to log scan", e);
             }
 
+            // Ghost mode check - always route to profile page so ghost page renders
+            const assignedUser = chip.assigned_user as any;
+            if (assignedUser?.ghost_mode) {
+                const ghostUntil = assignedUser.ghost_mode_until;
+                const isStillGhosted = !ghostUntil || new Date(ghostUntil) > new Date();
+
+                if (isStillGhosted) {
+                    const profilePath = assignedUser.slug
+                        ? `/p/${assignedUser.slug}`
+                        : `/p/${assignedUser.id}`;
+                    navigate(profilePath, { replace: true });
+                    return;
+                }
+            }
+
             // Route based on mode
             switch (chip.active_mode) {
                 case "corporate":

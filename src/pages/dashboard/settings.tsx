@@ -7,12 +7,18 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/lib/supabase/client";
 import { useAuth } from "@/contexts/auth-context";
+import { ImageUpload } from "@/components/settings/image-upload";
+import { TemplateSelector } from "@/components/settings/template-selector";
+import { GhostModeToggle } from "@/components/settings/ghost-mode-toggle";
+import { WebhookSettings } from "@/components/settings/webhook-settings";
 
 export default function SettingsPage() {
     const { user: authUser } = useAuth();
     const [user, setUser] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+    const [ghostSaving, setGhostSaving] = useState(false);
+    const [activeTemplate, setActiveTemplate] = useState("premium-gradient");
 
     useEffect(() => {
         async function fetchProfile() {
@@ -24,7 +30,9 @@ export default function SettingsPage() {
                 .eq("auth_user_id", authUser.id)
                 .single();
 
-            setUser(profile || { name: "", email: authUser.email, id: authUser.id });
+            const p = profile || { name: "", email: authUser.email, id: authUser.id } as any;
+            setUser(p);
+            setActiveTemplate(p?.active_template || "premium-gradient");
             setLoading(false);
         }
 
@@ -34,18 +42,24 @@ export default function SettingsPage() {
     async function handleSave(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setSaving(true);
+        if (!authUser) return;
 
         const formData = new FormData(e.currentTarget);
         const updates = {
+            auth_user_id: authUser.id,
             slug: formData.get("slug") as string,
             name: formData.get("name") as string,
             job_title: formData.get("title") as string,
             bio: formData.get("bio") as string,
+            email: formData.get("email") as string,
+            phone: formData.get("phone") as string,
             website: formData.get("website") as string,
             linkedin_url: formData.get("linkedin") as string,
+            active_template: activeTemplate,
+            updated_at: new Date().toISOString(),
         };
 
-        const { error } = await supabase.from("users").update(updates).eq("auth_user_id", authUser?.id || "");
+        const { error } = await supabase.from("users").upsert(updates as any, { onConflict: "auth_user_id" });
 
         if (error) {
             alert(error.message);
@@ -54,6 +68,43 @@ export default function SettingsPage() {
             setUser({ ...user, ...updates });
         }
         setSaving(false);
+    }
+
+    async function handleImageUploaded(type: "profile" | "banner", url: string) {
+        if (!authUser) return;
+        const field = type === "profile" ? "profile_pic" : "banner_pic";
+        await supabase.from("users").upsert({
+            auth_user_id: authUser.id,
+            email: user?.email || authUser.email,
+            [field]: url,
+            updated_at: new Date().toISOString()
+        } as any, { onConflict: "auth_user_id" });
+        setUser({ ...user, [field]: url });
+    }
+
+    async function handleImageRemoved(type: "profile" | "banner") {
+        if (!authUser) return;
+        const field = type === "profile" ? "profile_pic" : "banner_pic";
+        await supabase.from("users").upsert({
+            auth_user_id: authUser.id,
+            email: user?.email || authUser.email,
+            [field]: null,
+            updated_at: new Date().toISOString()
+        } as any, { onConflict: "auth_user_id" });
+        setUser({ ...user, [field]: null });
+    }
+
+    async function handleGhostModeChange(enabled: boolean, until: string | null) {
+        setGhostSaving(true);
+        const { error } = await supabase
+            .from("users")
+            .update({ ghost_mode: enabled, ghost_mode_until: until })
+            .eq("auth_user_id", authUser?.id || "");
+
+        if (!error) {
+            setUser({ ...user, ghost_mode: enabled, ghost_mode_until: until });
+        }
+        setGhostSaving(false);
     }
 
     if (loading) {
@@ -71,6 +122,31 @@ export default function SettingsPage() {
                 <p className="text-zinc-500">Verwalten Sie Ihr Profil und Integrationen.</p>
             </div>
 
+            {/* Profile Images */}
+            <Card className="bg-zinc-900/50 border-white/5">
+                <CardHeader>
+                    <CardTitle>Profilbilder</CardTitle>
+                    <CardDescription>Laden Sie ein Profilbild und Banner für Ihre digitale Visitenkarte hoch.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                    <ImageUpload
+                        type="profile"
+                        currentUrl={user?.profile_pic}
+                        authUserId={authUser?.id || ""}
+                        onUploaded={(url) => handleImageUploaded("profile", url)}
+                        onRemoved={() => handleImageRemoved("profile")}
+                    />
+                    <ImageUpload
+                        type="banner"
+                        currentUrl={user?.banner_pic}
+                        authUserId={authUser?.id || ""}
+                        onUploaded={(url) => handleImageUploaded("banner", url)}
+                        onRemoved={() => handleImageRemoved("banner")}
+                    />
+                </CardContent>
+            </Card>
+
+            {/* Profile Form */}
             <form onSubmit={handleSave}>
                 <Card className="bg-zinc-900/50 border-white/5 mb-8">
                     <CardHeader>
@@ -107,6 +183,14 @@ export default function SettingsPage() {
                             <Textarea id="bio" name="bio" defaultValue={user?.bio} className="bg-black/50 border-white/10" />
                         </div>
                         <div className="grid gap-2">
+                            <Label htmlFor="email">Kontakt E-Mail (öffentlich)</Label>
+                            <Input id="email" name="email" type="email" defaultValue={user?.email} className="bg-black/50 border-white/10" />
+                        </div>
+                        <div className="grid gap-2">
+                            <Label htmlFor="phone">Telefon</Label>
+                            <Input id="phone" name="phone" type="tel" defaultValue={user?.phone} className="bg-black/50 border-white/10" />
+                        </div>
+                        <div className="grid gap-2">
                             <Label htmlFor="website">Webseite</Label>
                             <Input id="website" name="website" defaultValue={user?.website} className="bg-black/50 border-white/10" />
                         </div>
@@ -122,25 +206,59 @@ export default function SettingsPage() {
                 </Card>
             </form>
 
-            <Card className="bg-zinc-900/50 border-white/5 disabled opacity-60">
+            {/* Template Selector */}
+            <Card className="bg-zinc-900/50 border-white/5">
                 <CardHeader>
-                    <CardTitle>Globale Integrationen (Coming Soon)</CardTitle>
-                    <CardDescription>Verbinden Sie Ihre externen Tools.</CardDescription>
+                    <CardTitle>Profil-Vorlage</CardTitle>
+                    <CardDescription>
+                        Wählen Sie ein Design für Ihre digitale Visitenkarte.
+                        {user?.slug && (
+                            <a href={`/p/${user.slug}`} target="_blank" rel="noopener noreferrer" className="ml-2 text-blue-400 hover:text-blue-300 inline-flex items-center gap-1">
+                                Vorschau <ExternalLink className="h-3 w-3" />
+                            </a>
+                        )}
+                    </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-6 pointer-events-none">
-                    <div className="flex items-center justify-between">
-                        <div className="space-y-0.5">
-                            <Label className="text-base">Salesforce CRM</Label>
-                            <p className="text-sm text-zinc-500">Kontakte automatisch mit Salesforce synchronisieren.</p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <div className="h-2 w-2 rounded-full bg-yellow-500" />
-                            <span className="text-xs text-zinc-500 uppercase">Ausstehend</span>
-                            <Button variant="outline" size="sm" className="ml-2 border-white/10">
-                                Verbinden
-                            </Button>
-                        </div>
-                    </div>
+                <CardContent>
+                    <TemplateSelector
+                        activeTemplateId={activeTemplate}
+                        onSelect={setActiveTemplate}
+                    />
+                    <p className="text-xs text-zinc-500 mt-3">
+                        Klicken Sie &quot;Profil Speichern&quot; oben, um die Vorlage zu übernehmen.
+                    </p>
+                </CardContent>
+            </Card>
+
+            {/* Ghost Mode */}
+            <Card className="bg-zinc-900/50 border-white/5">
+                <CardHeader>
+                    <CardTitle>Ghost-Modus</CardTitle>
+                    <CardDescription>Machen Sie Ihr Profil temporär unsichtbar für NFC-Scanner.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <GhostModeToggle
+                        ghostMode={user?.ghost_mode || false}
+                        ghostModeUntil={user?.ghost_mode_until || null}
+                        onChange={handleGhostModeChange}
+                        saving={ghostSaving}
+                    />
+                </CardContent>
+            </Card>
+
+            {/* Webhook Integration */}
+            <Card className="bg-zinc-900/50 border-white/5">
+                <CardHeader>
+                    <CardTitle>Integrationen</CardTitle>
+                    <CardDescription>Verbinden Sie externe Tools wie Zapier oder Make.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <WebhookSettings
+                        webhookUrl={user?.webhook_url || null}
+                        authUserId={authUser?.id || ""}
+                        email={user?.email || authUser?.email || ""}
+                        onChange={(url) => setUser({ ...user, webhook_url: url })}
+                    />
                 </CardContent>
             </Card>
         </div>

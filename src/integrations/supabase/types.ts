@@ -14,37 +14,87 @@ export type Database = {
   }
   public: {
     Tables: {
-      chips: {
+      campaign_overrides: {
         Row: {
-          active_surface_id: string | null
-          assigned_to_user_id: string | null
+          active: boolean | null
           company_id: string | null
-          created_at: string | null
-          scans_count: number | null
-          uid: string
+          end_date: string | null
+          id: string
+          start_date: string | null
+          target_url: string
         }
         Insert: {
-          active_surface_id?: string | null
-          assigned_to_user_id?: string | null
+          active?: boolean | null
           company_id?: string | null
-          created_at?: string | null
-          scans_count?: number | null
-          uid: string
+          end_date?: string | null
+          id?: string
+          start_date?: string | null
+          target_url: string
         }
         Update: {
-          active_surface_id?: string | null
-          assigned_to_user_id?: string | null
+          active?: boolean | null
           company_id?: string | null
-          created_at?: string | null
-          scans_count?: number | null
-          uid?: string
+          end_date?: string | null
+          id?: string
+          start_date?: string | null
+          target_url?: string
         }
         Relationships: [
           {
-            foreignKeyName: "chips_active_surface_id_fkey"
-            columns: ["active_surface_id"]
+            foreignKeyName: "campaign_overrides_company_id_fkey"
+            columns: ["company_id"]
             isOneToOne: false
-            referencedRelation: "surfaces"
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chips: {
+        Row: {
+          active_mode: Database["public"]["Enums"]["chip_mode"] | null
+          assigned_user_id: string | null
+          company_id: string | null
+          created_at: string | null
+          id: string
+          last_scan: string | null
+          menu_data: Json | null
+          review_data: Json | null
+          target_url: string | null
+          uid: string
+          vcard_data: Json | null
+        }
+        Insert: {
+          active_mode?: Database["public"]["Enums"]["chip_mode"] | null
+          assigned_user_id?: string | null
+          company_id?: string | null
+          created_at?: string | null
+          id?: string
+          last_scan?: string | null
+          menu_data?: Json | null
+          review_data?: Json | null
+          target_url?: string | null
+          uid: string
+          vcard_data?: Json | null
+        }
+        Update: {
+          active_mode?: Database["public"]["Enums"]["chip_mode"] | null
+          assigned_user_id?: string | null
+          company_id?: string | null
+          created_at?: string | null
+          id?: string
+          last_scan?: string | null
+          menu_data?: Json | null
+          review_data?: Json | null
+          target_url?: string | null
+          uid?: string
+          vcard_data?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chips_assigned_user_id_fkey"
+            columns: ["assigned_user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
           {
@@ -56,148 +106,231 @@ export type Database = {
           },
         ]
       }
+      profile_templates: {
+        Row: {
+          id: string
+          name: string
+          description: string | null
+          preview_image: string | null
+          config: Json | null
+          is_active: boolean | null
+          sort_order: number | null
+          created_at: string | null
+        }
+        Insert: {
+          id: string
+          name: string
+          description?: string | null
+          preview_image?: string | null
+          config?: Json | null
+          is_active?: boolean | null
+          sort_order?: number | null
+          created_at?: string | null
+        }
+        Update: {
+          id?: string
+          name?: string
+          description?: string | null
+          preview_image?: string | null
+          config?: Json | null
+          is_active?: boolean | null
+          sort_order?: number | null
+          created_at?: string | null
+        }
+        Relationships: []
+      }
       companies: {
         Row: {
           created_at: string | null
+          crm_config: Json | null
           id: string
-          logo_url: string | null
           name: string
-          primary_color: string | null
+          plan: Database["public"]["Enums"]["plan_type"] | null
         }
         Insert: {
           created_at?: string | null
+          crm_config?: Json | null
           id?: string
-          logo_url?: string | null
           name: string
-          primary_color?: string | null
+          plan?: Database["public"]["Enums"]["plan_type"] | null
         }
         Update: {
           created_at?: string | null
+          crm_config?: Json | null
           id?: string
-          logo_url?: string | null
           name?: string
-          primary_color?: string | null
+          plan?: Database["public"]["Enums"]["plan_type"] | null
         }
         Relationships: []
       }
       leads: {
         Row: {
+          captured_by_user_id: string | null
+          chip_id: string | null
           created_at: string | null
+          follow_up_sent: boolean | null
           id: string
-          surface_id: string | null
-          visitor_email: string | null
-          visitor_name: string | null
+          lead_email: string | null
+          lead_name: string | null
+          lead_phone: string | null
+          notes: string | null
+          sentiment: Database["public"]["Enums"]["sentiment_type"] | null
         }
         Insert: {
+          captured_by_user_id?: string | null
+          chip_id?: string | null
           created_at?: string | null
+          follow_up_sent?: boolean | null
           id?: string
-          surface_id?: string | null
-          visitor_email?: string | null
-          visitor_name?: string | null
+          lead_email?: string | null
+          lead_name?: string | null
+          lead_phone?: string | null
+          notes?: string | null
+          sentiment?: Database["public"]["Enums"]["sentiment_type"] | null
         }
         Update: {
+          captured_by_user_id?: string | null
+          chip_id?: string | null
           created_at?: string | null
+          follow_up_sent?: boolean | null
           id?: string
-          surface_id?: string | null
-          visitor_email?: string | null
-          visitor_name?: string | null
+          lead_email?: string | null
+          lead_name?: string | null
+          lead_phone?: string | null
+          notes?: string | null
+          sentiment?: Database["public"]["Enums"]["sentiment_type"] | null
         }
         Relationships: [
           {
-            foreignKeyName: "leads_surface_id_fkey"
-            columns: ["surface_id"]
+            foreignKeyName: "leads_captured_by_user_id_fkey"
+            columns: ["captured_by_user_id"]
             isOneToOne: false
-            referencedRelation: "surfaces"
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
-        ]
-      }
-      organization_members: {
-        Row: {
-          company_id: string
-          created_at: string | null
-          id: string
-          role: string | null
-          user_id: string
-        }
-        Insert: {
-          company_id: string
-          created_at?: string | null
-          id?: string
-          role?: string | null
-          user_id: string
-        }
-        Update: {
-          company_id?: string
-          created_at?: string | null
-          id?: string
-          role?: string | null
-          user_id?: string
-        }
-        Relationships: [
           {
-            foreignKeyName: "organization_members_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "companies"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      scan_logs: {
-        Row: {
-          chip_uid: string | null
-          id: string
-          scanned_at: string | null
-        }
-        Insert: {
-          chip_uid?: string | null
-          id?: string
-          scanned_at?: string | null
-        }
-        Update: {
-          chip_uid?: string | null
-          id?: string
-          scanned_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "scan_logs_chip_uid_fkey"
-            columns: ["chip_uid"]
+            foreignKeyName: "leads_chip_id_fkey"
+            columns: ["chip_id"]
             isOneToOne: false
             referencedRelation: "chips"
-            referencedColumns: ["uid"]
+            referencedColumns: ["id"]
           },
         ]
       }
-      surfaces: {
+      scans: {
         Row: {
-          company_id: string | null
-          content: Json | null
-          created_at: string | null
+          chip_id: string | null
+          device_type: string | null
           id: string
-          type: string
-          user_id: string | null
+          ip_address: string | null
+          location_data: Json | null
+          mode_at_scan: Database["public"]["Enums"]["chip_mode"] | null
+          scanned_at: string | null
+          user_agent: string | null
         }
         Insert: {
-          company_id?: string | null
-          content?: Json | null
-          created_at?: string | null
+          chip_id?: string | null
+          device_type?: string | null
           id?: string
-          type: string
-          user_id?: string | null
+          ip_address?: string | null
+          location_data?: Json | null
+          mode_at_scan?: Database["public"]["Enums"]["chip_mode"] | null
+          scanned_at?: string | null
+          user_agent?: string | null
         }
         Update: {
-          company_id?: string | null
-          content?: Json | null
-          created_at?: string | null
+          chip_id?: string | null
+          device_type?: string | null
           id?: string
-          type?: string
-          user_id?: string | null
+          ip_address?: string | null
+          location_data?: Json | null
+          mode_at_scan?: Database["public"]["Enums"]["chip_mode"] | null
+          scanned_at?: string | null
+          user_agent?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "surfaces_company_id_fkey"
+            foreignKeyName: "scans_chip_id_fkey"
+            columns: ["chip_id"]
+            isOneToOne: false
+            referencedRelation: "chips"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      users: {
+        Row: {
+          active_template: string | null
+          auth_user_id: string | null
+          banner_pic: string | null
+          bio: string | null
+          company_id: string | null
+          company_name: string | null
+          created_at: string | null
+          email: string
+          ghost_mode: boolean | null
+          ghost_mode_until: string | null
+          id: string
+          job_title: string | null
+          linkedin_url: string | null
+          name: string | null
+          phone: string | null
+          profile_pic: string | null
+          slug: string | null
+          social_links: Json | null
+          vcard_data: Json | null
+          website: string | null
+          webhook_url: string | null
+        }
+        Insert: {
+          active_template?: string | null
+          auth_user_id?: string | null
+          banner_pic?: string | null
+          bio?: string | null
+          company_id?: string | null
+          company_name?: string | null
+          created_at?: string | null
+          email: string
+          ghost_mode?: boolean | null
+          ghost_mode_until?: string | null
+          id?: string
+          job_title?: string | null
+          linkedin_url?: string | null
+          name?: string | null
+          phone?: string | null
+          profile_pic?: string | null
+          slug?: string | null
+          social_links?: Json | null
+          vcard_data?: Json | null
+          website?: string | null
+          webhook_url?: string | null
+        }
+        Update: {
+          active_template?: string | null
+          auth_user_id?: string | null
+          banner_pic?: string | null
+          bio?: string | null
+          company_id?: string | null
+          company_name?: string | null
+          created_at?: string | null
+          email?: string
+          ghost_mode?: boolean | null
+          ghost_mode_until?: string | null
+          id?: string
+          job_title?: string | null
+          linkedin_url?: string | null
+          name?: string | null
+          phone?: string | null
+          profile_pic?: string | null
+          slug?: string | null
+          social_links?: Json | null
+          vcard_data?: Json | null
+          website?: string | null
+          webhook_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "users_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
@@ -210,10 +343,12 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_id_from_auth: { Args: never; Returns: string }
     }
     Enums: {
-      [_ in never]: never
+      chip_mode: "corporate" | "hospitality" | "campaign"
+      plan_type: "starter" | "pro" | "enterprise"
+      sentiment_type: "hot" | "warm" | "cold"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -340,6 +475,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      chip_mode: ["corporate", "hospitality", "campaign"],
+      plan_type: ["starter", "pro", "enterprise"],
+      sentiment_type: ["hot", "warm", "cold"],
+    },
   },
 } as const
