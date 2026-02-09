@@ -77,11 +77,7 @@ export default function NfcTapPage() {
                     break;
 
                 default:
-                    if (chip.target_url) {
-                        window.location.href = chip.target_url;
-                    } else {
-                        setError("Unbekannter Modus");
-                    }
+                    setError("Unbekannter Modus");
             }
         }
 

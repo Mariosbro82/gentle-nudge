@@ -54,7 +54,7 @@ export function SidebarNews({ articles = defaultArticles }: { articles?: NewsArt
       data-active={cardCount !== 0}
     >
       <div className="relative size-full">
-        {cards.toReversed().map(({ href, title, summary, image }, idx) => (
+        {[...cards].reverse().map(({ href, title, summary, image }: { href: string; title: string; summary: string; image: string }, idx: number) => (
           <div
             key={href}
             className={cn(

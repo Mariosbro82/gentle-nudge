@@ -1,6 +1,6 @@
 
-import React from 'react';
-import { motion } from 'framer-motion';
+
+
 import { Zap, Clock, Mail, ArrowRight, Smartphone, ChevronLeft } from 'lucide-react';
 import { OnboardingData } from '@/types/onboarding';
 import { Slider } from "@/components/ui/slider";
@@ -75,7 +75,7 @@ export const AutomationPreviewStep = ({ data, updateData, onNext, onBack }: Auto
                     defaultValue={[data.automationDelayHours || 24]}
                     max={168}
                     min={6}
-                    step={null}
+                    step={1}
                     // @ts-ignore - Slider marks prop issue
                     marks={[
                         { value: 6, label: '6h' },

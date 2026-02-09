@@ -75,7 +75,6 @@ export function ImageUpload({ type, currentUrl, authUserId, onUploaded, onRemove
                     <button
                         type="button"
                         onClick={() => inputRef.current?.click()}
-                        onClick={() => inputRef.current?.click()}
                         disabled={uploading}
                         className="relative w-20 h-20 rounded-full bg-muted border-2 border-dashed border-border flex items-center justify-center overflow-hidden hover:border-blue-500/50 transition-colors group"
                     >
@@ -111,7 +110,6 @@ export function ImageUpload({ type, currentUrl, authUserId, onUploaded, onRemove
                     <p className="text-sm font-medium mb-2">Banner</p>
                     <button
                         type="button"
-                        onClick={() => inputRef.current?.click()}
                         onClick={() => inputRef.current?.click()}
                         disabled={uploading}
                         className="relative w-full h-24 rounded-lg bg-muted border-2 border-dashed border-border flex items-center justify-center overflow-hidden hover:border-blue-500/50 transition-colors group"

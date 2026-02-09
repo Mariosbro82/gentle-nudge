@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
-    Database, Search, Smartphone, Building2, Utensils, QrCode, Plus, FileSpreadsheet, UserPlus, X, Loader2
+    Database, Search, Smartphone, Building2, Utensils, QrCode, Plus, FileSpreadsheet, UserPlus, Loader2
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import {

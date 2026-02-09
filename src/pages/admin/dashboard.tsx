@@ -133,24 +133,24 @@ export default function AdminDashboardPage() {
 
                 // 3. Fetch Recent Activity
                 const { data: recentUsers } = await supabase.from('users').select('id, email, created_at').order('created_at', { ascending: false }).limit(5);
-                const { data: recentLeads } = await supabase.from('leads').select('id, email, created_at').order('created_at', { ascending: false }).limit(5);
+                const { data: recentLeads } = await supabase.from('leads').select('id, lead_email, created_at').order('created_at', { ascending: false }).limit(5);
                 // Depending on size, fetching views might be heavy, but limit 5 is fine
-                const { data: recentViews } = await supabase.from('profile_views').select('id, viewer_id, viewed_at').order('viewed_at', { ascending: false }).limit(5);
+                const { data: recentViews } = await supabase.from('profile_views').select('id, user_id, viewed_at').order('viewed_at', { ascending: false }).limit(5);
 
                 const newActivities: ActivityItem[] = [
                     ...(recentUsers?.map(u => ({
                         id: u.id,
                         type: 'user' as const,
                         description: `New user signed up: ${u.email}`,
-                        time: u.created_at,
+                        time: u.created_at || new Date().toISOString(),
                         icon: UserPlus,
                         color: 'text-blue-400'
                     })) || []),
                     ...(recentLeads?.map(l => ({
                         id: l.id.toString(),
                         type: 'lead' as const,
-                        description: `New lead captured: ${l.email}`,
-                        time: l.created_at,
+                        description: `New lead captured: ${l.lead_email || 'Unknown'}`,
+                        time: l.created_at || new Date().toISOString(),
                         icon: Megaphone,
                         color: 'text-orange-400'
                     })) || []),
@@ -158,7 +158,7 @@ export default function AdminDashboardPage() {
                         id: v.id ? v.id.toString() : `view-${i}`,
                         type: 'view' as const,
                         description: `Profile view recorded`,
-                        time: v.viewed_at,
+                        time: v.viewed_at || new Date().toISOString(),
                         icon: Eye,
                         color: 'text-green-400'
                     })) || [])
@@ -183,8 +183,8 @@ export default function AdminDashboardPage() {
                 }
 
                 monthUsers?.forEach(u => {
-                    const dateStr = u.created_at.split('T')[0];
-                    if (days[dateStr] !== undefined) {
+                    const dateStr = u.created_at?.split('T')[0];
+                    if (dateStr && days[dateStr] !== undefined) {
                         days[dateStr]++;
                     }
                 });
@@ -209,7 +209,7 @@ export default function AdminDashboardPage() {
         <div className="p-8 space-y-8">
             <header>
                 <h1 className="text-3xl font-bold text-white tracking-tight">Dashboard Overview</h1>
-                <p className="text-zinc-400">Welcome back, {adminProfile?.name || adminProfile?.email || 'Admin'}.</p>
+                <p className="text-zinc-400">Welcome back, {adminProfile?.full_name || adminProfile?.email || 'Admin'}.</p>
             </header>
 
             {/* KPI Grid */}

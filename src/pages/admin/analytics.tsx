@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
 import { Users, CreditCard, Activity, ArrowUpRight, Megaphone, TrendingUp, Filter } from "lucide-react";
 import {
-    Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis, Legend
+    Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis
 } from "recharts";
 
 interface AnalyticsStats {
@@ -75,8 +75,8 @@ export default function AdminAnalyticsPage() {
                     .gte('viewed_at', thirtyDaysAgo);
 
                 viewsData?.forEach(v => {
-                    const dateStr = v.viewed_at.split('T')[0];
-                    if (days[dateStr] !== undefined) {
+                    const dateStr = v.viewed_at?.split('T')[0];
+                    if (dateStr && days[dateStr] !== undefined) {
                         days[dateStr]++;
                     }
                 });

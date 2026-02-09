@@ -199,6 +199,7 @@ export function OnboardingWizard() {
                         updateData={updateData}
                         onNext={nextStep}
                         onBack={prevStep}
+                        onSkipAll={() => setCurrentStep(7)}
                     />
                 );
             case 7:
