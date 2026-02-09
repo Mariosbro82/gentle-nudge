@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import type { OnboardingData } from "../OnboardingWizard";
+import { ChevronLeft, ChevronRight, Info } from "lucide-react";
+import { OnboardingData } from "@/types/onboarding";
 
 interface PersonalizationStepProps {
     data: OnboardingData;
@@ -50,17 +50,18 @@ export function PersonalizationStep({
     return (
         <div className="space-y-8">
             <div className="text-center space-y-2">
-                <h2 className="text-3xl font-bold text-white">Erzählen Sie uns von sich</h2>
-                <p className="text-zinc-400">
-                    Diese Informationen helfen uns, Ihr Erlebnis zu personalisieren.
-                </p>
+                <h2 className="text-3xl font-bold text-foreground">Erzählen Sie uns von sich</h2>
+                <div className="flex items-center justify-center gap-2 text-muted-foreground bg-muted py-1 px-3 rounded-full w-fit mx-auto text-sm">
+                    <Info className="w-4 h-4 text-blue-400" />
+                    <span>Wir nutzen dies, um die besten Funktionen für Sie zu empfehlen</span>
+                </div>
             </div>
 
-            <Card className="bg-zinc-900/50 border-white/5">
+            <Card className="bg-card border-border">
                 <CardContent className="p-6 space-y-6">
                     {/* Industry */}
                     <div className="space-y-3">
-                        <Label className="text-white">In welcher Branche sind Sie tätig?</Label>
+                        <Label className="text-foreground">In welcher Branche sind Sie tätig?</Label>
                         <div className="grid grid-cols-2 gap-2">
                             {INDUSTRIES.map((industry) => (
                                 <button
@@ -70,8 +71,8 @@ export function PersonalizationStep({
                                     className={`
                                         px-4 py-2 rounded-lg text-sm text-left transition-all
                                         ${data.industry === industry
-                                            ? "bg-white text-black font-medium"
-                                            : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+                                            ? "bg-primary text-primary-foreground font-medium"
+                                            : "bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                                         }
                                     `}
                                 >
@@ -83,7 +84,7 @@ export function PersonalizationStep({
 
                     {/* Use Case */}
                     <div className="space-y-3">
-                        <Label className="text-white">Wofür möchten Sie NFCwear nutzen?</Label>
+                        <Label className="text-foreground">Wofür möchten Sie NFCwear nutzen?</Label>
                         <div className="grid grid-cols-2 gap-3">
                             {USE_CASES.map((useCase) => (
                                 <button
@@ -93,8 +94,8 @@ export function PersonalizationStep({
                                     className={`
                                         p-4 rounded-xl text-left transition-all border
                                         ${data.useCase === useCase.id
-                                            ? "bg-white text-black border-white"
-                                            : "bg-zinc-800/50 text-zinc-300 border-white/5 hover:border-white/20"
+                                            ? "bg-primary text-primary-foreground border-primary"
+                                            : "bg-muted/50 text-muted-foreground border-border hover:border-muted-foreground/50"
                                         }
                                     `}
                                 >
@@ -106,12 +107,12 @@ export function PersonalizationStep({
                     </div>
 
                     {/* Referral Source */}
-                    <div className="space-y-3">
-                        <Label className="text-white">Wie haben Sie von uns erfahren?</Label>
+                    <div className="space-y-3 pt-6 border-t border-border">
+                        <Label className="text-foreground">Wie haben Sie von uns erfahren?</Label>
                         <select
                             value={data.referralSource}
                             onChange={(e) => updateData({ referralSource: e.target.value })}
-                            className="w-full bg-zinc-800 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-white/20"
+                            className="w-full bg-input border border-input rounded-lg px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                         >
                             <option value="">Bitte auswählen...</option>
                             {REFERRAL_SOURCES.map((source) => (
@@ -129,7 +130,7 @@ export function PersonalizationStep({
                 <Button
                     variant="ghost"
                     onClick={onBack}
-                    className="text-zinc-400 hover:text-white"
+                    className="text-muted-foreground hover:text-foreground"
                 >
                     <ChevronLeft className="w-4 h-4 mr-2" />
                     Zurück
@@ -138,13 +139,13 @@ export function PersonalizationStep({
                     <Button
                         variant="ghost"
                         onClick={onNext}
-                        className="text-zinc-500 hover:text-white"
+                        className="text-muted-foreground hover:text-foreground"
                     >
                         Überspringen
                     </Button>
                     <Button
                         onClick={onNext}
-                        className="bg-white text-black hover:bg-zinc-200"
+                        className="bg-primary text-primary-foreground hover:bg-primary/90"
                     >
                         Weiter
                         <ChevronRight className="w-4 h-4 ml-2" />

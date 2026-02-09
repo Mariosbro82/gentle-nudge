@@ -84,10 +84,10 @@ export function ScrollTextReveal() {
 
     // Always dark mode for this section as requested
     const theme = {
-        bg: "bg-black",
-        text: "text-white",
-        revealBg: "bg-zinc-950",
-        revealText: "text-white",
+        bg: "bg-background",
+        text: "text-foreground",
+        revealBg: "bg-card",
+        revealText: "text-foreground",
     };
 
     const { scrollYProgress } = useScroll({
@@ -135,7 +135,7 @@ export function ScrollTextReveal() {
                     style={{ opacity: textOpacity, scale: textScale }}
                     className="absolute inset-0 flex items-center justify-center z-0"
                 >
-                    <h2 className="text-[10rem] md:text-[16rem] font-black text-transparent bg-clip-text bg-gradient-to-b from-zinc-700 via-zinc-800 to-zinc-900 select-none text-center leading-[0.85] tracking-tighter opacity-50">
+                    <h2 className="text-[10rem] md:text-[16rem] font-black text-transparent bg-clip-text bg-gradient-to-b from-foreground via-foreground/80 to-foreground/60 select-none text-center leading-[0.85] tracking-tighter opacity-50">
                         NFC<br />WEAR
                     </h2>
                 </motion.div>
@@ -148,7 +148,7 @@ export function ScrollTextReveal() {
                         borderRadius: circleRadius,
                         opacity: contentFadeOut, // Fade out
                     }}
-                    className={`absolute inset-0 z-20 ${theme.revealBg} flex items-center justify-center shadow-[0_-20px_100px_rgba(0,0,0,0.5)] border-t border-white/10`}
+                    className={`absolute inset-0 z-20 ${theme.revealBg} flex items-center justify-center shadow-[0_-20px_100px_rgba(0,0,0,0.5)] border-t border-border`}
                 >
                     {/* Inhalt innerhalb des Reveal-Kreises */}
                     <motion.div
@@ -170,7 +170,7 @@ export function ScrollTextReveal() {
                                 NTAG424 DNA Technologie
                             </motion.span>
 
-                            <h2 className="text-4xl md:text-7xl font-bold tracking-tighter mb-6 bg-clip-text text-transparent bg-gradient-to-b from-white to-zinc-500">
+                            <h2 className="text-4xl md:text-7xl font-bold tracking-tighter mb-6 bg-clip-text text-transparent bg-gradient-to-b from-foreground to-muted-foreground">
                                 Unfälschbare<br />Identität.
                             </h2>
 
@@ -186,8 +186,8 @@ export function ScrollTextReveal() {
                 style={{ opacity: textOpacity }}
                 className="absolute bottom-10 left-0 right-0 flex flex-col items-center gap-2"
             >
-                <div className="text-[10px] font-bold tracking-widest uppercase text-zinc-500">Scroll to Reveal</div>
-                <div className="w-px h-12 bg-zinc-800" />
+                <div className="text-[10px] font-bold tracking-widest uppercase text-muted-foreground">Scroll to Reveal</div>
+                <div className="w-px h-12 bg-border" />
             </motion.div>
         </section>
     );

@@ -57,11 +57,10 @@ export function TemplateSelector({ activeTemplateId, onSelect }: TemplateSelecto
                         key={template.id}
                         type="button"
                         onClick={() => onSelect(template.id)}
-                        className={`relative rounded-xl border-2 p-3 text-left transition-all ${
-                            isActive
+                        className={`relative rounded-xl border-2 p-3 text-left transition-all ${isActive
                                 ? "border-blue-500 bg-blue-500/5"
-                                : "border-white/5 bg-white/[0.02] hover:border-white/15"
-                        }`}
+                                : "border-border bg-card hover:border-muted-foreground/20"
+                            }`}
                     >
                         {/* Preview mockup */}
                         <div className={`h-16 rounded-lg bg-gradient-to-r ${preview.gradient} mb-3 flex items-end justify-center`}>
@@ -73,7 +72,7 @@ export function TemplateSelector({ activeTemplateId, onSelect }: TemplateSelecto
                         <div className="mt-2">
                             <p className="text-sm font-medium">{template.name}</p>
                             {template.description && (
-                                <p className="text-xs text-zinc-500 mt-0.5">{template.description}</p>
+                                <p className="text-xs text-muted-foreground mt-0.5">{template.description}</p>
                             )}
                         </div>
 

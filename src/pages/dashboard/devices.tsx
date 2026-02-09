@@ -16,6 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Plus, Edit, Trash, Loader2, AlertTriangle } from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
 import { useAuth } from "@/contexts/auth-context";
+import { BulkImportDialog } from "@/components/chips/bulk-import-dialog";
 
 interface Chip {
     id: string;
@@ -175,20 +176,21 @@ export default function DevicesPage() {
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight">Geräte</h1>
-                    <p className="text-zinc-500">Verwalten Sie alle NFC-Chips und deren aktive Modi.</p>
+                    <p className="text-muted-foreground">Verwalten Sie alle NFC-Chips und deren aktive Modi.</p>
                 </div>
 
                 {/* Add Chip Dialog */}
                 <Dialog open={addOpen} onOpenChange={setAddOpen}>
                     <DialogTrigger asChild>
-                        <Button className="bg-white text-black hover:bg-zinc-200">
+                        <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
                             <Plus size={18} className="mr-2" /> Chip hinzufügen
                         </Button>
                     </DialogTrigger>
-                    <DialogContent className="bg-zinc-900 border-zinc-800 text-white">
+                    <BulkImportDialog />
+                    <DialogContent className="bg-background border-border text-foreground">
                         <DialogHeader>
                             <DialogTitle>Neuen NFC-Chip registrieren</DialogTitle>
-                            <DialogDescription className="text-zinc-400">
+                            <DialogDescription className="text-muted-foreground">
                                 Geben Sie die UID des NTAG424 DNA Chips ein.
                             </DialogDescription>
                         </DialogHeader>
@@ -198,17 +200,17 @@ export default function DevicesPage() {
                                 <Input
                                     name="uid"
                                     placeholder="04:A1:B2:C3:D4:E5:F6"
-                                    className="bg-black/50 border-white/10 font-mono"
+                                    className="bg-input border-border font-mono"
                                     required
                                 />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="company_id">Firma zuweisen</Label>
                                 <Select name="company_id">
-                                    <SelectTrigger className="bg-black/50 border-white/10">
+                                    <SelectTrigger className="bg-input border-border">
                                         <SelectValue placeholder="Firma wählen" />
                                     </SelectTrigger>
-                                    <SelectContent className="bg-zinc-900 border-zinc-800 text-white">
+                                    <SelectContent className="bg-popover border-border text-popover-foreground">
                                         {companies.map((c) => (
                                             <SelectItem key={c.id} value={c.id}>
                                                 {c.name}
@@ -231,10 +233,10 @@ export default function DevicesPage() {
                 </Dialog>
             </div>
 
-            <div className="rounded-md border border-white/5 bg-zinc-900/50">
+            <div className="rounded-md border border-border bg-card">
                 <Table>
                     <TableHeader>
-                        <TableRow className="border-white/5 hover:bg-white/5">
+                        <TableRow className="border-border hover:bg-muted/50">
                             <TableHead>UID</TableHead>
                             <TableHead>Zugewiesen an</TableHead>
                             <TableHead>Aktiver Modus</TableHead>
@@ -244,11 +246,11 @@ export default function DevicesPage() {
                     </TableHeader>
                     <TableBody>
                         {devices.map((device) => (
-                            <TableRow key={device.id} className="border-white/5 hover:bg-white/5">
-                                <TableCell className="font-mono text-zinc-400">
+                            <TableRow key={device.id} className="border-border hover:bg-muted/50">
+                                <TableCell className="font-mono text-muted-foreground">
                                     {device.uid ? `****${device.uid.slice(-4).toUpperCase()}` : "-"}
                                 </TableCell>
-                                <TableCell className="font-medium text-white">{device.assigned_user?.name || "-"}</TableCell>
+                                <TableCell className="font-medium text-foreground">{device.assigned_user?.name || "-"}</TableCell>
                                 <TableCell>
                                     <Badge
                                         variant="outline"
@@ -263,7 +265,7 @@ export default function DevicesPage() {
                                         {device.active_mode}
                                     </Badge>
                                 </TableCell>
-                                <TableCell className="text-zinc-500">
+                                <TableCell className="text-muted-foreground">
                                     {device.last_scan ? new Date(device.last_scan).toLocaleDateString() : "Nie"}
                                 </TableCell>
                                 <TableCell className="text-right">
@@ -300,7 +302,7 @@ export default function DevicesPage() {
                         ))}
                         {devices.length === 0 && (
                             <TableRow>
-                                <TableCell colSpan={5} className="text-center py-10 text-zinc-500">
+                                <TableCell colSpan={5} className="text-center py-10 text-muted-foreground">
                                     Keine Geräte gefunden. Fügen Sie eines hinzu.
                                 </TableCell>
                             </TableRow>
@@ -311,10 +313,10 @@ export default function DevicesPage() {
 
             {/* Edit Dialog */}
             <Dialog open={editOpen} onOpenChange={setEditOpen}>
-                <DialogContent className="bg-zinc-900 border-zinc-800 text-white">
+                <DialogContent className="bg-background border-border text-foreground">
                     <DialogHeader>
                         <DialogTitle>Chip bearbeiten</DialogTitle>
-                        <DialogDescription className="text-zinc-400">
+                        <DialogDescription className="text-muted-foreground">
                             Ändern Sie die Einstellungen für diesen NFC-Chip.
                         </DialogDescription>
                     </DialogHeader>
@@ -324,23 +326,23 @@ export default function DevicesPage() {
                             <Input
                                 name="uid"
                                 defaultValue={selectedChip?.uid}
-                                className="bg-black/50 border-white/10 font-mono"
+                                className="bg-input border-border font-mono"
                             />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="active_mode">Aktiver Modus</Label>
                             <Select name="active_mode" defaultValue={selectedChip?.active_mode || undefined}>
-                                <SelectTrigger className="bg-black/50 border-white/10">
+                                <SelectTrigger className="bg-input border-border">
                                     <SelectValue />
                                 </SelectTrigger>
-                                <SelectContent className="bg-zinc-900 border-zinc-800 text-white">
+                                <SelectContent className="bg-popover border-border text-popover-foreground">
                                     <SelectItem value="corporate">Corporate</SelectItem>
                                     <SelectItem value="hospitality">Hospitality</SelectItem>
                                     <SelectItem value="event">Event</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
-                        <div className="space-y-2 pt-4 border-t border-white/10">
+                        <div className="space-y-2 pt-4 border-t border-border">
                             <Label htmlFor="password" className="text-orange-400">
                                 Passwort zur Bestätigung
                             </Label>
@@ -348,10 +350,10 @@ export default function DevicesPage() {
                                 name="password"
                                 type="password"
                                 placeholder="Ihr Konto-Passwort"
-                                className="bg-black/50 border-orange-500/30"
+                                className="bg-input border-orange-500/30"
                                 required
                             />
-                            <p className="text-xs text-zinc-500">Geben Sie Ihr Passwort ein, um die Änderungen zu bestätigen.</p>
+                            <p className="text-xs text-muted-foreground">Geben Sie Ihr Passwort ein, um die Änderungen zu bestätigen.</p>
                         </div>
                         {error && <p className="text-red-400 text-sm">{error}</p>}
                         <div className="flex justify-end gap-2 pt-2">
@@ -369,13 +371,13 @@ export default function DevicesPage() {
 
             {/* Delete Dialog */}
             <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-                <DialogContent className="bg-zinc-900 border-zinc-800 text-white">
+                <DialogContent className="bg-background border-border text-foreground">
                     <DialogHeader>
                         <DialogTitle className="flex items-center gap-2 text-red-400">
                             <AlertTriangle size={20} />
                             Chip löschen
                         </DialogTitle>
-                        <DialogDescription className="text-zinc-400">
+                        <DialogDescription className="text-muted-foreground">
                             Diese Aktion kann nicht rückgängig gemacht werden. Alle Scan-Daten bleiben erhalten.
                         </DialogDescription>
                     </DialogHeader>
@@ -395,10 +397,10 @@ export default function DevicesPage() {
                                 name="password"
                                 type="password"
                                 placeholder="Ihr Konto-Passwort"
-                                className="bg-black/50 border-red-500/30"
+                                className="bg-input border-red-500/30"
                                 required
                             />
-                            <p className="text-xs text-zinc-500">Geben Sie Ihr Passwort ein, um die Löschung zu bestätigen.</p>
+                            <p className="text-xs text-muted-foreground">Geben Sie Ihr Passwort ein, um die Löschung zu bestätigen.</p>
                         </div>
                         {error && <p className="text-red-400 text-sm">{error}</p>}
                         <div className="flex justify-end gap-2 pt-2">

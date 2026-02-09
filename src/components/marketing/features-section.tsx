@@ -35,14 +35,14 @@ export function FeaturesSection() {
     ];
 
     return (
-        <section id="features" className="py-24 bg-black relative">
+        <section id="features" className="py-24 bg-background relative">
             <div className="container mx-auto px-4">
 
                 <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
+                    <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4">
                         Ein Chip. <span className="text-blue-500">Drei Möglichkeiten.</span>
                     </h2>
-                    <p className="text-zinc-400 max-w-2xl mx-auto text-lg">
+                    <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
                         Wechseln Sie den Modus in Echtzeit über das Severmore Dashboard. Ohne App. Ohne Aufwand.
                     </p>
                 </div>
@@ -55,7 +55,7 @@ export function FeaturesSection() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.2 }}
-                            className="p-8 rounded-2xl bg-zinc-900/50 border border-white/5 hover:border-white/10 hover:bg-zinc-900/80 transition-all group"
+                            className="p-8 rounded-2xl bg-card border border-border hover:border-foreground/20 hover:bg-accent/50 transition-all group"
                         >
                             <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-6 bg-${mode.color}-500/10 text-${mode.color}-500 group-hover:scale-110 transition-transform duration-300`}>
                                 <mode.icon size={28} className={
@@ -64,21 +64,21 @@ export function FeaturesSection() {
                                 } />
                             </div>
 
-                            <h3 className="text-2xl font-bold text-white mb-2">{mode.title}</h3>
+                            <h3 className="text-2xl font-bold text-foreground mb-2">{mode.title}</h3>
                             <p className={`text-sm font-medium mb-4 ${mode.color === 'blue' ? 'text-blue-400' :
                                 mode.color === 'orange' ? 'text-orange-400' : 'text-purple-400'
                                 }`}>
                                 {mode.subtitle}
                             </p>
 
-                            <p className="text-zinc-400 mb-8 leading-relaxed text-sm">
+                            <p className="text-muted-foreground mb-8 leading-relaxed text-sm">
                                 {mode.description}
                             </p>
 
                             <ul className="space-y-3">
                                 {mode.features.map((feature) => (
-                                    <li key={feature} className="flex items-center gap-3 text-sm text-zinc-300">
-                                        <CheckCircle2 size={16} className="text-zinc-600 group-hover:text-white transition-colors" />
+                                    <li key={feature} className="flex items-center gap-3 text-sm text-muted-foreground">
+                                        <CheckCircle2 size={16} className="text-muted-foreground group-hover:text-foreground transition-colors" />
                                         {feature}
                                     </li>
                                 ))}

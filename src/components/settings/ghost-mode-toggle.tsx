@@ -60,12 +60,12 @@ export function GhostModeToggle({ ghostMode, ghostModeUntil, onChange, saving }:
         <div className="space-y-4">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${ghostMode ? "bg-violet-500/20" : "bg-zinc-800"}`}>
-                        <Ghost className={`h-5 w-5 ${ghostMode ? "text-violet-400" : "text-zinc-500"}`} />
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${ghostMode ? "bg-violet-500/20" : "bg-muted"}`}>
+                        <Ghost className={`h-5 w-5 ${ghostMode ? "text-violet-400" : "text-muted-foreground"}`} />
                     </div>
                     <div>
                         <Label className="text-base cursor-pointer">Ghost-Modus</Label>
-                        <p className="text-xs text-zinc-500">
+                        <p className="text-xs text-muted-foreground">
                             {ghostMode
                                 ? remainingText
                                     ? `Aktiv - ${remainingText}`
@@ -83,7 +83,7 @@ export function GhostModeToggle({ ghostMode, ghostModeUntil, onChange, saving }:
 
             {ghostMode && (
                 <div className="pl-[52px] space-y-2">
-                    <p className="text-xs text-zinc-500">Dauer:</p>
+                    <p className="text-xs text-muted-foreground">Dauer:</p>
                     <div className="flex flex-wrap gap-2">
                         {DURATION_OPTIONS.map((opt) => {
                             const isSelected =
@@ -95,18 +95,17 @@ export function GhostModeToggle({ ghostMode, ghostModeUntil, onChange, saving }:
                                     type="button"
                                     onClick={() => handleDurationChange(opt.value)}
                                     disabled={saving}
-                                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                                        isSelected
+                                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${isSelected
                                             ? "bg-violet-500/20 text-violet-300 border border-violet-500/30"
-                                            : "bg-zinc-800 text-zinc-400 border border-white/5 hover:border-white/10"
-                                    }`}
+                                            : "bg-muted text-muted-foreground border border-border hover:border-muted-foreground/20"
+                                        }`}
                                 >
                                     {opt.label}
                                 </button>
                             );
                         })}
                     </div>
-                    <p className="text-xs text-zinc-600 mt-1">
+                    <p className="text-xs text-muted-foreground mt-1">
                         Im Ghost-Modus sehen Scanner nur eine Platzhalter-Seite.
                     </p>
                 </div>

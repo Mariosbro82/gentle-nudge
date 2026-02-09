@@ -22,12 +22,14 @@ export function Navbar() {
       </div>
 
       {/* Desktop Menu */}
-      <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-600 dark:text-zinc-400">
-        <Link to="/products" className="hover:text-blue-500 transition-colors">Produkte</Link>
+      <div className="hidden lg:flex items-center gap-6 text-sm font-medium text-zinc-600 dark:text-zinc-400">
+        <Link to="/" className="hover:text-blue-500 transition-colors">Home</Link>
+        <Link to="/platform" className="hover:text-blue-500 transition-colors">Plattform</Link>
+        <Link to="/solutions" className="hover:text-blue-500 transition-colors">Lösungen</Link>
+        <Link to="/sustainability" className="hover:text-blue-500 transition-colors">Nachhaltigkeit</Link>
+        <Link to="/shop" className="hover:text-blue-500 transition-colors">Shop</Link>
         <Link to="/pricing" className="hover:text-blue-500 transition-colors">Preise</Link>
-        <Link to="/company" className="hover:text-blue-500 transition-colors">Unternehmen</Link>
-        <a href="/#features" className="hover:text-blue-500 transition-colors">Features</a>
-        <a href="/#tech" className="hover:text-blue-500 transition-colors">NFC Technik</a>
+        <Link to="/about" className="hover:text-blue-500 transition-colors">About Us</Link>
       </div>
 
       <div className="flex items-center gap-4">
@@ -39,19 +41,21 @@ export function Navbar() {
         </Link>
 
         {/* Mobile Menu Toggle */}
-        <button onClick={() => setIsOpen(!isOpen)} className="md:hidden text-zinc-600 dark:text-zinc-300">
+        <button onClick={() => setIsOpen(!isOpen)} className="lg:hidden text-zinc-600 dark:text-zinc-300">
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
       {/* Mobile Menu Overlay */}
       {isOpen && (
-        <div className="absolute top-16 left-0 right-0 bg-white dark:bg-black border-b border-white/10 p-6 flex flex-col gap-4 shadow-2xl md:hidden">
-          <Link to="/products" className="text-lg font-medium text-zinc-600 dark:text-zinc-300" onClick={() => setIsOpen(false)}>Produkte</Link>
+        <div className="absolute top-16 left-0 right-0 bg-white dark:bg-black border-b border-white/10 p-6 flex flex-col gap-4 shadow-2xl lg:hidden max-h-[calc(100vh-4rem)] overflow-y-auto">
+          <Link to="/" className="text-lg font-medium text-zinc-600 dark:text-zinc-300" onClick={() => setIsOpen(false)}>Home</Link>
+          <Link to="/platform" className="text-lg font-medium text-zinc-600 dark:text-zinc-300" onClick={() => setIsOpen(false)}>Plattform</Link>
+          <Link to="/solutions" className="text-lg font-medium text-zinc-600 dark:text-zinc-300" onClick={() => setIsOpen(false)}>Lösungen</Link>
+          <Link to="/sustainability" className="text-lg font-medium text-zinc-600 dark:text-zinc-300" onClick={() => setIsOpen(false)}>Nachhaltigkeit</Link>
+          <Link to="/shop" className="text-lg font-medium text-zinc-600 dark:text-zinc-300" onClick={() => setIsOpen(false)}>Shop</Link>
           <Link to="/pricing" className="text-lg font-medium text-zinc-600 dark:text-zinc-300" onClick={() => setIsOpen(false)}>Preise</Link>
-          <Link to="/company" className="text-lg font-medium text-zinc-600 dark:text-zinc-300" onClick={() => setIsOpen(false)}>Unternehmen</Link>
-          <a href="/#features" className="text-lg font-medium text-zinc-600 dark:text-zinc-300" onClick={() => setIsOpen(false)}>Features</a>
-          <a href="/#tech" className="text-lg font-medium text-zinc-600 dark:text-zinc-300" onClick={() => setIsOpen(false)}>NFC Technik</a>
+          <Link to="/about" className="text-lg font-medium text-zinc-600 dark:text-zinc-300" onClick={() => setIsOpen(false)}>About Us</Link>
           <div className="h-px bg-white/10 my-2" />
           <Link to="/login" onClick={() => setIsOpen(false)}>
             <Button className="w-full bg-blue-600 hover:bg-blue-500 text-white rounded-full">

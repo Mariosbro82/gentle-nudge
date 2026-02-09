@@ -85,12 +85,12 @@ export function WebhookSettings({ webhookUrl, authUserId, email, onChange }: Web
     return (
         <div className="space-y-4">
             <div className="flex items-center gap-3">
-                <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${isActive ? "bg-blue-500/20" : "bg-zinc-800"}`}>
-                    <Webhook className={`h-5 w-5 ${isActive ? "text-blue-400" : "text-zinc-500"}`} />
+                <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${isActive ? "bg-blue-500/20" : "bg-muted"}`}>
+                    <Webhook className={`h-5 w-5 ${isActive ? "text-blue-400" : "text-muted-foreground"}`} />
                 </div>
                 <div>
                     <Label className="text-base">Webhook-Integration</Label>
-                    <p className="text-xs text-zinc-500">
+                    <p className="text-xs text-muted-foreground">
                         {isActive ? (
                             <span className="flex items-center gap-1.5">
                                 <span className="h-2 w-2 rounded-full bg-green-500 inline-block" />
@@ -105,7 +105,7 @@ export function WebhookSettings({ webhookUrl, authUserId, email, onChange }: Web
 
             <div className="space-y-3 pl-[52px]">
                 <div className="space-y-1.5">
-                    <Label htmlFor="webhook-url" className="text-sm text-zinc-400">Webhook-URL</Label>
+                    <Label htmlFor="webhook-url" className="text-sm text-muted-foreground">Webhook-URL</Label>
                     <Input
                         id="webhook-url"
                         type="url"
@@ -115,7 +115,7 @@ export function WebhookSettings({ webhookUrl, authUserId, email, onChange }: Web
                             setUrl(e.target.value);
                             setTestResult(null);
                         }}
-                        className="bg-black/50 border-white/10"
+                        className="bg-input border-border"
                     />
                     {url && !urlValid && (
                         <p className="text-xs text-red-400">Bitte geben Sie eine gültige HTTPS-URL ein.</p>
@@ -127,7 +127,7 @@ export function WebhookSettings({ webhookUrl, authUserId, email, onChange }: Web
                         type="button"
                         onClick={handleSave}
                         disabled={saving || !urlChanged || (!!url && !urlValid)}
-                        className="bg-white text-black hover:bg-zinc-200"
+                        className="bg-primary text-primary-foreground hover:bg-primary/90"
                         size="sm"
                     >
                         {saving ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : null}
@@ -140,7 +140,7 @@ export function WebhookSettings({ webhookUrl, authUserId, email, onChange }: Web
                             size="sm"
                             onClick={handleTest}
                             disabled={testing || urlChanged}
-                            className="border-white/10"
+                            className="border-border"
                         >
                             {testing ? (
                                 <Loader2 className="animate-spin mr-2 h-4 w-4" />
@@ -159,10 +159,10 @@ export function WebhookSettings({ webhookUrl, authUserId, email, onChange }: Web
                     </div>
                 )}
 
-                <div className="rounded-lg bg-zinc-800/50 border border-white/5 p-3 space-y-1.5">
-                    <p className="text-xs font-medium text-zinc-300">So funktioniert es:</p>
-                    <ol className="text-xs text-zinc-500 space-y-1 list-decimal list-inside">
-                        <li>Erstellen Sie in Zapier einen <strong className="text-zinc-400">Webhooks by Zapier → Catch Hook</strong></li>
+                <div className="rounded-lg bg-muted/50 border border-border p-3 space-y-1.5">
+                    <p className="text-xs font-medium text-foreground">So funktioniert es:</p>
+                    <ol className="text-xs text-muted-foreground space-y-1 list-decimal list-inside">
+                        <li>Erstellen Sie in Zapier einen <strong className="text-foreground">Webhooks by Zapier → Catch Hook</strong></li>
                         <li>Kopieren Sie die generierte URL und fügen Sie sie oben ein</li>
                         <li>Jeder neue Lead wird automatisch als JSON an diese URL gesendet</li>
                     </ol>

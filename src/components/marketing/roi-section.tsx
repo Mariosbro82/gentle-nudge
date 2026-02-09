@@ -4,7 +4,7 @@ import { BarChart3, Zap } from "lucide-react";
 
 export function RoiSection() {
     return (
-        <section id="roi" className="py-24 bg-zinc-950 border-y border-white/5">
+        <section id="roi" className="py-24 bg-background border-y border-border">
             <div className="container mx-auto px-4">
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -14,12 +14,12 @@ export function RoiSection() {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
+                        <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-6">
                             Warum <span className="text-purple-400">NFCwear?</span>
                         </h2>
 
-                        <div className="space-y-8 text-lg text-zinc-400">
-                            <blockquote className="border-l-4 border-purple-500/50 pl-6 italic text-white/80">
+                        <div className="space-y-8 text-lg text-muted-foreground">
+                            <blockquote className="border-l-4 border-purple-500/50 pl-6 italic text-foreground/80">
                                 &quot;Ein Messestand kostet 50.000€. Wenn Ihr Team Papierkarten nutzt, landen 60% davon im Müll. Mit Severmore landet der Kontakt direkt im CRM.&quot;
                             </blockquote>
 
@@ -28,17 +28,17 @@ export function RoiSection() {
                             </p>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
-                                <div className="p-4 rounded-lg bg-white/5 border border-white/5 hover:border-purple-500/30 transition-colors">
-                                    <h4 className="flex items-center gap-2 text-white font-semibold mb-1">
+                                <div className="p-4 rounded-lg bg-card border border-border hover:border-purple-500/30 transition-colors">
+                                    <h4 className="flex items-center gap-2 text-foreground font-semibold mb-1">
                                         <Zap className="text-yellow-400" size={18} /> 60% mehr Leads
                                     </h4>
-                                    <p className="text-sm text-zinc-500">durch friktionslose Erfassung per Tap.</p>
+                                    <p className="text-sm text-muted-foreground">durch friktionslose Erfassung per Tap.</p>
                                 </div>
-                                <div className="p-4 rounded-lg bg-white/5 border border-white/5 hover:border-purple-500/30 transition-colors">
-                                    <h4 className="flex items-center gap-2 text-white font-semibold mb-1">
+                                <div className="p-4 rounded-lg bg-card border border-border hover:border-purple-500/30 transition-colors">
+                                    <h4 className="flex items-center gap-2 text-foreground font-semibold mb-1">
                                         <BarChart3 className="text-green-400" size={18} /> 100% Messbar
                                     </h4>
-                                    <p className="text-sm text-zinc-500">Volles ROI-Tracking für jedes Event.</p>
+                                    <p className="text-sm text-muted-foreground">Volles ROI-Tracking für jedes Event.</p>
                                 </div>
                             </div>
                         </div>
@@ -49,12 +49,12 @@ export function RoiSection() {
                         initial={{ opacity: 0, scale: 0.9 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
-                        className="relative h-[500px] w-full bg-gradient-to-br from-zinc-900 to-black rounded-2xl border border-white/10 overflow-hidden flex flex-col items-center justify-center p-8 shadow-2xl"
+                        className="relative h-[500px] w-full bg-gradient-to-br from-card to-background rounded-2xl border border-border overflow-hidden flex flex-col items-center justify-center p-8 shadow-2xl"
                     >
                         <div className="absolute inset-0 bg-grid-white/[0.02]" />
 
                         {/* Interactive Chart Visualization */}
-                        <div className="flex items-end gap-4 sm:gap-8 h-64 w-full max-w-md px-2 sm:px-6 pb-6 border-b border-l border-white/10 relative z-10">
+                        <div className="flex items-end gap-4 sm:gap-8 h-64 w-full max-w-md px-2 sm:px-6 pb-6 border-b border-l border-border relative z-10">
 
                             {/* Bar 1: Papier (4.4% -> ~26% height) */}
                             <div className="w-1/4 h-full flex flex-col justify-end group items-center relative">
@@ -66,11 +66,11 @@ export function RoiSection() {
                                     className="w-full bg-zinc-800/50 rounded-t-md relative cursor-pointer"
                                 >
                                     {/* Tooltip */}
-                                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-zinc-900 border border-white/10 px-2 py-1 rounded text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-20">
+                                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-popover border border-border px-2 py-1 rounded text-xs text-popover-foreground opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-20">
                                         4.4% Rate
                                     </div>
                                 </motion.div>
-                                <span className="absolute -bottom-8 text-xs text-zinc-500 font-medium tracking-wide">Papier</span>
+                                <span className="absolute -bottom-8 text-xs text-muted-foreground font-medium tracking-wide">Papier</span>
                             </div>
 
                             {/* Bar 2: QR Code (6.4% -> ~38% height) */}
@@ -83,11 +83,11 @@ export function RoiSection() {
                                     className="w-full bg-blue-900/30 rounded-t-md relative cursor-pointer"
                                 >
                                     {/* Tooltip */}
-                                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-zinc-900 border border-white/10 px-2 py-1 rounded text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-20">
+                                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-popover border border-border px-2 py-1 rounded text-xs text-popover-foreground opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-20">
                                         6.4% Rate
                                     </div>
                                 </motion.div>
-                                <span className="absolute -bottom-8 text-xs text-zinc-500 font-medium tracking-wide">QR Code</span>
+                                <span className="absolute -bottom-8 text-xs text-muted-foreground font-medium tracking-wide">QR Code</span>
                             </div>
 
                             {/* Bar 3: NFCwear (13.2% -> ~80% height to leave room for badge) */}
@@ -108,7 +108,7 @@ export function RoiSection() {
                                     </motion.div>
 
                                     {/* Tooltip for NFC - new requirement */}
-                                    <div className="absolute -top-24 left-1/2 -translate-x-1/2 bg-zinc-900 border border-white/10 px-2 py-1 rounded text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-20">
+                                    <div className="absolute -top-24 left-1/2 -translate-x-1/2 bg-popover border border-border px-2 py-1 rounded text-xs text-popover-foreground opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-20">
                                         ~13.2% Rate
                                     </div>
 
@@ -116,11 +116,11 @@ export function RoiSection() {
                                         NFCwear
                                     </div>
                                 </motion.div>
-                                <span className="absolute -bottom-8 text-xs text-white font-bold tracking-wide">NFCwear</span>
+                                <span className="absolute -bottom-8 text-xs text-foreground font-bold tracking-wide">NFCwear</span>
                             </div>
                         </div>
 
-                        <p className="mt-12 text-zinc-500 text-sm font-mono tracking-widest uppercase">Lead Conversion Comparison</p>
+                        <p className="mt-12 text-muted-foreground text-sm font-mono tracking-widest uppercase">Lead Conversion Comparison</p>
                     </motion.div>
 
                 </div>

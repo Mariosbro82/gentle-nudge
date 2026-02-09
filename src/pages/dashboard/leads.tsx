@@ -124,13 +124,14 @@ export default function LeadsPage() {
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight">Kontakte</h1>
-                    <p className="text-zinc-500">Erfasste Kontakte aus dem Visitenkarten-Modus.</p>
+                    <h1 className="text-3xl font-bold tracking-tight">Kontakte</h1>
+                    <p className="text-muted-foreground">Erfasste Kontakte aus dem Visitenkarten-Modus.</p>
                 </div>
                 <div className="flex gap-2">
-                    <Button variant="outline" className="border-white/10" onClick={exportToCSV}>
+                    <Button variant="outline" className="border-border" onClick={exportToCSV}>
                         <Download size={16} className="mr-2" /> Export CSV
                     </Button>
-                    <Button variant="outline" className="border-white/10" onClick={syncWithCRM}>
+                    <Button variant="outline" className="border-border" onClick={syncWithCRM}>
                         <RefreshCw size={16} className="mr-2" /> CRM Sync
                     </Button>
                 </div>

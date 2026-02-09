@@ -33,13 +33,13 @@ export default function ForgotPasswordPage() {
     };
 
     return (
-        <div className="min-h-screen bg-black flex flex-col">
+        <div className="min-h-screen bg-background flex flex-col">
             <Navbar />
             <div className="flex-1 flex items-center justify-center p-4 pt-20">
                 <div className="w-full max-w-md">
-                    <Card className="bg-zinc-900 border-white/10 shadow-2xl">
+                    <Card className="bg-card border-border shadow-2xl">
                         <CardHeader className="space-y-1">
-                            <CardTitle className="text-2xl font-bold text-white">Passwort zurücksetzen</CardTitle>
+                            <CardTitle className="text-2xl font-bold text-foreground">Passwort zurücksetzen</CardTitle>
                             <CardDescription>Geben Sie Ihre E-Mail-Adresse ein, um einen Link zum Zurücksetzen zu erhalten.</CardDescription>
                         </CardHeader>
                         <CardContent>
@@ -52,7 +52,7 @@ export default function ForgotPasswordPage() {
                                         placeholder="ihre@email.de"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        className="bg-black/50 border-white/10 text-white"
+                                        className="bg-input border-border text-foreground"
                                         required
                                     />
                                 </div>
@@ -65,11 +65,11 @@ export default function ForgotPasswordPage() {
                                     <div className="p-3 rounded-md bg-green-500/10 border border-green-500/20 text-green-500 text-sm">{successMessage}</div>
                                 )}
 
-                                <Button type="submit" className="w-full h-10 bg-white text-black hover:bg-zinc-200 font-semibold" disabled={isLoading}>
+                                <Button type="submit" className="w-full h-10 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold" disabled={isLoading}>
                                     {isLoading ? <Loader2 className="animate-spin" /> : "E-Mail senden"}
                                 </Button>
 
-                                <Link to="/login" className="flex items-center justify-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors">
+                                <Link to="/login" className="flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
                                     <ArrowLeft className="h-4 w-4" />
                                     Zurück zum Login
                                 </Link>

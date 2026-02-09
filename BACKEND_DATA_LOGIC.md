@@ -71,6 +71,21 @@ Stores leads captured via the NFC profile "Connect" feature.
 | `captured_by_user_id` | UUID | The user whose profile was scanned. |
 | `ip_address` | Text | IP address of the lead (for interest matching). |
 
+### `chips` Table
+Stores data for physical NFC tags.
+
+| Column | Type | Description |
+| :--- | :--- | :--- |
+| `id` | UUID | Primary Key |
+| `uid` | Text | Unique identifier of the NTAG424 Chip (Hex string). |
+| `company_id` | UUID | FK -> `companies.id` |
+| `assigned_user_id` | UUID | FK -> `users.id` |
+| `active_mode` | Enum | `corporate`, `hospitality`, or `campaign`. |
+| `last_scan` | TIMESTAMPTZ | Last time the chip was scanned. |
+| `vcard_data` | JSONB | Data for vCard mode. |
+| `menu_data` | JSONB | Data for Menu (hospitality) mode. |
+| `review_data` | JSONB | Data for Review mode. |
+
 ## 3. Frontend <-> Backend Logic
 
 ### Profile Updates (`src/pages/dashboard/settings.tsx`)
@@ -100,6 +115,7 @@ Stores leads captured via the NFC profile "Connect" feature.
 - **Analytics**: Added `view_count` column and `increment_view_count` RPC. Frontend now tracks views on profile mount and displays stats in Dashboard.
 - **Onboarding**: Added post-signup onboarding flow with `has_completed_onboarding` flag and `onboarding_data` table.
 - **Analytics System**: Implemented extensive profile view tracking using Edge Functions and `profile_views` table. Replaced simple `view_count` with detailed dashboard analytics (unique visitors, recurring leads, device/country breakdown). Updated `leads` table to track recurring interest.
+- **Consolidation**: Merged Chips management and Mass Import functionality into the `devices.tsx` page for a unified device management experience.
 ## 6. Onboarding System
 
 ### `users.has_completed_onboarding` Column
@@ -131,3 +147,49 @@ Stores survey responses from the onboarding wizard.
    - Inserts `onboarding_data` row with survey responses
 5. Redirects to `/dashboard`
 
+## 7. Email Verification (Auth Callback)
+
+### `/auth/callback` Page (`src/pages/auth/callback.tsx`)
+Handles Supabase email confirmation links (magic links, OTP verification).
+
+| State | UI | Action |
+| :--- | :--- | :--- |
+| `loading` | Spinner + "Ihre E-Mail wird verifiziert..." | Checks session validity |
+| `success` | Green checkmark + countdown | Redirects to `/login` after 3s |
+| `error` | Red X + error message | Shows retry/back buttons |
+
+### Flow
+1. User clicks confirmation link in email
+2. Supabase appends token as hash fragment
+3. `/auth/callback` page loads and verifies session
+4. On success: shows confirmation, redirects to `/login`
+5. User logs in → `ProtectedRoute` checks `has_completed_onboarding`
+6. If first login → `/onboarding` wizard
+7. If returning → `/dashboard`
+
+### Supabase Configuration Required
+Add to **Authentication > URL Configuration > Redirect URLs**:
+- `http://localhost:1234/auth/callback` (development)
+- `https://your-domain.com/auth/callback` (production)
+
+### Shop Data Logic (Mocked)
+Currently, product data is mocked on the frontend (`src/pages/shop/[id].tsx`) to simulate a Shopify experience. Payment flow is also mocked to simulate a Stripe checkout.
+
+| Field | Type | Description |
+| :--- | :--- | :--- |
+| `id` | String | Unique Product ID (`premium-nfc-tshirt`, `lifestyle-nfc-tee`) |
+| `name` | String | Product Name |
+| `price` | Number | Price in EUR |
+| `description` | String | Detailed product description |
+| `images` | Array | List of image URLs (located in `/public/assets/shop/`) |
+| `variants` | Array | Available sizes (S, M, L, XL) |
+
+### Navigation & Page Structure
+The website has been transitioned from a one-pager to a multi-page architecture:
+- `/`: Home (formerly Features)
+- `/platform`: Severmore OS details
+- `/solutions`: Target group specific solutions
+- `/sustainability`: ESG & Compliance standards
+- `/shop`: Hardware store ("The Fleet")
+- `/about`: Company storytelling and contact
+- `/pricing`: Subscription and hardware pricing

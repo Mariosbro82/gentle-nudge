@@ -15,17 +15,17 @@ interface StatsCardProps {
 
 function StatsCard({ title, value, change, icon: Icon }: StatsCardProps) {
     return (
-        <Card className="bg-zinc-900 border-white/5 p-6">
+        <Card className="bg-card border-border p-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <p className="text-sm font-medium text-zinc-400">{title}</p>
+                    <p className="text-sm font-medium text-muted-foreground">{title}</p>
                     <h2 className="text-2xl font-bold mt-2">{value}</h2>
                 </div>
-                <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-zinc-400">
+                <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground">
                     <Icon size={20} />
                 </div>
             </div>
-            <p className="text-xs text-zinc-500 mt-4">{change}</p>
+            <p className="text-xs text-muted-foreground mt-4">{change}</p>
         </Card>
     );
 }
@@ -109,7 +109,7 @@ export default function DashboardPage() {
                 <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
                 <div className="flex items-center gap-2">
                     <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-sm text-zinc-400">System Online</span>
+                    <span className="text-sm text-muted-foreground">System Online</span>
                 </div>
             </div>
 
@@ -124,22 +124,22 @@ export default function DashboardPage() {
 
             {/* Charts Section */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <Card className="bg-zinc-900 border-white/5 p-6 h-[400px]">
+                <Card className="bg-card border-border p-6 h-[400px]">
                     <h3 className="font-semibold mb-4">Live Scan Feed</h3>
-                    <div className="text-zinc-500 text-sm">
+                    <div className="text-muted-foreground text-sm">
                         <div className="space-y-4 mt-4">
                             {recentScans.slice(0, 5).map((scan: any) => (
-                                <div key={scan.id} className="flex items-center justify-between border-b border-white/5 pb-2">
+                                <div key={scan.id} className="flex items-center justify-between border-b border-border pb-2">
                                     <div className="flex items-center gap-3">
                                         <div className="h-8 w-8 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400">
                                             <ScanLine size={14} />
                                         </div>
                                         <div>
-                                            <p className="text-sm font-medium text-white">{scan.device_type || "Unknown Device"}</p>
-                                            <p className="text-xs text-zinc-500">{new Date(scan.scanned_at).toLocaleTimeString()}</p>
+                                            <p className="text-sm font-medium text-foreground">{scan.device_type || "Unknown Device"}</p>
+                                            <p className="text-xs text-muted-foreground">{new Date(scan.scanned_at).toLocaleTimeString()}</p>
                                         </div>
                                     </div>
-                                    <span className="text-xs text-zinc-600">{scan.ip_address}</span>
+                                    <span className="text-xs text-muted-foreground">{scan.ip_address}</span>
                                 </div>
                             ))}
                             {!recentScans.length && <p>Noch keine Scans.</p>}
@@ -147,7 +147,7 @@ export default function DashboardPage() {
                     </div>
                 </Card>
 
-                <Card className="bg-zinc-900 border-white/5 p-6 h-[400px] flex flex-col">
+                <Card className="bg-card border-border p-6 h-[400px] flex flex-col">
                     <div className="flex items-center justify-between mb-6">
                         <h3 className="font-semibold">Performance (30 Tage)</h3>
                         <Link to="/dashboard/analytics" className="text-xs text-blue-400 hover:underline">
@@ -156,10 +156,10 @@ export default function DashboardPage() {
                     </div>
                     <div className="flex-1 flex items-center justify-center flex-col gap-4">
                         <div className="text-center">
-                            <h4 className="text-4xl font-bold text-white mb-1">{scansCount}</h4>
-                            <p className="text-zinc-500 text-sm">Scans Gesamt</p>
+                            <h4 className="text-4xl font-bold text-foreground mb-1">{scansCount}</h4>
+                            <p className="text-muted-foreground text-sm">Scans Gesamt</p>
                         </div>
-                        <div className="w-full bg-white/5 h-32 rounded-lg flex items-end px-4 gap-2 pb-2">
+                        <div className="w-full bg-muted h-32 rounded-lg flex items-end px-4 gap-2 pb-2">
                             {/* Fake mini bars for visual flair */}
                             {[40, 60, 30, 80, 50, 90, 70].map((h, i) => (
                                 <div
@@ -169,7 +169,7 @@ export default function DashboardPage() {
                                 />
                             ))}
                         </div>
-                        <p className="text-xs text-zinc-600">Mini-Preview. Für Details siehe Analytics.</p>
+                        <p className="text-xs text-muted-foreground">Mini-Preview. Für Details siehe Analytics.</p>
                     </div>
                 </Card>
             </div>

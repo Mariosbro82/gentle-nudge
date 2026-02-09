@@ -119,11 +119,11 @@ export default function SettingsPage() {
         <div className="space-y-8 max-w-4xl">
             <div>
                 <h1 className="text-3xl font-bold tracking-tight">Einstellungen</h1>
-                <p className="text-zinc-500">Verwalten Sie Ihr Profil und Integrationen.</p>
+                <p className="text-muted-foreground">Verwalten Sie Ihr Profil und Integrationen.</p>
             </div>
 
             {/* Profile Images */}
-            <Card className="bg-zinc-900/50 border-white/5">
+            <Card className="bg-card border-border">
                 <CardHeader>
                     <CardTitle>Profilbilder</CardTitle>
                     <CardDescription>Laden Sie ein Profilbild und Banner für Ihre digitale Visitenkarte hoch.</CardDescription>
@@ -148,7 +148,7 @@ export default function SettingsPage() {
 
             {/* Profile Form */}
             <form onSubmit={handleSave}>
-                <Card className="bg-zinc-900/50 border-white/5 mb-8">
+                <Card className="bg-card border-border mb-8">
                     <CardHeader>
                         <CardTitle>Persönliches Profil</CardTitle>
                         <CardDescription>Diese Daten erscheinen auf Ihrer digitalen Visitenkarte.</CardDescription>
@@ -157,7 +157,7 @@ export default function SettingsPage() {
                         <div className="grid gap-2">
                             <Label htmlFor="slug">Username / Handle (für Ihre URL)</Label>
                             <div className="flex gap-2">
-                                <Input id="slug" name="slug" defaultValue={user?.slug} placeholder="fabian" className="bg-black/50 border-white/10" />
+                                <Input id="slug" name="slug" defaultValue={user?.slug} placeholder="fabian" className="bg-input border-border" />
                                 {user?.slug && (
                                     <Button type="button" variant="outline" size="icon" asChild title="Profil öffnen">
                                         <a href={`/p/${user.slug}`} target="_blank" rel="noopener noreferrer">
@@ -166,39 +166,39 @@ export default function SettingsPage() {
                                     </Button>
                                 )}
                             </div>
-                            <p className="text-[10px] text-zinc-500">
-                                Ihre öffentliche URL: <code className="bg-white/10 px-1 rounded">nfc.wear/p/{user?.slug || "..."}</code>
+                            <p className="text-[10px] text-muted-foreground">
+                                Ihre öffentliche URL: <code className="bg-muted px-1 rounded">nfc.wear/p/{user?.slug || "..."}</code>
                             </p>
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="name">Name</Label>
-                            <Input id="name" name="name" defaultValue={user?.name} className="bg-black/50 border-white/10" />
+                            <Input id="name" name="name" defaultValue={user?.name} className="bg-input border-border" />
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="title">Job Title</Label>
-                            <Input id="title" name="title" defaultValue={user?.job_title} className="bg-black/50 border-white/10" />
+                            <Input id="title" name="title" defaultValue={user?.job_title} className="bg-input border-border" />
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="bio">Bio</Label>
-                            <Textarea id="bio" name="bio" defaultValue={user?.bio} className="bg-black/50 border-white/10" />
+                            <Textarea id="bio" name="bio" defaultValue={user?.bio} className="bg-input border-border" />
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="email">Kontakt E-Mail (öffentlich)</Label>
-                            <Input id="email" name="email" type="email" defaultValue={user?.email} className="bg-black/50 border-white/10" />
+                            <Input id="email" name="email" type="email" defaultValue={user?.email} className="bg-input border-border" />
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="phone">Telefon</Label>
-                            <Input id="phone" name="phone" type="tel" defaultValue={user?.phone} className="bg-black/50 border-white/10" />
+                            <Input id="phone" name="phone" type="tel" defaultValue={user?.phone} className="bg-input border-border" />
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="website">Webseite</Label>
-                            <Input id="website" name="website" defaultValue={user?.website} className="bg-black/50 border-white/10" />
+                            <Input id="website" name="website" defaultValue={user?.website} className="bg-input border-border" />
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="linkedin">LinkedIn URL</Label>
-                            <Input id="linkedin" name="linkedin" defaultValue={user?.linkedin_url} className="bg-black/50 border-white/10" />
+                            <Input id="linkedin" name="linkedin" defaultValue={user?.linkedin_url} className="bg-input border-border" />
                         </div>
-                        <Button type="submit" className="w-fit bg-white text-black hover:bg-zinc-200" disabled={saving}>
+                        <Button type="submit" className="w-fit bg-primary text-primary-foreground hover:bg-primary/90" disabled={saving}>
                             {saving ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : null}
                             Profil Speichern
                         </Button>
@@ -207,7 +207,7 @@ export default function SettingsPage() {
             </form>
 
             {/* Template Selector */}
-            <Card className="bg-zinc-900/50 border-white/5">
+            <Card className="bg-card border-border">
                 <CardHeader>
                     <CardTitle>Profil-Vorlage</CardTitle>
                     <CardDescription>
@@ -224,14 +224,14 @@ export default function SettingsPage() {
                         activeTemplateId={activeTemplate}
                         onSelect={setActiveTemplate}
                     />
-                    <p className="text-xs text-zinc-500 mt-3">
+                    <p className="text-xs text-muted-foreground mt-3">
                         Klicken Sie &quot;Profil Speichern&quot; oben, um die Vorlage zu übernehmen.
                     </p>
                 </CardContent>
             </Card>
 
             {/* Ghost Mode */}
-            <Card className="bg-zinc-900/50 border-white/5">
+            <Card className="bg-card border-border">
                 <CardHeader>
                     <CardTitle>Ghost-Modus</CardTitle>
                     <CardDescription>Machen Sie Ihr Profil temporär unsichtbar für NFC-Scanner.</CardDescription>
@@ -247,7 +247,7 @@ export default function SettingsPage() {
             </Card>
 
             {/* Webhook Integration */}
-            <Card className="bg-zinc-900/50 border-white/5">
+            <Card className="bg-card border-border">
                 <CardHeader>
                     <CardTitle>Integrationen</CardTitle>
                     <CardDescription>Verbinden Sie externe Tools wie Zapier oder Make.</CardDescription>

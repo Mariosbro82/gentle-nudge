@@ -1,4 +1,4 @@
-import { Sparkles, Users, BarChart3, Zap } from "lucide-react";
+import { Sparkles, Users, BarChart3, Zap, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface WelcomeStepProps {
@@ -36,13 +36,21 @@ export function WelcomeStep({ onNext }: WelcomeStepProps) {
 
             {/* Welcome Text */}
             <div className="space-y-3">
-                <h1 className="text-4xl font-bold text-white">
+                <div className="flex items-center justify-center gap-2 text-sm font-medium text-blue-400 bg-blue-500/10 px-3 py-1 rounded-full mx-auto w-fit">
+                    <Users className="w-3 h-3" />
+                    <span>Schließen Sie sich über 5.000 Profis an</span>
+                </div>
+                <h1 className="text-4xl font-bold text-foreground">
                     Willkommen bei NFCwear
                 </h1>
-                <p className="text-lg text-zinc-400 max-w-md mx-auto">
+                <p className="text-lg text-muted-foreground max-w-md mx-auto">
                     Die Zukunft des Networkings beginnt jetzt. Lassen Sie uns Ihr Profil
                     in wenigen Schritten einrichten.
                 </p>
+                <div className="flex items-center justify-center gap-2 text-muted-foreground text-sm pt-2">
+                    <Clock className="w-4 h-4" />
+                    <span>7 schnelle Schritte • 2 Minuten</span>
+                </div>
             </div>
 
             {/* Feature Cards */}
@@ -50,13 +58,13 @@ export function WelcomeStep({ onNext }: WelcomeStepProps) {
                 {features.map((feature, index) => (
                     <div
                         key={index}
-                        className="bg-zinc-900/50 border border-white/5 rounded-xl p-6 text-left hover:border-white/10 transition-all"
+                        className="bg-card border border-border rounded-xl p-6 text-left hover:border-muted-foreground/20 transition-all"
                     >
-                        <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center mb-4">
+                        <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center mb-4">
                             <feature.icon className="w-5 h-5 text-blue-400" />
                         </div>
-                        <h3 className="font-semibold text-white mb-1">{feature.title}</h3>
-                        <p className="text-sm text-zinc-500">{feature.description}</p>
+                        <h3 className="font-semibold text-foreground mb-1">{feature.title}</h3>
+                        <p className="text-sm text-muted-foreground">{feature.description}</p>
                     </div>
                 ))}
             </div>
@@ -65,9 +73,9 @@ export function WelcomeStep({ onNext }: WelcomeStepProps) {
             <Button
                 onClick={onNext}
                 size="lg"
-                className="bg-white text-black hover:bg-zinc-200 px-8 py-6 text-lg font-semibold"
+                className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 text-lg font-semibold w-full sm:w-auto"
             >
-                Los geht's
+                Jetzt starten
             </Button>
         </div>
     );

@@ -75,23 +75,24 @@ export function ImageUpload({ type, currentUrl, authUserId, onUploaded, onRemove
                     <button
                         type="button"
                         onClick={() => inputRef.current?.click()}
+                        onClick={() => inputRef.current?.click()}
                         disabled={uploading}
-                        className="relative w-20 h-20 rounded-full bg-zinc-800 border-2 border-dashed border-white/10 flex items-center justify-center overflow-hidden hover:border-blue-500/50 transition-colors group"
+                        className="relative w-20 h-20 rounded-full bg-muted border-2 border-dashed border-border flex items-center justify-center overflow-hidden hover:border-blue-500/50 transition-colors group"
                     >
                         {currentUrl ? (
                             <img src={currentUrl} alt="Profilbild" className="w-full h-full object-cover" />
                         ) : (
-                            <Camera className="h-6 w-6 text-zinc-500 group-hover:text-blue-400 transition-colors" />
+                            <Camera className="h-6 w-6 text-muted-foreground group-hover:text-blue-400 transition-colors" />
                         )}
                         {uploading && (
-                            <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                                <Loader2 className="h-5 w-5 animate-spin text-white" />
+                            <div className="absolute inset-0 bg-background/60 flex items-center justify-center">
+                                <Loader2 className="h-5 w-5 animate-spin text-foreground" />
                             </div>
                         )}
                     </button>
                     <div className="space-y-1">
                         <p className="text-sm font-medium">Profilbild</p>
-                        <p className="text-xs text-zinc-500">JPG, PNG oder WebP. Max 5 MB.</p>
+                        <p className="text-xs text-muted-foreground">JPG, PNG oder WebP. Max 5 MB.</p>
                         {currentUrl && (
                             <button
                                 type="button"
@@ -111,25 +112,26 @@ export function ImageUpload({ type, currentUrl, authUserId, onUploaded, onRemove
                     <button
                         type="button"
                         onClick={() => inputRef.current?.click()}
+                        onClick={() => inputRef.current?.click()}
                         disabled={uploading}
-                        className="relative w-full h-24 rounded-lg bg-zinc-800 border-2 border-dashed border-white/10 flex items-center justify-center overflow-hidden hover:border-blue-500/50 transition-colors group"
+                        className="relative w-full h-24 rounded-lg bg-muted border-2 border-dashed border-border flex items-center justify-center overflow-hidden hover:border-blue-500/50 transition-colors group"
                     >
                         {currentUrl ? (
                             <img src={currentUrl} alt="Banner" className="w-full h-full object-cover" />
                         ) : (
                             <div className="flex flex-col items-center gap-1">
-                                <Camera className="h-5 w-5 text-zinc-500 group-hover:text-blue-400 transition-colors" />
-                                <span className="text-xs text-zinc-500">Banner hochladen</span>
+                                <Camera className="h-5 w-5 text-muted-foreground group-hover:text-blue-400 transition-colors" />
+                                <span className="text-xs text-muted-foreground">Banner hochladen</span>
                             </div>
                         )}
                         {uploading && (
-                            <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                                <Loader2 className="h-5 w-5 animate-spin text-white" />
+                            <div className="absolute inset-0 bg-background/60 flex items-center justify-center">
+                                <Loader2 className="h-5 w-5 animate-spin text-foreground" />
                             </div>
                         )}
                     </button>
                     <div className="flex items-center justify-between mt-1">
-                        <p className="text-xs text-zinc-500">Empfohlen: 1200x300px</p>
+                        <p className="text-xs text-muted-foreground">Empfohlen: 1200x300px</p>
                         {currentUrl && (
                             <button
                                 type="button"

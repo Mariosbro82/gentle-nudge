@@ -8,33 +8,19 @@ import { PersonalizationStep } from "./steps/PersonalizationStep";
 import { BusinessStep } from "./steps/BusinessStep";
 import { ProfileSetupStep } from "./steps/ProfileSetupStep";
 import { CompletionStep } from "./steps/CompletionStep";
+import { TemplateSelectionStep } from "./steps/TemplateSelectionStep";
+import { AutomationPreviewStep } from "./steps/AutomationPreviewStep";
 
-export interface OnboardingData {
-    // Personalization
-    industry: string;
-    useCase: string;
-    referralSource: string;
-    // Business
-    companyName: string;
-    teamSize: string;
-    expectedContacts: string;
-    // Profile
-    displayName: string;
-    tagline: string;
-    profilePic: string | null;
-    socialLinks: {
-        linkedin?: string;
-        twitter?: string;
-        website?: string;
-    };
-}
+import { OnboardingData } from "@/types/onboarding";
 
 const STEPS = [
     { id: 1, title: "Willkommen" },
-    { id: 2, title: "Personalisierung" },
-    { id: 3, title: "Business" },
-    { id: 4, title: "Profil" },
-    { id: 5, title: "Fertig" },
+    { id: 2, title: "Template" },
+    { id: 3, title: "Profil" },
+    { id: 4, title: "Personalisierung" },
+    { id: 5, title: "Automation" },
+    { id: 6, title: "Business" },
+    { id: 7, title: "Fertig" },
 ];
 
 export function OnboardingWizard() {
@@ -43,6 +29,9 @@ export function OnboardingWizard() {
     const [currentStep, setCurrentStep] = useState(1);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [data, setData] = useState<OnboardingData>({
+        selectedTemplate: "minimalist-card",
+        automationInterest: false,
+        automationDelayHours: 24,
         industry: "",
         useCase: "",
         referralSource: "",
@@ -103,7 +92,7 @@ export function OnboardingWizard() {
 
                 if (createError) throw createError;
 
-                // Save onboarding data (using type assertion for new table)
+                // Save onboarding data
                 await (supabase.from("onboarding_data" as any) as any).insert({
                     user_id: newProfile.id,
                     industry: data.industry || null,
@@ -112,6 +101,9 @@ export function OnboardingWizard() {
                     company_name: data.companyName || null,
                     team_size: data.teamSize || null,
                     expected_contacts: data.expectedContacts || null,
+                    selected_template: data.selectedTemplate,
+                    automation_interest: data.automationInterest,
+                    automation_delay_hours: data.automationDelayHours,
                 });
             } else {
                 // Update existing profile
@@ -121,15 +113,15 @@ export function OnboardingWizard() {
                         name: data.displayName || undefined,
                         job_title: data.tagline || undefined,
                         profile_pic: data.profilePic || undefined,
-                        linkedin_url: data.socialLinks.linkedin || undefined,
-                        website: data.socialLinks.website || undefined,
+                        // linkedin_url & website removed from main flow but kept in schema
                         company_name: data.companyName || undefined,
+                        active_template: data.selectedTemplate,
                         has_completed_onboarding: true,
                         updated_at: new Date().toISOString(),
                     })
                     .eq("auth_user_id", user.id);
 
-                // Save onboarding data (using type assertion for new table)
+                // Save onboarding data
                 await (supabase.from("onboarding_data" as any) as any).insert({
                     user_id: profile.id,
                     industry: data.industry || null,
@@ -138,6 +130,9 @@ export function OnboardingWizard() {
                     company_name: data.companyName || null,
                     team_size: data.teamSize || null,
                     expected_contacts: data.expectedContacts || null,
+                    selected_template: data.selectedTemplate,
+                    automation_interest: data.automationInterest,
+                    automation_delay_hours: data.automationDelayHours,
                 });
             }
 
@@ -157,8 +152,9 @@ export function OnboardingWizard() {
             case 1:
                 return <WelcomeStep onNext={nextStep} />;
             case 2:
+                // New: Template Selection
                 return (
-                    <PersonalizationStep
+                    <TemplateSelectionStep
                         data={data}
                         updateData={updateData}
                         onNext={nextStep}
@@ -166,15 +162,7 @@ export function OnboardingWizard() {
                     />
                 );
             case 3:
-                return (
-                    <BusinessStep
-                        data={data}
-                        updateData={updateData}
-                        onNext={nextStep}
-                        onBack={prevStep}
-                    />
-                );
-            case 4:
+                // Reordered: Profile (was 4)
                 return (
                     <ProfileSetupStep
                         data={data}
@@ -183,7 +171,37 @@ export function OnboardingWizard() {
                         onBack={prevStep}
                     />
                 );
+            case 4:
+                // Reordered: Personalization (was 2)
+                return (
+                    <PersonalizationStep
+                        data={data}
+                        updateData={updateData}
+                        onNext={nextStep}
+                        onBack={prevStep}
+                    />
+                );
             case 5:
+                // New: Automation Preview
+                return (
+                    <AutomationPreviewStep
+                        data={data}
+                        updateData={updateData}
+                        onNext={nextStep}
+                        onBack={prevStep}
+                    />
+                );
+            case 6:
+                // Reordered: Business (was 3)
+                return (
+                    <BusinessStep
+                        data={data}
+                        updateData={updateData}
+                        onNext={nextStep}
+                        onBack={prevStep}
+                    />
+                );
+            case 7:
                 return (
                     <CompletionStep
                         data={data}
@@ -197,7 +215,7 @@ export function OnboardingWizard() {
     };
 
     return (
-        <div className="min-h-screen bg-black flex flex-col">
+        <div className="min-h-screen bg-background flex flex-col">
             {/* Progress Bar */}
             <div className="w-full px-6 py-4">
                 <div className="max-w-2xl mx-auto">
@@ -208,8 +226,8 @@ export function OnboardingWizard() {
                                     className={`
                                         w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-all
                                         ${currentStep >= step.id
-                                            ? "bg-white text-black"
-                                            : "bg-zinc-800 text-zinc-500"
+                                            ? "bg-primary text-primary-foreground"
+                                            : "bg-muted text-muted-foreground"
                                         }
                                     `}
                                 >
@@ -217,18 +235,18 @@ export function OnboardingWizard() {
                                 </div>
                                 {index < STEPS.length - 1 && (
                                     <div
-                                        className={`flex-1 h-0.5 mx-2 transition-all ${currentStep > step.id ? "bg-white" : "bg-zinc-800"
+                                        className={`flex-1 h-0.5 mx-2 transition-all ${currentStep > step.id ? "bg-primary" : "bg-muted"
                                             }`}
                                     />
                                 )}
                             </div>
                         ))}
                     </div>
-                    <div className="flex justify-between text-xs text-zinc-500">
+                    <div className="flex justify-between text-xs text-muted-foreground">
                         {STEPS.map((step) => (
                             <span
                                 key={step.id}
-                                className={currentStep >= step.id ? "text-white" : ""}
+                                className={currentStep >= step.id ? "text-foreground font-medium" : ""}
                             >
                                 {step.title}
                             </span>

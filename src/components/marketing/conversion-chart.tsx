@@ -48,12 +48,12 @@ export function ConversionChart() {
     const CustomTooltip = ({ active, payload, label }: any) => {
         if (active && payload && payload.length) {
             return (
-                <div className="bg-zinc-950/90 border border-white/10 p-3 rounded-lg shadow-xl backdrop-blur-md">
-                    <p className="font-bold text-white mb-1">{label}</p>
-                    <p className="text-zinc-400 text-xs uppercase tracking-wider mb-1">
+                <div className="bg-popover border border-border p-3 rounded-lg shadow-xl backdrop-blur-md">
+                    <p className="font-bold text-popover-foreground mb-1">{label}</p>
+                    <p className="text-muted-foreground text-xs uppercase tracking-wider mb-1">
                         {payload[0].payload.subLabel}
                     </p>
-                    <p className="text-lg font-mono font-bold text-white">
+                    <p className="text-lg font-mono font-bold text-popover-foreground">
                         {payload[0].payload.label}
                     </p>
                 </div>
@@ -63,7 +63,7 @@ export function ConversionChart() {
     };
 
     const CustomLabel = (props: any) => {
-        const { x, y, width, value, index } = props;
+        const { x, y, width, index } = props;
         const entry = data[index];
         return (
             <g>
@@ -96,7 +96,7 @@ export function ConversionChart() {
     return (
         <Card className="bg-transparent border-0 shadow-none w-full max-w-3xl">
             <CardHeader className="pb-2">
-                <CardTitle className="text-2xl md:text-3xl text-center font-bold text-white">
+                <CardTitle className="text-2xl md:text-3xl text-center font-bold text-foreground">
                     Lead-Conversion im Vergleich
                 </CardTitle>
             </CardHeader>

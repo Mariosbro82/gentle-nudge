@@ -199,6 +199,9 @@ export type Database = {
           team_size: string | null
           use_case: string | null
           user_id: string | null
+          selected_template: string | null
+          automation_interest: boolean | null
+          automation_delay_hours: number | null
         }
         Insert: {
           company_name?: string | null
@@ -211,6 +214,9 @@ export type Database = {
           team_size?: string | null
           use_case?: string | null
           user_id?: string | null
+          selected_template?: string | null
+          automation_interest?: boolean | null
+          automation_delay_hours?: number | null
         }
         Update: {
           company_name?: string | null
@@ -223,6 +229,9 @@ export type Database = {
           team_size?: string | null
           use_case?: string | null
           user_id?: string | null
+          selected_template?: string | null
+          automation_interest?: boolean | null
+          automation_delay_hours?: number | null
         }
         Relationships: [
           {

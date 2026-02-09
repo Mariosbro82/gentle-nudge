@@ -7,7 +7,7 @@ const TrustIcon = ({ children, delay }: { children: React.ReactNode; delay: numb
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay }}
-        className="w-24 h-24 mb-6 rounded-2xl bg-zinc-900/50 border border-white/5 flex items-center justify-center relative overflow-hidden group shadow-2xl"
+        className="w-24 h-24 mb-6 rounded-2xl bg-card border border-border flex items-center justify-center relative overflow-hidden group shadow-2xl"
     >
         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         {children}
@@ -20,21 +20,21 @@ const TrustCard = ({ icon, title, description, delay }: { icon: React.ReactNode;
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay }}
-        className="flex flex-col items-center text-center p-8 rounded-3xl bg-black border border-white/10 relative overflow-hidden hover:border-white/20 transition-colors duration-300"
+        className="flex flex-col items-center text-center p-8 rounded-3xl bg-background border border-border relative overflow-hidden hover:border-foreground/20 transition-colors duration-300"
     >
         {/* Glow effect */}
         <div className="absolute -top-20 -right-20 w-64 h-64 bg-blue-500/5 blur-3xl rounded-full pointer-events-none" />
 
         <TrustIcon delay={delay + 0.2}>{icon}</TrustIcon>
 
-        <h3 className="text-xl font-bold text-white mb-3 tracking-tight">{title}</h3>
-        <p className="text-zinc-400 leading-relaxed text-sm max-w-sm">{description}</p>
+        <h3 className="text-xl font-bold text-foreground mb-3 tracking-tight">{title}</h3>
+        <p className="text-muted-foreground leading-relaxed text-sm max-w-sm">{description}</p>
     </motion.div>
 );
 
 export function TrustSection() {
     return (
-        <section className="py-24 bg-black relative z-30">
+        <section className="py-24 bg-background relative z-30">
             <div className="container mx-auto px-6">
 
                 <div className="text-center mb-24 max-w-2xl mx-auto">
@@ -42,7 +42,7 @@ export function TrustSection() {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-zinc-500 mb-6"
+                        className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-foreground to-muted-foreground mb-6"
                     >
                         Vertrauen ist gut.<br />Technologie ist besser.
                     </motion.h2>
@@ -51,7 +51,7 @@ export function TrustSection() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.1 }}
-                        className="text-zinc-400 text-lg"
+                        className="text-muted-foreground text-lg"
                     >
                         Wir setzen auf höchste Standards bei Sicherheit, Privatsphäre und Langlebigkeit.
                     </motion.p>

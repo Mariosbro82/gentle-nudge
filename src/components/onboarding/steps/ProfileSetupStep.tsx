@@ -3,10 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import { ChevronLeft, ChevronRight, Upload, User, Linkedin, Globe, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Upload, User, X } from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
 import { useAuth } from "@/contexts/auth-context";
-import type { OnboardingData } from "../OnboardingWizard";
+import { OnboardingData } from "@/types/onboarding";
+import { TemplatePreview } from "../TemplatePreview";
 
 interface ProfileSetupStepProps {
     data: OnboardingData;
@@ -60,126 +61,117 @@ export function ProfileSetupStep({
     return (
         <div className="space-y-8">
             <div className="text-center space-y-2">
-                <h2 className="text-3xl font-bold text-white">Ihr Profil einrichten</h2>
-                <p className="text-zinc-400">
+                <h2 className="text-3xl font-bold text-foreground">Ihr Profil einrichten</h2>
+                <p className="text-muted-foreground">
                     Personalisieren Sie Ihre digitale Visitenkarte.
                 </p>
             </div>
 
-            <Card className="bg-zinc-900/50 border-white/5">
-                <CardContent className="p-6 space-y-6">
-                    {/* Profile Picture */}
-                    <div className="flex flex-col items-center space-y-4">
-                        <Label className="text-white self-start">Profilbild</Label>
-                        <div className="relative">
-                            {data.profilePic ? (
-                                <div className="relative">
-                                    <img
-                                        src={data.profilePic}
-                                        alt="Profile"
-                                        className="w-32 h-32 rounded-full object-cover border-4 border-white/10"
-                                    />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Left Column: Form */}
+                <Card className="bg-card border-border h-fit">
+                    <CardContent className="p-6 space-y-6">
+                        {/* Profile Picture */}
+                        <div className="flex flex-col items-center space-y-4">
+                            <Label className="text-foreground self-start">Profilbild</Label>
+                            <div className="relative">
+                                {data.profilePic ? (
+                                    <div className="relative">
+                                        <img
+                                            src={data.profilePic}
+                                            alt="Profile"
+                                            className="w-32 h-32 rounded-full object-cover border-4 border-white/10"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={removeImage}
+                                            className="absolute -top-2 -right-2 bg-red-500 rounded-full p-1 hover:bg-red-600 transition-colors"
+                                        >
+                                            <X className="w-4 h-4 text-white" />
+                                        </button>
+                                    </div>
+                                ) : (
                                     <button
                                         type="button"
-                                        onClick={removeImage}
-                                        className="absolute -top-2 -right-2 bg-red-500 rounded-full p-1 hover:bg-red-600 transition-colors"
+                                        onClick={() => fileInputRef.current?.click()}
+                                        disabled={uploading}
+                                        className="w-32 h-32 rounded-full bg-muted border-2 border-dashed border-border flex flex-col items-center justify-center hover:border-muted-foreground/50 transition-all"
                                     >
-                                        <X className="w-4 h-4 text-white" />
+                                        {uploading ? (
+                                            <div className="h-6 w-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                        ) : (
+                                            <>
+                                                <Upload className="w-6 h-6 text-muted-foreground mb-2" />
+                                                <span className="text-xs text-muted-foreground">Hochladen</span>
+                                            </>
+                                        )}
                                     </button>
-                                </div>
-                            ) : (
-                                <button
-                                    type="button"
-                                    onClick={() => fileInputRef.current?.click()}
-                                    disabled={uploading}
-                                    className="w-32 h-32 rounded-full bg-zinc-800 border-2 border-dashed border-white/20 flex flex-col items-center justify-center hover:border-white/40 transition-all"
-                                >
-                                    {uploading ? (
-                                        <div className="h-6 w-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                    ) : (
-                                        <>
-                                            <Upload className="w-6 h-6 text-zinc-500 mb-2" />
-                                            <span className="text-xs text-zinc-500">Hochladen</span>
-                                        </>
-                                    )}
-                                </button>
-                            )}
-                            <input
-                                ref={fileInputRef}
-                                type="file"
-                                accept="image/*"
-                                onChange={handleImageUpload}
-                                className="hidden"
+                                )}
+                                <input
+                                    ref={fileInputRef}
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleImageUpload}
+                                    className="hidden"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Display Name */}
+                        <div className="space-y-2">
+                            <Label className="text-foreground flex items-center gap-2">
+                                <User className="w-4 h-4 text-muted-foreground" />
+                                Anzeigename
+                            </Label>
+                            <Input
+                                value={data.displayName}
+                                onChange={(e) => updateData({ displayName: e.target.value })}
+                                placeholder="z.B. Max Mustermann"
+                                className="bg-input border-border text-foreground"
                             />
                         </div>
-                    </div>
 
-                    {/* Display Name */}
-                    <div className="space-y-2">
-                        <Label className="text-white flex items-center gap-2">
-                            <User className="w-4 h-4 text-zinc-500" />
-                            Anzeigename
-                        </Label>
-                        <Input
-                            value={data.displayName}
-                            onChange={(e) => updateData({ displayName: e.target.value })}
-                            placeholder="z.B. Max Mustermann"
-                            className="bg-zinc-800 border-white/10 text-white"
-                        />
-                    </div>
-
-                    {/* Tagline */}
-                    <div className="space-y-2">
-                        <Label className="text-white">Tagline / Titel</Label>
-                        <Input
-                            value={data.tagline}
-                            onChange={(e) => updateData({ tagline: e.target.value })}
-                            placeholder="z.B. CEO @ Severmore | Digital Innovation"
-                            className="bg-zinc-800 border-white/10 text-white"
-                        />
-                    </div>
-
-                    {/* Social Links (optional) */}
-                    <div className="space-y-4 pt-4 border-t border-white/5">
-                        <Label className="text-white">Social Links (optional)</Label>
-                        <div className="space-y-3">
-                            <div className="flex items-center gap-3">
-                                <Linkedin className="w-5 h-5 text-blue-400" />
-                                <Input
-                                    value={data.socialLinks.linkedin || ""}
-                                    onChange={(e) =>
-                                        updateData({
-                                            socialLinks: { ...data.socialLinks, linkedin: e.target.value },
-                                        })
-                                    }
-                                    placeholder="linkedin.com/in/username"
-                                    className="bg-zinc-800 border-white/10 text-white flex-1"
-                                />
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <Globe className="w-5 h-5 text-green-400" />
-                                <Input
-                                    value={data.socialLinks.website || ""}
-                                    onChange={(e) =>
-                                        updateData({
-                                            socialLinks: { ...data.socialLinks, website: e.target.value },
-                                        })
-                                    }
-                                    placeholder="ihre-website.de"
-                                    className="bg-zinc-800 border-white/10 text-white flex-1"
-                                />
-                            </div>
+                        {/* Tagline */}
+                        <div className="space-y-2">
+                            <Label className="text-foreground">Tagline / Titel</Label>
+                            <Input
+                                value={data.tagline}
+                                onChange={(e) => updateData({ tagline: e.target.value })}
+                                placeholder="z.B. CEO @ Severmore"
+                                className="bg-input border-border text-foreground"
+                            />
                         </div>
+                    </CardContent>
+                </Card>
+
+                {/* Right Column: Live Preview */}
+                <div className="md:block space-y-4">
+                    <Label className="text-muted-foreground text-sm uppercase tracking-wider block text-center mb-4">
+                        Live Vorschau
+                    </Label>
+                    <div className="sticky top-4">
+                        <TemplatePreview
+                            template={data.selectedTemplate || 'minimalist-card'}
+                            user={{
+                                name: data.displayName || "Max Mustermann",
+                                title: data.tagline || "CEO & Founder",
+                                avatar: data.profilePic
+                            }}
+                            className="shadow-2xl"
+                        />
+                        <p className="text-center text-xs text-muted-foreground mt-4">
+                            Dies ist eine Vorschau Ihres gewählten Designs
+                        </p>
                     </div>
-                </CardContent>
-            </Card>
+                </div>
+            </div>
 
             {/* Navigation */}
             <div className="flex justify-between">
                 <Button
                     variant="ghost"
                     onClick={onBack}
-                    className="text-zinc-400 hover:text-white"
+                    className="text-muted-foreground hover:text-foreground"
                 >
                     <ChevronLeft className="w-4 h-4 mr-2" />
                     Zurück
@@ -188,13 +180,14 @@ export function ProfileSetupStep({
                     <Button
                         variant="ghost"
                         onClick={onNext}
-                        className="text-zinc-500 hover:text-white"
+                        className="text-muted-foreground hover:text-foreground"
                     >
                         Überspringen
                     </Button>
                     <Button
                         onClick={onNext}
-                        className="bg-white text-black hover:bg-zinc-200"
+                        className="bg-primary text-primary-foreground hover:bg-primary/90"
+                        disabled={!data.displayName}
                     >
                         Weiter
                         <ChevronRight className="w-4 h-4 ml-2" />

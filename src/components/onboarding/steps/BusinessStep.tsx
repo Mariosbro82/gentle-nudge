@@ -3,13 +3,14 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { ChevronLeft, ChevronRight, Building2, Users, MessageSquare } from "lucide-react";
-import type { OnboardingData } from "../OnboardingWizard";
+import { OnboardingData } from "@/types/onboarding";
 
 interface BusinessStepProps {
     data: OnboardingData;
     updateData: (updates: Partial<OnboardingData>) => void;
     onNext: () => void;
     onBack: () => void;
+    onSkipAll: () => void;
 }
 
 const TEAM_SIZES = [
@@ -31,36 +32,37 @@ export function BusinessStep({
     updateData,
     onNext,
     onBack,
+    onSkipAll
 }: BusinessStepProps) {
     return (
         <div className="space-y-8">
             <div className="text-center space-y-2">
-                <h2 className="text-3xl font-bold text-white">Business Details</h2>
-                <p className="text-zinc-400">
-                    Optionale Informationen für ein maßgeschneidertes Erlebnis.
+                <h2 className="text-3xl font-bold text-foreground">Helfen Sie uns, Sie besser zu bedienen</h2>
+                <p className="text-muted-foreground">
+                    Wir empfehlen Ihnen die richtigen Funktionen und Pläne.
                 </p>
             </div>
 
-            <Card className="bg-zinc-900/50 border-white/5">
+            <Card className="bg-card border-border">
                 <CardContent className="p-6 space-y-6">
                     {/* Company Name */}
                     <div className="space-y-3">
-                        <Label className="text-white flex items-center gap-2">
-                            <Building2 className="w-4 h-4 text-zinc-500" />
+                        <Label className="text-foreground flex items-center gap-2">
+                            <Building2 className="w-4 h-4 text-muted-foreground" />
                             Unternehmen (optional)
                         </Label>
                         <Input
                             value={data.companyName}
                             onChange={(e) => updateData({ companyName: e.target.value })}
                             placeholder="z.B. Severmore GmbH"
-                            className="bg-zinc-800 border-white/10 text-white"
+                            className="bg-input border-border text-foreground"
                         />
                     </div>
 
                     {/* Team Size */}
                     <div className="space-y-3">
-                        <Label className="text-white flex items-center gap-2">
-                            <Users className="w-4 h-4 text-zinc-500" />
+                        <Label className="text-foreground flex items-center gap-2">
+                            <Users className="w-4 h-4 text-muted-foreground" />
                             Teamgröße
                         </Label>
                         <div className="grid grid-cols-4 gap-3">
@@ -72,8 +74,8 @@ export function BusinessStep({
                                     className={`
                                         p-4 rounded-xl text-center transition-all border
                                         ${data.teamSize === size.id
-                                            ? "bg-white text-black border-white"
-                                            : "bg-zinc-800/50 text-zinc-300 border-white/5 hover:border-white/20"
+                                            ? "bg-primary text-primary-foreground border-primary"
+                                            : "bg-muted/50 text-muted-foreground border-border hover:border-muted-foreground/50"
                                         }
                                     `}
                                 >
@@ -87,8 +89,8 @@ export function BusinessStep({
 
                     {/* Expected Contacts */}
                     <div className="space-y-3">
-                        <Label className="text-white flex items-center gap-2">
-                            <MessageSquare className="w-4 h-4 text-zinc-500" />
+                        <Label className="text-foreground flex items-center gap-2">
+                            <MessageSquare className="w-4 h-4 text-muted-foreground" />
                             Erwartete Kontakte pro Monat
                         </Label>
                         <div className="grid grid-cols-2 gap-2">
@@ -100,8 +102,8 @@ export function BusinessStep({
                                     className={`
                                         px-4 py-3 rounded-lg text-sm transition-all
                                         ${data.expectedContacts === range.id
-                                            ? "bg-white text-black font-medium"
-                                            : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+                                            ? "bg-primary text-primary-foreground font-medium"
+                                            : "bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                                         }
                                     `}
                                 >
@@ -118,7 +120,7 @@ export function BusinessStep({
                 <Button
                     variant="ghost"
                     onClick={onBack}
-                    className="text-zinc-400 hover:text-white"
+                    className="text-muted-foreground hover:text-foreground"
                 >
                     <ChevronLeft className="w-4 h-4 mr-2" />
                     Zurück
@@ -126,14 +128,14 @@ export function BusinessStep({
                 <div className="flex gap-3">
                     <Button
                         variant="ghost"
-                        onClick={onNext}
-                        className="text-zinc-500 hover:text-white"
+                        onClick={onSkipAll}
+                        className="text-muted-foreground hover:text-foreground"
                     >
-                        Überspringen
+                        Alles überspringen
                     </Button>
                     <Button
                         onClick={onNext}
-                        className="bg-white text-black hover:bg-zinc-200"
+                        className="bg-primary text-primary-foreground hover:bg-primary/90"
                     >
                         Weiter
                         <ChevronRight className="w-4 h-4 ml-2" />

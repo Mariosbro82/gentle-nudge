@@ -19,6 +19,7 @@ const LoginPage = lazy(() => import("@/pages/login"));
 const OnboardingPage = lazy(() => import("@/pages/onboarding"));
 const ForgotPasswordPage = lazy(() => import("@/pages/forgot-password"));
 const ResetPasswordPage = lazy(() => import("@/pages/reset-password"));
+const AuthCallbackPage = lazy(() => import("@/pages/auth/callback"));
 
 // NFC public pages
 const ProfilePage = lazy(() => import("@/pages/p/[userId]"));
@@ -27,18 +28,22 @@ const CampaignPage = lazy(() => import("@/pages/campaign/[companyId]"));
 const ReviewPage = lazy(() => import("@/pages/review/[companyId]"));
 
 // Marketing
-// Marketing
 const MarketingPage = lazy(() => import("@/pages/marketing"));
-const ProductsPage = lazy(() => import("@/pages/products"));
+const ShopPage = lazy(() => import("@/pages/shop/index"));
+const ProductPage = lazy(() => import("@/pages/shop/[id]"));
+const PlatformPage = lazy(() => import("@/pages/platform"));
+const SolutionsPage = lazy(() => import("@/pages/solutions"));
+const SustainabilityPage = lazy(() => import("@/pages/sustainability"));
 const PricingPage = lazy(() => import("@/pages/pricing"));
-const CompanyPage = lazy(() => import("@/pages/company"));
+const AboutPage = lazy(() => import("@/pages/about"));
+const CheckoutPage = lazy(() => import("@/pages/shop/checkout"));
 const AnalyticsPublicPage = lazy(() => import("@/pages/analytics"));
 const ClaimPage = lazy(() => import("@/pages/claim/[uid]"));
 
 // Loader component
 function PageLoader() {
     return (
-        <div className="min-h-screen flex items-center justify-center bg-zinc-950">
+        <div className="min-h-screen flex items-center justify-center bg-background">
             <div className="flex items-center gap-3">
                 <div className="h-6 w-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
                 <span className="text-zinc-400">Loading...</span>
@@ -52,7 +57,7 @@ function PageLoader() {
 // NFC layout wrapper (minimal, for public pages)
 function NfcLayout() {
     return (
-        <div className="min-h-screen bg-black text-white">
+        <div className="dark min-h-screen bg-background text-foreground">
             <Suspense fallback={<PageLoader />}>
                 <Outlet />
             </Suspense>
@@ -67,13 +72,19 @@ export default function App() {
                 <Routes>
                     {/* Public routes */}
                     <Route path="/" element={<Suspense fallback={<PageLoader />}><MarketingPage /></Suspense>} />
-                    <Route path="/products" element={<Suspense fallback={<PageLoader />}><ProductsPage /></Suspense>} />
+                    <Route path="/platform" element={<Suspense fallback={<PageLoader />}><PlatformPage /></Suspense>} />
+                    <Route path="/solutions" element={<Suspense fallback={<PageLoader />}><SolutionsPage /></Suspense>} />
+                    <Route path="/sustainability" element={<Suspense fallback={<PageLoader />}><SustainabilityPage /></Suspense>} />
+                    <Route path="/shop" element={<Suspense fallback={<PageLoader />}><ShopPage /></Suspense>} />
+                    <Route path="/shop/:id" element={<Suspense fallback={<PageLoader />}><ProductPage /></Suspense>} />
+                    <Route path="/shop/checkout" element={<Suspense fallback={<PageLoader />}><CheckoutPage /></Suspense>} />
                     <Route path="/pricing" element={<Suspense fallback={<PageLoader />}><PricingPage /></Suspense>} />
-                    <Route path="/company" element={<Suspense fallback={<PageLoader />}><CompanyPage /></Suspense>} />
+                    <Route path="/about" element={<Suspense fallback={<PageLoader />}><AboutPage /></Suspense>} />
                     <Route path="/analytics" element={<Suspense fallback={<PageLoader />}><AnalyticsPublicPage /></Suspense>} />
                     <Route path="/login" element={<Suspense fallback={<PageLoader />}><LoginPage /></Suspense>} />
                     <Route path="/forgot-password" element={<Suspense fallback={<PageLoader />}><ForgotPasswordPage /></Suspense>} />
                     <Route path="/reset-password" element={<Suspense fallback={<PageLoader />}><ResetPasswordPage /></Suspense>} />
+                    <Route path="/auth/callback" element={<Suspense fallback={<PageLoader />}><AuthCallbackPage /></Suspense>} />
 
                     {/* NFC public routes */}
                     <Route element={<NfcLayout />}>

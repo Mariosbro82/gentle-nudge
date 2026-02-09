@@ -3,6 +3,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
 }
 
 Deno.serve(async (req) => {
@@ -24,7 +25,8 @@ Deno.serve(async (req) => {
 
         // Geo-IP lookup
         let country = 'Unknown'
-        if (ip !== 'unknown' && ip !== '127.0.0.1' && ip !== 'localhost') {
+        // Skip for local/reserved IPs
+        if (ip !== 'unknown' && ip !== '127.0.0.1' && ip !== 'localhost' && !ip.startsWith('192.168.') && !ip.startsWith('10.')) {
             try {
                 const geoResponse = await fetch(`http://ip-api.com/json/${ip}`)
                 const geoData = await geoResponse.json()
