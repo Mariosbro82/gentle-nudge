@@ -1,0 +1,102 @@
+import { useRef, useEffect } from "react";
+import { cn } from "@/lib/utils";
+
+interface InfiniteLogoScrollProps {
+    logos: {
+        name: string;
+        logo: React.FC<React.SVGProps<SVGSVGElement>>;
+    }[];
+    speed?: "slow" | "normal" | "fast";
+    direction?: "left" | "right";
+    pauseOnHover?: boolean;
+    className?: string;
+}
+
+export function InfiniteLogoScroll({
+    logos,
+    speed = "normal",
+    direction = "left",
+    pauseOnHover = true,
+    className,
+}: InfiniteLogoScrollProps) {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const scrollerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        addAnimation();
+    }, []);
+
+    function addAnimation() {
+        if (containerRef.current && scrollerRef.current) {
+            const scrollerContent = Array.from(scrollerRef.current.children);
+
+            scrollerContent.forEach((item) => {
+                const duplicatedItem = item.cloneNode(true);
+                if (scrollerRef.current) {
+                    scrollerRef.current.appendChild(duplicatedItem);
+                }
+            });
+
+            getDirection();
+            getSpeed();
+            containerRef.current.setAttribute("data-animated", "true");
+        }
+    }
+
+    const getDirection = () => {
+        if (containerRef.current) {
+            if (direction === "left") {
+                containerRef.current.style.setProperty(
+                    "--animation-direction",
+                    "forwards"
+                );
+            } else {
+                containerRef.current.style.setProperty(
+                    "--animation-direction",
+                    "reverse"
+                );
+            }
+        }
+    };
+
+    const getSpeed = () => {
+        if (containerRef.current) {
+            if (speed === "fast") {
+                containerRef.current.style.setProperty("--animation-duration", "20s");
+            } else if (speed === "normal") {
+                containerRef.current.style.setProperty("--animation-duration", "40s");
+            } else {
+                containerRef.current.style.setProperty("--animation-duration", "80s");
+            }
+        }
+    };
+
+    return (
+        <div
+            ref={containerRef}
+            className={cn(
+                "scroller relative z-20 max-w-7xl overflow-hidden [mask-image:linear-gradient(to_right,transparent,white_20%,white_80%,transparent)]",
+                className
+            )}
+        >
+            <div
+                ref={scrollerRef}
+                className={cn(
+                    "flex min-w-full shrink-0 gap-12 py-4 w-max flex-nowrap",
+                    "animate-scroll",
+                    pauseOnHover && "hover:[animation-play-state:paused]"
+                )}
+            >
+                {logos.map((item, idx) => (
+                    <div
+                        className="flex items-center gap-2 text-gray-500 dark:text-gray-400 opacity-70 hover:opacity-100 transition-opacity"
+                        key={item.name + idx}
+                    >
+                        <item.logo className="h-10 w-auto" />
+                        <span className="text-lg font-semibold whitespace-nowrap">{item.name}</span>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}

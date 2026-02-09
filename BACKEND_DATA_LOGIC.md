@@ -54,12 +54,15 @@ Stores user profile information, separate from `auth.users`.
 | `ghost_mode_until` | TIMESTAMPTZ | Status | Timestamp until which ghost mode is active. |
 | `webhook_url` | Text | URL | URL for sending lead capture events (Integrations). |
 | `view_count` | Integer | Analytics | Total number of profile views. Defaults to 0. Incremented via RPC. |
+| `role` | Text | Auth Role | 'user' or 'admin'. Default: 'user'. |
+| `notes` | Text | Admin Notes | Internal notes visible only to admins. |
 
 ### `functions` (RPC)
 | Function | Parameters | Logic | Permissions |
 | :--- | :--- | :--- | :--- |
 | `log_profile_view` | `p_user_id`, `p_ip_address`, `p_device_type`, `p_user_agent`, `p_referrer`, `p_country` | Logs a view. Checks for duplicates (<12h) and recurring visitors (>12h). | `anon` (service role via Edge Function) |
 | `get_interested_leads` | `p_user_id` | Returns leads that have recurring profile views (same IP). | `authenticated` |
+| `is_admin` | None | Returns TRUE if current user has `role = 'admin'`. Used in RLS policies. | `authenticated` (Security Definer) |
 
 ### `leads` Table
 Stores leads captured via the NFC profile "Connect" feature.
@@ -107,6 +110,7 @@ Stores data for physical NFC tags.
 ## 4. RLS Component (Row Level Security)
 - **Users**: Users can only update their own row (based on `auth_user_id`).
 - **Public Read**: `users` table should be readable by everyone (for public profiles), or at least the columns needed for rendering.
+- **Admin Access**: Users with `role = 'admin'` have full access (SELECT, UPDATE, DELETE) to `users`, `chips`, and read access to `profile_views`, `leads` via the `is_admin()` function.
 
 ## 5. Recent Changes
 - **Feature**: Added `email` and `phone` inputs to the Settings page.

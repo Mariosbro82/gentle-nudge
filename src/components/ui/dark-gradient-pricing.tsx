@@ -3,6 +3,7 @@ import { Check, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
+import { Link } from "react-router-dom"
 
 interface BenefitProps {
   text: string
@@ -33,6 +34,7 @@ interface PricingCardProps {
   CTA: string
   benefits: Array<{ text: string; checked: boolean }>
   className?: string
+  href?: string
 }
 
 export const PricingCard = ({
@@ -42,6 +44,7 @@ export const PricingCard = ({
   CTA,
   benefits,
   className,
+  href,
 }: PricingCardProps) => {
   return (
     <motion.div
@@ -54,7 +57,8 @@ export const PricingCard = ({
           "relative h-full w-full overflow-hidden border",
           "dark:border-zinc-700 dark:bg-gradient-to-br dark:from-zinc-950/50 dark:to-zinc-900/80",
           "border-zinc-200 bg-gradient-to-br from-zinc-50/50 to-zinc-100/80",
-          "p-6"
+          "p-6",
+          className
         )}
       >
         <div className="flex flex-col items-center border-b pb-6 dark:border-zinc-700 border-zinc-200">
@@ -73,12 +77,23 @@ export const PricingCard = ({
             <Benefit key={index} {...benefit} />
           ))}
         </div>
-        <Button
-          className="w-full"
-          variant={tier === "Pro" ? "default" : "ghost"}
-        >
-          {CTA}
-        </Button>
+        {href ? (
+          <Link to={href} className="w-full block">
+            <Button
+              className="w-full"
+              variant={tier === "Business" ? "default" : "ghost"}
+            >
+              {CTA}
+            </Button>
+          </Link>
+        ) : (
+          <Button
+            className="w-full"
+            variant={tier === "Business" ? "default" : "ghost"}
+          >
+            {CTA}
+          </Button>
+        )}
       </Card>
     </motion.div>
   )

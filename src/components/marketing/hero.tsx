@@ -22,7 +22,7 @@ export function Hero() {
 
     return (
         <div
-            className="h-[400vh] bg-black w-full dark:border dark:border-white/[0.1] relative pt-0 overflow-clip"
+            className="h-[400vh] bg-background w-full dark:border dark:border-white/[0.1] relative pt-0 overflow-clip"
             ref={ref}
         >
             <GoogleGeminiEffect
@@ -40,19 +40,19 @@ export function Hero() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
                     >
-                        <span className="px-4 py-1.5 rounded-full border border-yellow-500/30 bg-yellow-500/10 backdrop-blur-md text-sm text-yellow-200 inline-flex items-center gap-2 mb-8">
-                            <Sparkles size={14} className="text-yellow-400" />
+                        <span className="px-4 py-1.5 rounded-full border border-yellow-500/30 bg-yellow-500/10 backdrop-blur-md text-sm text-yellow-600 dark:text-yellow-200 inline-flex items-center gap-2 mb-8">
+                            <Sparkles size={14} className="text-yellow-500 dark:text-yellow-400" />
                             Sonderpreis U21 Gewinner 2025 🏆
                         </span>
 
-                        <h1 className="text-4xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white mb-8">
+                        <h1 className="text-4xl md:text-7xl lg:text-8xl font-bold tracking-tight text-foreground mb-8">
                             Kleidung, die <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-white animate-gradient">
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-zinc-900 dark:from-blue-400 dark:via-purple-400 dark:to-white animate-gradient">
                                 verbindet.
                             </span>
                         </h1>
 
-                        <p className="text-xl md:text-3xl font-light text-zinc-300 max-w-2xl mx-auto mb-24 leading-relaxed tracking-wide">
+                        <p className="text-xl md:text-3xl font-light text-muted-foreground max-w-2xl mx-auto mb-24 leading-relaxed tracking-wide">
                             Das Betriebssystem für Corporate Fashion.
                         </p>
 
@@ -63,10 +63,10 @@ export function Hero() {
 
 
                         <div className="flex flex-col md:flex-row items-center justify-center gap-6 w-full md:w-auto mt-40 relative z-50">
-                            <Button size="lg" className="h-16 px-10 rounded-full bg-white text-black hover:bg-zinc-200 text-lg font-semibold shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)] transition-all hover:scale-105" onClick={() => window.location.href = 'mailto:contact@nfcwear.com'}>
+                            <Button size="lg" className="h-16 px-10 rounded-full bg-foreground text-background hover:bg-zinc-800 dark:hover:bg-zinc-200 text-lg font-semibold shadow-[0_0_40px_-10px_rgba(0,0,0,0.3)] dark:shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)] transition-all hover:scale-105" onClick={() => window.location.href = 'mailto:contact@nfcwear.com'}>
                                 Demo buchen
                             </Button>
-                            <Button size="lg" variant="outline" className="h-16 px-10 rounded-full border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 text-white text-lg transition-all hover:scale-105" onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}>
+                            <Button size="lg" variant="outline" className="h-16 px-10 rounded-full border-zinc-200 bg-white/50 dark:border-white/10 dark:bg-white/5 backdrop-blur-md hover:bg-zinc-100 dark:hover:bg-white/10 text-foreground text-lg transition-all hover:scale-105" onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}>
                                 Mehr erfahren <ArrowRight className="ml-2 w-5 h-5" />
                             </Button>
                         </div>

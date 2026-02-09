@@ -15,7 +15,7 @@ import { FeatureBentoGrid } from "@/components/marketing/feature-bento-grid";
 
 export default function MarketingPage() {
     return (
-        <main className="min-h-screen bg-black selection:bg-blue-500/30">
+        <main className="min-h-screen bg-background text-foreground selection:bg-blue-500/30">
             <Navbar />
             <Hero />
             <ScrollTextReveal />
@@ -23,7 +23,7 @@ export default function MarketingPage() {
             <IdeaSection />
 
             {/* Visual Divider */}
-            <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-0" />
+            <div className="h-px bg-gradient-to-r from-transparent via-foreground/10 to-transparent my-0" />
 
             <AnalyticsSection />
             <FeatureBentoGrid />

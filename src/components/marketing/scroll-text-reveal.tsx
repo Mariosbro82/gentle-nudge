@@ -148,7 +148,7 @@ export function ScrollTextReveal() {
                         borderRadius: circleRadius,
                         opacity: contentFadeOut, // Fade out
                     }}
-                    className={`absolute inset-0 z-20 ${theme.revealBg} flex items-center justify-center shadow-[0_-20px_100px_rgba(0,0,0,0.5)] border-t border-border`}
+                    className={`absolute inset-0 z-20 flex items-center justify-center`}
                 >
                     {/* Inhalt innerhalb des Reveal-Kreises */}
                     <motion.div

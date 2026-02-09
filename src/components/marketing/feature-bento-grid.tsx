@@ -2,9 +2,6 @@
 
 import { motion } from "framer-motion";
 import {
-    Database,
-    Share2,
-    Slack,
     Webhook,
     ShieldCheck,
     Waves,
@@ -15,6 +12,7 @@ import {
     Unlock
 } from "lucide-react";
 import { useState, useEffect } from "react";
+import { InfiniteImageScroll } from "./ui/infinite-image-scroll";
 
 export function FeatureBentoGrid() {
     const [isGhostMode, setIsGhostMode] = useState(false);
@@ -53,44 +51,28 @@ export function FeatureBentoGrid() {
                     >
                         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
+                        <div className="absolute inset-x-0 bottom-0 h-40 mask-linear-gradient-to-t">
+                            <InfiniteImageScroll
+                                images={[
+                                    { alt: "Salesforce", src: "/assets/integrations/salesforce.png" },
+                                    { alt: "HubSpot", src: "/assets/integrations/hubspot.png" },
+                                    { alt: "Pipedrive", src: "/assets/integrations/pipedrive.png" },
+                                    { alt: "Zapier", src: "/assets/integrations/zapier.png" },
+                                ]}
+                                speed="slow"
+                                direction="left"
+                                className="w-full h-full"
+                            />
+                        </div>
+
                         <div className="relative z-10">
                             <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center mb-6 text-blue-400">
                                 <Webhook size={24} />
                             </div>
                             <h3 className="text-2xl font-bold text-foreground mb-2">Deep CRM Integration</h3>
-                            <p className="text-muted-foreground mb-8">
+                            <p className="text-muted-foreground mb-8 relative z-20">
                                 Wir schreiben Leads direkt in Ihre Systeme via Webhook. Sparen Sie 5h Tipparbeit pro Messe.
                             </p>
-                        </div>
-
-                        {/* Visual: Simulated CRM Connection */}
-                        <div className="relative mt-4 h-48 bg-muted/50 rounded-xl border border-border p-6 flex flex-col justify-center items-center gap-8">
-                            {/* Connection Lines */}
-                            <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 400 200">
-                                <path d="M200 100 L 80 50" stroke="rgba(59, 130, 246, 0.2)" strokeWidth="2" strokeDasharray="4 4" className="animate-pulse" />
-                                <path d="M200 100 L 320 50" stroke="rgba(59, 130, 246, 0.2)" strokeWidth="2" strokeDasharray="4 4" className="animate-pulse" />
-                                <path d="M200 100 L 80 150" stroke="rgba(59, 130, 246, 0.2)" strokeWidth="2" strokeDasharray="4 4" className="animate-pulse" />
-                                <path d="M200 100 L 320 150" stroke="rgba(59, 130, 246, 0.2)" strokeWidth="2" strokeDasharray="4 4" className="animate-pulse" />
-                            </svg>
-
-                            <div className="relative z-10 bg-blue-600 w-16 h-16 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(37,99,235,0.3)]">
-                                <span className="font-bold text-white text-xl">N</span>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-x-32 gap-y-4 w-full px-8">
-                                <div className="flex items-center gap-2 text-muted-foreground text-xs font-mono bg-card px-3 py-1.5 rounded-full border border-border">
-                                    <Database size={12} /> Salesforce
-                                </div>
-                                <div className="flex items-center gap-2 text-muted-foreground text-xs font-mono bg-card px-3 py-1.5 rounded-full border border-border justify-self-end">
-                                    <Share2 size={12} /> HubSpot
-                                </div>
-                                <div className="flex items-center gap-2 text-muted-foreground text-xs font-mono bg-card px-3 py-1.5 rounded-full border border-border">
-                                    <Slack size={12} /> Slack
-                                </div>
-                                <div className="flex items-center gap-2 text-muted-foreground text-xs font-mono bg-card px-3 py-1.5 rounded-full border border-border justify-self-end">
-                                    <Webhook size={12} /> Pipedrive
-                                </div>
-                            </div>
                         </div>
                     </motion.div>
 

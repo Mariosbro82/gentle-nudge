@@ -43,12 +43,12 @@ export default function ProductPage() {
     if (!product) return <div>Product not found</div>;
 
     return (
-        <main className="min-h-screen bg-black text-white selection:bg-blue-500/30">
+        <main className="min-h-screen bg-background text-foreground selection:bg-blue-500/30">
             <Navbar />
 
             <section className="pt-32 pb-20 px-6">
                 <div className="max-w-7xl mx-auto">
-                    <Link to="/shop" className="inline-flex items-center gap-2 text-zinc-500 hover:text-white mb-12 transition-colors">
+                    <Link to="/shop" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-12 transition-colors">
                         <ArrowLeft size={20} />
                         <span>Zurück zum Shop</span>
                     </Link>
@@ -60,7 +60,7 @@ export default function ProductPage() {
                                 key={activeImage}
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
-                                className="aspect-[4/5] rounded-3xl overflow-hidden bg-zinc-900 border border-white/5"
+                                className="aspect-[4/5] rounded-3xl overflow-hidden bg-muted border border-border"
                             >
                                 <img
                                     src={product.images[activeImage]}
@@ -90,8 +90,8 @@ export default function ProductPage() {
                                     <span>Premium Hardware</span>
                                 </div>
                                 <h1 className="text-4xl md:text-5xl font-bold mb-4">{product.name}</h1>
-                                <div className="text-3xl font-bold text-white mb-6">€{product.price}</div>
-                                <p className="text-zinc-400 text-lg leading-relaxed mb-8">
+                                <div className="text-3xl font-bold text-foreground mb-6">€{product.price}</div>
+                                <p className="text-muted-foreground text-lg leading-relaxed mb-8">
                                     {product.description}
                                 </p>
                             </div>
@@ -106,7 +106,7 @@ export default function ProductPage() {
                                             onClick={() => setSelectedSize(size)}
                                             className={`w-14 h-14 rounded-full border-2 flex items-center justify-center font-bold transition-all ${selectedSize === size
                                                 ? "border-blue-500 bg-blue-500 text-white"
-                                                : "border-white/10 hover:border-white/30 text-zinc-400"
+                                                : "border-border hover:border-foreground/30 text-muted-foreground"
                                                 }`}
                                         >
                                             {size}
@@ -124,24 +124,24 @@ export default function ProductPage() {
                                     <ShoppingCart className="mr-2" />
                                     In den Warenkorb
                                 </Button>
-                                <p className="text-center text-zinc-500 text-sm italic">
+                                <p className="text-center text-muted-foreground text-sm italic">
                                     Blitzschneller Versand in 2-3 Werktagen.
                                 </p>
                             </div>
 
                             {/* Trust Features */}
-                            <div className="grid grid-cols-3 gap-6 pt-12 border-t border-white/10">
+                            <div className="grid grid-cols-3 gap-6 pt-12 border-t border-border">
                                 <div className="flex flex-col items-center text-center gap-2">
                                     <ShieldCheck className="text-blue-500" />
-                                    <span className="text-xs font-medium text-zinc-400">Garantie</span>
+                                    <span className="text-xs font-medium text-muted-foreground">Garantie</span>
                                 </div>
                                 <div className="flex flex-col items-center text-center gap-2">
                                     <Truck className="text-purple-500" />
-                                    <span className="text-xs font-medium text-zinc-400">Gratis Versand</span>
+                                    <span className="text-xs font-medium text-muted-foreground">Gratis Versand</span>
                                 </div>
                                 <div className="flex flex-col items-center text-center gap-2">
                                     <RefreshCcw className="text-indigo-500" />
-                                    <span className="text-xs font-medium text-zinc-400">30 Tage Rückgabe</span>
+                                    <span className="text-xs font-medium text-muted-foreground">30 Tage Rückgabe</span>
                                 </div>
                             </div>
                         </div>

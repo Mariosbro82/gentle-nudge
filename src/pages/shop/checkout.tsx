@@ -24,7 +24,7 @@ export default function CheckoutPage() {
 
     if (isSuccess) {
         return (
-            <div className="min-h-screen bg-black flex items-center justify-center p-6">
+            <div className="min-h-screen bg-background flex items-center justify-center p-6">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -33,11 +33,11 @@ export default function CheckoutPage() {
                     <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-8">
                         <CheckCircle2 size={40} className="text-green-500" />
                     </div>
-                    <h1 className="text-3xl font-bold text-white">Zahlung erfolgreich!</h1>
-                    <p className="text-zinc-400">
+                    <h1 className="text-3xl font-bold text-foreground">Zahlung erfolgreich!</h1>
+                    <p className="text-muted-foreground">
                         Vielen Dank für Ihre Bestellung. Wir bereiten den Versand Ihrer NFCwear Produkte vor.
                     </p>
-                    <p className="text-zinc-500 text-sm">
+                    <p className="text-muted-foreground text-sm">
                         Weiterleitung zum Shop in Kürze...
                     </p>
                 </motion.div>
@@ -46,9 +46,9 @@ export default function CheckoutPage() {
     }
 
     return (
-        <main className="min-h-screen bg-zinc-950 text-white selection:bg-blue-500/30">
+        <main className="min-h-screen bg-background text-foreground selection:bg-blue-500/30">
             <div className="max-w-5xl mx-auto px-6 py-12 md:py-20 lg:py-24">
-                <Link to="/shop" className="inline-flex items-center gap-2 text-zinc-500 hover:text-white mb-12 transition-colors">
+                <Link to="/shop" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-12 transition-colors">
                     <ArrowLeft size={20} />
                     <span>Zurück zum Shop</span>
                 </Link>
@@ -60,63 +60,63 @@ export default function CheckoutPage() {
 
                         <form onSubmit={handlePayment} className="space-y-8">
                             <section>
-                                <h3 className="text-zinc-500 font-bold text-sm uppercase tracking-widest mb-6">Versanddetails</h3>
+                                <h3 className="text-muted-foreground font-bold text-sm uppercase tracking-widest mb-6">Versanddetails</h3>
                                 <div className="grid grid-cols-2 gap-4">
                                     <input
                                         placeholder="Vorname"
-                                        className="bg-zinc-900 border border-white/5 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors w-full"
+                                        className="bg-input border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-blue-500 transition-colors w-full"
                                         required
                                     />
                                     <input
                                         placeholder="Nachname"
-                                        className="bg-zinc-900 border border-white/5 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors w-full"
+                                        className="bg-input border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-blue-500 transition-colors w-full"
                                         required
                                     />
                                 </div>
                                 <input
                                     placeholder="E-Mail-Adresse"
                                     type="email"
-                                    className="mt-4 bg-zinc-900 border border-white/5 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors w-full"
+                                    className="mt-4 bg-input border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-blue-500 transition-colors w-full"
                                     required
                                 />
                                 <input
                                     placeholder="Straße & Hausnummer"
-                                    className="mt-4 bg-zinc-900 border border-white/5 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors w-full"
+                                    className="mt-4 bg-input border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-blue-500 transition-colors w-full"
                                     required
                                 />
                             </section>
 
                             <section>
-                                <h3 className="text-zinc-500 font-bold text-sm uppercase tracking-widest mb-6">Zahlungsmittel</h3>
-                                <div className="bg-zinc-900 border border-white/5 rounded-2xl overflow-hidden">
-                                    <div className="p-6 border-b border-white/5 bg-white/5 flex items-center justify-between">
+                                <h3 className="text-muted-foreground font-bold text-sm uppercase tracking-widest mb-6">Zahlungsmittel</h3>
+                                <div className="bg-card border border-border rounded-2xl overflow-hidden">
+                                    <div className="p-6 border-b border-border bg-muted/50 flex items-center justify-between">
                                         <div className="flex items-center gap-3">
                                             <CreditCard className="text-blue-500" />
-                                            <span className="font-medium">Kreditkarte</span>
+                                            <span className="font-medium text-foreground">Kreditkarte</span>
                                         </div>
                                         <div className="flex gap-2">
-                                            <div className="w-8 h-5 bg-zinc-800 rounded"></div>
-                                            <div className="w-8 h-5 bg-zinc-800 rounded"></div>
+                                            <div className="w-8 h-5 bg-muted rounded"></div>
+                                            <div className="w-8 h-5 bg-muted rounded"></div>
                                         </div>
                                     </div>
                                     <div className="p-6 space-y-4">
                                         <div className="relative">
                                             <input
                                                 placeholder="Kartennummer"
-                                                className="bg-black border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors w-full pl-12"
+                                                className="bg-background border border-input rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-blue-500 transition-colors w-full pl-12"
                                                 required
                                             />
-                                            <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600" />
+                                            <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
                                         </div>
                                         <div className="grid grid-cols-2 gap-4">
                                             <input
                                                 placeholder="MM / YY"
-                                                className="bg-black border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors w-full"
+                                                className="bg-background border border-input rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-blue-500 transition-colors w-full"
                                                 required
                                             />
                                             <input
                                                 placeholder="CVC"
-                                                className="bg-black border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors w-full"
+                                                className="bg-background border border-input rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-blue-500 transition-colors w-full"
                                                 required
                                             />
                                         </div>
@@ -127,11 +127,11 @@ export default function CheckoutPage() {
                             <Button
                                 type="submit"
                                 disabled={isProcessing}
-                                className="w-full h-16 rounded-2xl bg-white text-black hover:bg-zinc-200 text-lg font-bold transition-all relative"
+                                className="w-full h-16 rounded-2xl bg-foreground text-background hover:bg-muted-foreground text-lg font-bold transition-all relative"
                             >
                                 {isProcessing ? (
                                     <div className="flex items-center gap-3">
-                                        <div className="h-5 w-5 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                                        <div className="h-5 w-5 border-2 border-background border-t-transparent rounded-full animate-spin" />
                                         <span>Zahlung wird verarbeitet...</span>
                                     </div>
                                 ) : (
@@ -139,7 +139,7 @@ export default function CheckoutPage() {
                                 )}
                             </Button>
 
-                            <div className="flex items-center justify-center gap-6 text-zinc-500">
+                            <div className="flex items-center justify-center gap-6 text-muted-foreground">
                                 <div className="flex items-center gap-2 text-xs">
                                     <ShieldCheck size={14} />
                                     <span>Sichere SSL-Zahlung</span>
@@ -154,37 +154,37 @@ export default function CheckoutPage() {
 
                     {/* Order Summary */}
                     <div className="lg:col-span-5">
-                        <div className="bg-zinc-900 border border-white/5 rounded-3xl p-8 sticky top-24">
-                            <h3 className="text-xl font-bold mb-8">Bestellübersicht</h3>
+                        <div className="bg-card border border-border rounded-3xl p-8 sticky top-24">
+                            <h3 className="text-xl font-bold mb-8 text-foreground">Bestellübersicht</h3>
                             <div className="space-y-6 mb-8">
                                 <div className="flex justify-between items-center">
                                     <div className="flex gap-4 items-center">
-                                        <div className="w-16 h-16 rounded-xl bg-black border border-white/10 overflow-hidden shrink-0">
+                                        <div className="w-16 h-16 rounded-xl bg-muted border border-border overflow-hidden shrink-0">
                                             <img src="/assets/shop/model-premium.png" className="w-full h-full object-cover" />
                                         </div>
                                         <div>
-                                            <h4 className="font-medium">Premium NFC T-Shirt</h4>
-                                            <p className="text-xs text-zinc-500">Größe: M • Farbe: Schwarz</p>
+                                            <h4 className="font-medium text-foreground">Premium NFC T-Shirt</h4>
+                                            <p className="text-xs text-muted-foreground">Größe: M • Farbe: Schwarz</p>
                                         </div>
                                     </div>
-                                    <span className="font-bold">€49,00</span>
+                                    <span className="font-bold text-foreground">€49,00</span>
                                 </div>
                             </div>
 
-                            <div className="space-y-3 pt-6 border-t border-white/5 mb-6">
-                                <div className="flex justify-between text-sm text-zinc-400">
+                            <div className="space-y-3 pt-6 border-t border-border mb-6">
+                                <div className="flex justify-between text-sm text-muted-foreground">
                                     <span>Zwischensumme</span>
                                     <span>€49,00</span>
                                 </div>
-                                <div className="flex justify-between text-sm text-zinc-400">
+                                <div className="flex justify-between text-sm text-muted-foreground">
                                     <span>Versand</span>
                                     <span className="text-green-500">Gratis</span>
                                 </div>
                             </div>
 
-                            <div className="flex justify-between text-xl font-bold pt-6 border-t border-white/5">
-                                <span>Gesamt</span>
-                                <span className="text-white">€49,00</span>
+                            <div className="flex justify-between text-xl font-bold pt-6 border-t border-border">
+                                <span className="text-foreground">Gesamt</span>
+                                <span className="text-foreground">€49,00</span>
                             </div>
                         </div>
                     </div>

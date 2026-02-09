@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firmen Logo Animation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Animation für den unendlichen Scroll-Effekt */
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .logo-track {
+            display: flex;
+            width: calc(250px * 12);
+            /* Breite basierend auf Logo-Anzahl x2 für Nahtlosigkeit */
+            animation: scroll 30s linear infinite;
+        }
+
+        /* Hover-Effekte wurden entfernt, damit die Animation ungestört weiterläuft */
+
+        .logo-item {
+            width: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 40px;
+            /* Transition für flüssige Darstellung */
+            transition: opacity 0.3s ease;
+        }
+
+        /* Ausblend-Effekt an den Rändern */
+        .fade-edge {
+            pointer-events: none;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 150px;
+            z-index: 2;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 flex flex-col items-center justify-center min-h-screen font-sans">
+
+    <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-800 mb-2">Unsere Partner & Kunden</h2>
+        <p class="text-gray-500">Vertrauen von den weltweit führenden Unternehmen</p>
+    </div>
+
+    <!-- Haupt-Container für das Karussell -->
+    <div
+        class="logo-carousel relative w-full max-w-6xl overflow-hidden bg-white py-12 border-y border-gray-200 shadow-sm">
+
+        <!-- Verläufe an den Seiten für einen weichen Übergang -->
+        <div class="fade-edge left-0 bg-gradient-to-r from-white to-transparent"></div>
+        <div class="fade-edge right-0 bg-gradient-to-l from-white to-transparent"></div>
+
+        <!-- Der Ticker-Track -->
+        <div class="logo-track">
+            <!-- Logo-Set 1 -->
+            <div class="logo-item">
+                <div class="flex items-center space-x-2 text-gray-700">
+                    <svg class="w-10 h-10" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M17.05 20.28c-.98.95-2.05 1.72-3.15 1.72-1.07 0-1.42-.65-2.67-.65-1.27 0-1.65.63-2.65.65-1.07.02-2.12-.75-3.12-1.72C3.42 18.25 2 15.15 2 12.05c0-3.13 2.02-4.8 4-4.8 1.05 0 2.05.73 2.68.73.65 0 1.83-.88 3.12-.88 1.63 0 2.87.88 3.65 2.05-3.37 1.4-2.82 5.67.5 7.13-.65 1.55-1.45 3-2.4 4zM12.03 7.25c-.02-2.23 1.85-4.28 3.93-4.5.17 2.45-2.07 4.58-3.93 4.5z" />
+                    </svg>
+                    <span class="text-xl font-bold">Apple</span>
+                </div>
+            </div>
+            <div class="logo-item">
+                <div class="flex items-center space-x-2 text-gray-700">
+                    <svg class="w-10 h-10" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M18.65 14.65c-1.12.75-2.95 1.25-5 1.25-3.05 0-5.65-1.2-5.65-3.75 0-2.35 1.95-3.4 5.25-3.4 1.15 0 2.2.15 3.05.45v-.4c0-1.35-.85-2.05-2.35-2.05-1.15 0-2.5.4-3.5 1.05l-.65-1.5c1.25-.8 3-1.25 4.6-1.25 2.7 0 4.15 1.35 4.15 3.75v5.15c0 1 .35 1.6 1.05 2.1l-.95 1.35c-1-.7-1.35-1.5-1.35-2.3v-.45zm-2.35-3.35c-.75-.3-1.6-.45-2.45-.45-2 0-3.05.65-3.05 1.75 0 1 .95 1.65 2.5 1.65 1.45 0 2.55-.45 3.25-.95v-2zM12 21c-4.35 0-8.65-2.15-10.45-5.35l1.65-1c1.5 2.7 5.1 4.5 8.8 4.5 3.55 0 6.6-1.6 7.4-4.1l1.8.6c-1.1 3.2-4.7 5.35-9.2 5.35z" />
+                    </svg>
+                    <span class="text-xl font-bold">Amazon</span>
+                </div>
+            </div>
+            <div class="logo-item">
+                <div class="flex items-center space-x-2 text-gray-700">
+                    <svg class="w-10 h-10" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M11.5 11.5H3V3h8.5v8.5zm9 0h-8.5V3h8.5v8.5zm-9 9H3v-8.5h8.5v8.5zm9 0h-8.5v-8.5h8.5v8.5z" />
+                    </svg>
+                    <span class="text-xl font-bold">Microsoft</span>
+                </div>
+            </div>
+            <div class="logo-item">
+                <div class="flex items-center space-x-2 text-gray-700">
+                    <svg class="w-10 h-10" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M22.5 12c0-5.8-4.7-10.5-10.5-10.5S1.5 6.2 1.5 12s4.7 10.5 10.5 10.5c3 0 5.7-1.2 7.6-3.2l-2.4-1.8c-1.4 1.3-3.2 2-5.2 2-4.1 0-7.5-3.1-7.5-7.5s3.4-7.5 7.5-7.5c2.1 0 3.9.8 5.3 2.1l-4.1 4.1h8.8v-1.2z" />
+                    </svg>
+                    <span class="text-xl font-bold">Google</span>
+                </div>
+            </div>
+            <div class="logo-item">
+                <div class="flex items-center space-x-2 text-gray-700">
+                    <svg class="w-10 h-10" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M19.7 10.2c-1-1-2.4-1.6-3.9-1.6-1.5 0-2.9.6-3.9 1.6-.9.9-1.4 2.1-1.4 3.4 0 1.3.5 2.5 1.4 3.4 1 1 2.4 1.6 3.9 1.6s2.9-.6 3.9-1.6c.9-.9 1.4-2.1 1.4-3.4s-.5-2.5-1.4-3.4zm-7.7 0c-1-1-2.4-1.6-3.9-1.6-1.5 0-2.9.6-3.9 1.6-.9.9-1.4 2.1-1.4 3.4 0 1.3.5 2.5 1.4 3.4 1 1 2.4 1.6 3.9 1.6s2.9-.6 3.9-1.6c.9-.9 1.4-2.1 1.4-3.4s-.5-2.5-1.4-3.4zM12 12c.5.5 1 .5 1.5 0M2 12c0-5.5 4.5-10 10-10s10 4.5 10 10-4.5 10-10 10S2 17.5 2 12z"
+                            opacity=".2" />
+                        <path
+                            d="M17.5 16.5c-2.5 2.5-6.5 2.5-9 0-1-1-1.5-2.2-1.5-3.5s.5-2.5 1.5-3.5c2.5-2.5 6.5-2.5 9 0 1 1 1.5 2.2 1.5 3.5s-.5 2.5-1.5 3.5zM12 8c-3.3 0-6 2.7-6 6s2.7 6 6 6 6-2.7 6-6-2.7-6-6-6z" />
+                    </svg>
+                    <span class="text-xl font-bold">Meta</span>
+                </div>
+            </div>
+            <div class="logo-item">
+                <div class="flex items-center space-x-2 text-gray-700">
+                    <svg class="w-10 h-10" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" />
+                    </svg>
+                    <span class="text-xl font-bold">Tesla</span>
+                </div>
+            </div>
+
+            <!-- Logo-Set 2 (Kopie für den unendlichen Loop) -->
+            <div class="logo-item">
+                <div class="flex items-center space-x-2 text-gray-700">
+                    <svg class="w-10 h-10" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M17.05 20.28c-.98.95-2.05 1.72-3.15 1.72-1.07 0-1.42-.65-2.67-.65-1.27 0-1.65.63-2.65.65-1.07.02-2.12-.75-3.12-1.72C3.42 18.25 2 15.15 2 12.05c0-3.13 2.02-4.8 4-4.8 1.05 0 2.05.73 2.68.73.65 0 1.83-.88 3.12-.88 1.63 0 2.87.88 3.65 2.05-3.37 1.4-2.82 5.67.5 7.13-.65 1.55-1.45 3-2.4 4zM12.03 7.25c-.02-2.23 1.85-4.28 3.93-4.5.17 2.45-2.07 4.58-3.93 4.5z" />
+                    </svg>
+                    <span class="text-xl font-bold">Apple</span>
+                </div>
+            </div>
+            <div class="logo-item">
+                <div class="flex items-center space-x-2 text-gray-700">
+                    <svg class="w-10 h-10" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M18.65 14.65c-1.12.75-2.95 1.25-5 1.25-3.05 0-5.65-1.2-5.65-3.75 0-2.35 1.95-3.4 5.25-3.4 1.15 0 2.2.15 3.05.45v-.4c0-1.35-.85-2.05-2.35-2.05-1.15 0-2.5.4-3.5 1.05l-.65-1.5c1.25-.8 3-1.25 4.6-1.25 2.7 0 4.15 1.35 4.15 3.75v5.15c0 1 .35 1.6 1.05 2.1l-.95 1.35c-1-.7-1.35-1.5-1.35-2.3v-.45zm-2.35-3.35c-.75-.3-1.6-.45-2.45-.45-2 0-3.05.65-3.05 1.75 0 1 .95 1.65 2.5 1.65 1.45 0 2.55-.45 3.25-.95v-2zM12 21c-4.35 0-8.65-2.15-10.45-5.35l1.65-1c1.5 2.7 5.1 4.5 8.8 4.5 3.55 0 6.6-1.6 7.4-4.1l1.8.6c-1.1 3.2-4.7 5.35-9.2 5.35z" />
+                    </svg>
+                    <span class="text-xl font-bold">Amazon</span>
+                </div>
+            </div>
+            <div class="logo-item">
+                <div class="flex items-center space-x-2 text-gray-700">
+                    <svg class="w-10 h-10" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M11.5 11.5H3V3h8.5v8.5zm9 0h-8.5V3h8.5v8.5zm-9 9H3v-8.5h8.5v8.5zm9 0h-8.5v-8.5h8.5v8.5z" />
+                    </svg>
+                    <span class="text-xl font-bold">Microsoft</span>
+                </div>
+            </div>
+            <div class="logo-item">
+                <div class="flex items-center space-x-2 text-gray-700">
+                    <svg class="w-10 h-10" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M22.5 12c0-5.8-4.7-10.5-10.5-10.5S1.5 6.2 1.5 12s4.7 10.5 10.5 10.5c3 0 5.7-1.2 7.6-3.2l-2.4-1.8c-1.4 1.3-3.2 2-5.2 2-4.1 0-7.5-3.1-7.5-7.5s3.4-7.5 7.5-7.5c2.1 0 3.9.8 5.3 2.1l-4.1 4.1h8.8v-1.2z" />
+                    </svg>
+                    <span class="text-xl font-bold">Google</span>
+                </div>
+            </div>
+            <div class="logo-item">
+                <div class="flex items-center space-x-2 text-gray-700">
+                    <svg class="w-10 h-10" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M19.7 10.2c-1-1-2.4-1.6-3.9-1.6-1.5 0-2.9.6-3.9 1.6-.9.9-1.4 2.1-1.4 3.4 0 1.3.5 2.5 1.4 3.4 1 1 2.4 1.6 3.9 1.6s2.9-.6 3.9-1.6c.9-.9 1.4-2.1 1.4-3.4s-.5-2.5-1.4-3.4zm-7.7 0c-1-1-2.4-1.6-3.9-1.6-1.5 0-2.9.6-3.9 1.6-.9.9-1.4 2.1-1.4 3.4 0 1.3.5 2.5 1.4 3.4 1 1 2.4 1.6 3.9 1.6s2.9-.6 3.9-1.6c.9-.9 1.4-2.1 1.4-3.4s-.5-2.5-1.4-3.4zM12 12c.5.5 1 .5 1.5 0M2 12c0-5.5 4.5-10 10-10s10 4.5 10 10-4.5 10-10 10S2 17.5 2 12z"
+                            opacity=".2" />
+                        <path
+                            d="M17.5 16.5c-2.5 2.5-6.5 2.5-9 0-1-1-1.5-2.2-1.5-3.5s.5-2.5 1.5-3.5c2.5-2.5 6.5-2.5 9 0 1 1 1.5 2.2 1.5 3.5s-.5 2.5-1.5 3.5zM12 8c-3.3 0-6 2.7-6 6s2.7 6 6 6 6-2.7 6-6-2.7-6-6-6z" />
+                    </svg>
+                    <span class="text-xl font-bold">Meta</span>
+                </div>
+            </div>
+            <div class="logo-item">
+                <div class="flex items-center space-x-2 text-gray-700">
+                    <svg class="w-10 h-10" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" />
+                    </svg>
+                    <span class="text-xl font-bold">Tesla</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

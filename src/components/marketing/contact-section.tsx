@@ -15,7 +15,7 @@ import { Calendar } from "lucide-react";
 export function ContactSection() {
     return (
         <section id="contact" className="py-24 bg-background relative">
-            <div className="absolute inset-0 bg-blue-500/5 bg-[radial-gradient(circle_at_center,_transparent_0%,_black_100%)] pointer-events-none" />
+            <div className="absolute inset-0 bg-blue-500/5 pointer-events-none" />
 
             <div className="container mx-auto px-4 max-w-6xl relative z-10">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
@@ -46,7 +46,7 @@ export function ContactSection() {
 
                             {/* Digital Handshake Image - 2:3 Ratio */}
                             <div className="hidden sm:block relative w-[200px] aspect-[2/3] rounded-2xl overflow-hidden border border-border shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-500 group">
-                                <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent z-10" />
+
                                 <img
                                     src="/assets/digital-handshake.png"
                                     alt="Digital Handshake"

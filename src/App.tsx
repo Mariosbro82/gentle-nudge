@@ -1,4 +1,4 @@
-import { Routes, Route, Outlet } from "react-router-dom";
+import { Routes, Route, Outlet, Navigate } from "react-router-dom";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/contexts/auth-context";
 import { ProtectedRoute } from "@/components/auth/protected-route";
@@ -20,6 +20,16 @@ const OnboardingPage = lazy(() => import("@/pages/onboarding"));
 const ForgotPasswordPage = lazy(() => import("@/pages/forgot-password"));
 const ResetPasswordPage = lazy(() => import("@/pages/reset-password"));
 const AuthCallbackPage = lazy(() => import("@/pages/auth/callback"));
+
+// Admin pages
+import AdminLogin from "@/pages/admin-login"; // Eager load for better UX on secret route
+import { AdminLayout } from "@/layouts/AdminLayout";
+import { AdminRoute } from "@/components/auth/admin-route";
+const AdminDashboardPage = lazy(() => import("@/pages/admin/dashboard"));
+const AdminUsersPage = lazy(() => import("@/pages/admin/users"));
+const AdminChipsPage = lazy(() => import("@/pages/admin/chips"));
+const AdminAnalyticsPage = lazy(() => import("@/pages/admin/analytics"));
+const AdminSupportPage = lazy(() => import("@/pages/admin/support"));
 
 // NFC public pages
 const ProfilePage = lazy(() => import("@/pages/p/[userId]"));
@@ -67,7 +77,7 @@ function NfcLayout() {
 
 export default function App() {
     return (
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <ThemeProvider defaultTheme="system">
             <AuthProvider>
                 <Routes>
                     {/* Public routes */}
@@ -106,6 +116,21 @@ export default function App() {
                             </ProtectedRoute>
                         }
                     />
+
+                    {/* Secret Admin Routes */}
+                    <Route path="/admin-secret-login" element={<AdminLogin />} />
+
+                    <Route path="/admin" element={<AdminRoute />}>
+                        <Route element={<AdminLayout />}>
+                            <Route path="dashboard" element={<Suspense fallback={<PageLoader />}><AdminDashboardPage /></Suspense>} />
+                            <Route path="users" element={<Suspense fallback={<PageLoader />}><AdminUsersPage /></Suspense>} />
+                            <Route path="chips" element={<Suspense fallback={<PageLoader />}><AdminChipsPage /></Suspense>} />
+                            <Route path="analytics" element={<Suspense fallback={<PageLoader />}><AdminAnalyticsPage /></Suspense>} />
+                            <Route path="support" element={<Suspense fallback={<PageLoader />}><AdminSupportPage /></Suspense>} />
+                            {/* Redirect /admin to /admin/dashboard */}
+                            <Route index element={<Navigate to="/admin/dashboard" replace />} />
+                        </Route>
+                    </Route>
 
                     {/* Protected admin routes */}
                     <Route

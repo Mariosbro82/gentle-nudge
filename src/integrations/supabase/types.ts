@@ -137,12 +137,12 @@ export type Database = {
           created_at: string | null
           follow_up_sent: boolean | null
           id: string
+          ip_address: string | null
           lead_email: string | null
           lead_name: string | null
           lead_phone: string | null
           notes: string | null
           sentiment: Database["public"]["Enums"]["sentiment_type"] | null
-          ip_address: string | null
         }
         Insert: {
           captured_by_user_id?: string | null
@@ -150,12 +150,12 @@ export type Database = {
           created_at?: string | null
           follow_up_sent?: boolean | null
           id?: string
+          ip_address?: string | null
           lead_email?: string | null
           lead_name?: string | null
           lead_phone?: string | null
           notes?: string | null
           sentiment?: Database["public"]["Enums"]["sentiment_type"] | null
-          ip_address?: string | null
         }
         Update: {
           captured_by_user_id?: string | null
@@ -163,12 +163,12 @@ export type Database = {
           created_at?: string | null
           follow_up_sent?: boolean | null
           id?: string
+          ip_address?: string | null
           lead_email?: string | null
           lead_name?: string | null
           lead_phone?: string | null
           notes?: string | null
           sentiment?: Database["public"]["Enums"]["sentiment_type"] | null
-          ip_address?: string | null
         }
         Relationships: [
           {
@@ -189,6 +189,8 @@ export type Database = {
       }
       onboarding_data: {
         Row: {
+          automation_delay_hours: number | null
+          automation_interest: boolean | null
           company_name: string | null
           completed_at: string | null
           created_at: string | null
@@ -196,14 +198,14 @@ export type Database = {
           id: string
           industry: string | null
           referral_source: string | null
+          selected_template: string | null
           team_size: string | null
           use_case: string | null
           user_id: string | null
-          selected_template: string | null
-          automation_interest: boolean | null
-          automation_delay_hours: number | null
         }
         Insert: {
+          automation_delay_hours?: number | null
+          automation_interest?: boolean | null
           company_name?: string | null
           completed_at?: string | null
           created_at?: string | null
@@ -211,14 +213,14 @@ export type Database = {
           id?: string
           industry?: string | null
           referral_source?: string | null
+          selected_template?: string | null
           team_size?: string | null
           use_case?: string | null
           user_id?: string | null
-          selected_template?: string | null
-          automation_interest?: boolean | null
-          automation_delay_hours?: number | null
         }
         Update: {
+          automation_delay_hours?: number | null
+          automation_interest?: boolean | null
           company_name?: string | null
           completed_at?: string | null
           created_at?: string | null
@@ -226,12 +228,10 @@ export type Database = {
           id?: string
           industry?: string | null
           referral_source?: string | null
+          selected_template?: string | null
           team_size?: string | null
           use_case?: string | null
           user_id?: string | null
-          selected_template?: string | null
-          automation_interest?: boolean | null
-          automation_delay_hours?: number | null
         }
         Relationships: [
           {
@@ -387,8 +387,10 @@ export type Database = {
           job_title: string | null
           linkedin_url: string | null
           name: string | null
+          notes: string | null
           phone: string | null
           profile_pic: string | null
+          role: string
           slug: string | null
           social_links: Json | null
           updated_at: string | null
@@ -413,8 +415,10 @@ export type Database = {
           job_title?: string | null
           linkedin_url?: string | null
           name?: string | null
+          notes?: string | null
           phone?: string | null
           profile_pic?: string | null
+          role?: string
           slug?: string | null
           social_links?: Json | null
           updated_at?: string | null
@@ -439,8 +443,10 @@ export type Database = {
           job_title?: string | null
           linkedin_url?: string | null
           name?: string | null
+          notes?: string | null
           phone?: string | null
           profile_pic?: string | null
+          role?: string
           slug?: string | null
           social_links?: Json | null
           updated_at?: string | null
@@ -510,24 +516,27 @@ export type Database = {
     }
     Functions: {
       get_interested_leads: {
-        Args: {
-          p_user_id: string
-        }
+        Args: { p_user_id: string }
         Returns: {
+          last_viewed_at: string
           lead_id: string
           lead_name: string
           recurring_views: number
-          last_viewed_at: string
         }[]
       }
+      increment_view_count: {
+        Args: { page_user_id: string }
+        Returns: undefined
+      }
+      is_admin: { Args: never; Returns: boolean }
       log_profile_view: {
         Args: {
-          p_user_id: string
-          p_ip_address: string
-          p_device_type: string
-          p_user_agent: string
-          p_referrer: string
           p_country: string
+          p_device_type: string
+          p_ip_address: string
+          p_referrer: string
+          p_user_agent: string
+          p_user_id: string
         }
         Returns: Json
       }
@@ -590,6 +599,12 @@ export type TablesInsert<
   schema: keyof DatabaseWithoutInternals
 }
   ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+    Insert: infer I
+  }
+  ? I
+  : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+  ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
     Insert: infer I
   }
   ? I
@@ -664,4 +679,3 @@ export const Constants = {
     },
   },
 } as const
-
