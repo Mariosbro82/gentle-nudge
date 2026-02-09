@@ -5,6 +5,7 @@ import { Users, ScanLine, ArrowUpRight } from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
 import { useAuth } from "@/contexts/auth-context";
 
+
 interface StatsCardProps {
     title: string;
     value: number | string;
@@ -50,7 +51,13 @@ export default function DashboardPage() {
                 .single();
 
             if (userProfile) {
-                setViewsCount(userProfile.view_count || 0);
+                // Fetch view count from profile_views
+                const { count } = await supabase
+                    .from("profile_views")
+                    .select("*", { count: "exact", head: true })
+                    .eq("user_id", userProfile.id);
+
+                setViewsCount(count || 0);
             }
 
             // Get user's chip IDs

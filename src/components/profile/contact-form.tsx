@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { supabase } from "@/lib/supabase/client";
+
 import { UserPlus, Send, CheckCircle, Link, ChevronDown, ChevronUp } from "lucide-react";
+import { submitLead } from "@/lib/api/analytics";
 
 interface ContactFormProps {
   recipientUserId: string;
@@ -39,17 +40,16 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
       .filter(Boolean)
       .join("\n");
 
-    const { error } = await supabase.from("leads").insert({
+    const { success } = await submitLead({
       captured_by_user_id: recipientUserId,
       lead_name: form.name.trim(),
       lead_email: form.email.trim(),
-      lead_phone: form.phone.trim() || null,
-      notes: notes || null,
-      sentiment: "warm",
+      lead_phone: form.phone.trim() || undefined,
+      notes: notes || undefined,
     });
 
     setSubmitting(false);
-    if (!error) {
+    if (success) {
       setSubmitted(true);
     }
   }

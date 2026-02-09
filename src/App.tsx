@@ -16,6 +16,9 @@ const SettingsPage = lazy(() => import("@/pages/dashboard/settings"));
 
 // Auth pages
 const LoginPage = lazy(() => import("@/pages/login"));
+const OnboardingPage = lazy(() => import("@/pages/onboarding"));
+const ForgotPasswordPage = lazy(() => import("@/pages/forgot-password"));
+const ResetPasswordPage = lazy(() => import("@/pages/reset-password"));
 
 // NFC public pages
 const ProfilePage = lazy(() => import("@/pages/p/[userId]"));
@@ -59,7 +62,7 @@ function NfcLayout() {
 
 export default function App() {
     return (
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             <AuthProvider>
                 <Routes>
                     {/* Public routes */}
@@ -69,6 +72,8 @@ export default function App() {
                     <Route path="/company" element={<Suspense fallback={<PageLoader />}><CompanyPage /></Suspense>} />
                     <Route path="/analytics" element={<Suspense fallback={<PageLoader />}><AnalyticsPublicPage /></Suspense>} />
                     <Route path="/login" element={<Suspense fallback={<PageLoader />}><LoginPage /></Suspense>} />
+                    <Route path="/forgot-password" element={<Suspense fallback={<PageLoader />}><ForgotPasswordPage /></Suspense>} />
+                    <Route path="/reset-password" element={<Suspense fallback={<PageLoader />}><ResetPasswordPage /></Suspense>} />
 
                     {/* NFC public routes */}
                     <Route element={<NfcLayout />}>
@@ -78,6 +83,18 @@ export default function App() {
                         <Route path="/review/:companyId" element={<ReviewPage />} />
                         <Route path="/claim/:uid" element={<ClaimPage />} />
                     </Route>
+
+                    {/* Protected onboarding route */}
+                    <Route
+                        path="/onboarding"
+                        element={
+                            <ProtectedRoute skipOnboardingCheck>
+                                <Suspense fallback={<PageLoader />}>
+                                    <OnboardingPage />
+                                </Suspense>
+                            </ProtectedRoute>
+                        }
+                    />
 
                     {/* Protected admin routes */}
                     <Route

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { supabase } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +14,7 @@ export default function LoginPage() {
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -23,6 +24,7 @@ export default function LoginPage() {
         e.preventDefault();
         setIsLoading(true);
         setError(null);
+        setSuccessMessage(null);
 
         const { error } = await supabase.auth.signInWithPassword({
             email,
@@ -40,6 +42,7 @@ export default function LoginPage() {
     const handleSignUp = async () => {
         setIsLoading(true);
         setError(null);
+        setSuccessMessage(null);
 
         const { error } = await supabase.auth.signUp({
             email,
@@ -50,7 +53,7 @@ export default function LoginPage() {
             setError(error.message);
             setIsLoading(false);
         } else {
-            setError("Account created! Check your email (or proceed to dashboard if auto-confirmed).");
+            setSuccessMessage("Account created! Check your email to confirm your account.");
             setIsLoading(false);
         }
     };
@@ -90,7 +93,7 @@ export default function LoginPage() {
                                     <div className="space-y-2">
                                         <div className="flex items-center justify-between">
                                             <Label htmlFor="password">Passwort</Label>
-                                            <a href="#" className="text-xs text-blue-400 hover:text-blue-300">Vergessen?</a>
+                                            <Link to="/forgot-password" className="text-xs text-blue-400 hover:text-blue-300">Vergessen?</Link>
                                         </div>
                                         <Input
                                             id="password"
@@ -106,20 +109,23 @@ export default function LoginPage() {
                                         <div className="p-3 rounded-md bg-red-500/10 border border-red-500/20 text-red-400 text-sm">{error}</div>
                                     )}
 
+                                    {successMessage && (
+                                        <div className="p-3 rounded-md bg-green-500/10 border border-green-500/20 text-green-500 text-sm">{successMessage}</div>
+                                    )}
+
                                     <div className="flex gap-4 pt-2">
-                                        <Button type="submit" className="flex-1 bg-white text-black hover:bg-zinc-200 font-semibold" disabled={isLoading}>
-                                            {isLoading ? <Loader2 className="animate-spin mr-2" /> : "Anmelden"}
+                                        <Button type="submit" className="flex-1 h-10 bg-white text-black hover:bg-zinc-200 font-semibold" disabled={isLoading}>
+                                            {isLoading ? <Loader2 className="animate-spin" /> : "Anmelden"}
                                         </Button>
-                                    </div>
-                                    <div className="text-center">
-                                        <button
+                                        <Button
                                             type="button"
-                                            className="text-sm text-zinc-500 hover:text-white transition-colors"
+                                            variant="outline"
+                                            className="flex-1 h-10 border-white/20 text-white hover:bg-white/10 font-semibold"
                                             onClick={handleSignUp}
                                             disabled={isLoading}
                                         >
-                                            Noch kein Account? Registrieren
-                                        </button>
+                                            {isLoading ? <Loader2 className="animate-spin" /> : "Registrieren"}
+                                        </Button>
                                     </div>
                                 </form>
                             </CardContent>

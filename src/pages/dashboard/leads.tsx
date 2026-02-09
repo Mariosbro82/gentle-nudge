@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Download, RefreshCw } from "lucide-react";
+import { Download, RefreshCw, Flame } from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
 import { useAuth } from "@/contexts/auth-context";
+import { getInterestedLeads } from "@/lib/api/analytics";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface Lead {
     id: string;
@@ -15,6 +17,8 @@ interface Lead {
     notes: string | null;
     created_at: string | null;
     users?: { name: string | null } | null;
+    is_interested?: boolean;
+    recurring_views?: number;
 }
 
 export default function LeadsPage() {
@@ -38,13 +42,34 @@ export default function LeadsPage() {
                 return;
             }
 
-            const { data } = await supabase
-                .from("leads")
-                .select("*, users(name)")
-                .eq("captured_by_user_id", profile.id)
-                .order("created_at", { ascending: false });
+            // Fetch leads and interested leads in parallel
+            const [leadsResponse, interestedLeads] = await Promise.all([
+                supabase
+                    .from("leads")
+                    .select("*, users(name)")
+                    .eq("captured_by_user_id", profile.id)
+                    .order("created_at", { ascending: false }),
+                getInterestedLeads(profile.id)
+            ]);
 
-            setLeads(data || []);
+            const leadsData = leadsResponse.data || [];
+
+            // Map interested leads to a lookup object
+            const interestedMap = new Map();
+            if (interestedLeads) {
+                interestedLeads.forEach((l: any) => {
+                    interestedMap.set(l.lead_id, l.recurring_views);
+                });
+            }
+
+            // Merge data
+            const mergedLeads = leadsData.map(lead => ({
+                ...lead,
+                is_interested: interestedMap.has(lead.id),
+                recurring_views: interestedMap.get(lead.id) || 0
+            }));
+
+            setLeads(mergedLeads);
             setLoading(false);
         }
 
@@ -54,7 +79,7 @@ export default function LeadsPage() {
     function exportToCSV() {
         if (!leads.length) return;
 
-        const headers = ["Name", "Email", "Telefon", "Stimmung", "Nachricht", "Links", "Datum"];
+        const headers = ["Name", "Email", "Telefon", "Stimmung", "Interesse (Views)", "Nachricht", "Links", "Datum"];
         const rows = leads.map((lead) => {
             const notes = lead.notes || "";
             const lines = notes.split("\n").filter(Boolean);
@@ -65,6 +90,7 @@ export default function LeadsPage() {
                 lead.lead_email,
                 lead.lead_phone || "",
                 lead.sentiment,
+                lead.is_interested ? `Sehr hoch (${lead.recurring_views})` : "Normal",
                 message,
                 links,
                 new Date(lead.created_at || '').toLocaleDateString(),
@@ -131,7 +157,26 @@ export default function LeadsPage() {
 
                             return (
                                 <TableRow key={lead.id} className="border-border hover:bg-muted/50">
-                                    <TableCell className="font-medium text-foreground">{lead.lead_name}</TableCell>
+                                    <TableCell className="font-medium text-foreground">
+                                        <div className="flex items-center gap-2">
+                                            {lead.lead_name}
+                                            {lead.is_interested && (
+                                                <TooltipProvider>
+                                                    <Tooltip>
+                                                        <TooltipTrigger>
+                                                            <Badge variant="secondary" className="bg-orange-500/10 text-orange-500 border-orange-500/20 hover:bg-orange-500/20 px-1.5 py-0 h-5">
+                                                                <Flame size={10} className="mr-1" fill="currentColor" />
+                                                                Heiß
+                                                            </Badge>
+                                                        </TooltipTrigger>
+                                                        <TooltipContent>
+                                                            <p>Dieser Kontakt hat dein Profil {lead.recurring_views}x besucht!</p>
+                                                        </TooltipContent>
+                                                    </Tooltip>
+                                                </TooltipProvider>
+                                            )}
+                                        </div>
+                                    </TableCell>
                                     <TableCell className="text-muted-foreground">{lead.lead_email}</TableCell>
                                     <TableCell className="text-muted-foreground">{lead.lead_phone || "-"}</TableCell>
                                     <TableCell>

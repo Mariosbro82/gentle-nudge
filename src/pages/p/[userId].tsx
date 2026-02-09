@@ -4,6 +4,7 @@ import { supabase } from "@/lib/supabase/client";
 import { GhostPage } from "@/components/profile/ghost-page";
 import { getTemplate } from "@/components/profile/templates";
 import type { ProfileUser } from "@/types/profile";
+import { logProfileView } from "@/lib/api/analytics";
 
 export default function ProfilePage() {
     const { userId } = useParams<{ userId: string }>();
@@ -27,7 +28,7 @@ export default function ProfilePage() {
             // Increment view count
             if (data) {
                 // Fire and forget - don't await this to keep page load fast
-                supabase.rpc("increment_view_count", { page_user_id: data.id });
+                logProfileView(data.id);
             }
 
             if (data) {

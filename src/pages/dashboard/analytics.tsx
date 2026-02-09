@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart3, Users, TrendingUp, Target } from "lucide-react";
+import { Users, TrendingUp, Target, Eye, Repeat } from "lucide-react";
 import {
     LineChart,
     Line,
@@ -15,20 +15,22 @@ import {
 } from "recharts";
 import { supabase } from "@/lib/supabase/client";
 import { useAuth } from "@/contexts/auth-context";
+import { getProfileViewAnalytics } from "@/lib/api/analytics";
 
-const COLORS = ["#0ea5e9", "#14b8a6", "#6366f1", "#f59e0b"];
+const COLORS = ["#0ea5e9", "#14b8a6", "#6366f1", "#f59e0b", "#ec4899"];
 
 export default function AnalyticsPage() {
     const { user } = useAuth();
     const [loading, setLoading] = useState(true);
-    const [scanData, setScanData] = useState<{ date: string; scans: number }[]>([]);
+    const [viewData, setViewData] = useState<{ date: string; views: number }[]>([]);
     const [deviceData, setDeviceData] = useState<{ name: string; value: number }[]>([]);
+    const [countryData, setCountryData] = useState<{ name: string; value: number }[]>([]);
     const [metrics, setMetrics] = useState({
-        totalScans: 0,
+        totalViews: 0,
         uniqueVisitors: 0,
+        recurringVisitors: 0,
         avgDaily: 0,
         conversionRate: 0,
-        totalViews: 0,
     });
 
     useEffect(() => {
@@ -38,75 +40,39 @@ export default function AnalyticsPage() {
             // Get user's profile to check company
             const { data: userProfile } = await supabase
                 .from("users")
-                .select("id, company_id, view_count")
+                .select("id, company_id")
                 .eq("auth_user_id", user.id)
                 .single();
 
-            // Get chips
-            let chipsQuery = supabase.from("chips").select("id");
-            if (userProfile?.company_id) {
-                chipsQuery = chipsQuery.eq("company_id", userProfile.company_id);
-            } else {
-                chipsQuery = chipsQuery.eq("assigned_user_id", userProfile?.id || "");
-            }
-            const { data: chips } = await chipsQuery;
-            const chipIds = chips?.map((c) => c.id) || [];
-
-            if (chipIds.length === 0) {
+            if (!userProfile) {
                 setLoading(false);
                 return;
             }
 
-            // Fetch scans (last 30 days)
-            const thirtyDaysAgo = new Date();
-            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            // Fetch profile analytics
+            const analytics = await getProfileViewAnalytics(userProfile.id);
 
-            const { data: scans } = await supabase
-                .from("scans")
-                .select("*")
-                .in("chip_id", chipIds)
-                .gte("scanned_at", thirtyDaysAgo.toISOString())
-                .order("scanned_at", { ascending: true });
-
-            const recentScans = scans || [];
-            const totalScans = recentScans.length;
-            const uniqueVisitors = new Set(recentScans.map((s) => s.ip_address)).size;
-            const avgDaily = Math.round((totalScans / 30) * 10) / 10;
-
-            // Conversion rate
+            // Calculate conversion rate (leads / unique visitors)
             const { count: leadsCount } = await supabase
                 .from("leads")
                 .select("*", { count: "exact", head: true })
-                .eq("captured_by_user_id", userProfile?.id || "");
+                .eq("captured_by_user_id", userProfile.id);
 
-            const conversionRate = totalScans > 0 ? Math.round(((leadsCount || 0) / totalScans) * 100) / 10 : 0;
+            const conversionRate = analytics.uniqueVisitors > 0
+                ? Math.round(((leadsCount || 0) / analytics.uniqueVisitors) * 100) / 10
+                : 0;
 
-            // Process scan data by date
-            const scansByDate: Record<string, number> = {};
-            recentScans.forEach((scan) => {
-                const date = new Date(scan.scanned_at || '').toLocaleDateString("en-US", { month: "short", day: "numeric" });
-                scansByDate[date] = (scansByDate[date] || 0) + 1;
+            setMetrics({
+                totalViews: analytics.totalViews,
+                uniqueVisitors: analytics.uniqueVisitors,
+                recurringVisitors: analytics.recurringVisitors,
+                avgDaily: analytics.avgDaily,
+                conversionRate,
             });
-            const processedScanData = Object.entries(scansByDate).map(([date, count]) => ({ date, scans: count }));
 
-            // Device data
-            const devices: Record<string, number> = { Mobile: 0, Desktop: 0, Tablet: 0, Other: 0 };
-            recentScans.forEach((scan) => {
-                const type = scan.device_type || "Other";
-                if (type.includes("Mobile")) devices.Mobile++;
-                else if (type.includes("Desktop")) devices.Desktop++;
-                else if (type.includes("Tablet")) devices.Tablet++;
-                else devices.Other++;
-            });
-            const processedDeviceData = Object.entries(devices)
-                .filter(([_, val]) => val > 0)
-                .map(([name, value]) => ({ name, value }));
-
-            const totalViews = userProfile?.view_count || 0;
-
-            setMetrics({ totalScans, uniqueVisitors, avgDaily, conversionRate, totalViews });
-            setScanData(processedScanData);
-            setDeviceData(processedDeviceData);
+            setViewData(analytics.viewsByDate);
+            setDeviceData(analytics.deviceBreakdown);
+            setCountryData(analytics.countryBreakdown);
             setLoading(false);
         }
 
@@ -122,22 +88,22 @@ export default function AnalyticsPage() {
     }
 
     const statCards = [
-        { title: "Total Scans", value: metrics.totalScans, icon: BarChart3, color: "text-sky-500" },
-        { title: "Unique Visitors", value: metrics.uniqueVisitors, icon: Users, color: "text-teal-500" },
-        { title: "Profile Views", value: metrics.totalViews, icon: Users, color: "text-purple-500" },
-        { title: "Avg. Daily Scans", value: metrics.avgDaily, icon: TrendingUp, color: "text-indigo-500" },
-        { title: "Conversion Rate", value: `${metrics.conversionRate}%`, icon: Target, color: "text-amber-500" },
+        { title: "Profil Aufrufe", value: metrics.totalViews, icon: Eye, color: "text-sky-500" },
+        { title: "Besucher (Unique)", value: metrics.uniqueVisitors, icon: Users, color: "text-teal-500" },
+        { title: "Wiederkehrend", value: metrics.recurringVisitors, icon: Repeat, color: "text-purple-500" },
+        { title: "Ø Täglich", value: metrics.avgDaily, icon: TrendingUp, color: "text-indigo-500" },
+        { title: "Konversionsrate", value: `${metrics.conversionRate}%`, icon: Target, color: "text-amber-500" },
     ];
 
     return (
         <div className="space-y-6">
             <div>
                 <h1 className="text-3xl font-bold tracking-tight">Analytics</h1>
-                <p className="text-zinc-500">Performance Ihrer NFC Chips (Letzte 30 Tage).</p>
+                <p className="text-zinc-500">Performance deines Profils (Letzte 30 Tage).</p>
             </div>
 
             {/* Stats Grid */}
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
                 {statCards.map((stat) => (
                     <Card key={stat.title} className="bg-zinc-900/50 border-white/5">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -157,13 +123,13 @@ export default function AnalyticsPage() {
             <div className="grid gap-6 lg:grid-cols-3">
                 <Card className="bg-zinc-900/50 border-white/5 lg:col-span-2">
                     <CardHeader>
-                        <CardTitle className="text-white">Scans Over Time</CardTitle>
+                        <CardTitle className="text-white">Aufrufe im Zeitverlauf</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        {scanData.length > 0 ? (
+                        {viewData.length > 0 ? (
                             <div className="h-[300px]">
                                 <ResponsiveContainer width="100%" height="100%">
-                                    <LineChart data={scanData}>
+                                    <LineChart data={viewData}>
                                         <CartesianGrid strokeDasharray="3 3" stroke="#333" />
                                         <XAxis dataKey="date" stroke="#666" fontSize={12} tickLine={false} />
                                         <YAxis stroke="#666" fontSize={12} tickLine={false} axisLine={false} />
@@ -177,7 +143,7 @@ export default function AnalyticsPage() {
                                         />
                                         <Line
                                             type="monotone"
-                                            dataKey="scans"
+                                            dataKey="views"
                                             stroke="#0ea5e9"
                                             strokeWidth={2}
                                             dot={false}
@@ -187,62 +153,86 @@ export default function AnalyticsPage() {
                                 </ResponsiveContainer>
                             </div>
                         ) : (
-                            <div className="h-[300px] flex items-center justify-center text-zinc-500">No data available yet</div>
+                            <div className="h-[300px] flex items-center justify-center text-zinc-500">Noch keine Daten verfügbar</div>
                         )}
                     </CardContent>
                 </Card>
 
-                <Card className="bg-zinc-900/50 border-white/5">
-                    <CardHeader>
-                        <CardTitle className="text-white">Device Breakdown</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        {deviceData.length > 0 ? (
-                            <div className="h-[300px]">
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <PieChart>
-                                        <Pie
-                                            data={deviceData}
-                                            cx="50%"
-                                            cy="50%"
-                                            innerRadius={60}
-                                            outerRadius={90}
-                                            paddingAngle={5}
-                                            dataKey="value"
-                                        >
-                                            {deviceData.map((_, index) => (
-                                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                            ))}
-                                        </Pie>
-                                        <Tooltip
-                                            contentStyle={{
-                                                backgroundColor: "#18181b",
-                                                border: "1px solid #333",
-                                                borderRadius: "8px",
-                                                color: "#fff",
-                                            }}
-                                        />
-                                    </PieChart>
-                                </ResponsiveContainer>
-                                <div className="flex justify-center gap-4 mt-4 flex-wrap">
-                                    {deviceData.map((entry, index) => (
-                                        <div key={entry.name} className="flex items-center gap-2">
-                                            <div
-                                                className="w-3 h-3 rounded-full"
-                                                style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                <div className="space-y-6">
+                    <Card className="bg-zinc-900/50 border-white/5">
+                        <CardHeader>
+                            <CardTitle className="text-white">Geräte</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            {deviceData.length > 0 ? (
+                                <div className="h-[200px]">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <PieChart>
+                                            <Pie
+                                                data={deviceData}
+                                                cx="50%"
+                                                cy="50%"
+                                                innerRadius={40}
+                                                outerRadius={70}
+                                                paddingAngle={5}
+                                                dataKey="value"
+                                            >
+                                                {deviceData.map((_, index) => (
+                                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                                ))}
+                                            </Pie>
+                                            <Tooltip
+                                                contentStyle={{
+                                                    backgroundColor: "#18181b",
+                                                    border: "1px solid #333",
+                                                    borderRadius: "8px",
+                                                    color: "#fff",
+                                                }}
                                             />
-                                            <span className="text-xs text-zinc-400">
-                                                {entry.name} ({entry.value})
+                                        </PieChart>
+                                    </ResponsiveContainer>
+                                    <div className="flex justify-center gap-2 mt-2 flex-wrap">
+                                        {deviceData.map((entry, index) => (
+                                            <div key={entry.name} className="flex items-center gap-1.5">
+                                                <div
+                                                    className="w-2 h-2 rounded-full"
+                                                    style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                                                />
+                                                <span className="text-[10px] text-zinc-400">
+                                                    {entry.name} ({entry.value})
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="h-[200px] flex items-center justify-center text-zinc-500">K.A.</div>
+                            )}
+                        </CardContent>
+                    </Card>
+
+                    <Card className="bg-zinc-900/50 border-white/5">
+                        <CardHeader>
+                            <CardTitle className="text-white">Länder (Top 5)</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            {countryData.length > 0 ? (
+                                <div className="space-y-2">
+                                    {countryData.map((country, i) => (
+                                        <div key={country.name} className="flex items-center justify-between text-sm">
+                                            <span className="text-zinc-300 flex items-center gap-2">
+                                                <span className="text-zinc-500 w-4">{i + 1}.</span> {country.name}
                                             </span>
+                                            <span className="font-mono text-zinc-400">{country.value}</span>
                                         </div>
                                     ))}
                                 </div>
-                            </div>
-                        ) : (
-                            <div className="h-[300px] flex items-center justify-center text-zinc-500">No data available yet</div>
-                        )}
-                    </CardContent>
-                </Card>
+                            ) : (
+                                <div className="flex items-center justify-center py-4 text-zinc-500">K.A.</div>
+                            )}
+                        </CardContent>
+                    </Card>
+                </div>
             </div>
         </div>
     );
