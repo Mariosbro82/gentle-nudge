@@ -14,7 +14,7 @@ interface CompletionStepProps {
 }
 
 export function CompletionStep({ data, onComplete, isSubmitting }: CompletionStepProps) {
-    const { user } = useAuth();
+    const { user: _user } = useAuth();
     const [copied, setCopied] = useState(false);
 
     // We try to use the slug from user metadata first, but for now we'll construct a likely one

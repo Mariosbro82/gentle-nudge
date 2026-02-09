@@ -1,5 +1,5 @@
 
-import React from 'react';
+
 import { cn } from "@/lib/utils";
 
 interface TemplatePreviewProps {
@@ -13,7 +13,7 @@ interface TemplatePreviewProps {
     className?: string;
 }
 
-export const TemplatePreview = ({ template, user, scale = 1, className }: TemplatePreviewProps) => {
+export const TemplatePreview = ({ template, user, scale: _scale = 1, className }: TemplatePreviewProps) => {
     const getInitials = (name: string) => {
         return name
             .split(' ')

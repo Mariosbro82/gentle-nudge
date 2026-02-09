@@ -30,7 +30,6 @@ export default function AnalyticsPage() {
     ];
 
     return (
-    return (
         <main className="min-h-screen bg-background text-foreground selection:bg-blue-500/30">
             <Navbar />
 
