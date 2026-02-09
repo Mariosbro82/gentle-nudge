@@ -148,7 +148,7 @@ export default function AboutPage() {
                                 <motion.div
                                     key={i}
                                     initial={{ opacity: 0, x: 20 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ margin: "-100px" }}
                                     className="relative"
                                 >
@@ -159,6 +159,105 @@ export default function AboutPage() {
                                 </motion.div>
                             ))}
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Behind the Scenes Gallery */}
+            <section className="py-24 px-6">
+                <div className="max-w-7xl mx-auto">
+                    <div className="text-center mb-16">
+                        <span className="text-sm font-bold text-blue-500 tracking-wider uppercase mb-2 block">Einblicke</span>
+                        <h2 className="text-3xl md:text-5xl font-bold mb-6">Behind the Scenes</h2>
+                        <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+                            Echte Momente, echte Leidenschaft. Von der ersten Idee bis zur fertigen Kollektion.
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            className="md:col-span-2 md:row-span-2 relative rounded-3xl overflow-hidden group border border-border"
+                        >
+                            <video
+                                src="/images/journey/behind-the-scenes.mp4"
+                                autoPlay
+                                muted
+                                loop
+                                playsInline
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-8">
+                                <p className="text-white font-medium text-lg">Work in Progress</p>
+                                <p className="text-white/70 text-sm">Unsere tägliche Vision im Einsatz.</p>
+                            </div>
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.1 }}
+                            className="relative rounded-3xl overflow-hidden group border border-border"
+                        >
+                            <img
+                                src="/images/journey/founders-1.jpg"
+                                alt="Founders team"
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            />
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.2 }}
+                            className="relative rounded-3xl overflow-hidden group border border-border"
+                        >
+                            <img
+                                src="/images/journey/founders-2.jpg"
+                                alt="Founders collaboration"
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            />
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.3 }}
+                            className="relative rounded-3xl overflow-hidden group border border-border"
+                        >
+                            <img
+                                src="/images/journey/founders-event-1.jpg"
+                                alt="Award event"
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            />
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.4 }}
+                            className="md:col-span-2 relative rounded-3xl overflow-hidden group border border-border"
+                        >
+                            <img
+                                src="/images/journey/founders-event-2.jpg"
+                                alt="Severmore event"
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            />
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.5 }}
+                            className="relative rounded-3xl overflow-hidden group border border-border text-center bg-blue-600 flex flex-col items-center justify-center p-6 text-white"
+                        >
+                            <h4 className="text-2xl font-bold mb-2">Join the Journey</h4>
+                            <p className="text-blue-100 text-sm mb-6">Werde Teil unserer Community und gestalte die Zukunft mit.</p>
+                            <button className="px-6 py-2 rounded-full bg-white text-blue-600 font-medium text-sm hover:bg-blue-50 transition-colors">
+                                Mehr erfahren
+                            </button>
+                        </motion.div>
                     </div>
                 </div>
             </section>

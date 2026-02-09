@@ -47,11 +47,11 @@ export function FeatureBentoGrid() {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="md:col-span-2 md:row-span-2 rounded-3xl bg-card border border-border p-8 flex flex-col justify-between overflow-hidden relative group"
+                        className="md:col-span-2 md:row-span-2 rounded-3xl bg-card border border-border p-8 pb-28 md:pb-8 flex flex-col justify-between overflow-hidden relative group"
                     >
                         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                        <div className="absolute inset-x-0 bottom-0 h-40 mask-linear-gradient-to-t">
+                        <div className="absolute inset-x-0 bottom-0 h-24 md:h-40 z-0 mask-linear-gradient-to-t">
                             <InfiniteImageScroll
                                 images={[
                                     { alt: "Salesforce", src: "/assets/integrations/salesforce.png" },

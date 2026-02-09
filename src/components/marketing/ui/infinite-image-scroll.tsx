@@ -85,14 +85,14 @@ export function InfiniteImageScroll({
             <div
                 ref={scrollerRef}
                 className={cn(
-                    "flex min-w-full shrink-0 gap-8 py-4 w-max flex-nowrap",
+                    "flex min-w-full shrink-0 gap-6 md:gap-8 py-4 w-max flex-nowrap",
                     start && "animate-scroll",
                     pauseOnHover && "hover:[animation-play-state:paused]"
                 )}
             >
                 {images.map((item, idx) => (
                     <div
-                        className="flex items-center justify-center relative w-[100px] h-[60px]"
+                        className="flex items-center justify-center relative w-20 md:w-32 h-12 md:h-20"
                         key={item.alt + idx}
                     >
                         <img
