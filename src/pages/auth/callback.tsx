@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/lib/supabase/client";
 import { CheckCircle2, Loader2, XCircle, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,12 +11,32 @@ export default function AuthCallbackPage() {
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [countdown, setCountdown] = useState(3);
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
 
     useEffect(() => {
         async function handleCallback() {
             try {
-                // Supabase automatically handles the hash fragment from magic links
-                // We just need to check if session was established
+                // Check for PKCE code in URL query params (Supabase v2 default)
+                const code = searchParams.get("code");
+
+                if (code) {
+                    // Exchange the code for a session
+                    const { error } = await supabase.auth.exchangeCodeForSession(code);
+                    if (error) {
+                        console.error("Code exchange error:", error);
+                        setErrorMessage(error.message);
+                        setState("error");
+                        return;
+                    }
+                    setState("success");
+                    return;
+                }
+
+                // Fallback: check for hash fragment (implicit flow / magic links)
+                // Supabase client auto-detects hash tokens on page load
+                // Give it a moment to process
+                await new Promise(resolve => setTimeout(resolve, 500));
+
                 const { data: { session }, error } = await supabase.auth.getSession();
 
                 if (error) {
@@ -27,12 +47,10 @@ export default function AuthCallbackPage() {
                 }
 
                 if (session) {
-                    // Email was verified and user is now logged in
                     setState("success");
                 } else {
-                    // No session yet - might still be processing
-                    // Wait a moment and try again
-                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    // Try once more after a delay
+                    await new Promise(resolve => setTimeout(resolve, 1500));
                     const { data: { session: retrySession }, error: retryError } = await supabase.auth.getSession();
 
                     if (retryError) {
@@ -41,7 +59,6 @@ export default function AuthCallbackPage() {
                     } else if (retrySession) {
                         setState("success");
                     } else {
-                        // If still no session, the link might be invalid or expired
                         setErrorMessage("Die E-Mail-Bestätigung konnte nicht abgeschlossen werden. Der Link ist möglicherweise abgelaufen.");
                         setState("error");
                     }
@@ -54,7 +71,7 @@ export default function AuthCallbackPage() {
         }
 
         handleCallback();
-    }, []);
+    }, [searchParams]);
 
     // Countdown and redirect on success
     useEffect(() => {
@@ -64,7 +81,7 @@ export default function AuthCallbackPage() {
             setCountdown((prev) => {
                 if (prev <= 1) {
                     clearInterval(timer);
-                    navigate("/login", { replace: true });
+                    navigate("/dashboard", { replace: true });
                     return 0;
                 }
                 return prev - 1;
@@ -110,14 +127,14 @@ export default function AuthCallbackPage() {
                                     E-Mail erfolgreich bestätigt!
                                 </h2>
                                 <p className="text-muted-foreground">
-                                    Ihr Konto wurde verifiziert. Sie werden in {countdown} Sekunden zum Login weitergeleitet...
+                                    Ihr Konto wurde verifiziert. Sie werden in {countdown} Sekunden weitergeleitet...
                                 </p>
                             </div>
                             <Button
-                                onClick={() => navigate("/login", { replace: true })}
+                                onClick={() => navigate("/dashboard", { replace: true })}
                                 className="w-full mt-4"
                             >
-                                Jetzt anmelden
+                                Zum Dashboard
                             </Button>
                         </div>
                     )}

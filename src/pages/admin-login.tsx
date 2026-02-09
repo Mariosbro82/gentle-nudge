@@ -42,6 +42,7 @@ export default function AdminLogin() {
                     email: data.email,
                     password: data.password,
                     options: {
+                        emailRedirectTo: `${window.location.origin}/auth/callback`,
                         data: {
                             full_name: "Admin User" // Default name
                         }
