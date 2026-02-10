@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
 import { Check } from "lucide-react";
-import { supabase } from "@/lib/supabase/client";
 
 interface TemplateSelectorProps {
     activeTemplateId: string;
@@ -10,47 +8,40 @@ interface TemplateSelectorProps {
 interface TemplateOption {
     id: string;
     name: string;
-    description: string | null;
+    description: string;
+    gradient: string;
+    icon: string;
 }
 
-const TEMPLATE_PREVIEWS: Record<string, { gradient: string; icon: string }> = {
-    "premium-gradient": {
+const TEMPLATES: TemplateOption[] = [
+    {
+        id: "premium-gradient",
+        name: "Premium Gradient",
+        description: "Eleganter Farbverlauf mit modernem Look",
         gradient: "from-blue-600 to-purple-600",
         icon: "Aa",
     },
-    "minimalist-card": {
+    {
+        id: "minimalist-card",
+        name: "Minimalist Card",
+        description: "Schlicht und professionell",
         gradient: "from-zinc-700 to-zinc-900",
         icon: "Aa",
     },
-    "event-badge": {
+    {
+        id: "event-badge",
+        name: "Event Badge",
+        description: "Auffällig für Messen und Events",
         gradient: "from-violet-600 to-indigo-600",
         icon: "Aa",
     },
-};
+];
 
 export function TemplateSelector({ activeTemplateId, onSelect }: TemplateSelectorProps) {
-    const [templates, setTemplates] = useState<TemplateOption[]>([]);
-
-    useEffect(() => {
-        async function fetchTemplates() {
-            const { data } = await supabase
-                .from("profile_templates" as any)
-                .select("id, name, description")
-                .eq("is_active", true)
-                .order("sort_order");
-
-            if (data) setTemplates(data as any);
-        }
-        fetchTemplates();
-    }, []);
-
-    if (templates.length === 0) return null;
-
     return (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {templates.map((template) => {
+            {TEMPLATES.map((template) => {
                 const isActive = template.id === activeTemplateId;
-                const preview = TEMPLATE_PREVIEWS[template.id] || TEMPLATE_PREVIEWS["premium-gradient"];
 
                 return (
                     <button
@@ -63,17 +54,15 @@ export function TemplateSelector({ activeTemplateId, onSelect }: TemplateSelecto
                             }`}
                     >
                         {/* Preview mockup */}
-                        <div className={`h-16 rounded-lg bg-gradient-to-r ${preview.gradient} mb-3 flex items-end justify-center`}>
+                        <div className={`h-16 rounded-lg bg-gradient-to-r ${template.gradient} mb-3 flex items-end justify-center`}>
                             <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm -mb-4 border-2 border-zinc-900 flex items-center justify-center text-[10px] font-bold text-white/80">
-                                {preview.icon}
+                                {template.icon}
                             </div>
                         </div>
 
                         <div className="mt-2">
                             <p className="text-sm font-medium">{template.name}</p>
-                            {template.description && (
-                                <p className="text-xs text-muted-foreground mt-0.5">{template.description}</p>
-                            )}
+                            <p className="text-xs text-muted-foreground mt-0.5">{template.description}</p>
                         </div>
 
                         {isActive && (
