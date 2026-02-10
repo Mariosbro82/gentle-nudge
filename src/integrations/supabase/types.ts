@@ -476,6 +476,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_slug_availability: {
+        Args: { slug_to_check: string }
+        Returns: boolean
+      }
       get_interested_leads: {
         Args: { p_user_id: string }
         Returns: {

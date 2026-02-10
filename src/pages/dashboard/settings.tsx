@@ -29,14 +29,8 @@ export default function SettingsPage() {
         message: usernameMessage,
         checkUsername,
         isAvailable
-    } = useUsernameAvailability("");
+    } = useUsernameAvailability(user?.slug || "");
 
-    // Sync username from profile when loaded
-    useEffect(() => {
-        if (user?.slug) {
-            checkUsername(user.slug);
-        }
-    }, [user?.slug]);
 
     useEffect(() => {
         async function fetchProfile() {

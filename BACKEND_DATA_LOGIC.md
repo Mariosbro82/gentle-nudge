@@ -64,6 +64,7 @@ Stores user profile information, separate from `auth.users`.
 | `get_interested_leads` | `p_user_id` | Returns leads that have recurring profile views (same IP). | `authenticated` |
 | `is_admin` | None | Returns TRUE if current user has `role = 'admin'`. Used in RLS policies. | `authenticated` (Security Definer) |
 | `scan` | `uid` (via URL) | **Edge Function**: Handles NFC scanning. Lookups chip, logs scan, and redirects based on mode. | `anon` / `public` |
+| `check_slug_availability` | `slug_to_check` | **New:** Performs case-insensitive uniqueness check for usernames (slugs) in the `users` table. Returns `true` if available. | `anon` / `authenticated` |
 | `test_webhook` | `url` | Sends a test POST request to the specified URL to verify webhook connectivity. Requires `http` extension. | `authenticated` / `service_role` |
 
 ### `leads` Table
@@ -103,6 +104,17 @@ Stores analytics for every NFC scan.
 | `ip_address` | Text | Scanner IP. |
 | `user_agent` | Text | Scanner User Agent. |
 | `mode_at_scan` | Enum | Mode the chip was in during scan. |
+
+### `profile_templates` Table
+Stores available design templates for profiles.
+
+| Column | Type | Description |
+| :--- | :--- | :--- |
+| `id` | UUID | Primary Key |
+| `name` | Text | Display name of the template. |
+| `description` | Text | Short description. |
+| `is_active` | Boolean | Whether the template is currently selectable. |
+| `sort_order` | Integer | Order in the selector. |
 
 ## 3. Frontend <-> Backend Logic
 
@@ -145,6 +157,10 @@ Stores analytics for every NFC scan.
   - **UI/UX**: Redesigned sub-pages (Platform, Solutions, Sustainability, About Us) to replace Bento Boxes with static feature grids.
   - **Navigation**: Added `ScrollToTop` component to ensure pages start at the top on route changes.
   - **Navigation**: Linked the "NFCwear" logo in the Navbar to the Home page.
+  - **Admin UI**: Refactored `AdminLayout.tsx` and `admin-secret-login.tsx` for full mobile responsiveness.
+    - Added responsive sidebar with hamburger menu.
+    - Centered login form with responsive container.
+  - **Types**: Regenerated Supabase types and fixed miscellaneous TypeScript errors across the project.
 ## 6. Onboarding System
 
 ### `users.has_completed_onboarding` Column

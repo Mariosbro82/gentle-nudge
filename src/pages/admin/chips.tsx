@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
-    Database, Search, Smartphone, Building2, Utensils, QrCode, Plus, FileSpreadsheet, UserPlus, Loader2, Copy, ExternalLink, Trash2, Settings, Pen
+    Database, Search, Smartphone, Building2, Utensils, QrCode, Plus, FileSpreadsheet, UserPlus, Loader2, Copy, ExternalLink, Trash2, Settings
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import {

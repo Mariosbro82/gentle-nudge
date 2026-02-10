@@ -37,42 +37,63 @@ const AdminLogin = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-background p-4">
-            <Card className="w-full max-w-md">
-                <CardHeader>
-                    <CardTitle>Admin Login</CardTitle>
-                    <CardDescription>Sign in to access the administration panel.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <form onSubmit={handleLogin} className="space-y-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="email">Email</Label>
-                            <Input
-                                id="email"
-                                type="email"
-                                placeholder="admin@example.com"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="password">Password</Label>
-                            <Input
-                                id="password"
-                                type="password"
-                                placeholder="••••••••"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                            />
-                        </div>
-                        <Button type="submit" className="w-full" disabled={loading}>
-                            {loading ? "Signing in..." : "Sign In"}
-                        </Button>
-                    </form>
-                </CardContent>
-            </Card>
+        <div className="min-h-screen flex flex-col justify-center bg-background py-12 sm:px-6 lg:px-8">
+            <div className="sm:mx-auto sm:w-full sm:max-w-md">
+                <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-foreground">
+                    Admin Login
+                </h2>
+                <p className="mt-2 text-center text-sm text-muted-foreground">
+                    Sign in to access the administration panel.
+                </p>
+            </div>
+
+            <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+                <Card className="bg-card shadow-xl border-border">
+                    <CardHeader className="space-y-1">
+                        <CardTitle className="text-2xl font-bold">Sign in</CardTitle>
+                        <CardDescription>Enter your credentials to continue.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <form onSubmit={handleLogin} className="space-y-6">
+                            <div className="space-y-2">
+                                <Label htmlFor="email">Email address</Label>
+                                <Input
+                                    id="email"
+                                    type="email"
+                                    autoComplete="email"
+                                    placeholder="admin@example.com"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                    className="bg-input"
+                                />
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label htmlFor="password">Password</Label>
+                                <Input
+                                    id="password"
+                                    type="password"
+                                    autoComplete="current-password"
+                                    placeholder="••••••••"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                    className="bg-input"
+                                />
+                            </div>
+
+                            <Button
+                                type="submit"
+                                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                                disabled={loading}
+                            >
+                                {loading ? "Signing in..." : "Sign in"}
+                            </Button>
+                        </form>
+                    </CardContent>
+                </Card>
+            </div>
         </div>
     );
 };

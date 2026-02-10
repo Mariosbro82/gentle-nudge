@@ -18,20 +18,37 @@ export function useUsernameAvailability(initialUsername: string = ''): UseUserna
     const [username, setUsername] = useState(initialUsername)
     const [status, setStatus] = useState<AvailabilityStatus>('idle')
     const [message, setMessage] = useState('')
+    const [isDirty, setIsDirty] = useState(false)
 
     // Debounce the username change to avoid too many requests
     const debouncedUsername = useDebounce(username, 500)
 
+    // Sync state when initialUsername changes (e.g. after profile load or save)
+    // Only sync if the user hasn't started typing yet (not dirty)
     useEffect(() => {
-        // Skip if empty or same as initial (for editing existing profile, pass initialUsername as current one)
+        if (!isDirty) {
+            setUsername(initialUsername)
+            setStatus('idle')
+            setMessage('')
+        }
+    }, [initialUsername, isDirty])
+
+    useEffect(() => {
+        // Skip if empty or same as initial (for editing existing profile)
         if (!debouncedUsername) {
             setStatus('idle')
             setMessage('')
             return
         }
 
+        // Case-insensitive comparison with initial username
+        if (initialUsername && debouncedUsername.toLowerCase() === initialUsername.toLowerCase()) {
+            setStatus('idle') // Treat as idle if it's the current username
+            setMessage('Das ist Ihr aktueller Benutzername.')
+            return
+        }
+
         // Basic validation
-        // Allow A-Z, a-z, 0-9, -, _
         const isValidFormat = /^[a-zA-Z0-9_-]+$/.test(debouncedUsername)
         if (!isValidFormat) {
             setStatus('invalid')
@@ -51,35 +68,24 @@ export function useUsernameAvailability(initialUsername: string = ''): UseUserna
             setMessage('Prüfe Verfügbarkeit...')
 
             try {
-                // Use the RPC function we created
+                // Use the RPC function (already case-insensitive in DB)
                 const { data: isAvailable, error } = await supabase.rpc('check_slug_availability', {
                     slug_to_check: debouncedUsername
                 })
 
-                if (error) {
-                    throw error
-                }
+                if (error) throw error
 
                 if (isAvailable) {
                     setStatus('available')
                     setMessage('Benutzername ist verfügbar!')
                 } else {
-                    // If we are editing our own profile, checking our current username should effectively be "available" (not taken by someone else)
-                    // But here we are just checking raw availability. The consuming component should handle "if username === initialUsername then it's fine".
-                    // However, for simplicity, let's assume this hook is for checking NEW usernames.
-                    // If initialUsername is provided and matches debouncedUsername, we can say it's valid (it's yours)
-                    if (initialUsername && debouncedUsername === initialUsername) {
-                        setStatus('available')
-                        setMessage('Das ist Ihr aktueller Benutzername.')
-                    } else {
-                        setStatus('taken')
-                        setMessage('Dieser Benutzername ist bereits vergeben.')
-                    }
+                    setStatus('taken')
+                    setMessage('Dieser Benutzername ist bereits vergeben.')
                 }
             } catch (error) {
                 console.error('Error checking username availability:', error)
                 setStatus('error')
-                setMessage('Fehler bei der Überprüfung via Netzwerk.')
+                setMessage('Fehler bei der Überprüfung.')
             }
         }
 
@@ -87,20 +93,24 @@ export function useUsernameAvailability(initialUsername: string = ''): UseUserna
     }, [debouncedUsername, initialUsername])
 
     const checkUsername = (newUsername: string) => {
+        setIsDirty(true)
         setUsername(newUsername)
-        // Instant feedback for empty
+
         if (!newUsername) {
             setStatus('idle')
             setMessage('')
+        } else if (initialUsername && newUsername.toLowerCase() === initialUsername.toLowerCase()) {
+            setStatus('idle')
+            setMessage('Das ist Ihr aktueller Benutzername.')
         } else {
-            // Set to loading immediately to show something is happening before debounce
             setStatus('loading')
             setMessage('...')
         }
     }
 
     const reset = () => {
-        setUsername('')
+        setUsername(initialUsername)
+        setIsDirty(false)
         setStatus('idle')
         setMessage('')
     }
@@ -109,7 +119,7 @@ export function useUsernameAvailability(initialUsername: string = ''): UseUserna
         username,
         status,
         isChecking: status === 'loading',
-        isAvailable: status === 'available',
+        isAvailable: status === 'available' || (username.toLowerCase() === initialUsername.toLowerCase() && username !== ""),
         message,
         checkUsername,
         reset

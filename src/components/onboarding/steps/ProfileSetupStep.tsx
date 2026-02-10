@@ -34,7 +34,7 @@ export function ProfileSetupStep({
         message: usernameMessage,
         checkUsername,
         isAvailable
-    } = useUsernameAvailability(data.slug || "");
+    } = useUsernameAvailability(""); // Always check against all users in onboarding
 
     // Update parent state when username changes (and is valid/available)
     useEffect(() => {

@@ -34,12 +34,12 @@ export function TemplateSelector({ activeTemplateId, onSelect }: TemplateSelecto
     useEffect(() => {
         async function fetchTemplates() {
             const { data } = await supabase
-                .from("profile_templates")
+                .from("profile_templates" as any)
                 .select("id, name, description")
                 .eq("is_active", true)
                 .order("sort_order");
 
-            if (data) setTemplates(data);
+            if (data) setTemplates(data as any);
         }
         fetchTemplates();
     }, []);
@@ -58,8 +58,8 @@ export function TemplateSelector({ activeTemplateId, onSelect }: TemplateSelecto
                         type="button"
                         onClick={() => onSelect(template.id)}
                         className={`relative rounded-xl border-2 p-3 text-left transition-all ${isActive
-                                ? "border-blue-500 bg-blue-500/5"
-                                : "border-border bg-card hover:border-muted-foreground/20"
+                            ? "border-blue-500 bg-blue-500/5"
+                            : "border-border bg-card hover:border-muted-foreground/20"
                             }`}
                     >
                         {/* Preview mockup */}
