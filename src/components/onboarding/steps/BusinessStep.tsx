@@ -65,23 +65,23 @@ export function BusinessStep({
                             <Users className="w-4 h-4 text-muted-foreground" />
                             Teamgröße
                         </Label>
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+                        <div className="grid grid-cols-4 gap-2 sm:gap-3">
                             {TEAM_SIZES.map((size) => (
                                 <button
                                     key={size.id}
                                     type="button"
                                     onClick={() => updateData({ teamSize: size.id })}
                                     className={`
-                                        p-3 sm:p-4 rounded-xl text-center transition-all border min-w-0 overflow-hidden
+                                        p-2 sm:p-4 rounded-xl text-center transition-all border min-w-0
                                         ${data.teamSize === size.id
                                             ? "bg-primary text-primary-foreground border-primary"
                                             : "bg-muted/50 text-muted-foreground border-border hover:border-muted-foreground/50"
                                         }
                                     `}
                                 >
-                                    <span className="text-xl sm:text-2xl block mb-1">{size.icon}</span>
-                                    <span className="font-semibold block text-sm sm:text-base truncate">{size.label}</span>
-                                    <span className="text-[10px] sm:text-xs opacity-70 truncate block">{size.description}</span>
+                                    <span className="text-lg sm:text-2xl block mb-0.5">{size.icon}</span>
+                                    <span className="font-semibold block text-xs sm:text-base leading-tight">{size.label}</span>
+                                    <span className="text-[9px] sm:text-xs opacity-70 leading-tight block">{size.description}</span>
                                 </button>
                             ))}
                         </div>
