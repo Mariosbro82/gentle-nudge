@@ -63,6 +63,7 @@ Stores user profile information, separate from `auth.users`.
 | `log_profile_view` | `p_user_id`, `p_ip_address`, `p_device_type`, `p_user_agent`, `p_referrer`, `p_country` | Logs a view. Checks for duplicates (<12h) and recurring visitors (>12h). | `anon` (service role via Edge Function) |
 | `get_interested_leads` | `p_user_id` | Returns leads that have recurring profile views (same IP). | `authenticated` |
 | `is_admin` | None | Returns TRUE if current user has `role = 'admin'`. Used in RLS policies. | `authenticated` (Security Definer) |
+| `scan` | `uid` (via URL) | **Edge Function**: Handles NFC scanning. Lookups chip, logs scan, and redirects based on mode. | `anon` / `public` |
 
 ### `leads` Table
 Stores leads captured via the NFC profile "Connect" feature.
@@ -83,11 +84,24 @@ Stores data for physical NFC tags.
 | `uid` | Text | Unique identifier of the NTAG424 Chip (Hex string). |
 | `company_id` | UUID | FK -> `companies.id` |
 | `assigned_user_id` | UUID | FK -> `users.id` |
-| `active_mode` | Enum | `corporate`, `hospitality`, or `campaign`. |
+| `active_mode` | Enum | `corporate`, `hospitality`, `campaign`, or `lost`. |
 | `last_scan` | TIMESTAMPTZ | Last time the chip was scanned. |
 | `vcard_data` | JSONB | Data for vCard mode. |
 | `menu_data` | JSONB | Data for Menu (hospitality) mode. |
 | `review_data` | JSONB | Data for Review mode. |
+
+### `scans` Table
+Stores analytics for every NFC scan.
+
+| Column | Type | Description |
+| :--- | :--- | :--- |
+| `id` | UUID | Primary Key |
+| `chip_id` | UUID | FK -> `chips.id` |
+| `scanned_at` | TIMESTAMPTZ | Timestamp of scan. |
+| `device_type` | Text | Mobile/Tablet/Desktop. |
+| `ip_address` | Text | Scanner IP. |
+| `user_agent` | Text | Scanner User Agent. |
+| `mode_at_scan` | Enum | Mode the chip was in during scan. |
 
 ## 3. Frontend <-> Backend Logic
 
@@ -154,22 +168,24 @@ Stores survey responses from the onboarding wizard.
 ## 7. Email Verification (Auth Callback)
 
 ### `/auth/callback` Page (`src/pages/auth/callback.tsx`)
-Handles Supabase email confirmation links (magic links, OTP verification).
+Handles Supabase email confirmation links (magic links, OTP verification) and PKCE code exchange.
 
-| State | UI | Action |
+| State | UI | Logic |
 | :--- | :--- | :--- |
-| `loading` | Spinner + "Ihre E-Mail wird verifiziert..." | Checks session validity |
-| `success` | Green checkmark + countdown | Redirects to `/login` after 3s |
-| `error` | Red X + error message | Shows retry/back buttons |
+| `loading` | Spinner + "Ihre E-Mail wird verifiziert..." | Checks for `code` (PKCE) or hash fragment (Implicit). Exchanges code for session or verifies existing session. |
+| `success` | Green checkmark + countdown | Redirects to `/dashboard` after 3s (countdown). |
+| `error` | Red X + error message | Shows retry button (reload) and "Back to Login". |
 
-### Flow
-1. User clicks confirmation link in email
-2. Supabase appends token as hash fragment
-3. `/auth/callback` page loads and verifies session
-4. On success: shows confirmation, redirects to `/login`
-5. User logs in → `ProtectedRoute` checks `has_completed_onboarding`
-6. If first login → `/onboarding` wizard
-7. If returning → `/dashboard`
+### Logic Flow
+1. **Detection**: Checks URL for `?code=` (PKCE) or `#access_token` (Implicit/Magic Link).
+2. **Exchange**: 
+   - If `code`: Calls `exchangeCodeForSession(code)`.
+   - If hash: Waits 500ms for Supabase client to auto-detect session.
+3. **Session Check**: Verifies `supabase.auth.getSession()`.
+   - If no session, waits 1500ms and retries once (handling race conditions).
+4. **Completion**:
+   - **Success**: Sets state to `success`, starts 3s countdown -> Redirects to `/dashboard`.
+   - **Failure**: Sets state to `error` with specific message (e.g., "Link expired").
 
 ### Supabase Configuration Required
 Add to **Authentication > URL Configuration > Redirect URLs**:

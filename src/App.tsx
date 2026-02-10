@@ -22,7 +22,7 @@ const ResetPasswordPage = lazy(() => import("@/pages/reset-password"));
 const AuthCallbackPage = lazy(() => import("@/pages/auth/callback"));
 
 // Admin pages
-import AdminLogin from "@/pages/admin-login"; // Eager load for better UX on secret route
+import AdminSecretLogin from "@/pages/admin-secret-login"; // New secret signup page
 import { AdminLayout } from "@/layouts/AdminLayout";
 import { AdminRoute } from "@/components/auth/admin-route";
 const AdminDashboardPage = lazy(() => import("@/pages/admin/dashboard"));
@@ -118,7 +118,7 @@ export default function App() {
                     />
 
                     {/* Secret Admin Routes */}
-                    <Route path="/admin-secret-login" element={<AdminLogin />} />
+                    <Route path="/admin-secret-login" element={<AdminSecretLogin />} />
 
                     <Route path="/admin" element={<AdminRoute />}>
                         <Route element={<AdminLayout />}>
