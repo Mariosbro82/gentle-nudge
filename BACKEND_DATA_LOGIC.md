@@ -240,3 +240,23 @@ The website has been transitioned from a one-pager to a multi-page architecture:
 - `/shop`: Hardware store ("The Fleet")
 - `/about`: Company storytelling and contact
 - `/pricing`: Subscription and hardware pricing
+
+## 8. Authentication Flows
+
+### Password Reset Flow
+1. **Request**: User enters email on `/forgot-password`.
+2. **Action**: `supabase.auth.resetPasswordForEmail(email)` is called with a redirect to `/reset-password`.
+3. **Email**: User receives a magic link from Supabase.
+4. **Processing**: Clicking the link redirects to `/reset-password` with an `#access_token` in the URL.
+5. **Detection**: `reset-password.tsx` listens for `PASSWORD_RECOVERY` event via `onAuthStateChange`.
+6. **Update**: User enters new password and `supabase.auth.updateUser({ password })` is called.
+7. **Success**: Redirect to `/login` after successful update.
+
+### Email Confirmation (Signup)
+1. **Signup**: User registers on `/login` (Registrieren button).
+2. **Action**: `supabase.auth.signUp()` is called with a redirect to `/auth/callback`.
+3. **Email**: User receives a confirmation link.
+4. **Callback**: User is redirected to `/auth/callback`, which exchanges the code for a session and redirects to `/dashboard`.
+
+> [!IMPORTANT]
+> All redirect URLs must be whitelisted in the Supabase Dashboard under **Authentication > URL Configuration > Redirect URLs**.

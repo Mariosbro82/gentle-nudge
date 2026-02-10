@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
-import { SidebarNews } from "@/components/ui/sidebar-news";
+import { SidebarDashboard } from "@/components/ui/sidebar-dashboard";
 import { Navbar } from "@/components/marketing/navbar";
 
 export default function LoginPage() {
@@ -135,14 +135,14 @@ export default function LoginPage() {
                         </Card>
                     </div>
 
-                    {/* Right Column: News / Status Sidebar */}
+                    {/* Right Column: Dashboard Preview Sidebar */}
                     <div className="hidden lg:block h-full pl-8">
                         <div className="sticky top-24">
                             <h2 className="text-xl font-semibold mb-6 text-foreground flex items-center gap-2">
-                                <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                                System Status & Updates
+                                <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                                Ihr Dashboard im Überblick
                             </h2>
-                            <SidebarNews />
+                            <SidebarDashboard />
                         </div>
                     </div>
 

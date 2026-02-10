@@ -50,6 +50,13 @@ const CheckoutPage = lazy(() => import("@/pages/shop/checkout"));
 const AnalyticsPublicPage = lazy(() => import("@/pages/analytics"));
 const ClaimPage = lazy(() => import("@/pages/claim/[uid]"));
 
+// Footer Pages
+const CareersPage = lazy(() => import("@/pages/careers"));
+const ContactPage = lazy(() => import("@/pages/contact"));
+const PrivacyPage = lazy(() => import("@/pages/privacy"));
+const TermsPage = lazy(() => import("@/pages/terms"));
+const ImprintPage = lazy(() => import("@/pages/imprint"));
+
 // Loader component
 function PageLoader() {
     return (
@@ -98,6 +105,13 @@ export default function App() {
                     <Route path="/forgot-password" element={<Suspense fallback={<PageLoader />}><ForgotPasswordPage /></Suspense>} />
                     <Route path="/reset-password" element={<Suspense fallback={<PageLoader />}><ResetPasswordPage /></Suspense>} />
                     <Route path="/auth/callback" element={<Suspense fallback={<PageLoader />}><AuthCallbackPage /></Suspense>} />
+
+                    {/* Footer Routes */}
+                    <Route path="/careers" element={<Suspense fallback={<PageLoader />}><CareersPage /></Suspense>} />
+                    <Route path="/contact" element={<Suspense fallback={<PageLoader />}><ContactPage /></Suspense>} />
+                    <Route path="/privacy" element={<Suspense fallback={<PageLoader />}><PrivacyPage /></Suspense>} />
+                    <Route path="/terms" element={<Suspense fallback={<PageLoader />}><TermsPage /></Suspense>} />
+                    <Route path="/imprint" element={<Suspense fallback={<PageLoader />}><ImprintPage /></Suspense>} />
 
                     {/* NFC public routes */}
                     <Route element={<NfcLayout />}>

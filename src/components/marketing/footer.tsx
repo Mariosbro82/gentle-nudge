@@ -17,13 +17,13 @@ export function Footer() {
                             Corporate Fashion trifft NFC-Technologie.
                         </p>
                         <div className="flex gap-4">
-                            <a href="#" className="w-10 h-10 rounded-lg bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-all">
+                            <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-all">
                                 <Twitter size={18} />
                             </a>
-                            <a href="#" className="w-10 h-10 rounded-lg bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-all">
+                            <a href="https://www.linkedin.com/company/severmore-ug-haftungsbeschr%C3%A4nkt/posts/?feedView=all&viewAsMember=" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-all">
                                 <Linkedin size={18} />
                             </a>
-                            <a href="#" className="w-10 h-10 rounded-lg bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-all">
+                            <a href="https://www.instagram.com/severmore.clo/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-all">
                                 <Instagram size={18} />
                             </a>
                         </div>
@@ -36,8 +36,8 @@ export function Footer() {
                     <div>
                         <h4 className="text-foreground font-bold mb-6 uppercase text-sm tracking-wider">Produkt</h4>
                         <ul className="space-y-4">
-                            <li><Link to="/products" className="text-muted-foreground hover:text-foreground text-sm transition-colors">Kollektion</Link></li>
-                            <li><Link to="/tech" className="text-muted-foreground hover:text-foreground text-sm transition-colors">Technologie</Link></li>
+                            <li><Link to="/shop" className="text-muted-foreground hover:text-foreground text-sm transition-colors">Kollektion</Link></li>
+                            <li><Link to="/platform" className="text-muted-foreground hover:text-foreground text-sm transition-colors">Technologie</Link></li>
                             <li><Link to="/pricing" className="text-muted-foreground hover:text-foreground text-sm transition-colors">Preise</Link></li>
                         </ul>
                     </div>
@@ -46,7 +46,7 @@ export function Footer() {
                     <div>
                         <h4 className="text-foreground font-bold mb-6 uppercase text-sm tracking-wider">Unternehmen</h4>
                         <ul className="space-y-4">
-                            <li><Link to="/company" className="text-muted-foreground hover:text-foreground text-sm transition-colors">Über uns</Link></li>
+                            <li><Link to="/about" className="text-muted-foreground hover:text-foreground text-sm transition-colors">Über uns</Link></li>
                             <li><Link to="/careers" className="text-muted-foreground hover:text-foreground text-sm transition-colors">Karriere</Link></li>
                             <li><Link to="/contact" className="text-muted-foreground hover:text-foreground text-sm transition-colors">Kontakt</Link></li>
                         </ul>

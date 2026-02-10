@@ -1,6 +1,7 @@
 import { Mail, Phone, Globe, Linkedin, Briefcase } from "lucide-react";
 import { ContactForm } from "@/components/profile/contact-form";
 import type { TemplateProps } from "@/types/profile";
+import { ensureAbsoluteUrl } from "@/lib/utils";
 
 export function EventBadgeTemplate({ user }: TemplateProps) {
     return (
@@ -83,7 +84,7 @@ export function EventBadgeTemplate({ user }: TemplateProps) {
                             )}
                             {user.linkedin && (
                                 <a
-                                    href={user.linkedin}
+                                    href={ensureAbsoluteUrl(user.linkedin)}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition-colors text-sm"
@@ -96,7 +97,7 @@ export function EventBadgeTemplate({ user }: TemplateProps) {
 
                         {user.website && (
                             <a
-                                href={user.website}
+                                href={ensureAbsoluteUrl(user.website)}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition-colors text-sm mb-5"

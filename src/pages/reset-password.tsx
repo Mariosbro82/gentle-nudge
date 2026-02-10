@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, CheckCircle, AlertCircle } from "lucide-react";
+import { Loader2, CheckCircle, AlertCircle, Lock } from "lucide-react";
 import { Navbar } from "@/components/marketing/navbar";
 
 export default function ResetPasswordPage() {
@@ -18,6 +18,33 @@ export default function ResetPasswordPage() {
     const navigate = useNavigate();
 
     useEffect(() => {
+        let timeoutId: NodeJS.Timeout;
+
+        // Check for PKCE code first (Supabase v2 default)
+        const checkSession = async () => {
+            const url = new URL(window.location.href);
+            const code = url.searchParams.get("code");
+
+            if (code) {
+                // Exchange code for session
+                const { error } = await supabase.auth.exchangeCodeForSession(code);
+                if (error) {
+                    setError("Der Link ist abgelaufen oder ungültig. Bitte fordern Sie einen neuen Link an.");
+                    // Stop loading spinner by setting a timeout or handle error state directly
+                    return;
+                }
+                // Success will trigger onAuthStateChange -> PASSWORD_RECOVERY
+            } else {
+                // Fallback: Check if we already have a session (e.g. implicitly)
+                const { data: { session } } = await supabase.auth.getSession();
+                if (session) {
+                    setIsRecoveryMode(true);
+                }
+            }
+        };
+
+        checkSession();
+
         // Listen for PASSWORD_RECOVERY event
         const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event) => {
             if (event === "PASSWORD_RECOVERY") {
@@ -25,19 +52,23 @@ export default function ResetPasswordPage() {
             }
         });
 
-        // Also check if we're already in a recovery session
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            if (session) {
-                setIsRecoveryMode(true);
+        // Timeout to stop infinite loading if something goes wrong
+        timeoutId = setTimeout(() => {
+            if (!isRecoveryMode) {
+                // Only show error if we haven't transitioned yet and no specific error exists
+                setError((prev) => prev || "Zeitüberschreitung bei der Überprüfung. Bitte versuchen Sie es erneut.");
             }
-        });
+        }, 10000); // 10 seconds timeout
 
-        return () => subscription.unsubscribe();
-    }, []);
+        return () => {
+            subscription.unsubscribe();
+            clearTimeout(timeoutId);
+        };
+    }, [isRecoveryMode]);
 
     const validatePassword = (): string | null => {
-        if (password.length < 6) {
-            return "Das Passwort muss mindestens 6 Zeichen lang sein.";
+        if (password.length < 8) {
+            return "Das Passwort muss mindestens 8 Zeichen lang sein.";
         }
         if (password !== confirmPassword) {
             return "Die Passwörter stimmen nicht überein.";
@@ -61,16 +92,16 @@ export default function ResetPasswordPage() {
         const { error } = await supabase.auth.updateUser({ password });
 
         if (error) {
-            if (error.message.includes("expired") || error.message.includes("invalid")) {
+            if (error.message.toLowerCase().includes("expired") || error.message.toLowerCase().includes("invalid")) {
                 setError("Der Link ist abgelaufen oder ungültig. Bitte fordern Sie einen neuen Link an.");
             } else {
                 setError(error.message);
             }
         } else {
-            setSuccessMessage("Passwort erfolgreich geändert! Sie werden zum Login weitergeleitet...");
+            setSuccessMessage("Ihr Passwort wurde erfolgreich aktualisiert!");
             setTimeout(() => {
                 navigate("/login");
-            }, 2000);
+            }, 3000);
         }
         setIsLoading(false);
     };
@@ -82,20 +113,21 @@ export default function ResetPasswordPage() {
                 <Navbar />
                 <div className="flex-1 flex items-center justify-center p-4 pt-20">
                     <div className="w-full max-w-md">
-                        <Card className="bg-card border-border shadow-2xl">
+                        <Card className="bg-card border-border shadow-2xl relative overflow-hidden">
+                            <div className="absolute top-0 left-0 w-full h-1 bg-yellow-500" />
                             <CardHeader className="space-y-1">
                                 <CardTitle className="text-2xl font-bold text-foreground flex items-center gap-2">
                                     <AlertCircle className="h-6 w-6 text-yellow-500" />
                                     Überprüfung...
                                 </CardTitle>
                                 <CardDescription>
-                                    Bitte warten Sie, während wir Ihren Reset-Link überprüfen.
-                                    Falls Sie keinen gültigen Link haben, fordern Sie bitte einen neuen an.
+                                    Bitte warten Sie, während wir Ihren Reset-Link verifizieren.
+                                    Falls diese Seite nicht automatisch lädt, ist Ihr Link eventuell abgelaufen.
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="flex items-center justify-center py-4">
-                                    <Loader2 className="h-8 w-8 animate-spin text-foreground" />
+                                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
                                 </div>
                                 <Button
                                     variant="outline"
@@ -117,36 +149,43 @@ export default function ResetPasswordPage() {
             <Navbar />
             <div className="flex-1 flex items-center justify-center p-4 pt-20">
                 <div className="w-full max-w-md">
-                    <Card className="bg-card border-border shadow-2xl">
+                    <Card className="bg-card border-border shadow-2xl relative overflow-hidden">
+                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 to-emerald-600" />
                         <CardHeader className="space-y-1">
                             <CardTitle className="text-2xl font-bold text-foreground">Neues Passwort setzen</CardTitle>
-                            <CardDescription>Geben Sie Ihr neues Passwort ein.</CardDescription>
+                            <CardDescription>Sichern Sie Ihren Account mit einem neuen Passwort.</CardDescription>
                         </CardHeader>
                         <CardContent>
                             <form onSubmit={handleUpdatePassword} className="space-y-4">
                                 <div className="space-y-2">
                                     <Label htmlFor="password">Neues Passwort</Label>
-                                    <Input
-                                        id="password"
-                                        type="password"
-                                        placeholder="Mindestens 6 Zeichen"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        className="bg-input border-border text-foreground"
-                                        required
-                                    />
+                                    <div className="relative">
+                                        <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                                        <Input
+                                            id="password"
+                                            type="password"
+                                            placeholder="Mindestens 8 Zeichen"
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            className="bg-input border-border text-foreground pl-10"
+                                            required
+                                        />
+                                    </div>
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="confirmPassword">Passwort bestätigen</Label>
-                                    <Input
-                                        id="confirmPassword"
-                                        type="password"
-                                        placeholder="Passwort wiederholen"
-                                        value={confirmPassword}
-                                        onChange={(e) => setConfirmPassword(e.target.value)}
-                                        className="bg-input border-border text-foreground"
-                                        required
-                                    />
+                                    <div className="relative">
+                                        <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                                        <Input
+                                            id="confirmPassword"
+                                            type="password"
+                                            placeholder="Passwort wiederholen"
+                                            value={confirmPassword}
+                                            onChange={(e) => setConfirmPassword(e.target.value)}
+                                            className="bg-input border-border text-foreground pl-10"
+                                            required
+                                        />
+                                    </div>
                                 </div>
 
                                 {error && (
@@ -164,7 +203,7 @@ export default function ResetPasswordPage() {
                                 )}
 
                                 <Button type="submit" className="w-full h-10 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold" disabled={isLoading || !!successMessage}>
-                                    {isLoading ? <Loader2 className="animate-spin" /> : "Passwort ändern"}
+                                    {isLoading ? <Loader2 className="animate-spin" /> : "Passwort speichern"}
                                 </Button>
                             </form>
                         </CardContent>

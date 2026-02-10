@@ -1,31 +1,31 @@
 import { motion } from "framer-motion";
-import { Users, Briefcase, Calendar, Building2 } from "lucide-react";
+import { Monitor, Calendar, Building2, Utensils } from "lucide-react";
 
 export function USPSection() {
     const useCases = [
         {
-            icon: <Users className="w-12 h-12 text-blue-400" />,
-            title: "Sales Reps",
-            description: "Verwandle jeden Händedruck in einen Lead. Speichere Kontakte direkt auf das Smartphone deines Gegenübers.",
+            icon: <Monitor className="w-12 h-12 text-blue-400" />,
+            title: "Messen & Expos",
+            description: "Verwandle jeden Händedruck in einen Lead. Teile Kataloge und Kontakte direkt per Tap auf das Smartphone deines Gegenübers.",
             gradient: "from-blue-500/20 to-cyan-500/20"
         },
         {
-            icon: <Briefcase className="w-12 h-12 text-pink-400" />,
-            title: "Startups & Teams",
-            description: "Einheitlicher Markenauftritt. Jeder Mitarbeiter wird zum Brand Ambassador mit digitaler Visitenkarte.",
-            gradient: "from-pink-500/20 to-rose-500/20"
-        },
-        {
-            icon: <Calendar className="w-12 h-12 text-amber-400" />,
-            title: "Events & Messen",
-            description: "Verzichte auf Papier-Flyer. Teile Präsentationen, Kataloge oder Webseiten mit einem Tap.",
-            gradient: "from-amber-500/20 to-orange-500/20"
+            icon: <Calendar className="w-12 h-12 text-purple-400" />,
+            title: "Events & Festivals",
+            description: "Digitaler Check-in und Networking für Teilnehmer. Teambekleidung wird zur smarten Event-Schnittstelle.",
+            gradient: "from-purple-500/20 to-pink-500/20"
         },
         {
             icon: <Building2 className="w-12 h-12 text-indigo-400" />,
             title: "Unternehmen",
-            description: "Verwalte hunderte Hoodies zentral. Analysiere die Reichweite deiner Corporate Fashion.",
+            description: "Corporate Identity neu gedacht. Hochwertige Fashion mit smarten Funktionen für den modernen Arbeitsalltag.",
             gradient: "from-indigo-500/20 to-violet-500/20"
+        },
+        {
+            icon: <Utensils className="w-12 h-12 text-pink-400" />,
+            title: "Gastronomie",
+            description: "Digitale Speisekarten und Social Follows direkt über die Team-Kleidung. Service-Optimierung par excellence.",
+            gradient: "from-pink-500/20 to-rose-500/20"
         }
     ];
 
@@ -37,7 +37,7 @@ export function USPSection() {
                         Mehrwert für jede Branche
                     </h2>
                     <p className="text-xl text-muted-foreground">
-                        Maßgeschneiderte Lösungen für deinen Erfolg.
+                        Maßgeschneiderte Lösungen für Ihren Erfolg.
                     </p>
                 </div>
 

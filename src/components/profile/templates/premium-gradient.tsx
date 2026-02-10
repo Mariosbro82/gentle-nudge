@@ -2,6 +2,7 @@ import { Mail, Phone, Globe, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ContactForm } from "@/components/profile/contact-form";
 import type { TemplateProps } from "@/types/profile";
+import { ensureAbsoluteUrl } from "@/lib/utils";
 
 export function PremiumGradientTemplate({ user }: TemplateProps) {
     return (
@@ -58,14 +59,14 @@ export function PremiumGradientTemplate({ user }: TemplateProps) {
                         )}
                         {user.website && (
                             <Button asChild variant="outline" className="w-full border-white/10">
-                                <a href={user.website} target="_blank" rel="noopener noreferrer">
+                                <a href={ensureAbsoluteUrl(user.website)} target="_blank" rel="noopener noreferrer">
                                     <Globe className="mr-2 h-4 w-4" /> Website
                                 </a>
                             </Button>
                         )}
                         {user.linkedin && (
                             <Button asChild variant="outline" className="w-full border-white/10">
-                                <a href={user.linkedin} target="_blank" rel="noopener noreferrer">
+                                <a href={ensureAbsoluteUrl(user.linkedin)} target="_blank" rel="noopener noreferrer">
                                     <Linkedin className="mr-2 h-4 w-4" /> LinkedIn
                                 </a>
                             </Button>

@@ -38,7 +38,7 @@ Deno.serve(async (req) => {
                     lead_email,
                     lead_phone: lead_phone || null,
                     notes: notes || null,
-                    sentiment: sentiment || null,
+                    sentiment: sentiment || 'warm',
                     ip_address: ip
                 }
             ])

@@ -53,3 +53,8 @@ The application uses Supabase (PostgreSQL) for data storage and authentication.
 ## Security Notes
 - **Modification**: Only the owner (matching `auth_user_id`) or an Admin can modify chip or user data. Authenticated users cannot modify others' data.
 - **Public Access**: Explicitly granted for `SELECT` on `chips` and `users` (non-ghosted) to enable core functionality.
+
+## Authentication & Security
+1.  **Password Reset**: Handled via Supabase Auth. Redirects are secured by whitelisting in the Supabase dashboard.
+2.  **Session Management**: Handled via `src/contexts/auth-context.tsx`.
+3.  **Password Strength**: Minimum 8 characters required on the reset page.

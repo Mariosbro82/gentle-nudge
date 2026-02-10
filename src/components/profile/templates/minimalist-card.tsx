@@ -1,6 +1,7 @@
 import { Mail, Phone, Globe, Linkedin } from "lucide-react";
 import { ContactForm } from "@/components/profile/contact-form";
 import type { TemplateProps } from "@/types/profile";
+import { ensureAbsoluteUrl } from "@/lib/utils";
 
 export function MinimalistCardTemplate({ user }: TemplateProps) {
     return (
@@ -72,7 +73,7 @@ export function MinimalistCardTemplate({ user }: TemplateProps) {
                         )}
                         {user.website && (
                             <a
-                                href={user.website}
+                                href={ensureAbsoluteUrl(user.website)}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-white/10 text-sm hover:bg-white/5 transition-colors"
@@ -83,7 +84,7 @@ export function MinimalistCardTemplate({ user }: TemplateProps) {
                         )}
                         {user.linkedin && (
                             <a
-                                href={user.linkedin}
+                                href={ensureAbsoluteUrl(user.linkedin)}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-white/10 text-sm hover:bg-white/5 transition-colors"
