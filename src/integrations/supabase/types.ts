@@ -58,8 +58,8 @@ export type Database = {
           id: string
           last_scan: string | null
           menu_data: Json | null
-          mode: string | null
           review_data: Json | null
+          target_url: string | null
           uid: string
           vcard_data: Json | null
         }
@@ -71,8 +71,8 @@ export type Database = {
           id?: string
           last_scan?: string | null
           menu_data?: Json | null
-          mode?: string | null
           review_data?: Json | null
+          target_url?: string | null
           uid: string
           vcard_data?: Json | null
         }
@@ -84,8 +84,8 @@ export type Database = {
           id?: string
           last_scan?: string | null
           menu_data?: Json | null
-          mode?: string | null
           review_data?: Json | null
+          target_url?: string | null
           uid?: string
           vcard_data?: Json | null
         }
@@ -243,39 +243,6 @@ export type Database = {
           },
         ]
       }
-      profile_templates: {
-        Row: {
-          config: Json | null
-          created_at: string | null
-          description: string | null
-          id: string
-          is_active: boolean | null
-          name: string
-          preview_image: string | null
-          sort_order: number | null
-        }
-        Insert: {
-          config?: Json | null
-          created_at?: string | null
-          description?: string | null
-          id: string
-          is_active?: boolean | null
-          name: string
-          preview_image?: string | null
-          sort_order?: number | null
-        }
-        Update: {
-          config?: Json | null
-          created_at?: string | null
-          description?: string | null
-          id?: string
-          is_active?: boolean | null
-          name?: string
-          preview_image?: string | null
-          sort_order?: number | null
-        }
-        Relationships: []
-      }
       profile_views: {
         Row: {
           country: string | null
@@ -286,7 +253,7 @@ export type Database = {
           is_unique: boolean | null
           referrer: string | null
           user_agent: string | null
-          user_id: string
+          user_id: string | null
           viewed_at: string | null
         }
         Insert: {
@@ -298,7 +265,7 @@ export type Database = {
           is_unique?: boolean | null
           referrer?: string | null
           user_agent?: string | null
-          user_id: string
+          user_id?: string | null
           viewed_at?: string | null
         }
         Update: {
@@ -310,7 +277,7 @@ export type Database = {
           is_unique?: boolean | null
           referrer?: string | null
           user_agent?: string | null
-          user_id?: string
+          user_id?: string | null
           viewed_at?: string | null
         }
         Relationships: [
@@ -329,10 +296,8 @@ export type Database = {
           device_type: string | null
           id: string
           ip_address: string | null
-          location: Json | null
           location_data: Json | null
           mode_at_scan: Database["public"]["Enums"]["chip_mode"] | null
-          scan_time: string | null
           scanned_at: string | null
           user_agent: string | null
         }
@@ -341,10 +306,8 @@ export type Database = {
           device_type?: string | null
           id?: string
           ip_address?: string | null
-          location?: Json | null
           location_data?: Json | null
           mode_at_scan?: Database["public"]["Enums"]["chip_mode"] | null
-          scan_time?: string | null
           scanned_at?: string | null
           user_agent?: string | null
         }
@@ -353,10 +316,8 @@ export type Database = {
           device_type?: string | null
           id?: string
           ip_address?: string | null
-          location?: Json | null
           location_data?: Json | null
           mode_at_scan?: Database["public"]["Enums"]["chip_mode"] | null
-          scan_time?: string | null
           scanned_at?: string | null
           user_agent?: string | null
         }
@@ -390,7 +351,7 @@ export type Database = {
           notes: string | null
           phone: string | null
           profile_pic: string | null
-          role: string
+          role: string | null
           slug: string | null
           social_links: Json | null
           updated_at: string | null
@@ -418,7 +379,7 @@ export type Database = {
           notes?: string | null
           phone?: string | null
           profile_pic?: string | null
-          role?: string
+          role?: string | null
           slug?: string | null
           social_links?: Json | null
           updated_at?: string | null
@@ -446,7 +407,7 @@ export type Database = {
           notes?: string | null
           phone?: string | null
           profile_pic?: string | null
-          role?: string
+          role?: string | null
           slug?: string | null
           social_links?: Json | null
           updated_at?: string | null
@@ -518,16 +479,13 @@ export type Database = {
       get_interested_leads: {
         Args: { p_user_id: string }
         Returns: {
-          last_viewed_at: string
+          last_visit: string
           lead_id: string
           lead_name: string
-          recurring_views: number
+          visit_count: number
         }[]
       }
-      increment_view_count: {
-        Args: { page_user_id: string }
-        Returns: undefined
-      }
+      get_user_id_from_auth: { Args: never; Returns: string }
       is_admin: { Args: never; Returns: boolean }
       log_profile_view: {
         Args: {
@@ -543,7 +501,7 @@ export type Database = {
       test_webhook: { Args: { url: string }; Returns: Json }
     }
     Enums: {
-      chip_mode: "corporate" | "hospitality" | "campaign"
+      chip_mode: "corporate" | "hospitality" | "campaign" | "lost"
       plan_type: "starter" | "pro" | "enterprise"
       sentiment_type: "hot" | "warm" | "cold"
     }
@@ -673,7 +631,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      chip_mode: ["corporate", "hospitality", "campaign"],
+      chip_mode: ["corporate", "hospitality", "campaign", "lost"],
       plan_type: ["starter", "pro", "enterprise"],
       sentiment_type: ["hot", "warm", "cold"],
     },
