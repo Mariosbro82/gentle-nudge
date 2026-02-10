@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
-    Database, Search, Smartphone, Building2, Utensils, QrCode, Plus, FileSpreadsheet, UserPlus, Loader2
+    Database, Search, Smartphone, Building2, Utensils, QrCode, Plus, FileSpreadsheet, UserPlus, Loader2, Copy, ExternalLink
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -364,17 +364,41 @@ export default function AdminChipsPage() {
                                         {chip.last_scan ? new Date(chip.last_scan).toLocaleString() : 'Never'}
                                     </TableCell>
                                     <TableCell className="text-right">
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            className="h-8 w-8 p-0 text-zinc-400 hover:text-white"
-                                            onClick={() => {
-                                                setSelectedChip(chip);
-                                                setIsAssignOpen(true);
-                                            }}
-                                        >
-                                            <UserPlus className="w-4 h-4" />
-                                        </Button>
+                                        <div className="flex justify-end gap-1">
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="h-8 w-8 p-0 text-zinc-400 hover:text-white"
+                                                onClick={() => {
+                                                    navigator.clipboard.writeText(`${window.location.origin}/t/${chip.uid}`);
+                                                    alert("Link copied to clipboard");
+                                                }}
+                                                title="Copy Link"
+                                            >
+                                                <Copy className="w-4 h-4" />
+                                            </Button>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="h-8 w-8 p-0 text-zinc-400 hover:text-white"
+                                                onClick={() => window.open(`${window.location.origin}/t/${chip.uid}`, '_blank')}
+                                                title="Open Link"
+                                            >
+                                                <ExternalLink className="w-4 h-4" />
+                                            </Button>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="h-8 w-8 p-0 text-zinc-400 hover:text-white"
+                                                onClick={() => {
+                                                    setSelectedChip(chip);
+                                                    setIsAssignOpen(true);
+                                                }}
+                                                title="Assign User"
+                                            >
+                                                <UserPlus className="w-4 h-4" />
+                                            </Button>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ))
