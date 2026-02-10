@@ -1,8 +1,7 @@
 import { Navbar } from "@/components/marketing/navbar";
 import { Footer } from "@/components/marketing/footer";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Users, Rocket, Heart, Star, Play, Pause } from "lucide-react";
-import { BentoGrid, BentoCard } from "@/components/marketing/ui/bento-grid";
 import { useState, useRef } from "react";
 
 export default function AboutPage() {
@@ -293,44 +292,51 @@ export default function AboutPage() {
                         <h2 className="text-3xl md:text-5xl font-bold mb-6">Wofür wir stehen</h2>
                     </div>
 
-                    <BentoGrid>
-                        <BentoCard
-                            name="Innovation"
-                            className="col-span-3 lg:col-span-2"
-                            background={<div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent" />}
-                            Icon={Rocket}
-                            description="Wir hinterfragen den Status Quo. Mode muss digitaler und interaktiver werden."
-                            href="#"
-                            cta="Unsere Vision"
-                        />
-                        <BentoCard
-                            name="Community"
-                            className="col-span-3 lg:col-span-1"
-                            background={<div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent" />}
-                            Icon={Users}
-                            description="Severmore ist mehr als eine Marke. Es ist ein Wir-Gefühl."
-                            href="#"
-                            cta="Werde Teil davon"
-                        />
-                        <BentoCard
-                            name="Leidenschaft"
-                            className="col-span-3 lg:col-span-1"
-                            background={<div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-transparent" />}
-                            Icon={Heart}
-                            description="Von Gründern für Gründer. Wir lieben, was wir tun."
-                            href="#"
-                            cta="Kontakt"
-                        />
-                        <BentoCard
-                            name="Exzellenz"
-                            className="col-span-3 lg:col-span-2"
-                            background={<div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 to-transparent" />}
-                            Icon={Star}
-                            description="Wir geben uns nicht mit dem Durchschnitt zufrieden. Award-winning Qualität."
-                            href="#"
-                            cta="Awards ansehen"
-                        />
-                    </BentoGrid>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        {[
+                            {
+                                title: "Innovation",
+                                description: "Wir hinterfragen den Status Quo. Mode muss digitaler und interaktiver werden.",
+                                icon: Rocket,
+                                color: "text-blue-500"
+                            },
+                            {
+                                title: "Community",
+                                description: "Severmore ist mehr als eine Marke. Es ist ein Wir-Gefühl.",
+                                icon: Users,
+                                color: "text-purple-500"
+                            },
+                            {
+                                title: "Leidenschaft",
+                                description: "Von Gründern für Gründer. Wir lieben, was wir tun.",
+                                icon: Heart,
+                                color: "text-red-500"
+                            },
+                            {
+                                title: "Exzellenz",
+                                description: "Wir geben uns nicht mit dem Durchschnitt zufrieden. Award-winning Qualität.",
+                                icon: Star,
+                                color: "text-yellow-500"
+                            }
+                        ].map((feature, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.1 }}
+                                className="flex flex-col gap-4 p-6 rounded-2xl bg-muted/30 border border-border/50 text-center items-center"
+                            >
+                                <div className={`w-12 h-12 rounded-full bg-background flex items-center justify-center ${feature.color} shadow-sm`}>
+                                    <feature.icon className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
+                                    <p className="text-muted-foreground leading-relaxed text-sm">{feature.description}</p>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
                 </div>
             </section>
 

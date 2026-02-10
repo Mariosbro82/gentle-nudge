@@ -3,7 +3,6 @@ import { Footer } from "@/components/marketing/footer";
 import { motion } from "framer-motion";
 import { MockDashboard } from "@/components/marketing/ui/mock-dashboard";
 import { InfiniteLogoScroll } from "@/components/marketing/ui/infinite-scroll";
-import { BentoGrid, BentoCard } from "@/components/marketing/ui/bento-grid";
 import { BarChart3, Users, Zap, Shield, Smartphone, Globe, Code2, Database } from "lucide-react";
 
 const integrations = [
@@ -62,44 +61,51 @@ export default function PlatformPage() {
                         </p>
                     </div>
 
-                    <BentoGrid>
-                        <BentoCard
-                            name="Echtzeit Analytics"
-                            className="col-span-3 lg:col-span-2"
-                            background={<div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent" />}
-                            Icon={BarChart3}
-                            description="Verfolgen Sie Scans, Interaktionen und Nutzerverhalten in Echtzeit. Treffen Sie datenbasierte Entscheidungen."
-                            href="#"
-                            cta="Mehr erfahren"
-                        />
-                        <BentoCard
-                            name="NFC Management"
-                            className="col-span-3 lg:col-span-1"
-                            background={<div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent" />}
-                            Icon={Smartphone}
-                            description="Verwalten Sie tausende von Chips mit einem Klick."
-                            href="#"
-                            cta="Details"
-                        />
-                        <BentoCard
-                            name="Nutzerverwaltung"
-                            className="col-span-3 lg:col-span-1"
-                            background={<div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent" />}
-                            Icon={Users}
-                            description="Rollenbasierte Zugriffsrechte für Ihr ganzes Team."
-                            href="#"
-                            cta="Team einladen"
-                        />
-                        <BentoCard
-                            name="Sicherheit & Datenschutz"
-                            className="col-span-3 lg:col-span-2"
-                            background={<div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-transparent" />}
-                            Icon={Shield}
-                            description="DSGVO-konform und verschlüsselt. Ihre Daten gehören Ihnen."
-                            href="#"
-                            cta="Sicherheitsbericht"
-                        />
-                    </BentoGrid>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
+                        {[
+                            {
+                                title: "Echtzeit Analytics",
+                                description: "Verfolgen Sie Scans, Interaktionen und Nutzerverhalten in Echtzeit. Treffen Sie datenbasierte Entscheidungen.",
+                                icon: BarChart3,
+                                color: "text-blue-500"
+                            },
+                            {
+                                title: "NFC Management",
+                                description: "Verwalten Sie tausende von Chips mit einem Klick. Volle Kontrolle über Ihre Assets.",
+                                icon: Smartphone,
+                                color: "text-purple-500"
+                            },
+                            {
+                                title: "Nutzerverwaltung",
+                                description: "Rollenbasierte Zugriffsrechte für Ihr ganzes Team. Skalierbar und sicher.",
+                                icon: Users,
+                                color: "text-green-500"
+                            },
+                            {
+                                title: "Sicherheit & Datenschutz",
+                                description: "DSGVO-konform und verschlüsselt. Ihre Daten gehören Ihnen und sind geschützt.",
+                                icon: Shield,
+                                color: "text-red-500"
+                            }
+                        ].map((feature, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.1 }}
+                                className="flex flex-col gap-4"
+                            >
+                                <div className={`w-12 h-12 rounded-2xl bg-muted/50 flex items-center justify-center ${feature.color}`}>
+                                    <feature.icon className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <h3 className="text-2xl font-bold mb-2">{feature.title}</h3>
+                                    <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
                 </div>
             </section>
 

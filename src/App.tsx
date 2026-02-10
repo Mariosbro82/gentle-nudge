@@ -75,10 +75,13 @@ function NfcLayout() {
     );
 }
 
+import ScrollToTop from "@/components/ScrollToTop";
+
 export default function App() {
     return (
         <ThemeProvider defaultTheme="system">
             <AuthProvider>
+                <ScrollToTop />
                 <Routes>
                     {/* Public routes */}
                     <Route path="/" element={<Suspense fallback={<PageLoader />}><MarketingPage /></Suspense>} />

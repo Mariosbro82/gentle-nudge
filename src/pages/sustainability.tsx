@@ -2,7 +2,7 @@ import { Navbar } from "@/components/marketing/navbar";
 import { Footer } from "@/components/marketing/footer";
 import { motion } from "framer-motion";
 import { Leaf, Recycle, Heart, Droplets, Factory, Truck, Shirt, HeartHandshake } from "lucide-react";
-import { BentoGrid, BentoCard } from "@/components/marketing/ui/bento-grid";
+
 
 export default function SustainabilityPage() {
     return (
@@ -80,44 +80,51 @@ export default function SustainabilityPage() {
             {/* ESG Bento Grid */}
             <section className="py-24 px-6">
                 <div className="max-w-7xl mx-auto">
-                    <BentoGrid>
-                        <BentoCard
-                            name="CO2 Optimiert"
-                            className="col-span-3 lg:col-span-2"
-                            background={<div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent" />}
-                            Icon={Leaf}
-                            description="Durch lokale Veredelung und optimierte Lieferketten minimieren wir unseren CO2-Fußabdruck drastisch."
-                            href="#"
-                            cta="Unser Klimabericht"
-                        />
-                        <BentoCard
-                            name="Langlebigkeit"
-                            className="col-span-3 lg:col-span-1"
-                            background={<div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent" />}
-                            Icon={Shirt}
-                            description="'Evermore' steht für Qualität. Kauf weniger, aber besser."
-                            href="#"
-                            cta="Pflegehinweise"
-                        />
-                        <BentoCard
-                            name="Fair Fashion"
-                            className="col-span-3 lg:col-span-1"
-                            background={<div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 to-transparent" />}
-                            Icon={HeartHandshake}
-                            description="Keine Kompromisse bei Arbeitsbedingungen. Jeder verdient Respekt."
-                            href="#"
-                            cta="Zertifikate"
-                        />
-                        <BentoCard
-                            name="Ressourcenschutz"
-                            className="col-span-3 lg:col-span-2"
-                            background={<div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent" />}
-                            Icon={Droplets}
-                            description="Wir sparen bis zu 90% Wasser im Vergleich zu konventioneller Herstellung durch innovative Färbeprozesse."
-                            href="#"
-                            cta="Mehr dazu"
-                        />
-                    </BentoGrid>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
+                        {[
+                            {
+                                title: "CO2 Optimiert",
+                                description: "Durch lokale Veredelung und optimierte Lieferketten minimieren wir unseren CO2-Fußabdruck drastisch. Klimaneutraler Versand.",
+                                icon: Leaf,
+                                color: "text-green-500"
+                            },
+                            {
+                                title: "Langlebigkeit",
+                                description: "'Evermore' steht für Qualität. Kauf weniger, aber besser. Unsere Produkte sind gemacht für ein ganzes Leben.",
+                                icon: Shirt,
+                                color: "text-amber-500"
+                            },
+                            {
+                                title: "Fair Fashion",
+                                description: "Keine Kompromisse bei Arbeitsbedingungen. Jeder verdient Respekt und faire Bezahlung entlang der gesamten Kette.",
+                                icon: HeartHandshake,
+                                color: "text-pink-500"
+                            },
+                            {
+                                title: "Ressourcenschutz",
+                                description: "Wir sparen bis zu 90% Wasser im Vergleich zu konventioneller Herstellung durch innovative Färbeprozesse.",
+                                icon: Droplets,
+                                color: "text-blue-500"
+                            }
+                        ].map((feature, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.1 }}
+                                className="flex flex-col gap-4"
+                            >
+                                <div className={`w-12 h-12 rounded-2xl bg-muted/50 flex items-center justify-center ${feature.color}`}>
+                                    <feature.icon className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <h3 className="text-2xl font-bold mb-2">{feature.title}</h3>
+                                    <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
                 </div>
             </section>
 

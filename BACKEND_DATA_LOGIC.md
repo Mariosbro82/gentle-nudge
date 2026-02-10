@@ -139,15 +139,12 @@ Stores analytics for every NFC scan.
 - **Public Read**: `users` table should be readable by everyone (for public profiles), or at least the columns needed for rendering.
 - **Admin Access**: Users with `role = 'admin'` have full access (SELECT, UPDATE, DELETE) to `users`, `chips`, and read access to `profile_views`, `leads` via the `is_admin()` function.
 
-## 5. Recent Changes
-- **Feature**: Added `email` and `phone` inputs to the Settings page.
-- **Backend Fix**: Added missing columns (`phone`, `slug`, `bio`, `website`, `linkedin_url`, `active_template`, `banner_pic`, `webhook_url`, `ghost_mode_until`) to the `users` table via migration `add_missing_user_columns`.
-- **Logic**: Updated `handleSave` in `settings.tsx` to persist these fields to the `users` table.
-- **Analytics**: Added `view_count` column and `increment_view_count` RPC. Frontend now tracks views on profile mount and displays stats in Dashboard.
-- **Onboarding**: Added post-signup onboarding flow with `has_completed_onboarding` flag and `onboarding_data` table.
-- **Analytics System**: Implemented extensive profile view tracking using Edge Functions and `profile_views` table. Replaced simple `view_count` with detailed dashboard analytics (unique visitors, recurring leads, device/country breakdown). Updated `leads` table to track recurring interest.
-- **Deep Analytics Restoration**: Re-implemented `log_profile_view` RPC to correctly track IP addresses and identify recurring visitors (visits > 12h apart). Added NFC Scan analytics to the dashboard.
-- **Marketing Update**: Updated the donation claim on the Sustainability page from "1€ pro Artikel" to "Ein Teil jedes Verkaufs".
+- **Recent Implementation**: Integrated a real-time username checker in the onboarding and settings pages.
+  - **Migration**: Added `supabase/migrations/20260210130000_check_slug_availability.sql`.
+  - **Hooks**: Added `use-username-availability` and `use-debounce` for efficient API calls.
+  - **UI/UX**: Redesigned sub-pages (Platform, Solutions, Sustainability, About Us) to replace Bento Boxes with static feature grids.
+  - **Navigation**: Added `ScrollToTop` component to ensure pages start at the top on route changes.
+  - **Navigation**: Linked the "NFCwear" logo in the Navbar to the Home page.
 ## 6. Onboarding System
 
 ### `users.has_completed_onboarding` Column

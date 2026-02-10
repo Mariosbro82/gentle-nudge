@@ -2,7 +2,7 @@ import { Navbar } from "@/components/marketing/navbar";
 import { Footer } from "@/components/marketing/footer";
 import { motion } from "framer-motion";
 import { GraduationCap, Building2, Palette, Repeat, Vote } from "lucide-react";
-import { BentoGrid, BentoCard } from "@/components/marketing/ui/bento-grid";
+
 
 export default function SolutionsPage() {
     return (
@@ -127,35 +127,45 @@ export default function SolutionsPage() {
                         </p>
                     </div>
 
-                    <BentoGrid>
-                        <BentoCard
-                            name="Design Voting"
-                            className="col-span-3 lg:col-span-1"
-                            background={<div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 to-transparent" />}
-                            Icon={Vote}
-                            description="Lassen Sie Ihre Community über neue Designs abstimmen."
-                            href="#"
-                            cta="Zum Voting"
-                        />
-                        <BentoCard
-                            name="Live-Feedback"
-                            className="col-span-3 lg:col-span-1"
-                            background={<div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 to-transparent" />}
-                            Icon={Palette}
-                            description="Direktes Feedback zu Farben, Materialien und Schnitten."
-                            href="#"
-                            cta="Feedback geben"
-                        />
-                        <BentoCard
-                            name="Community Iteration"
-                            className="col-span-3 lg:col-span-1"
-                            background={<div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-transparent" />}
-                            Icon={Repeat}
-                            description="Schnelle Iterationszyklen basierend auf echten Wünschen."
-                            href="#"
-                            cta="Mitmachen"
-                        />
-                    </BentoGrid>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        {[
+                            {
+                                title: "Design Voting",
+                                description: "Lassen Sie Ihre Community über neue Designs abstimmen. Demokratisierung der Mode.",
+                                icon: Vote,
+                                color: "text-yellow-500"
+                            },
+                            {
+                                title: "Live-Feedback",
+                                description: "Direktes Feedback zu Farben, Materialien und Schnitten. Wissen, was gewünscht ist.",
+                                icon: Palette,
+                                color: "text-pink-500"
+                            },
+                            {
+                                title: "Community Iteration",
+                                description: "Schnelle Iterationszyklen basierend auf echten Wünschen. Agil und kundenorientiert.",
+                                icon: Repeat,
+                                color: "text-cyan-500"
+                            }
+                        ].map((feature, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.1 }}
+                                className="flex flex-col gap-4 p-6 rounded-2xl bg-muted/30 border border-border/50"
+                            >
+                                <div className={`w-12 h-12 rounded-xl bg-background flex items-center justify-center ${feature.color}`}>
+                                    <feature.icon className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
+                                    <p className="text-muted-foreground leading-relaxed text-sm">{feature.description}</p>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
                 </div>
             </section>
 

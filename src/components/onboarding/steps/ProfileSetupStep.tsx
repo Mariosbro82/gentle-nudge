@@ -1,13 +1,14 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import { ChevronLeft, ChevronRight, Upload, User, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Upload, User, X, Check, Loader2, AlertCircle } from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
 import { useAuth } from "@/contexts/auth-context";
 import { OnboardingData } from "@/types/onboarding";
 import { TemplatePreview } from "../TemplatePreview";
+import { useUsernameAvailability } from "@/hooks/use-username-availability";
 
 interface ProfileSetupStepProps {
     data: OnboardingData;
@@ -25,6 +26,22 @@ export function ProfileSetupStep({
     const { user } = useAuth();
     const [uploading, setUploading] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    // Username availability checker
+    const {
+        username,
+        status: usernameStatus,
+        message: usernameMessage,
+        checkUsername,
+        isAvailable
+    } = useUsernameAvailability(data.slug || "");
+
+    // Update parent state when username changes (and is valid/available)
+    useEffect(() => {
+        if (username !== data.slug) {
+            updateData({ slug: username });
+        }
+    }, [username]);
 
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -117,6 +134,39 @@ export function ProfileSetupStep({
                             </div>
                         </div>
 
+                        {/* Username / Slug */}
+                        <div className="space-y-2">
+                            <Label className="text-foreground flex items-center gap-2">
+                                <User className="w-4 h-4 text-muted-foreground" />
+                                Benutzername (für Ihre URL)
+                            </Label>
+                            <div className="relative">
+                                <Input
+                                    value={username}
+                                    onChange={(e) => checkUsername(e.target.value)}
+                                    placeholder="max.mustermann"
+                                    className={`bg-input border-border text-foreground pr-10 ${usernameStatus === 'available' ? 'border-green-500 ring-green-500/20' :
+                                        usernameStatus === 'taken' || usernameStatus === 'invalid' ? 'border-red-500 ring-red-500/20' : ''
+                                        }`}
+                                />
+                                <div className="absolute right-3 top-2.5">
+                                    {usernameStatus === 'loading' && <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />}
+                                    {usernameStatus === 'available' && <Check className="w-4 h-4 text-green-500" />}
+                                    {(usernameStatus === 'taken' || usernameStatus === 'invalid') && <AlertCircle className="w-4 h-4 text-red-500" />}
+                                </div>
+                            </div>
+                            {usernameMessage && (
+                                <p className={`text-xs ${usernameStatus === 'available' ? 'text-green-500' :
+                                    usernameStatus === 'taken' || usernameStatus === 'invalid' ? 'text-red-500' : 'text-muted-foreground'
+                                    }`}>
+                                    {usernameMessage}
+                                </p>
+                            )}
+                            <p className="text-[10px] text-muted-foreground">
+                                Ihre URL: nfc.wear/p/{username || "ihr-name"}
+                            </p>
+                        </div>
+
                         {/* Display Name */}
                         <div className="space-y-2">
                             <Label className="text-foreground flex items-center gap-2">
@@ -187,7 +237,7 @@ export function ProfileSetupStep({
                     <Button
                         onClick={onNext}
                         className="bg-primary text-primary-foreground hover:bg-primary/90"
-                        disabled={!data.displayName}
+                        disabled={!data.displayName || !isAvailable}
                     >
                         Weiter
                         <ChevronRight className="w-4 h-4 ml-2" />

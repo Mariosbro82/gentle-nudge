@@ -14,12 +14,12 @@ export function Navbar() {
       animate={{ y: 0 }}
       className="fixed top-0 left-0 right-0 z-50 h-16 border-b border-white/5 bg-white/5 dark:bg-black/5 backdrop-blur-xl px-6 flex items-center justify-between"
     >
-      <div className="flex items-center gap-2">
+      <Link to="/" className="flex items-center gap-2">
         <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-white shadow-[0_0_15px_rgba(37,99,235,0.5)]">
           N
         </div>
         <span className="font-bold text-lg tracking-tight text-zinc-900 dark:text-white">NFCwear</span>
-      </div>
+      </Link>
 
       {/* Desktop Menu */}
       <div className="hidden lg:flex items-center gap-6 text-sm font-medium text-zinc-600 dark:text-zinc-400">

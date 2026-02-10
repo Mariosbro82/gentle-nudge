@@ -11,6 +11,8 @@ import { ImageUpload } from "@/components/settings/image-upload";
 import { TemplateSelector } from "@/components/settings/template-selector";
 import { GhostModeToggle } from "@/components/settings/ghost-mode-toggle";
 import { WebhookSettings } from "@/components/settings/webhook-settings";
+import { useUsernameAvailability } from "@/hooks/use-username-availability";
+import { Check, AlertCircle } from "lucide-react";
 
 export default function SettingsPage() {
     const { user: authUser } = useAuth();
@@ -19,6 +21,22 @@ export default function SettingsPage() {
     const [saving, setSaving] = useState(false);
     const [ghostSaving, setGhostSaving] = useState(false);
     const [activeTemplate, setActiveTemplate] = useState("premium-gradient");
+
+    // Username checker
+    const {
+        username,
+        status: usernameStatus,
+        message: usernameMessage,
+        checkUsername,
+        isAvailable
+    } = useUsernameAvailability("");
+
+    // Sync username from profile when loaded
+    useEffect(() => {
+        if (user?.slug) {
+            checkUsername(user.slug);
+        }
+    }, [user?.slug]);
 
     useEffect(() => {
         async function fetchProfile() {
@@ -182,19 +200,46 @@ export default function SettingsPage() {
                     <CardContent className="space-y-4">
                         <div className="grid gap-2">
                             <Label htmlFor="slug">Username / Handle (für Ihre URL)</Label>
-                            <div className="flex gap-2">
-                                <Input id="slug" name="slug" defaultValue={user?.slug} placeholder="fabian" className="bg-input border-border" />
-                                {user?.slug && (
-                                    <Button type="button" variant="outline" size="icon" asChild title="Profil öffnen">
-                                        <a href={`/p/${user.slug}`} target="_blank" rel="noopener noreferrer">
-                                            <ExternalLink className="h-4 w-4" />
-                                        </a>
-                                    </Button>
+                            <div className="space-y-2">
+                                <div className="relative">
+                                    <Input
+                                        id="slug"
+                                        name="slug"
+                                        value={username}
+                                        onChange={(e) => checkUsername(e.target.value)}
+                                        placeholder="fabian"
+                                        className={`bg-input border-border pr-10 ${usernameStatus === 'available' ? 'border-green-500 ring-green-500/20' :
+                                            usernameStatus === 'taken' || usernameStatus === 'invalid' ? 'border-red-500 ring-red-500/20' : ''
+                                            }`}
+                                    />
+                                    <div className="absolute right-3 top-2.5">
+                                        {usernameStatus === 'loading' && <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />}
+                                        {usernameStatus === 'available' && <Check className="w-4 h-4 text-green-500" />}
+                                        {(usernameStatus === 'taken' || usernameStatus === 'invalid') && <AlertCircle className="w-4 h-4 text-red-500" />}
+                                    </div>
+                                </div>
+
+                                {usernameMessage && (
+                                    <p className={`text-xs ${usernameStatus === 'available' ? 'text-green-500' :
+                                        usernameStatus === 'taken' || usernameStatus === 'invalid' ? 'text-red-500' : 'text-muted-foreground'
+                                        }`}>
+                                        {usernameMessage}
+                                    </p>
                                 )}
+
+                                <div className="flex justify-between items-center">
+                                    <p className="text-[10px] text-muted-foreground">
+                                        Ihre öffentliche URL: <code className="bg-muted px-1 rounded">nfc.wear/p/{username || "..."}</code>
+                                    </p>
+                                    {user?.slug && (
+                                        <Button type="button" variant="outline" size="sm" asChild title="Profil öffnen">
+                                            <a href={`/p/${user.slug}`} target="_blank" rel="noopener noreferrer">
+                                                <ExternalLink className="h-3 w-3 mr-1" /> Öffnen
+                                            </a>
+                                        </Button>
+                                    )}
+                                </div>
                             </div>
-                            <p className="text-[10px] text-muted-foreground">
-                                Ihre öffentliche URL: <code className="bg-muted px-1 rounded">nfc.wear/p/{user?.slug || "..."}</code>
-                            </p>
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="name">Name</Label>
@@ -224,7 +269,7 @@ export default function SettingsPage() {
                             <Label htmlFor="linkedin">LinkedIn URL</Label>
                             <Input id="linkedin" name="linkedin" defaultValue={user?.linkedin_url} className="bg-input border-border" />
                         </div>
-                        <Button type="submit" className="w-fit bg-primary text-primary-foreground hover:bg-primary/90" disabled={saving}>
+                        <Button type="submit" className="w-fit bg-primary text-primary-foreground hover:bg-primary/90" disabled={saving || (!isAvailable && username !== user?.slug)}>
                             {saving ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : null}
                             Profil Speichern
                         </Button>

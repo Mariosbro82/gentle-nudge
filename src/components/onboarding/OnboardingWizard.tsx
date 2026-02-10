@@ -39,6 +39,7 @@ export function OnboardingWizard() {
         teamSize: "",
         expectedContacts: "",
         displayName: "",
+        slug: "",
         tagline: "",
         profilePic: null,
         socialLinks: {},
@@ -87,6 +88,7 @@ export function OnboardingWizard() {
                         auth_user_id: user.id,
                         email: user.email || "",
                         name: data.displayName || null,
+                        slug: data.slug || null,
                         job_title: data.tagline || null,
                         profile_pic: data.profilePic || null,
                         linkedin_url: data.socialLinks.linkedin || null,
@@ -121,6 +123,7 @@ export function OnboardingWizard() {
                     .from("users")
                     .update({
                         name: data.displayName || undefined,
+                        slug: data.slug || undefined,
                         job_title: data.tagline || undefined,
                         profile_pic: data.profilePic || undefined,
                         // linkedin_url & website removed from main flow but kept in schema

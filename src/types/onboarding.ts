@@ -16,6 +16,7 @@ export interface OnboardingData {
 
     // Profile
     displayName: string;
+    slug: string; // New: Unique username handle
     tagline: string;
     profilePic: string | null;
     socialLinks: {
