@@ -1,4 +1,5 @@
 
+
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
 import {
@@ -12,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
-    Database, Search, Smartphone, Building2, Utensils, QrCode, Plus, FileSpreadsheet, UserPlus, Loader2, Copy, ExternalLink
+    Database, Search, Smartphone, Building2, Utensils, QrCode, Plus, FileSpreadsheet, UserPlus, Loader2, Copy, ExternalLink, Trash2, Settings, Pen
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -26,6 +27,8 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { AlertTriangle } from "lucide-react";
 
 interface Chip {
     id: string;
@@ -49,6 +52,8 @@ export default function AdminChipsPage() {
     const [isAddOpen, setIsAddOpen] = useState(false);
     const [isImportOpen, setIsImportOpen] = useState(false);
     const [isAssignOpen, setIsAssignOpen] = useState(false);
+    const [isEditModeOpen, setIsEditModeOpen] = useState(false);
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
     // Form state
     const [newChipUid, setNewChipUid] = useState("");
@@ -56,6 +61,7 @@ export default function AdminChipsPage() {
     const [selectedChip, setSelectedChip] = useState<Chip | null>(null);
     const [assignTarget, setAssignTarget] = useState("");
     const [assignType, setAssignType] = useState<'user' | 'company'>('user');
+    const [newMode, setNewMode] = useState<string>('corporate');
     const [actionLoading, setActionLoading] = useState(false);
 
     const fetchChips = async () => {
@@ -91,15 +97,21 @@ export default function AdminChipsPage() {
         fetchChips();
     }, []);
 
+    const normalizeUid = (uid: string) => uid.replace(/[:\-\s]/g, "").toUpperCase();
+
     const handleAddChip = async () => {
         if (!newChipUid) return;
         setActionLoading(true);
         try {
-            const { error } = await supabase.from('chips').insert({ uid: newChipUid });
-            if (error) throw error;
+            const cleanUid = normalizeUid(newChipUid);
+            const { error } = await supabase.from('chips').insert({ uid: cleanUid, active_mode: 'corporate' });
+            if (error) {
+                if (error.code === '23505') throw new Error("This chip UID is already registered.");
+                throw error;
+            }
             setIsAddOpen(false);
             setNewChipUid("");
-            fetchChips();
+            await fetchChips();
         } catch (error: any) {
             alert("Error adding chip: " + error.message);
         } finally {
@@ -111,12 +123,13 @@ export default function AdminChipsPage() {
         if (!importData) return;
         setActionLoading(true);
         try {
-            // Expecting CSV format: uid, mode?
-            // Simple implementation: split by newline, take first column as UID
             const rows = importData.split('\n').filter(r => r.trim());
             const chipsToInsert = rows.map(row => {
                 const cols = row.split(',').map(c => c.trim());
-                return { uid: cols[0], active_mode: (cols[1] || null) as any }; // Optional mode, cast for enum
+                return {
+                    uid: normalizeUid(cols[0]),
+                    active_mode: (cols[1] || 'corporate') as any
+                };
             });
 
             const { error } = await supabase.from('chips').insert(chipsToInsert);
@@ -124,7 +137,7 @@ export default function AdminChipsPage() {
 
             setIsImportOpen(false);
             setImportData("");
-            fetchChips();
+            await fetchChips();
             alert(`Successfully imported ${chipsToInsert.length} chips.`);
         } catch (error: any) {
             alert("Import failed: " + error.message);
@@ -179,11 +192,57 @@ export default function AdminChipsPage() {
         }
     };
 
+    const handleUpdateMode = async () => {
+        if (!selectedChip || !newMode) return;
+        setActionLoading(true);
+        try {
+            const { error } = await supabase
+                .from('chips')
+                .update({ active_mode: newMode as any })
+                .eq('id', selectedChip.id);
+
+            if (error) throw error;
+
+            setIsEditModeOpen(false);
+            setSelectedChip(null);
+            fetchChips();
+        } catch (error: any) {
+            alert("Failed to update mode: " + error.message);
+        } finally {
+            setActionLoading(false);
+        }
+    };
+
+    const handleDeleteChip = async () => {
+        if (!selectedChip) return;
+        setActionLoading(true);
+        try {
+            const { error } = await supabase
+                .from('chips')
+                .delete()
+                .eq('id', selectedChip.id);
+
+            if (error) throw error;
+
+            setIsDeleteOpen(false);
+            setSelectedChip(null);
+            fetchChips();
+        } catch (error: any) {
+            alert("Failed to delete chip: " + error.message);
+        } finally {
+            setActionLoading(false);
+        }
+    };
+
     const filteredChips = chips.filter(chip => {
+        const normalizedSearch = normalizeUid(searchQuery).toLowerCase();
+
         const matchesSearch =
-            chip.uid.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            chip.uid.toLowerCase().includes(searchQuery.toLowerCase()) || // Direct match
+            normalizeUid(chip.uid).toLowerCase().includes(normalizedSearch) || // Search for 04A1... in 04:A1...
             chip.users?.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
             chip.companies?.name?.toLowerCase().includes(searchQuery.toLowerCase());
+
         const matchesMode = filterMode ? chip.active_mode === filterMode : true;
         return matchesSearch && matchesMode;
     });
@@ -392,11 +451,36 @@ export default function AdminChipsPage() {
                                                 className="h-8 w-8 p-0 text-zinc-400 hover:text-white"
                                                 onClick={() => {
                                                     setSelectedChip(chip);
+                                                    setNewMode(chip.active_mode || 'corporate');
+                                                    setIsEditModeOpen(true);
+                                                }}
+                                                title="Edit Mode"
+                                            >
+                                                <Settings className="w-4 h-4" />
+                                            </Button>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="h-8 w-8 p-0 text-zinc-400 hover:text-white"
+                                                onClick={() => {
+                                                    setSelectedChip(chip);
                                                     setIsAssignOpen(true);
                                                 }}
                                                 title="Assign User"
                                             >
                                                 <UserPlus className="w-4 h-4" />
+                                            </Button>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="h-8 w-8 p-0 text-red-500 hover:text-red-400 hover:bg-red-500/10"
+                                                onClick={() => {
+                                                    setSelectedChip(chip);
+                                                    setIsDeleteOpen(true);
+                                                }}
+                                                title="Delete Chip"
+                                            >
+                                                <Trash2 className="w-4 h-4" />
                                             </Button>
                                         </div>
                                     </TableCell>
@@ -453,6 +537,64 @@ export default function AdminChipsPage() {
                         <Button variant="ghost" onClick={() => setIsAssignOpen(false)}>Cancel</Button>
                         <Button onClick={handleAssign} disabled={actionLoading}>
                             {actionLoading && <Loader2 className="w-4 h-4 animate-spin mr-2" />} Assign
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            {/* Edit Mode Dialog */}
+            <Dialog open={isEditModeOpen} onOpenChange={setIsEditModeOpen}>
+                <DialogContent className="bg-zinc-950 border-zinc-800 text-white">
+                    <DialogHeader>
+                        <DialogTitle>Edit Chip Mode</DialogTitle>
+                        <DialogDescription className="text-zinc-400">
+                            Change the operational mode for chip {selectedChip?.uid}.
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    <div className="grid gap-4 py-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="mode">Active Mode</Label>
+                            <Select value={newMode} onValueChange={(val) => setNewMode(val)}>
+                                <SelectTrigger className="bg-zinc-900 border-zinc-700">
+                                    <SelectValue placeholder="Select mode" />
+                                </SelectTrigger>
+                                <SelectContent className="bg-zinc-900 border-zinc-800 text-white">
+                                    <SelectItem value="corporate">Corporate</SelectItem>
+                                    <SelectItem value="hospitality">Hospitality</SelectItem>
+                                    <SelectItem value="campaign">Campaign</SelectItem>
+                                    <SelectItem value="lost">Lost</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+
+                    <DialogFooter>
+                        <Button variant="ghost" onClick={() => setIsEditModeOpen(false)}>Cancel</Button>
+                        <Button onClick={handleUpdateMode} disabled={actionLoading}>
+                            {actionLoading && <Loader2 className="w-4 h-4 animate-spin mr-2" />} Save Changes
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            {/* Delete Confirmation Dialog */}
+            <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
+                <DialogContent className="bg-zinc-950 border-zinc-800 text-white">
+                    <DialogHeader>
+                        <DialogTitle className="text-red-500 flex items-center gap-2">
+                            <AlertTriangle className="w-5 h-5" />
+                            Confirm Deletion
+                        </DialogTitle>
+                        <DialogDescription className="text-zinc-400">
+                            Are you sure you want to delete chip <strong>{selectedChip?.uid}</strong>? This action cannot be undone.
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    <DialogFooter>
+                        <Button variant="ghost" onClick={() => setIsDeleteOpen(false)}>Cancel</Button>
+                        <Button onClick={handleDeleteChip} variant="destructive" className="bg-red-600 hover:bg-red-700" disabled={actionLoading}>
+                            {actionLoading && <Loader2 className="w-4 h-4 animate-spin mr-2" />} Delete Chip
                         </Button>
                     </DialogFooter>
                 </DialogContent>

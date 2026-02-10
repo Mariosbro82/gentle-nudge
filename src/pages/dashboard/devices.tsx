@@ -79,11 +79,13 @@ export default function DevicesPage() {
             .eq("auth_user_id", user?.id || "")
             .single();
 
+        const active_mode = formData.get("active_mode") as string;
+
         const { error: insertError } = await supabase.from("chips").insert({
             uid: uid.replace(/:/g, "").toUpperCase(),
             company_id: company_id || null,
             assigned_user_id: profile?.id || null,
-            active_mode: "corporate",
+            active_mode: (active_mode as "corporate" | "hospitality" | "campaign") || "corporate",
         });
 
         if (insertError) {
@@ -216,6 +218,19 @@ export default function DevicesPage() {
                                                 {c.name}
                                             </SelectItem>
                                         ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="active_mode">Modus</Label>
+                                <Select name="active_mode" defaultValue="corporate">
+                                    <SelectTrigger className="bg-input border-border">
+                                        <SelectValue placeholder="Modus wählen" />
+                                    </SelectTrigger>
+                                    <SelectContent className="bg-popover border-border text-popover-foreground">
+                                        <SelectItem value="corporate">Corporate</SelectItem>
+                                        <SelectItem value="hospitality">Hospitality</SelectItem>
+                                        <SelectItem value="campaign">Campaign</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>

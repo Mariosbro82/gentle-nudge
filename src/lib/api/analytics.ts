@@ -163,9 +163,6 @@ export async function getProfileViewAnalytics(userId: string, daysBack: number =
     };
 }
 
-/**
- * Get interested leads (recurring visitors)
- */
 export async function getInterestedLeads(userId: string) {
     const { data, error } = await supabase.rpc('get_interested_leads', { p_user_id: userId });
 
@@ -175,4 +172,75 @@ export async function getInterestedLeads(userId: string) {
     }
 
     return data;
+}
+
+/**
+ * Get NFC scan analytics
+ */
+export async function getScanAnalytics(userId: string, daysBack: number = 30) {
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - daysBack);
+
+    // First get chips assigned to user to filter scans
+    const { data: chips } = await supabase
+        .from("chips")
+        .select("id")
+        .eq("assigned_user_id", userId);
+
+    if (!chips || chips.length === 0) {
+        return {
+            totalScans: 0,
+            uniqueScans: 0,
+            scansByDate: [],
+            deviceBreakdown: [],
+        };
+    }
+
+    const chipIds = chips.map(c => c.id);
+
+    const { data: scans, error } = await supabase
+        .from("scans")
+        .select("*")
+        .in("chip_id", chipIds)
+        .gte("scanned_at", startDate.toISOString())
+        .order("scanned_at", { ascending: true });
+
+    if (error || !scans) {
+        console.error("Error fetching scans:", error);
+        return {
+            totalScans: 0,
+            uniqueScans: 0,
+            scansByDate: [],
+            deviceBreakdown: [],
+        };
+    }
+
+    const totalScans = scans.length;
+    const uniqueScans = new Set(scans.map(s => s.ip_address)).size;
+
+    // Group by date
+    const scansByDate: Record<string, number> = {};
+    scans.forEach(scan => {
+        const date = new Date(scan.scanned_at || '').toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        scansByDate[date] = (scansByDate[date] || 0) + 1;
+    });
+
+    // Device breakdown
+    const devices: Record<string, number> = { Mobile: 0, Desktop: 0, Tablet: 0, Other: 0 };
+    scans.forEach(scan => {
+        const type = scan.device_type || "Other";
+        if (type.includes("Mobile")) devices.Mobile++;
+        else if (type.includes("Desktop")) devices.Desktop++;
+        else if (type.includes("Tablet")) devices.Tablet++;
+        else devices.Other++;
+    });
+
+    return {
+        totalScans,
+        uniqueScans,
+        scansByDate: Object.entries(scansByDate).map(([date, count]) => ({ date, scans: count })),
+        deviceBreakdown: Object.entries(devices)
+            .filter(([_, val]) => val > 0)
+            .map(([name, value]) => ({ name, value })),
+    };
 }

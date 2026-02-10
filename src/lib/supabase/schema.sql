@@ -19,15 +19,30 @@ CREATE TABLE IF NOT EXISTS companies (
 CREATE TABLE IF NOT EXISTS users (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   company_id UUID REFERENCES companies(id) ON DELETE CASCADE,
+  auth_user_id UUID UNIQUE, -- Link to Supabase Auth
   email TEXT NOT NULL,
   name TEXT,
+  slug TEXT UNIQUE,
   job_title TEXT,
+  bio TEXT,
   profile_pic TEXT,
+  banner_pic TEXT,
+  phone TEXT,
+  website TEXT,
+  linkedin_url TEXT,
+  company_name TEXT,
   vcard_data JSONB DEFAULT '{}'::jsonb,
   social_links JSONB DEFAULT '{}'::jsonb,
   ghost_mode BOOLEAN DEFAULT FALSE,
+  ghost_mode_until TIMESTAMPTZ,
+  webhook_url TEXT,
+  has_completed_onboarding BOOLEAN DEFAULT FALSE,
+  role TEXT DEFAULT 'user',
+  active_template TEXT DEFAULT 'premium-gradient',
+  view_count INTEGER DEFAULT 0,
+  notes TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
-  auth_user_id UUID -- Link to Supabase Auth
+  updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Chips Table

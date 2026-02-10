@@ -118,7 +118,6 @@ export default function DashboardPage() {
                 <StatsCard title="Gesamt Scans" value={scansCount} change="Gesamtzeit" icon={ScanLine} />
                 <StatsCard title="Aktive Kontakte" value={leadsCount} change="Erfasste Kontakte" icon={Users} />
                 <StatsCard title="Aktive Chips" value={chipsCount} change="Verteilte Geräte" icon={ArrowUpRight} />
-                <StatsCard title="Aktive Chips" value={chipsCount} change="Verteilte Geräte" icon={ArrowUpRight} />
                 <StatsCard title="Profil Aufrufe" value={viewsCount} change="Besucher Gesamt" icon={Users} />
             </div>
 

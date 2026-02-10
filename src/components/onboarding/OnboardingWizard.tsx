@@ -60,17 +60,24 @@ export function OnboardingWizard() {
         }
     };
 
+    const [error, setError] = useState<string | null>(null);
+
     const handleComplete = async () => {
         if (!user) return;
         setIsSubmitting(true);
+        setError(null);
 
         try {
             // Get user's profile row
-            const { data: profile } = await supabase
+            const { data: profile, error: profileError } = await supabase
                 .from("users")
                 .select("id")
                 .eq("auth_user_id", user.id)
                 .single();
+
+            if (profileError && profileError.code !== "PGRST116") {
+                throw profileError;
+            }
 
             if (!profile) {
                 // Create user profile if it doesn't exist
@@ -93,7 +100,7 @@ export function OnboardingWizard() {
                 if (createError) throw createError;
 
                 // Save onboarding data
-                await (supabase.from("onboarding_data" as any) as any).insert({
+                const { error: onboardingError } = await (supabase.from("onboarding_data" as any) as any).insert({
                     user_id: newProfile.id,
                     industry: data.industry || null,
                     use_case: data.useCase || null,
@@ -105,9 +112,12 @@ export function OnboardingWizard() {
                     automation_interest: data.automationInterest,
                     automation_delay_hours: data.automationDelayHours,
                 });
+
+                if (onboardingError) throw onboardingError;
+
             } else {
                 // Update existing profile
-                await supabase
+                const { error: updateError } = await supabase
                     .from("users")
                     .update({
                         name: data.displayName || undefined,
@@ -121,8 +131,10 @@ export function OnboardingWizard() {
                     })
                     .eq("auth_user_id", user.id);
 
+                if (updateError) throw updateError;
+
                 // Save onboarding data
-                await (supabase.from("onboarding_data" as any) as any).insert({
+                const { error: onboardingInsertError } = await (supabase.from("onboarding_data" as any) as any).insert({
                     user_id: profile.id,
                     industry: data.industry || null,
                     use_case: data.useCase || null,
@@ -134,14 +146,15 @@ export function OnboardingWizard() {
                     automation_interest: data.automationInterest,
                     automation_delay_hours: data.automationDelayHours,
                 });
+
+                if (onboardingInsertError) throw onboardingInsertError;
             }
 
-            // Navigate to dashboard
+            // Navigate to dashboard ONLY if successful
             navigate("/dashboard", { replace: true });
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error completing onboarding:", error);
-            // Still navigate even on error
-            navigate("/dashboard", { replace: true });
+            setError(error.message || "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.");
         } finally {
             setIsSubmitting(false);
         }
@@ -208,6 +221,7 @@ export function OnboardingWizard() {
                         data={data}
                         onComplete={handleComplete}
                         isSubmitting={isSubmitting}
+                        error={error}
                     />
                 );
             default:

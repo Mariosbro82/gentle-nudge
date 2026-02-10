@@ -39,7 +39,7 @@ Stores user profile information, separate from `auth.users`.
 | :--- | :--- | :--- | :--- |
 | `id` | UUID | Primary Key | - |
 | `auth_user_id` | UUID | Foreign Key -> `auth.users` | Links profile to authenticated user. |
-| `slug` | Text | Unique Handle | Used for public profile URL (`nfc.wear/p/[slug]`). Editable in Settings. |
+| `email` | Text | **Contact Email** | **Required** (NOT NULL) for `upsert`. Must be included in every update. |
 | `name` | Text | Full Name | Displayed on profile. Editable in Settings. |
 | `email` | Text | **Contact Email** | Publicly displayed contact email (distinct from auth email). **Added to Settings form.** |
 | `phone` | Text | **Contact Phone** | Publicly displayed phone number. **Added to Settings form.** |
@@ -60,10 +60,11 @@ Stores user profile information, separate from `auth.users`.
 ### `functions` (RPC)
 | Function | Parameters | Logic | Permissions |
 | :--- | :--- | :--- | :--- |
-| `log_profile_view` | `p_user_id`, `p_ip_address`, `p_device_type`, `p_user_agent`, `p_referrer`, `p_country` | Logs a view. Checks for duplicates (<12h) and recurring visitors (>12h). | `anon` (service role via Edge Function) |
+| `log_profile_view` | `p_user_id`, `p_ip_address`, `p_device_type`, `p_user_agent`, `p_referrer`, `p_country` | **Restored:** Logs a view. Checks for duplicates (<12h) and recurring visitors (>12h) based on IP. Increments `users.view_count`. | `anon` (service role via Edge Function) |
 | `get_interested_leads` | `p_user_id` | Returns leads that have recurring profile views (same IP). | `authenticated` |
 | `is_admin` | None | Returns TRUE if current user has `role = 'admin'`. Used in RLS policies. | `authenticated` (Security Definer) |
 | `scan` | `uid` (via URL) | **Edge Function**: Handles NFC scanning. Lookups chip, logs scan, and redirects based on mode. | `anon` / `public` |
+| `test_webhook` | `url` | Sends a test POST request to the specified URL to verify webhook connectivity. Requires `http` extension. | `authenticated` / `service_role` |
 
 ### `leads` Table
 Stores leads captured via the NFC profile "Connect" feature.
@@ -113,7 +114,19 @@ Stores analytics for every NFC scan.
     - `handleSave` collects form data (Slug, Name, Title, Bio, **Email**, **Phone**, Website, LinkedIn).
     - Sends `UPDATE` query to `users` table matching `auth_user_id`.
     - Updates local state on success.
-- **Images**: Uploads to Supabase Storage (`profile-images` bucket?), gets public URL, then updates `users.profile_pic` or `users.banner_pic`.
+- **Images**: Uploads to Supabase Storage (`profile-images` bucket?), gets public URL, then updating `users.profile_pic` or `users.banner_pic`.
+
+### Admin Dashboard (`src/pages/admin/chips.tsx`)
+- **Chip Management**:
+    - **Add**: Admins can manually register chips by UID.
+    - **Import**: Mass import via CSV (`UID, Mode`).
+    - **Edit**: Admins can change the `active_mode` (Corporate, Hospitality, Campaign, Lost) of any chip.
+    - **Delete**: Chips can be permanently deleted.
+    - **Assign**: Chips can be assigned to Users or Companies.
+
+### User Dashboard (`src/pages/dashboard/devices.tsx`)
+- **Add Chip**: Users can add chips and select the initial `active_mode`.
+- **Overview**: Shows aggregated stats including active chips count.
 
 ### Public Profile (`src/pages/p/[userId].tsx`)
 - **Fetch**: Looks up user by `slug` first. If not found, tries by `id`.
@@ -133,7 +146,7 @@ Stores analytics for every NFC scan.
 - **Analytics**: Added `view_count` column and `increment_view_count` RPC. Frontend now tracks views on profile mount and displays stats in Dashboard.
 - **Onboarding**: Added post-signup onboarding flow with `has_completed_onboarding` flag and `onboarding_data` table.
 - **Analytics System**: Implemented extensive profile view tracking using Edge Functions and `profile_views` table. Replaced simple `view_count` with detailed dashboard analytics (unique visitors, recurring leads, device/country breakdown). Updated `leads` table to track recurring interest.
-- **Consolidation**: Merged Chips management and Mass Import functionality into the `devices.tsx` page for a unified device management experience.
+- **Deep Analytics Restoration**: Re-implemented `log_profile_view` RPC to correctly track IP addresses and identify recurring visitors (visits > 12h apart). Added NFC Scan analytics to the dashboard.
 ## 6. Onboarding System
 
 ### `users.has_completed_onboarding` Column

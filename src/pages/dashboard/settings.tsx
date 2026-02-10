@@ -72,26 +72,52 @@ export default function SettingsPage() {
 
     async function handleImageUploaded(type: "profile" | "banner", url: string) {
         if (!authUser) return;
-        const field = type === "profile" ? "profile_pic" : "banner_pic";
-        await supabase.from("users").upsert({
-            auth_user_id: authUser.id,
-            email: user?.email || authUser.email,
-            [field]: url,
-            updated_at: new Date().toISOString()
-        } as any, { onConflict: "auth_user_id" });
-        setUser({ ...user, [field]: url });
+        try {
+            const field = type === "profile" ? "profile_pic" : "banner_pic";
+            const { error } = await supabase.from("users").upsert({
+                auth_user_id: authUser.id,
+                email: user?.email || authUser.email, // Important: email is required for upsert if it's a new row, though unlikely here
+                [field]: url,
+                updated_at: new Date().toISOString()
+            } as any, { onConflict: "auth_user_id" });
+
+            if (error) {
+                console.error("Error saving image URL:", error);
+                alert(`Fehler beim Speichern: ${error.message}`);
+                return;
+            }
+
+            setUser({ ...user, [field]: url });
+            alert(type === "profile" ? "Profilbild aktualisiert!" : "Banner aktualisiert!");
+        } catch (err: any) {
+            console.error("Unexpected error:", err);
+            alert(`Ein unerwarteter Fehler ist aufgetreten: ${err.message || err}`);
+        }
     }
 
     async function handleImageRemoved(type: "profile" | "banner") {
         if (!authUser) return;
-        const field = type === "profile" ? "profile_pic" : "banner_pic";
-        await supabase.from("users").upsert({
-            auth_user_id: authUser.id,
-            email: user?.email || authUser.email,
-            [field]: null,
-            updated_at: new Date().toISOString()
-        } as any, { onConflict: "auth_user_id" });
-        setUser({ ...user, [field]: null });
+        try {
+            const field = type === "profile" ? "profile_pic" : "banner_pic";
+            const { error } = await supabase.from("users").upsert({
+                auth_user_id: authUser.id,
+                email: user?.email || authUser.email,
+                [field]: null,
+                updated_at: new Date().toISOString()
+            } as any, { onConflict: "auth_user_id" });
+
+            if (error) {
+                console.error("Error removing image:", error);
+                alert(`Fehler beim Löschen: ${error.message}`);
+                return;
+            }
+
+            setUser({ ...user, [field]: null });
+            alert("Bild erfolgreich entfernt.");
+        } catch (err: any) {
+            console.error("Unexpected error:", err);
+            alert(`Ein unerwarteter Fehler ist aufgetreten: ${err.message || err}`);
+        }
     }
 
     async function handleGhostModeChange(enabled: boolean, until: string | null) {

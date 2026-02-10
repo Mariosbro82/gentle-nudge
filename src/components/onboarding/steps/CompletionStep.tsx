@@ -7,13 +7,17 @@ import { useAuth } from "@/contexts/auth-context";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
+import { AlertCircle } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+
 interface CompletionStepProps {
     data: OnboardingData;
-    onComplete: () => void;
+    onComplete: () => Promise<void>;
     isSubmitting: boolean;
+    error?: string | null;
 }
 
-export function CompletionStep({ data, onComplete, isSubmitting }: CompletionStepProps) {
+export function CompletionStep({ data, onComplete, isSubmitting, error }: CompletionStepProps) {
     const { user: _user } = useAuth();
     const [copied, setCopied] = useState(false);
 
@@ -48,6 +52,17 @@ export function CompletionStep({ data, onComplete, isSubmitting }: CompletionSte
                     Ihr Profil ist bereit! Hier ist Ihr persönlicher Link.
                 </p>
             </div>
+
+            {/* Error Alert */}
+            {error && (
+                <Alert variant="destructive" className="max-w-md mx-auto text-left">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>Fehler</AlertTitle>
+                    <AlertDescription>
+                        {error}
+                    </AlertDescription>
+                </Alert>
+            )}
 
             {/* Link & QR Code Section */}
             <Card className="bg-card p-6 max-w-md mx-auto overflow-hidden border-border">
