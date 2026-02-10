@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/lib/supabase/client";
@@ -163,6 +163,13 @@ export function OnboardingWizard() {
         }
     };
 
+    // Scroll to top on step change
+    const stepContentRef = React.useRef<HTMLDivElement>(null);
+    React.useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'instant' });
+        stepContentRef.current?.scrollTo({ top: 0, behavior: 'instant' });
+    }, [currentStep]);
+
     const renderStep = () => {
         switch (currentStep) {
             case 1:
@@ -235,14 +242,14 @@ export function OnboardingWizard() {
     return (
         <div className="min-h-screen bg-background flex flex-col">
             {/* Progress Bar */}
-            <div className="w-full px-6 py-4">
+            <div className="w-full px-3 sm:px-6 py-4">
                 <div className="max-w-2xl mx-auto">
                     <div className="flex items-center justify-between mb-2">
                         {STEPS.map((step, index) => (
                             <div key={step.id} className="flex items-center flex-1">
                                 <div
                                     className={`
-                                        w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-all
+                                        w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-[10px] sm:text-sm font-medium transition-all shrink-0
                                         ${currentStep >= step.id
                                             ? "bg-primary text-primary-foreground"
                                             : "bg-muted text-muted-foreground"
@@ -253,14 +260,14 @@ export function OnboardingWizard() {
                                 </div>
                                 {index < STEPS.length - 1 && (
                                     <div
-                                        className={`flex-1 h-0.5 mx-2 transition-all ${currentStep > step.id ? "bg-primary" : "bg-muted"
+                                        className={`flex-1 h-0.5 mx-1 sm:mx-2 transition-all ${currentStep > step.id ? "bg-primary" : "bg-muted"
                                             }`}
                                     />
                                 )}
                             </div>
                         ))}
                     </div>
-                    <div className="flex justify-between text-xs text-muted-foreground">
+                    <div className="hidden sm:flex justify-between text-xs text-muted-foreground">
                         {STEPS.map((step) => (
                             <span
                                 key={step.id}
@@ -274,7 +281,7 @@ export function OnboardingWizard() {
             </div>
 
             {/* Step Content */}
-            <div className="flex-1 flex items-center justify-center p-6">
+            <div ref={stepContentRef} className="flex-1 flex items-start sm:items-center justify-center p-3 sm:p-6 overflow-y-auto">
                 <div className="w-full max-w-2xl">
                     <AnimatePresence mode="wait">
                         <motion.div
