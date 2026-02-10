@@ -267,16 +267,6 @@ export function OnboardingWizard() {
                             </div>
                         ))}
                     </div>
-                    <div className="hidden sm:flex justify-between text-xs text-muted-foreground">
-                        {STEPS.map((step) => (
-                            <span
-                                key={step.id}
-                                className={currentStep >= step.id ? "text-foreground font-medium" : ""}
-                            >
-                                {step.title}
-                            </span>
-                        ))}
-                    </div>
                 </div>
             </div>
 
