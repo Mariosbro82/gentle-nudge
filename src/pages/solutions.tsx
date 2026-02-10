@@ -11,7 +11,6 @@ import {
     Utensils,
     Zap,
     CheckCircle2,
-    ChevronRight,
     ArrowRight
 } from "lucide-react";
 

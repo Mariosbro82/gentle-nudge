@@ -1,7 +1,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
-import { Users, ScanLine, ArrowUpRight, Activity, TrendingUp } from "lucide-react";
+import { ScanLine, Activity, TrendingUp } from "lucide-react";
 
 const OFFSET_FACTOR = 4;
 const SCALE_FACTOR = 0.03;

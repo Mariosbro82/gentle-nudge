@@ -17,32 +17,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Debug logging
-        console.log("AuthProvider mounted");
-        console.log("Current URL:", window.location.href);
-
-        // Get initial session
-        supabase.auth.getSession().then(({ data: { session }, error }) => {
-            if (error) console.error("Error getting session:", error);
-            if (session) console.log("Initial session found:", session.user.email);
-            else console.log("No initial session found");
-
-            setSession(session);
-            setUser(session?.user ?? null);
-            setLoading(false);
-        });
-
-        // Listen for auth changes
+        // Set up auth listener FIRST (before getSession) per Supabase best practices
         const { data: { subscription } } = supabase.auth.onAuthStateChange(
-            (event, session) => {
-                console.log("Auth state change:", event);
-                if (session) console.log("New session user:", session.user.email);
-
+            (_event, session) => {
                 setSession(session);
                 setUser(session?.user ?? null);
                 setLoading(false);
             }
         );
+
+        // Then get initial session
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            setSession(session);
+            setUser(session?.user ?? null);
+            setLoading(false);
+        });
 
         return () => subscription.unsubscribe();
     }, []);
