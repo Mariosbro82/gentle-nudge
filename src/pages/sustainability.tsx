@@ -133,7 +133,7 @@ export default function SustainabilityPage() {
                     </motion.div>
 
                     <h2 className="text-4xl md:text-6xl font-bold mb-8">
-                        1€ pro Artikel
+                        Ein Teil jedes Verkaufs
                     </h2>
                     <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-12">
                         Geht direkt an die <span className="text-red-500 font-semibold">Kinderkrebshilfe Hamburg</span>.

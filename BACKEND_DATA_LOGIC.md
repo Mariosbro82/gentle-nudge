@@ -147,6 +147,7 @@ Stores analytics for every NFC scan.
 - **Onboarding**: Added post-signup onboarding flow with `has_completed_onboarding` flag and `onboarding_data` table.
 - **Analytics System**: Implemented extensive profile view tracking using Edge Functions and `profile_views` table. Replaced simple `view_count` with detailed dashboard analytics (unique visitors, recurring leads, device/country breakdown). Updated `leads` table to track recurring interest.
 - **Deep Analytics Restoration**: Re-implemented `log_profile_view` RPC to correctly track IP addresses and identify recurring visitors (visits > 12h apart). Added NFC Scan analytics to the dashboard.
+- **Marketing Update**: Updated the donation claim on the Sustainability page from "1€ pro Artikel" to "Ein Teil jedes Verkaufs".
 ## 6. Onboarding System
 
 ### `users.has_completed_onboarding` Column

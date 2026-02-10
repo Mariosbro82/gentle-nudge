@@ -3,7 +3,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Create Enums
 CREATE TYPE plan_type AS ENUM ('starter', 'pro', 'enterprise');
-CREATE TYPE chip_mode AS ENUM ('corporate', 'hospitality', 'campaign');
+CREATE TYPE chip_mode AS ENUM ('corporate', 'hospitality', 'campaign', 'lost');
 CREATE TYPE sentiment_type AS ENUM ('hot', 'warm', 'cold');
 
 -- Companies Table

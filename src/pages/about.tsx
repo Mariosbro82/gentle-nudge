@@ -1,10 +1,25 @@
 import { Navbar } from "@/components/marketing/navbar";
 import { Footer } from "@/components/marketing/footer";
-import { motion } from "framer-motion";
-import { Users, Rocket, Heart, Star } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Users, Rocket, Heart, Star, Play, Pause } from "lucide-react";
 import { BentoGrid, BentoCard } from "@/components/marketing/ui/bento-grid";
+import { useState, useRef } from "react";
 
 export default function AboutPage() {
+    const [isPlaying, setIsPlaying] = useState(false);
+    const videoRef = useRef<HTMLVideoElement>(null);
+
+    const togglePlayback = () => {
+        if (videoRef.current) {
+            if (isPlaying) {
+                videoRef.current.pause();
+            } else {
+                videoRef.current.play();
+            }
+            setIsPlaying(!isPlaying);
+        }
+    };
+
     const founders = [
         {
             name: "Tjark Schmitt",
@@ -12,7 +27,7 @@ export default function AboutPage() {
             bio: "Als kreativer Kopf hinter Severmore ist Tjark für das Design und die visuelle Identität der Marke verantwortlich. Sein Ziel ist es, technische Innovation mit ästhetischem Anspruch zu vereinen.",
             future: "Zukünftiger Ingenieurswissenschaftler",
             gradient: "from-blue-500/20 to-cyan-500/20",
-            image: "/images/founders/tjark.png"
+            image: "/images/founders/tjark-portrait.jpg"
         },
         {
             name: "Noah Solaker",
@@ -20,7 +35,7 @@ export default function AboutPage() {
             bio: "Noah leitet die operativen Geschäfte, den Vertrieb und die Kundenbeziehungen. Er setzt auf persönlichen Kontakt statt anonymer E-Commerce-Abwicklung.",
             future: "Zukünftiger BWL-Student",
             gradient: "from-purple-500/20 to-pink-500/20",
-            image: "/images/founders/noah.png"
+            image: "/images/founders/noah-portrait.jpg"
         }
     ];
 
@@ -178,22 +193,35 @@ export default function AboutPage() {
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95 }}
                             whileInView={{ opacity: 1, scale: 1 }}
-                            className="md:col-span-2 md:row-span-2 relative rounded-3xl overflow-hidden group border border-border"
+                            className="md:col-span-2 md:row-span-2 relative rounded-3xl overflow-hidden group border border-border cursor-pointer"
+                            onClick={togglePlayback}
                         >
                             <video
-                                src="/images/journey/behind-the-scenes.mp4"
-                                autoPlay
-                                muted
+                                ref={videoRef}
+                                src="/images/journey/behind-the-scenes-v2.mp4"
                                 loop
                                 playsInline
                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                onPlay={() => setIsPlaying(true)}
+                                onPause={() => setIsPlaying(false)}
                             />
+
+                            {/* Play/Pause Overlay */}
+                            <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${isPlaying ? 'opacity-0 group-hover:opacity-100 bg-black/20' : 'opacity-100 bg-black/40'}`}>
+                                <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white ring-1 ring-white/30 transition-transform duration-300 group-hover:scale-110">
+                                    {isPlaying ? (
+                                        <Pause className="w-8 h-8 fill-white" />
+                                    ) : (
+                                        <Play className="w-8 h-8 fill-white ml-1" />
+                                    )}
+                                </div>
+                            </div>
+
                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-8">
                                 <p className="text-white font-medium text-lg">Work in Progress</p>
-                                <p className="text-white/70 text-sm">Unsere tägliche Vision im Einsatz.</p>
+                                <p className="text-white/70 text-sm">Diese Vision treibt uns täglich an.</p>
                             </div>
                         </motion.div>
-
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95 }}
                             whileInView={{ opacity: 1, scale: 1 }}
@@ -201,12 +229,11 @@ export default function AboutPage() {
                             className="relative rounded-3xl overflow-hidden group border border-border"
                         >
                             <img
-                                src="/images/journey/founders-1.jpg"
+                                src="/images/journey/founders-team-new.jpg"
                                 alt="Founders team"
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
                             />
                         </motion.div>
-
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95 }}
                             whileInView={{ opacity: 1, scale: 1 }}
@@ -214,38 +241,35 @@ export default function AboutPage() {
                             className="relative rounded-3xl overflow-hidden group border border-border"
                         >
                             <img
-                                src="/images/journey/founders-2.jpg"
+                                src="/images/journey/founding-signing.jpg"
                                 alt="Founders collaboration"
                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                             />
                         </motion.div>
-
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95 }}
                             whileInView={{ opacity: 1, scale: 1 }}
                             transition={{ delay: 0.3 }}
-                            className="relative rounded-3xl overflow-hidden group border border-border"
+                            className="md:col-span-2 md:row-span-2 relative rounded-3xl overflow-hidden group border border-border"
                         >
                             <img
-                                src="/images/journey/founders-event-1.jpg"
+                                src="/images/journey/award-ceremony-new.jpg"
                                 alt="Award event"
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
                             />
                         </motion.div>
-
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95 }}
                             whileInView={{ opacity: 1, scale: 1 }}
                             transition={{ delay: 0.4 }}
-                            className="md:col-span-2 relative rounded-3xl overflow-hidden group border border-border"
+                            className="relative rounded-3xl overflow-hidden group border border-border"
                         >
                             <img
-                                src="/images/journey/founders-event-2.jpg"
-                                alt="Severmore event"
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                src="/images/journey/founders-event-1.jpg"
+                                alt="Founders event"
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                             />
                         </motion.div>
-
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95 }}
                             whileInView={{ opacity: 1, scale: 1 }}

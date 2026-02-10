@@ -116,61 +116,61 @@ export default function ShopPage() {
             </section>
 
             {/* Dynamic Tech Specs */}
-            <section className="py-24 px-6 bg-foreground text-background">
+            <section className="py-24 px-6 bg-background text-foreground border-t border-border">
                 <div className="max-w-7xl mx-auto">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                         <div>
-                            <span className="text-blue-400 font-bold tracking-wider uppercase text-sm mb-4 block">Technology</span>
+                            <span className="text-blue-500 font-bold tracking-wider uppercase text-sm mb-4 block">Technology</span>
                             <h2 className="text-4xl md:text-6xl font-bold mb-8">
                                 Intelligenz trifft <br />
                                 Textil.
                             </h2>
-                            <p className="text-lg text-white/70 mb-12 max-w-md leading-relaxed">
+                            <p className="text-lg text-muted-foreground mb-12 max-w-md leading-relaxed">
                                 Jedes Severmore Produkt ist mit einem eigens entwickelten NFC-Chip ausgestattet.
                                 Waschfest, unsichtbar und sofort einsatzbereit.
                             </p>
 
                             <div className="space-y-8">
                                 <div className="flex gap-4 items-start">
-                                    <div className="p-3 rounded-xl bg-white/10 text-white">
+                                    <div className="p-3 rounded-xl bg-blue-500/10 text-blue-500">
                                         <ShieldCheck size={24} />
                                     </div>
                                     <div>
                                         <h4 className="text-xl font-bold mb-1">Waterproof Shield</h4>
-                                        <p className="text-white/60">Zertifiziert waschbar bis 40°C. Hält ein Leben lang.</p>
+                                        <p className="text-muted-foreground">Zertifiziert waschbar bis 40°C. Hält ein Leben lang.</p>
                                     </div>
                                 </div>
                                 <div className="flex gap-4 items-start">
-                                    <div className="p-3 rounded-xl bg-white/10 text-white">
+                                    <div className="p-3 rounded-xl bg-blue-500/10 text-blue-500">
                                         <Smartphone size={24} />
                                     </div>
                                     <div>
                                         <h4 className="text-xl font-bold mb-1">iOS & Android</h4>
-                                        <p className="text-white/60">Keine App nötig. Funktioniert nativ mit allen modernen Smartphones.</p>
+                                        <p className="text-muted-foreground">Keine App nötig. Funktioniert nativ mit allen modernen Smartphones.</p>
                                     </div>
                                 </div>
                                 <div className="flex gap-4 items-start">
-                                    <div className="p-3 rounded-xl bg-white/10 text-white">
+                                    <div className="p-3 rounded-xl bg-blue-500/10 text-blue-500">
                                         <Zap size={24} />
                                     </div>
                                     <div>
                                         <h4 className="text-xl font-bold mb-1">Instant Connect</h4>
-                                        <p className="text-white/60">Teile Socials, Websites oder Kontaktdaten in Millisekunden.</p>
+                                        <p className="text-muted-foreground">Teile Socials, Websites oder Kontaktdaten in Millisekunden.</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div className="relative">
-                            <div className="aspect-square rounded-[3rem] overflow-hidden bg-white/5 border border-white/10 relative">
+                            <div className="aspect-square rounded-[3rem] overflow-hidden bg-muted/50 border border-border relative">
                                 {/* Abstract Visual Representation of the Chip/Tech */}
                                 <div className="absolute inset-0 flex items-center justify-center">
-                                    <div className="w-64 h-64 rounded-full border border-white/20 animate-pulse flex items-center justify-center">
-                                        <div className="w-48 h-48 rounded-full border border-white/40 animate-[spin_10s_linear_infinite] flex items-center justify-center">
+                                    <div className="w-64 h-64 rounded-full border border-blue-500/20 animate-pulse flex items-center justify-center">
+                                        <div className="w-48 h-48 rounded-full border border-blue-500/40 animate-[spin_10s_linear_infinite] flex items-center justify-center">
                                             <div className="w-32 h-32 rounded-full bg-blue-500 blur-[80px]" />
                                         </div>
                                     </div>
                                 </div>
-                                <img src="/assets/shop/closeup.png" alt="Tech Detail" className="relative z-10 w-full h-full object-cover mix-blend-overlay opacity-50" />
+                                <img src="/assets/shop/closeup.png" alt="Tech Detail" className="relative z-10 w-full h-full object-cover mix-blend-overlay dark:mix-blend-normal opacity-50" />
                             </div>
                         </div>
                     </div>

@@ -61,23 +61,60 @@ export default function NfcTapPage() {
                         navigate(`/p/${(chip.assigned_user as any).slug}`, { replace: true });
                     } else if (chip.assigned_user_id) {
                         navigate(`/p/${chip.assigned_user_id}`, { replace: true });
+                    } else {
+                        setError("Chip ist im Corporate-Modus, aber keinem User zugewiesen.");
                     }
                     break;
 
                 case "hospitality":
                     if ((chip.menu_data as any)?.url) {
                         window.location.href = (chip.menu_data as any).url;
-                    } else {
+                    } else if (chip.company_id) {
                         navigate(`/review/${chip.company_id}`, { replace: true });
+                    } else if (chip.assigned_user_id || (chip.assigned_user as any)?.id) {
+                        // Fallback to profile if no company/menu but user is assigned
+                        const targetUser = chip.assigned_user as any;
+                        if (targetUser?.slug) {
+                            navigate(`/p/${targetUser.slug}`, { replace: true });
+                        } else if (chip.assigned_user_id) {
+                            navigate(`/p/${chip.assigned_user_id}`, { replace: true });
+                        } else {
+                            // Should be covered by above, but safe fallback
+                            setError("Hospitality Mode: Kein Menü, keine Firma und kein User gefunden.");
+                        }
+                    } else {
+                        setError("Chip ist im Hospitality-Modus, aber nicht konfiguriert (Kein Menü, Firma oder User).");
                     }
                     break;
 
                 case "campaign":
-                    navigate(`/campaign/${chip.company_id}`, { replace: true });
+                    if (chip.company_id) {
+                        navigate(`/campaign/${chip.company_id}`, { replace: true });
+                    } else if (assignedUser) {
+                        const profilePath = assignedUser.slug ? `/p/${assignedUser.slug}` : `/p/${assignedUser.id}`;
+                        navigate(profilePath, { replace: true });
+                    } else {
+                        setError("Campaign Mode: Keine Kampagne und kein User gefunden.");
+                    }
+                    break;
+
+                case "lost":
+                    if (assignedUser) {
+                        const profilePath = assignedUser.slug ? `/p/${assignedUser.slug}` : `/p/${assignedUser.id}`;
+                        navigate(profilePath, { replace: true });
+                    } else {
+                        setError("Lost Mode: Kein Besitzer zugewiesen.");
+                    }
                     break;
 
                 default:
-                    setError("Unbekannter Modus");
+                    // Universal Fallback for unknown modes or missing config
+                    if (assignedUser) {
+                        const profilePath = assignedUser.slug ? `/p/${assignedUser.slug}` : `/p/${assignedUser.id}`;
+                        navigate(profilePath, { replace: true });
+                    } else {
+                        setError("Unbekannter Modus und kein User zugewiesen.");
+                    }
             }
         }
 
