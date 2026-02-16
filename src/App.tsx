@@ -13,6 +13,7 @@ const DevicesPage = lazy(() => import("@/pages/dashboard/devices"));
 const LeadsPage = lazy(() => import("@/pages/dashboard/leads"));
 const AnalyticsPage = lazy(() => import("@/pages/dashboard/analytics"));
 const SettingsPage = lazy(() => import("@/pages/dashboard/settings"));
+const TeamPage = lazy(() => import("@/pages/dashboard/team"));
 
 // Auth pages
 const LoginPage = lazy(() => import("@/pages/login"));
@@ -29,6 +30,7 @@ const AdminDashboardPage = lazy(() => import("@/pages/admin/dashboard"));
 const AdminUsersPage = lazy(() => import("@/pages/admin/users"));
 const AdminChipsPage = lazy(() => import("@/pages/admin/chips"));
 const AdminAnalyticsPage = lazy(() => import("@/pages/admin/analytics"));
+const AdminOrganizationsPage = lazy(() => import("@/pages/admin/organizations"));
 const AdminSupportPage = lazy(() => import("@/pages/admin/support"));
 
 // NFC public pages
@@ -145,6 +147,7 @@ export default function App() {
                             <Route path="users" element={<Suspense fallback={<PageLoader />}><AdminUsersPage /></Suspense>} />
                             <Route path="chips" element={<Suspense fallback={<PageLoader />}><AdminChipsPage /></Suspense>} />
                             <Route path="analytics" element={<Suspense fallback={<PageLoader />}><AdminAnalyticsPage /></Suspense>} />
+                            <Route path="organizations" element={<Suspense fallback={<PageLoader />}><AdminOrganizationsPage /></Suspense>} />
                             <Route path="support" element={<Suspense fallback={<PageLoader />}><AdminSupportPage /></Suspense>} />
                             {/* Redirect /admin to /admin/dashboard */}
                             <Route index element={<Navigate to="/admin/dashboard" replace />} />
@@ -165,6 +168,7 @@ export default function App() {
                         <Route path="leads" element={<LeadsPage />} />
                         <Route path="analytics" element={<AnalyticsPage />} />
                         <Route path="settings" element={<SettingsPage />} />
+                        <Route path="team" element={<TeamPage />} />
                     </Route>
                 </Routes>
             </AuthProvider>
