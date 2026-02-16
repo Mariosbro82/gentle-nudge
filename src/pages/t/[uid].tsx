@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { supabase } from "@/lib/supabase/client";
 
 export default function NfcTapPage() {
     const { uid } = useParams<{ uid: string }>();
@@ -16,106 +15,42 @@ export default function NfcTapPage() {
                 return;
             }
 
-            // Fetch chip data
-            const { data: chip, error: fetchError } = await supabase
-                .from("chips")
-                .select(`*, company:companies(*), assigned_user:users(*)`)
-                .eq("uid", uid)
-                .single();
-
-            if (fetchError || !chip) {
-                setError("Chip nicht erkannt");
-                setLoading(false);
-                return;
-            }
-
-            // Log scan (non-blocking)
             try {
-                await supabase.from("scans").insert({
-                    chip_id: chip.id,
-                    scanned_at: new Date().toISOString(),
-                });
-            } catch (e) {
-                console.error("Failed to log scan", e);
-            }
+                const response = await fetch(
+                    `https://owxuoejwnxspzuleeyqi.supabase.co/functions/v1/scan?uid=${encodeURIComponent(uid)}`,
+                    {
+                        method: "GET",
+                        headers: {
+                            "Accept": "application/json",
+                            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im93eHVvZWp3bnhzcHp1bGVleXFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA2NzM4NDgsImV4cCI6MjA4NjI0OTg0OH0.snwR-UPW1Qrm_pqT6qSWVmAYHR5nsL1-xaxwz9LZotA",
+                            "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im93eHVvZWp3bnhzcHp1bGVleXFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA2NzM4NDgsImV4cCI6MjA4NjI0OTg0OH0.snwR-UPW1Qrm_pqT6qSWVmAYHR5nsL1-xaxwz9LZotA",
+                        },
+                    }
+                );
 
-            // Ghost mode check - always route to profile page so ghost page renders
-            const assignedUser = chip.assigned_user as any;
-            if (assignedUser?.ghost_mode) {
-                const ghostUntil = assignedUser.ghost_mode_until;
-                const isStillGhosted = !ghostUntil || new Date(ghostUntil) > new Date();
+                const data = await response.json();
 
-                if (isStillGhosted) {
-                    const profilePath = assignedUser.slug
-                        ? `/p/${assignedUser.slug}`
-                        : `/p/${assignedUser.id}`;
-                    navigate(profilePath, { replace: true });
+                if (!response.ok) {
+                    setError(data.error === "chip_not_found" ? "Chip nicht erkannt" : (data.error || "Fehler beim Laden"));
+                    setLoading(false);
                     return;
                 }
+
+                if (data.redirect) {
+                    if (data.external) {
+                        window.location.href = data.redirect;
+                    } else {
+                        navigate(data.redirect, { replace: true });
+                    }
+                    return;
+                }
+
+                setError("Chip nicht erkannt");
+            } catch (e) {
+                console.error("NFC tap error:", e);
+                setError("Verbindungsfehler");
             }
-
-            // Route based on mode
-            switch (chip.active_mode) {
-                case "corporate":
-                    if ((chip.assigned_user as any)?.slug) {
-                        navigate(`/p/${(chip.assigned_user as any).slug}`, { replace: true });
-                    } else if (chip.assigned_user_id) {
-                        navigate(`/p/${chip.assigned_user_id}`, { replace: true });
-                    } else {
-                        setError("Chip ist im Corporate-Modus, aber keinem User zugewiesen.");
-                    }
-                    break;
-
-                case "hospitality":
-                    if ((chip.menu_data as any)?.url) {
-                        window.location.href = (chip.menu_data as any).url;
-                    } else if (chip.company_id) {
-                        navigate(`/review/${chip.company_id}`, { replace: true });
-                    } else if (chip.assigned_user_id || (chip.assigned_user as any)?.id) {
-                        // Fallback to profile if no company/menu but user is assigned
-                        const targetUser = chip.assigned_user as any;
-                        if (targetUser?.slug) {
-                            navigate(`/p/${targetUser.slug}`, { replace: true });
-                        } else if (chip.assigned_user_id) {
-                            navigate(`/p/${chip.assigned_user_id}`, { replace: true });
-                        } else {
-                            // Should be covered by above, but safe fallback
-                            setError("Hospitality Mode: Kein Menü, keine Firma und kein User gefunden.");
-                        }
-                    } else {
-                        setError("Chip ist im Hospitality-Modus, aber nicht konfiguriert (Kein Menü, Firma oder User).");
-                    }
-                    break;
-
-                case "campaign":
-                    if (chip.company_id) {
-                        navigate(`/campaign/${chip.company_id}`, { replace: true });
-                    } else if (assignedUser) {
-                        const profilePath = assignedUser.slug ? `/p/${assignedUser.slug}` : `/p/${assignedUser.id}`;
-                        navigate(profilePath, { replace: true });
-                    } else {
-                        setError("Campaign Mode: Keine Kampagne und kein User gefunden.");
-                    }
-                    break;
-
-                case "lost":
-                    if (assignedUser) {
-                        const profilePath = assignedUser.slug ? `/p/${assignedUser.slug}` : `/p/${assignedUser.id}`;
-                        navigate(profilePath, { replace: true });
-                    } else {
-                        setError("Lost Mode: Kein Besitzer zugewiesen.");
-                    }
-                    break;
-
-                default:
-                    // Universal Fallback for unknown modes or missing config
-                    if (assignedUser) {
-                        const profilePath = assignedUser.slug ? `/p/${assignedUser.slug}` : `/p/${assignedUser.id}`;
-                        navigate(profilePath, { replace: true });
-                    } else {
-                        setError("Unbekannter Modus und kein User zugewiesen.");
-                    }
-            }
+            setLoading(false);
         }
 
         handleTap();
@@ -123,21 +58,21 @@ export default function NfcTapPage() {
 
     if (error) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-black text-white p-4 text-center">
+            <div className="min-h-screen flex items-center justify-center bg-background text-foreground p-4 text-center">
                 <div>
-                    <h1 className="text-2xl font-bold mb-2 text-red-500">{error}</h1>
-                    <p className="text-zinc-400">Dieser NFC-Tag ist nicht registriert oder inaktiv.</p>
-                    <p className="mt-4 text-xs text-zinc-600">UID: {uid}</p>
+                    <h1 className="text-2xl font-bold mb-2 text-destructive">{error}</h1>
+                    <p className="text-muted-foreground">Dieser NFC-Tag ist nicht registriert oder inaktiv.</p>
+                    <p className="mt-4 text-xs text-muted-foreground/50">UID: {uid}</p>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-black text-white p-4">
+        <div className="min-h-screen flex items-center justify-center bg-background text-foreground p-4">
             <div className="flex items-center gap-3">
-                <div className="h-6 w-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
-                <span className="text-zinc-400">Lädt...</span>
+                <div className="h-6 w-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                <span className="text-muted-foreground">Lädt...</span>
             </div>
         </div>
     );
