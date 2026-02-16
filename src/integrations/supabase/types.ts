@@ -852,6 +852,7 @@ export type Database = {
       get_org_member_ids: { Args: never; Returns: string[] }
       get_user_id_from_auth: { Args: never; Returns: string }
       get_user_org_id: { Args: never; Returns: string }
+      get_user_organization_ids: { Args: never; Returns: string[] }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -861,6 +862,7 @@ export type Database = {
       }
       is_admin: { Args: never; Returns: boolean }
       is_org_admin: { Args: never; Returns: boolean }
+      is_org_admin_of: { Args: { org_id: string }; Returns: boolean }
       log_profile_view: {
         Args: {
           p_country: string
