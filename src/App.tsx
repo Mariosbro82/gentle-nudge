@@ -14,6 +14,7 @@ const LeadsPage = lazy(() => import("@/pages/dashboard/leads"));
 const AnalyticsPage = lazy(() => import("@/pages/dashboard/analytics"));
 const SettingsPage = lazy(() => import("@/pages/dashboard/settings"));
 const TeamPage = lazy(() => import("@/pages/dashboard/team"));
+const TopPerformersPage = lazy(() => import("@/pages/dashboard/top-performers"));
 
 // Auth pages
 const LoginPage = lazy(() => import("@/pages/login"));
@@ -169,6 +170,7 @@ export default function App() {
                         <Route path="analytics" element={<AnalyticsPage />} />
                         <Route path="settings" element={<SettingsPage />} />
                         <Route path="team" element={<TeamPage />} />
+                        <Route path="top-performers" element={<TopPerformersPage />} />
                     </Route>
                 </Routes>
             </AuthProvider>

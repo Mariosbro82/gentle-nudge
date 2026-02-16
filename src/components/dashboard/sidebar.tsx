@@ -9,6 +9,7 @@ import {
     LogOut,
     BarChart,
     UsersRound,
+    Trophy,
     X
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -25,6 +26,7 @@ export function AdminSidebar({ onClose }: { onClose?: () => void }) {
         { href: "/dashboard/leads", label: "Kontakte", icon: Users },
         { href: "/dashboard/analytics", label: "Analyse", icon: BarChart },
         { href: "/dashboard/team", label: "Team", icon: UsersRound },
+        { href: "/dashboard/top-performers", label: "Top Performer", icon: Trophy },
         { href: "/dashboard/settings", label: "Einstellungen", icon: Settings },
     ];
 
