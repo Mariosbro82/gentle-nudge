@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { Users, LayoutDashboard, Database, BarChart3, HelpCircle, LogOut, ShieldAlert, Menu } from "lucide-react";
+import { Users, LayoutDashboard, Database, BarChart3, HelpCircle, LogOut, ShieldAlert, Menu, Building2 } from "lucide-react";
 import { useAuth } from "@/contexts/auth-context";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ const NAV_ITEMS = [
     { label: "Users", icon: Users, href: "/admin/users" },
     { label: "Chips", icon: Database, href: "/admin/chips" },
     { label: "Analytics", icon: BarChart3, href: "/admin/analytics" },
+    { label: "Organizations", icon: Building2, href: "/admin/organizations" },
     { label: "Support", icon: HelpCircle, href: "/admin/support" },
 ];
 
