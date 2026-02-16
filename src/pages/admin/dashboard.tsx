@@ -208,8 +208,8 @@ export default function AdminDashboardPage() {
     return (
         <div className="p-8 space-y-8">
             <header>
-                <h1 className="text-3xl font-bold text-white tracking-tight">Dashboard Overview</h1>
-                <p className="text-zinc-400">Welcome back, {adminProfile?.full_name || adminProfile?.email || 'Admin'}.</p>
+                <h1 className="text-2xl font-bold text-zinc-100 tracking-tight font-mono">Dashboard Overview</h1>
+                <p className="text-zinc-500 text-sm">Welcome back, {adminProfile?.full_name || adminProfile?.email || 'Admin'}.</p>
             </header>
 
             {/* KPI Grid */}

@@ -40,10 +40,10 @@ export function AdminRoute() {
 
     if (authLoading || checkingRole) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-zinc-950 text-zinc-400">
+            <div className="min-h-screen flex items-center justify-center bg-[#0a0a0f] text-zinc-500 font-mono">
                 <div className="flex flex-col items-center gap-4">
-                    <div className="h-8 w-8 border-2 border-zinc-500 border-t-transparent rounded-full animate-spin" />
-                    <p className="text-sm font-mono">Verifying Access Level 4...</p>
+                    <div className="h-8 w-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+                    <p className="text-xs tracking-widest uppercase">Authenticating...</p>
                 </div>
             </div>
         );
