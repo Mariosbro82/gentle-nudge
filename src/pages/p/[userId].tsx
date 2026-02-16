@@ -16,12 +16,12 @@ export default function ProfilePage() {
         async function fetchUser() {
             if (!userId) return;
 
-            // Try to fetch by slug first
-            let { data } = await supabase.from("users").select("*").eq("slug", userId).single();
+            // Use public_profiles view to avoid exposing sensitive fields
+            let { data } = await supabase.from("public_profiles" as any).select("*").eq("slug", userId).single();
 
             // If not found by slug, try by ID
             if (!data) {
-                const result = await supabase.from("users").select("*").eq("id", userId).single();
+                const result = await supabase.from("public_profiles" as any).select("*").eq("id", userId).single();
                 data = result.data;
             }
 
