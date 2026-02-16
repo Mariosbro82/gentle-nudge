@@ -27,6 +27,7 @@ interface PublicProfile {
     phone: string | null;
     background_image: string | null;
     background_color: string | null;
+    banner_color: string | null;
 }
 
 export default function ProfilePage() {
@@ -69,6 +70,7 @@ export default function ProfilePage() {
                     ghostModeUntil: data.ghost_mode_until || null,
                     backgroundImage: data.background_image || "",
                     backgroundColor: data.background_color || "#0a0a0a",
+                    bannerColor: data.banner_color || "#4f46e5",
                 });
             } else {
                 setError(true);

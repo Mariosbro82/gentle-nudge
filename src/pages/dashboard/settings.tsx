@@ -170,6 +170,11 @@ export default function SettingsPage() {
         if (!error) setUser({ ...user, background_image: null });
     }
 
+    async function handleBannerColorSave(color: string) {
+        if (!authUser) return;
+        await supabase.from("users").update({ banner_color: color, updated_at: new Date().toISOString() } as any).eq("auth_user_id", authUser.id);
+    }
+
     if (loading) {
         return (
             <div className="flex items-center justify-center h-64">
@@ -391,6 +396,39 @@ export default function SettingsPage() {
                         <p className="text-xs text-muted-foreground">
                             Das Hintergrundbild wird hinter der Profilkarte angezeigt. Empfohlene Größe: 1080x1920px.
                         </p>
+                    </div>
+
+                    {/* Banner Color */}
+                    <div className="space-y-2">
+                        <Label htmlFor="banner-color">Banner-Farbe</Label>
+                        <p className="text-xs text-muted-foreground">Wird als farbiger Banner angezeigt, wenn kein Banner-Bild hochgeladen ist.</p>
+                        <div className="flex items-center gap-3">
+                            <input
+                                type="color"
+                                id="banner-color"
+                                value={user?.banner_color || "#4f46e5"}
+                                onChange={(e) => {
+                                    setUser({ ...user, banner_color: e.target.value });
+                                    handleBannerColorSave(e.target.value);
+                                }}
+                                className="w-12 h-10 rounded-lg border border-border cursor-pointer bg-transparent"
+                            />
+                            <span className="text-sm text-muted-foreground font-mono">{user?.banner_color || "#4f46e5"}</span>
+                            <div className="flex gap-2 ml-auto">
+                                {["#4f46e5", "#2563eb", "#7c3aed", "#dc2626", "#059669", "#d97706"].map((color) => (
+                                    <button
+                                        key={color}
+                                        type="button"
+                                        className={`w-8 h-8 rounded-full border-2 transition-all ${user?.banner_color === color ? "border-blue-500 scale-110" : "border-border hover:border-zinc-400"}`}
+                                        style={{ backgroundColor: color }}
+                                        onClick={() => {
+                                            setUser({ ...user, banner_color: color });
+                                            handleBannerColorSave(color);
+                                        }}
+                                    />
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </CardContent>
             </Card>

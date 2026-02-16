@@ -15,6 +15,7 @@ export interface ProfileUser {
     ghostModeUntil: string | null;
     backgroundImage: string;
     backgroundColor: string;
+    bannerColor: string;
 }
 
 export interface TemplateProps {

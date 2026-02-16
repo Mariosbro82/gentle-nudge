@@ -549,6 +549,7 @@ export type Database = {
           auth_user_id: string | null
           background_color: string | null
           background_image: string | null
+          banner_color: string | null
           banner_pic: string | null
           bio: string | null
           company_id: string | null
@@ -584,6 +585,7 @@ export type Database = {
           auth_user_id?: string | null
           background_color?: string | null
           background_image?: string | null
+          banner_color?: string | null
           banner_pic?: string | null
           bio?: string | null
           company_id?: string | null
@@ -619,6 +621,7 @@ export type Database = {
           auth_user_id?: string | null
           background_color?: string | null
           background_image?: string | null
+          banner_color?: string | null
           banner_pic?: string | null
           bio?: string | null
           company_id?: string | null
@@ -785,6 +788,7 @@ export type Database = {
           active_template: string | null
           background_color: string | null
           background_image: string | null
+          banner_color: string | null
           banner_pic: string | null
           bio: string | null
           company_name: string | null
@@ -806,6 +810,7 @@ export type Database = {
           active_template?: string | null
           background_color?: string | null
           background_image?: string | null
+          banner_color?: string | null
           banner_pic?: string | null
           bio?: string | null
           company_name?: string | null
@@ -827,6 +832,7 @@ export type Database = {
           active_template?: string | null
           background_color?: string | null
           background_image?: string | null
+          banner_color?: string | null
           banner_pic?: string | null
           bio?: string | null
           company_name?: string | null
