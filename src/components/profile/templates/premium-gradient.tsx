@@ -18,7 +18,7 @@ export function PremiumGradientTemplate({ user }: TemplateProps) {
                     style={{ backgroundImage: `url(${user.banner})` }}
                 />
             ) : (
-                <div className="h-44 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600" />
+                <div className="h-44" style={{ background: `linear-gradient(135deg, ${user.bannerColor || '#4f46e5'}, ${user.bannerColor || '#4f46e5'}88)` }} />
             )}
 
             {/* Profile Card */}
