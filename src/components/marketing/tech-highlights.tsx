@@ -4,10 +4,10 @@ import { Cpu, ShieldCheck, Zap, Smartphone } from "lucide-react";
 
 export function TechHighlights() {
     const features = [
-        { icon: <Cpu />, title: "Secure Element (NTAG 424 DNA)", desc: "AES-128 verschlüsselter NFC-Controller mit Anti-Cloning Protection. Tamper-proof Hardware auf Enterprise-Level." },
-        { icon: <ShieldCheck />, title: "SUN Authentication Protocol", desc: "Secure Unique NFC – jeder Tap generiert einen kryptographischen One-Time-Code. Server-side Verification in <50ms." },
-        { icon: <Smartphone />, title: "Zero-App Architecture", desc: "Native NFC-Kompatibilität via ISO 14443-4. Kein App-Download, kein Onboarding-Friction – Plug & Tap." },
-        { icon: <Zap />, title: "Dynamic URL Routing Engine", desc: "Cloud-basiertes Redirect-Management mit Conditional Logic. A/B-Testing, Geo-Rules und Time-Based Targeting über das SaaS-Dashboard." }
+        { icon: <Cpu />, title: "NTAG 424 DNA Chip", desc: "AES-128 verschlüsselter NFC-Controller mit Anti-Cloning Schutz. Der sicherste Consumer-NFC-Chip am Markt." },
+        { icon: <ShieldCheck />, title: "SUN-Authentifizierung", desc: "Secure Unique NFC – jeder Tap generiert einen einzigartigen Code. Echtheit wird serverseitig in Millisekunden verifiziert." },
+        { icon: <Smartphone />, title: "Ohne App", desc: "Funktioniert nativ mit allen modernen iPhones und Android-Geräten. Kein Download, kein Onboarding-Aufwand." },
+        { icon: <Zap />, title: "Dynamic Routing", desc: "Ändere das Ziel des Chips jederzeit über das Dashboard. Von Visitenkarte zu Landingpage – mit einem Klick." }
     ];
 
     return (

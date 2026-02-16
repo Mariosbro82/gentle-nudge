@@ -44,7 +44,7 @@ export function TrustSection() {
                         viewport={{ once: true }}
                         className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-foreground to-muted-foreground mb-6"
                     >
-                        Trust by Design.<br />Security by Default.
+                        Vertrauen ist gut.<br />Technologie ist besser.
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
@@ -53,7 +53,7 @@ export function TrustSection() {
                         transition={{ delay: 0.1 }}
                         className="text-muted-foreground text-lg"
                     >
-                        Enterprise-Grade Compliance, Privacy-First Architecture und Industrial Durability.
+                        Höchste Standards bei Sicherheit, Datenschutz und Langlebigkeit.
                     </motion.p>
                 </div>
 
@@ -62,8 +62,8 @@ export function TrustSection() {
                     {/* 1. DSGVO / Privacy Icon */}
                     <TrustCard
                         delay={0.1}
-                        title="DSGVO & Data Sovereignty"
-                        description="Vollständig DSGVO-konform mit EU-Hosting. End-to-End Encryption, Data Residency in Deutschland und SOC 2 Type II konforme Infrastruktur."
+                        title="DSGVO-konform"
+                        description="Vollständig DSGVO-konform mit EU-Hosting. Verschlüsselte Datenübertragung, Serverstandort Deutschland und höchste Sicherheitsstandards."
                         icon={
                             <svg viewBox="0 0 24 24" className="w-10 h-10 text-blue-500" fill="none" stroke="currentColor" strokeWidth="1.5">
                                 <motion.path
@@ -88,7 +88,7 @@ export function TrustSection() {
                     <TrustCard
                         delay={0.2}
                         title="Ghost Mode™"
-                        description="Granulare Privacy Controls mit Opt-in/Opt-out Toggle. Temporäre oder permanente Device-Deaktivierung – User-centric Data Governance."
+                        description="Du entscheidest, wann du sichtbar bist. Mit einem Klick deaktivierst du deinen Chip temporär oder dauerhaft. Volle Kontrolle über deine Daten."
                         icon={
                             <svg viewBox="0 0 24 24" className="w-10 h-10 text-purple-500" fill="none" stroke="currentColor" strokeWidth="1.5">
                                 <motion.path
@@ -118,8 +118,8 @@ export function TrustSection() {
                     {/* 3. Washing Guarantee Icon */}
                     <TrustCard
                         delay={0.3}
-                        title="365-Day Durability SLA"
-                        description="IP67-rated NFC-Module mit garantierter Funktionalität über 500+ Industriewaschzyklen. Hardware Warranty inklusive."
+                        title="365 Tage Wasch-Garantie"
+                        description="Unsere NFC-Module überstehen 500+ Waschzyklen. Wir garantieren 365 Tage volle Funktionalität – inklusive Hardware-Warranty."
                         icon={
                             <svg viewBox="0 0 24 24" className="w-10 h-10 text-cyan-400" fill="none" stroke="currentColor" strokeWidth="1.5">
                                 {/* Water drop shape */}

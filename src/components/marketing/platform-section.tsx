@@ -5,23 +5,23 @@ export function PlatformSection() {
     const features = [
         {
             icon: <Laptop className="w-8 h-8 text-blue-400" />,
-            title: "Multi-Tenant Dashboard",
-            description: "Fleet Management für alle Wearables. Role-Based Access, Bulk-Provisioning und Real-Time Device Status auf einer Plattform."
+            title: "Zentrales Dashboard",
+            description: "Verwalte alle Geräte an einem Ort. Mitarbeiter zuweisen, Modi ändern und den Status in Echtzeit überwachen."
         },
         {
             icon: <Zap className="w-8 h-8 text-yellow-400" />,
-            title: "OTA-Updates",
-            description: "Over-the-Air Configuration Changes mit Zero Downtime. Instant Deployment ohne App-Dependency."
+            title: "Instant Updates",
+            description: "Änderungen sind sofort live – Over-the-Air, ohne App-Installation. Einfach tappen und erleben."
         },
         {
             icon: <Share2 className="w-8 h-8 text-purple-400" />,
-            title: "API-First Integrations",
-            description: "RESTful API & Webhook-Layer für nahtlose CRM-, ERP- und Marketing-Automation-Anbindung. Salesforce, HubSpot, Zapier-ready."
+            title: "API & Integrationen",
+            description: "REST-API und Webhooks für nahtlose Anbindung an CRM, ERP und Marketing-Tools. Salesforce, HubSpot & Zapier-ready."
         },
         {
             icon: <BarChart3 className="w-8 h-8 text-green-400" />,
-            title: "Business Intelligence",
-            description: "Granulare KPI-Dashboards mit Scan-Analytics, Lead-Attribution und Conversion-Tracking. Exportierbar als CSV oder via API."
+            title: "Analytics & Reporting",
+            description: "Detaillierte KPI-Dashboards mit Scan-Analytics, Lead-Attribution und Conversion-Tracking."
         }
     ];
 
@@ -34,7 +34,7 @@ export function PlatformSection() {
                         Die Severmore Cloud™
                     </h2>
                     <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                        End-to-End Wearable Management als Cloud-native SaaS.
+                        Wearable Management als Cloud-native SaaS-Plattform.
                     </p>
                 </div>
 
