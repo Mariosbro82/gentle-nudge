@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ExternalLink, Loader2 } from "lucide-react";
+import { ExternalLink, Loader2, Upload, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -68,6 +68,7 @@ export default function SettingsPage() {
             website: formData.get("website") as string,
             linkedin_url: formData.get("linkedin") as string,
             active_template: activeTemplate,
+            background_color: formData.get("background_color") as string || "#0a0a0a",
             updated_at: new Date().toISOString(),
         };
 
@@ -143,6 +144,30 @@ export default function SettingsPage() {
             setUser({ ...user, ghost_mode: enabled, ghost_mode_until: until });
         }
         setGhostSaving(false);
+    }
+
+    async function handleBackgroundColorSave(color: string) {
+        if (!authUser) return;
+        await supabase.from("users").update({ background_color: color, updated_at: new Date().toISOString() } as any).eq("auth_user_id", authUser.id);
+    }
+
+    async function handleBackgroundImageUpload(file: File | undefined | null) {
+        if (!file || !authUser) return;
+        const ext = file.name.split(".").pop();
+        const path = `${authUser.id}/background.${ext}`;
+        const { error: uploadError } = await supabase.storage.from("profile-images").upload(path, file, { upsert: true });
+        if (uploadError) { alert(`Upload fehlgeschlagen: ${uploadError.message}`); return; }
+        const { data: urlData } = supabase.storage.from("profile-images").getPublicUrl(path);
+        const url = urlData.publicUrl + `?t=${Date.now()}`;
+        const { error } = await supabase.from("users").update({ background_image: url, updated_at: new Date().toISOString() } as any).eq("auth_user_id", authUser.id);
+        if (error) { alert(error.message); return; }
+        setUser({ ...user, background_image: url });
+    }
+
+    async function handleBackgroundImageRemove() {
+        if (!authUser) return;
+        const { error } = await supabase.from("users").update({ background_image: null, updated_at: new Date().toISOString() } as any).eq("auth_user_id", authUser.id);
+        if (!error) setUser({ ...user, background_image: null });
     }
 
     if (loading) {
@@ -292,6 +317,81 @@ export default function SettingsPage() {
                     <p className="text-xs text-muted-foreground mt-3">
                         Klicken Sie &quot;Profil Speichern&quot; oben, um die Vorlage zu übernehmen.
                     </p>
+                </CardContent>
+            </Card>
+
+            {/* Background Settings */}
+            <Card className="bg-card border-border">
+                <CardHeader>
+                    <CardTitle>Profil-Hintergrund</CardTitle>
+                    <CardDescription>Wählen Sie eine Hintergrundfarbe oder laden Sie ein Hintergrundbild für Ihr Profil hoch.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                    {/* Background Color */}
+                    <div className="space-y-2">
+                        <Label htmlFor="bg-color">Hintergrundfarbe</Label>
+                        <div className="flex items-center gap-3">
+                            <input
+                                type="color"
+                                id="bg-color"
+                                value={user?.background_color || "#0a0a0a"}
+                                onChange={(e) => {
+                                    setUser({ ...user, background_color: e.target.value });
+                                    handleBackgroundColorSave(e.target.value);
+                                }}
+                                className="w-12 h-10 rounded-lg border border-border cursor-pointer bg-transparent"
+                            />
+                            <span className="text-sm text-muted-foreground font-mono">{user?.background_color || "#0a0a0a"}</span>
+                            <div className="flex gap-2 ml-auto">
+                                {["#0a0a0a", "#1a1a2e", "#0f172a", "#1c1917", "#052e16"].map((color) => (
+                                    <button
+                                        key={color}
+                                        type="button"
+                                        className={`w-8 h-8 rounded-full border-2 transition-all ${user?.background_color === color ? "border-blue-500 scale-110" : "border-border hover:border-zinc-400"}`}
+                                        style={{ backgroundColor: color }}
+                                        onClick={() => {
+                                            setUser({ ...user, background_color: color });
+                                            handleBackgroundColorSave(color);
+                                        }}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Background Image */}
+                    <div className="space-y-2">
+                        <Label>Hintergrundbild</Label>
+                        {user?.background_image ? (
+                            <div className="relative rounded-xl overflow-hidden border border-border">
+                                <img src={user.background_image} alt="Background" className="w-full h-32 object-cover" />
+                                <Button
+                                    variant="destructive"
+                                    size="sm"
+                                    className="absolute top-2 right-2"
+                                    onClick={() => handleBackgroundImageRemove()}
+                                >
+                                    <X className="h-4 w-4 mr-1" /> Entfernen
+                                </Button>
+                            </div>
+                        ) : (
+                            <div>
+                                <label className="flex flex-col items-center justify-center h-28 rounded-xl border-2 border-dashed border-border hover:border-zinc-400 cursor-pointer transition-colors">
+                                    <Upload className="h-6 w-6 text-muted-foreground mb-2" />
+                                    <span className="text-sm text-muted-foreground">Bild hochladen</span>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        className="hidden"
+                                        onChange={(e) => handleBackgroundImageUpload(e.target.files?.[0])}
+                                    />
+                                </label>
+                            </div>
+                        )}
+                        <p className="text-xs text-muted-foreground">
+                            Das Hintergrundbild wird hinter der Profilkarte angezeigt. Empfohlene Größe: 1080x1920px.
+                        </p>
+                    </div>
                 </CardContent>
             </Card>
 

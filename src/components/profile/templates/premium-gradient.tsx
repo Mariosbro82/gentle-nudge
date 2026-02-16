@@ -5,8 +5,12 @@ import type { TemplateProps } from "@/types/profile";
 import { ensureAbsoluteUrl } from "@/lib/utils";
 
 export function PremiumGradientTemplate({ user }: TemplateProps) {
+    const bgStyle: React.CSSProperties = user.backgroundImage
+        ? { backgroundImage: `url(${user.backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+        : { backgroundColor: user.backgroundColor || '#000000' };
+
     return (
-        <div className="min-h-screen bg-black text-white">
+        <div className="min-h-screen text-white" style={bgStyle}>
             {/* Banner */}
             {user.banner ? (
                 <div

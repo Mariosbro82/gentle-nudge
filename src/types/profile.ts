@@ -13,6 +13,8 @@ export interface ProfileUser {
     activeTemplate: string;
     ghostMode: boolean;
     ghostModeUntil: string | null;
+    backgroundImage: string;
+    backgroundColor: string;
 }
 
 export interface TemplateProps {

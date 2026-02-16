@@ -4,8 +4,12 @@ import type { TemplateProps } from "@/types/profile";
 import { ensureAbsoluteUrl } from "@/lib/utils";
 
 export function MinimalistCardTemplate({ user }: TemplateProps) {
+    const bgStyle: React.CSSProperties = user.backgroundImage
+        ? { backgroundImage: `url(${user.backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+        : { backgroundColor: user.backgroundColor || '#0a0a0a' };
+
     return (
-        <div className="min-h-screen bg-zinc-950 text-white flex flex-col items-center justify-center px-4 py-12">
+        <div className="min-h-screen text-white flex flex-col items-center justify-center px-4 py-12" style={bgStyle}>
             <div className="w-full max-w-md">
                 {/* Banner strip */}
                 {user.banner && (

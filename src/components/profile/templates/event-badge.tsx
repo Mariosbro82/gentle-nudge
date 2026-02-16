@@ -4,8 +4,12 @@ import type { TemplateProps } from "@/types/profile";
 import { ensureAbsoluteUrl } from "@/lib/utils";
 
 export function EventBadgeTemplate({ user }: TemplateProps) {
+    const bgStyle: React.CSSProperties = user.backgroundImage
+        ? { backgroundImage: `url(${user.backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+        : { backgroundColor: user.backgroundColor || '#09090b' };
+
     return (
-        <div className="min-h-screen bg-zinc-950 text-white">
+        <div className="min-h-screen text-white" style={bgStyle}>
             {/* Event Header Bar */}
             <div className="bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 px-4 py-3">
                 <div className="max-w-lg mx-auto flex items-center justify-between">
