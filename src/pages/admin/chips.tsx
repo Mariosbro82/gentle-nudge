@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
+import { PUBLIC_BASE_URL } from "@/lib/constants";
 import {
     Table,
     TableBody,
@@ -429,7 +430,7 @@ export default function AdminChipsPage() {
                                                 size="sm"
                                                 className="h-8 w-8 p-0 text-zinc-400 hover:text-white"
                                                 onClick={() => {
-                                                    navigator.clipboard.writeText(`${window.location.origin}/t/${chip.uid}`);
+                                                    navigator.clipboard.writeText(`${PUBLIC_BASE_URL}/t/${chip.uid}`);
                                                     alert("Link copied to clipboard");
                                                 }}
                                                 title="Copy Link"
@@ -440,7 +441,7 @@ export default function AdminChipsPage() {
                                                 variant="ghost"
                                                 size="sm"
                                                 className="h-8 w-8 p-0 text-zinc-400 hover:text-white"
-                                                onClick={() => window.open(`${window.location.origin}/t/${chip.uid}`, '_blank')}
+                                                onClick={() => window.open(`${PUBLIC_BASE_URL}/t/${chip.uid}`, '_blank')}
                                                 title="Open Link"
                                             >
                                                 <ExternalLink className="w-4 h-4" />
