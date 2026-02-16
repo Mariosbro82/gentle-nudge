@@ -22,7 +22,7 @@ export function MinimalistCardTemplate({ user }: TemplateProps) {
                 )}
 
                 {/* Card */}
-                <div className={`bg-white/5 ${user.banner ? '' : 'rounded-t-2xl'} rounded-b-3xl p-8 border border-white/5`}>
+                <div className={`bg-zinc-900/95 backdrop-blur-sm ${user.banner ? '' : 'rounded-t-2xl'} rounded-b-3xl p-8 border border-white/10 shadow-2xl shadow-black/50`}>
                     {/* Avatar */}
                     <div className="flex justify-center mb-6">
                         <div className="w-28 h-28 rounded-full bg-zinc-800 flex items-center justify-center text-3xl font-light text-white overflow-hidden ring-2 ring-white/10">
