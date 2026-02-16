@@ -6,6 +6,21 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// SSRF protection: block private/internal IP ranges
+const BLOCKED_HOSTNAME_PATTERNS = [
+  /^localhost$/i,
+  /^127\./,
+  /^0\.0\.0\.0$/,
+  /^10\./,
+  /^192\.168\./,
+  /^172\.(1[6-9]|2[0-9]|3[0-1])\./,
+  /^169\.254\./,
+  /^::1$/,
+  /^fc00:/i,
+  /^fe80:/i,
+  /^\[::1\]$/,
+];
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -20,7 +35,6 @@ serve(async (req) => {
       });
     }
 
-    // Verify the user is authenticated
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_ANON_KEY") ?? "",
@@ -57,6 +71,29 @@ serve(async (req) => {
 
     if (parsed.protocol !== "https:") {
       return new Response(JSON.stringify({ success: false, error: "Nur HTTPS-URLs erlaubt." }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // SSRF protection: block private/internal addresses
+    const hostname = parsed.hostname;
+    if (BLOCKED_HOSTNAME_PATTERNS.some(pattern => pattern.test(hostname))) {
+      return new Response(JSON.stringify({ 
+        success: false, 
+        error: "Webhook-URLs dürfen nicht auf private/interne Adressen verweisen." 
+      }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Block raw IP addresses to prevent DNS rebinding
+    if (/^\d+\.\d+\.\d+\.\d+$/.test(hostname)) {
+      return new Response(JSON.stringify({ 
+        success: false, 
+        error: "Webhook-URLs müssen Domainnamen verwenden, keine IP-Adressen." 
+      }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });

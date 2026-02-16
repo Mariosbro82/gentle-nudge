@@ -6,8 +6,9 @@ const corsHeaders = {
     'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
 }
 
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 Deno.serve(async (req) => {
-    // Handle CORS preflight requests
     if (req.method === 'OPTIONS') {
         return new Response('ok', { headers: corsHeaders })
     }
@@ -20,12 +21,24 @@ Deno.serve(async (req) => {
 
         const { user_id, device_type, user_agent, referrer } = await req.json()
 
+        // Validate user_id is a valid UUID
+        if (!user_id || !UUID_REGEX.test(user_id)) {
+            return new Response(JSON.stringify({ error: 'Invalid or missing user_id' }), {
+                headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+                status: 400,
+            })
+        }
+
+        // Enforce length limits on text fields
+        const sanitizedDeviceType = device_type ? String(device_type).substring(0, 50) : 'unknown';
+        const sanitizedUserAgent = user_agent ? String(user_agent).substring(0, 500) : 'unknown';
+        const sanitizedReferrer = referrer ? String(referrer).substring(0, 500) : '';
+
         // Get IP address
         const ip = req.headers.get('x-forwarded-for')?.split(',')[0] || req.headers.get('cf-connecting-ip') || 'unknown'
 
         // Geo-IP lookup
         let country = 'Unknown'
-        // Skip for local/reserved IPs
         if (ip !== 'unknown' && ip !== '127.0.0.1' && ip !== 'localhost' && !ip.startsWith('192.168.') && !ip.startsWith('10.')) {
             try {
                 const geoResponse = await fetch(`http://ip-api.com/json/${ip}`)
@@ -42,9 +55,9 @@ Deno.serve(async (req) => {
         const { data, error } = await supabase.rpc('log_profile_view', {
             p_user_id: user_id,
             p_ip_address: ip,
-            p_device_type: device_type,
-            p_user_agent: user_agent,
-            p_referrer: referrer,
+            p_device_type: sanitizedDeviceType,
+            p_user_agent: sanitizedUserAgent,
+            p_referrer: sanitizedReferrer,
             p_country: country
         })
 

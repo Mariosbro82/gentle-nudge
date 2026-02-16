@@ -94,6 +94,13 @@ export type Database = {
             foreignKeyName: "chips_assigned_user_id_fkey"
             columns: ["assigned_user_id"]
             isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chips_assigned_user_id_fkey"
+            columns: ["assigned_user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -175,6 +182,13 @@ export type Database = {
             foreignKeyName: "leads_captured_by_user_id_fkey"
             columns: ["captured_by_user_id"]
             isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leads_captured_by_user_id_fkey"
+            columns: ["captured_by_user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -238,6 +252,13 @@ export type Database = {
             foreignKeyName: "onboarding_data_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "onboarding_data_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -281,6 +302,13 @@ export type Database = {
           viewed_at?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "profile_views_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "profile_views_user_id_fkey"
             columns: ["user_id"]
@@ -330,6 +358,27 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
       }
       users: {
         Row: {
@@ -466,6 +515,13 @@ export type Database = {
             foreignKeyName: "webhook_logs_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "webhook_logs_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -473,7 +529,60 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      public_profiles: {
+        Row: {
+          active_template: string | null
+          banner_pic: string | null
+          bio: string | null
+          company_name: string | null
+          ghost_mode: boolean | null
+          ghost_mode_until: string | null
+          id: string | null
+          job_title: string | null
+          linkedin_url: string | null
+          name: string | null
+          profile_pic: string | null
+          slug: string | null
+          social_links: Json | null
+          view_count: number | null
+          website: string | null
+        }
+        Insert: {
+          active_template?: string | null
+          banner_pic?: string | null
+          bio?: string | null
+          company_name?: string | null
+          ghost_mode?: boolean | null
+          ghost_mode_until?: string | null
+          id?: string | null
+          job_title?: string | null
+          linkedin_url?: string | null
+          name?: string | null
+          profile_pic?: string | null
+          slug?: string | null
+          social_links?: Json | null
+          view_count?: number | null
+          website?: string | null
+        }
+        Update: {
+          active_template?: string | null
+          banner_pic?: string | null
+          bio?: string | null
+          company_name?: string | null
+          ghost_mode?: boolean | null
+          ghost_mode_until?: string | null
+          id?: string | null
+          job_title?: string | null
+          linkedin_url?: string | null
+          name?: string | null
+          profile_pic?: string | null
+          slug?: string | null
+          social_links?: Json | null
+          view_count?: number | null
+          website?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       check_slug_availability: {
@@ -490,6 +599,13 @@ export type Database = {
         }[]
       }
       get_user_id_from_auth: { Args: never; Returns: string }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
       is_admin: { Args: never; Returns: boolean }
       log_profile_view: {
         Args: {
@@ -505,6 +621,7 @@ export type Database = {
       test_webhook: { Args: { url: string }; Returns: Json }
     }
     Enums: {
+      app_role: "admin" | "moderator" | "user"
       chip_mode: "corporate" | "hospitality" | "campaign" | "lost"
       plan_type: "starter" | "pro" | "enterprise"
       sentiment_type: "hot" | "warm" | "cold"
@@ -635,6 +752,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_role: ["admin", "moderator", "user"],
       chip_mode: ["corporate", "hospitality", "campaign", "lost"],
       plan_type: ["starter", "pro", "enterprise"],
       sentiment_type: ["hot", "warm", "cold"],

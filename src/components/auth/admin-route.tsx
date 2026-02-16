@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "@/contexts/auth-context";
 import { supabase } from "@/lib/supabase/client";
-import { UserRole } from "@/types/admin";
 
 export function AdminRoute() {
     const { user, loading: authLoading } = useAuth();
@@ -17,19 +16,14 @@ export function AdminRoute() {
             }
 
             try {
-                // Fetch user role from public users table
-                const { data, error } = await supabase
-                    .from('users')
-                    .select('role')
-                    .eq('auth_user_id', user.id)
-                    .single();
+                // Use server-side is_admin() RPC which checks user_roles table
+                const { data, error } = await supabase.rpc('is_admin');
 
                 if (error) {
                     console.error("Error checking admin role:", error);
                     setIsAdmin(false);
                 } else {
-                    const role = data?.role as UserRole;
-                    setIsAdmin(role === 'admin');
+                    setIsAdmin(data === true);
                 }
             } catch (err) {
                 console.error("Unexpected error checking role:", err);
@@ -55,13 +49,7 @@ export function AdminRoute() {
         );
     }
 
-    // If not authenticated or not admin, show 404 to hide the existence of this route
-    // Or redirect to secret login if user is not logged in at all?
-    // User asked for "hidden". If I redirect to login, it reveals the route exists.
-    // But if they are at /admin/dashboard, they probably know it exists.
-    // Use a classic 404 if not admin.
     if (!isAdmin) {
-        // Render a fake 404 page or redirect to home
         return <Navigate to="/" replace />;
     }
 
