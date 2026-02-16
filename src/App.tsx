@@ -83,9 +83,11 @@ function NfcLayout() {
 }
 
 import ScrollToTop from "@/components/ScrollToTop";
+import { PasswordGate } from "@/components/PasswordGate";
 
 export default function App() {
     return (
+        <PasswordGate>
         <ThemeProvider defaultTheme="system">
             <AuthProvider>
                 <ScrollToTop />
@@ -167,5 +169,6 @@ export default function App() {
                 </Routes>
             </AuthProvider>
         </ThemeProvider>
+        </PasswordGate>
     );
 }
