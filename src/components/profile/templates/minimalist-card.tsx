@@ -10,19 +10,19 @@ export function MinimalistCardTemplate({ user }: TemplateProps) {
 
     return (
         <div className="min-h-screen text-white flex flex-col items-center justify-center px-4 py-12" style={bgStyle}>
-            <div className="w-full max-w-md">
+            <div className="w-full max-w-md rounded-3xl overflow-hidden shadow-2xl shadow-black/50 border border-white/10">
                 {/* Banner strip */}
                 {user.banner ? (
                     <div
-                        className="h-24 rounded-t-3xl bg-cover bg-center"
+                        className="h-24 bg-cover bg-center"
                         style={{ backgroundImage: `url(${user.banner})` }}
                     />
                 ) : (
-                    <div className="h-6 rounded-t-3xl" style={{ backgroundColor: user.bannerColor || '#4f46e5' }} />
+                    <div className="h-6" style={{ backgroundColor: user.bannerColor || '#4f46e5' }} />
                 )}
 
                 {/* Card */}
-                <div className={`bg-zinc-900/95 backdrop-blur-sm ${user.banner ? '' : 'rounded-t-2xl'} rounded-b-3xl p-8 border border-white/10 shadow-2xl shadow-black/50`}>
+                <div className="bg-zinc-900/95 backdrop-blur-sm p-8">
                     {/* Avatar */}
                     <div className="flex justify-center mb-6">
                         <div className="w-28 h-28 rounded-full bg-zinc-800 flex items-center justify-center text-3xl font-light text-white overflow-hidden ring-2 ring-white/10">
