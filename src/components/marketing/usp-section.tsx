@@ -6,25 +6,25 @@ export function USPSection() {
         {
             icon: <Monitor className="w-12 h-12 text-blue-400" />,
             title: "Messen & Expos",
-            description: "Verwandle jeden Händedruck in einen Lead. Teile Kataloge und Kontakte direkt per Tap auf das Smartphone deines Gegenübers.",
+            description: "Konvertiere physische Touchpoints in qualifizierte MQLs. Teile Produktkataloge und Kontaktdaten via NFC-Handshake – direkt ins CRM deines Gegenübers.",
             gradient: "from-blue-500/20 to-cyan-500/20"
         },
         {
             icon: <Calendar className="w-12 h-12 text-purple-400" />,
             title: "Events & Festivals",
-            description: "Digitaler Check-in und Networking für Teilnehmer. Teambekleidung wird zur smarten Event-Schnittstelle.",
+            description: "Digitaler Check-in, Attendee-Tracking und Networking-Automation. Team-Wearables werden zur IoT-fähigen Event-Infrastruktur.",
             gradient: "from-purple-500/20 to-pink-500/20"
         },
         {
             icon: <Building2 className="w-12 h-12 text-indigo-400" />,
-            title: "Unternehmen",
-            description: "Corporate Identity neu gedacht. Hochwertige Fashion mit smarten Funktionen für den modernen Arbeitsalltag.",
+            title: "Enterprise",
+            description: "Corporate Identity als SaaS-Layer. White-Label Wearable Solutions mit SSO-Integration, Role-Based Access Control und Fleet Management.",
             gradient: "from-indigo-500/20 to-violet-500/20"
         },
         {
             icon: <Utensils className="w-12 h-12 text-pink-400" />,
-            title: "Gastronomie",
-            description: "Digitale Speisekarten und Social Follows direkt über die Team-Kleidung. Service-Optimierung par excellence.",
+            title: "Gastronomie & Hospitality",
+            description: "Point-of-Service Digitalisierung via Wearable Interface. Automated Review-Funnels, Digital Menus und Contactless Tipping.",
             gradient: "from-pink-500/20 to-rose-500/20"
         }
     ];
@@ -34,10 +34,10 @@ export function USPSection() {
             <div className="container mx-auto px-6">
                 <div className="text-center mb-20">
                     <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-6">
-                        Mehrwert für jede Branche
+                        Vertikale SaaS-Lösungen
                     </h2>
                     <p className="text-xl text-muted-foreground">
-                        Maßgeschneiderte Lösungen für Ihren Erfolg.
+                        Branchenspezifische Wearable-Technologie mit messbarem ROI.
                     </p>
                 </div>
 

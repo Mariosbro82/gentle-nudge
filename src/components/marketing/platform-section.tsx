@@ -5,23 +5,23 @@ export function PlatformSection() {
     const features = [
         {
             icon: <Laptop className="w-8 h-8 text-blue-400" />,
-            title: "Central Dashboard",
-            description: "Verwalte alle Hoodies und Produkte an einem Ort. Weise Mitarbeiter zu und ändere Modi in Sekunden."
+            title: "Multi-Tenant Dashboard",
+            description: "Fleet Management für alle Wearables. Role-Based Access, Bulk-Provisioning und Real-Time Device Status auf einer Plattform."
         },
         {
             icon: <Zap className="w-8 h-8 text-yellow-400" />,
-            title: "Instant Updates",
-            description: "Änderungen sind sofort live. Keine App-Installation nötig. Einfach tappen und erleben."
+            title: "OTA-Updates",
+            description: "Over-the-Air Configuration Changes mit Zero Downtime. Instant Deployment ohne App-Dependency."
         },
         {
             icon: <Share2 className="w-8 h-8 text-purple-400" />,
-            title: "Nahtlose Integration",
-            description: "Verbinde deine CRM-Systeme, Social Media und mehr direkt mit deiner Kleidung."
+            title: "API-First Integrations",
+            description: "RESTful API & Webhook-Layer für nahtlose CRM-, ERP- und Marketing-Automation-Anbindung. Salesforce, HubSpot, Zapier-ready."
         },
         {
             icon: <BarChart3 className="w-8 h-8 text-green-400" />,
-            title: "Deep Analytics",
-            description: "Verstehe, wie deine Marke interagiert. Tracke Scans, Leads und Conversion-Rates."
+            title: "Business Intelligence",
+            description: "Granulare KPI-Dashboards mit Scan-Analytics, Lead-Attribution und Conversion-Tracking. Exportierbar als CSV oder via API."
         }
     ];
 
@@ -34,7 +34,7 @@ export function PlatformSection() {
                         Die Severmore Cloud™
                     </h2>
                     <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                        Eine Plattform für unendliche Möglichkeiten.
+                        End-to-End Wearable Management als Cloud-native SaaS.
                     </p>
                 </div>
 
