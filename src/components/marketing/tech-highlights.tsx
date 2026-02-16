@@ -4,10 +4,10 @@ import { Cpu, ShieldCheck, Zap, Smartphone } from "lucide-react";
 
 export function TechHighlights() {
     const features = [
-        { icon: <Cpu />, title: "Premium Sicherheits-Chip", desc: "Der modernste Chip am Markt (NTAG 424 DNA). Kryptographisch verschlüsselt und unmöglich zu kopieren." },
-        { icon: <ShieldCheck />, title: "SUN Authentifizierung", desc: "Jeder Scan generiert einen einzigartigen Code. Wir verifizieren die Echtheit in Millisekunden." },
-        { icon: <Smartphone />, title: "App-los", desc: "Funktioniert nativ mit allen modernen iPhones und Android Geräten. Keine App nötig." },
-        { icon: <Zap />, title: "Dynamisches Routing", desc: "Ändere das Ziel des Chips jederzeit über das Dashboard. Von Visitenkarte zu Gewinnspiel in einem Klick." }
+        { icon: <Cpu />, title: "Secure Element (NTAG 424 DNA)", desc: "AES-128 verschlüsselter NFC-Controller mit Anti-Cloning Protection. Tamper-proof Hardware auf Enterprise-Level." },
+        { icon: <ShieldCheck />, title: "SUN Authentication Protocol", desc: "Secure Unique NFC – jeder Tap generiert einen kryptographischen One-Time-Code. Server-side Verification in <50ms." },
+        { icon: <Smartphone />, title: "Zero-App Architecture", desc: "Native NFC-Kompatibilität via ISO 14443-4. Kein App-Download, kein Onboarding-Friction – Plug & Tap." },
+        { icon: <Zap />, title: "Dynamic URL Routing Engine", desc: "Cloud-basiertes Redirect-Management mit Conditional Logic. A/B-Testing, Geo-Rules und Time-Based Targeting über das SaaS-Dashboard." }
     ];
 
     return (

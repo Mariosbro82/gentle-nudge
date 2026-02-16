@@ -24,21 +24,21 @@ export function RoiSection() {
                             </blockquote>
 
                             <p>
-                                Wir machen Corporate Fashion messbar. Jede Interaktion wird getrackt, jeder Lead wird erfasst. Sehen Sie live, welcher Mitarbeiter performt und welcher Hoodie den meisten Umsatz generiert.
+                                Wir machen Corporate Fashion datengetrieben. End-to-End Attribution von physischem Touchpoint bis zur Conversion. Granulares Performance-Tracking pro Mitarbeiter, Device und Kampagne – mit vollständigem ROI-Reporting.
                             </p>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
                                 <div className="p-4 rounded-lg bg-card border border-border hover:border-purple-500/30 transition-colors">
                                     <h4 className="flex items-center gap-2 text-foreground font-semibold mb-1">
-                                        <Zap className="text-yellow-400" size={18} /> 60% mehr Leads
+                                        <Zap className="text-yellow-400" size={18} /> +60% Lead Velocity
                                     </h4>
-                                    <p className="text-sm text-muted-foreground">durch friktionslose Erfassung per Tap.</p>
+                                    <p className="text-sm text-muted-foreground">durch Zero-Friction NFC-Capturing am Touchpoint.</p>
                                 </div>
                                 <div className="p-4 rounded-lg bg-card border border-border hover:border-purple-500/30 transition-colors">
                                     <h4 className="flex items-center gap-2 text-foreground font-semibold mb-1">
-                                        <BarChart3 className="text-green-400" size={18} /> 100% Messbar
+                                        <BarChart3 className="text-green-400" size={18} /> Full-Funnel Analytics
                                     </h4>
-                                    <p className="text-sm text-muted-foreground">Volles ROI-Tracking für jedes Event.</p>
+                                    <p className="text-sm text-muted-foreground">End-to-End ROI-Attribution pro Event und Device.</p>
                                 </div>
                             </div>
                         </div>

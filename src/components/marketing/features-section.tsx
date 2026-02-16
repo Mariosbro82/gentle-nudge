@@ -9,28 +9,28 @@ export function FeaturesSection() {
             id: "corporate",
             icon: Briefcase,
             title: "Vertrieb",
-            subtitle: "Vom Hoodie zum Lead-Generator",
-            description: "Digitale Visitenkarte und Lead-Capture für Sales-Teams. Verwandeln Sie jeden Mitarbeiterkontakt in einen CRM-Eintrag.",
+            subtitle: "Vom Wearable zum Lead-Funnel",
+            description: "Automatisiertes Lead-Capturing via NFC-Touchpoint. Jeder physische Kontakt wird zum qualifizierten CRM-Datensatz – mit Zero-Friction User Experience.",
             color: "blue",
-            features: ["Digitale vCard", "2-Way Lead Capture", "LinkedIn Integration", "Recruiting Links"],
+            features: ["Digitale vCard (RFC 6350)", "Bidirektionales Lead-Capturing", "CRM-Pipeline Integration", "Automated Follow-Up Workflows"],
         },
         {
             id: "campaign",
             icon: Megaphone,
-            title: "Events",
-            subtitle: "Marketingkampagnen am Körper",
-            description: "Steuern Sie alle Hoodies zentral für Events. Black Friday, Messen oder Produktlaunches mit einem Klick.",
+            title: "Kampagnen",
+            subtitle: "Omnichannel-Marketing am Körper",
+            description: "Multi-Tenant Kampagnensteuerung über das SaaS-Dashboard. A/B-Testing, Geo-Targeting und zeitgesteuerte Redirects – skalierbar für Enterprise-Rollouts.",
             color: "purple",
-            features: ["Zentrale Event-Steuerung", "Gutschein-Codes", "Countdown Landing Pages", "Zeitgesteuerte Weiterleitung"],
+            features: ["Zentrales Campaign Management", "Dynamic Link Routing", "Conversion-optimierte Landing Pages", "Scheduled Deployment & Rollback"],
         },
         {
             id: "hospitality",
             icon: Utensils,
             title: "Bewertung",
-            subtitle: "5-Sterne ohne Papierkarte",
-            description: " Boosten Sie Google Reviews und Trinkgeld mit einem Scan. Ideal für Service-Personal und Gastronomie.",
+            subtitle: "Review-Automation ohne Medienbruch",
+            description: "Conversion-optimierter Review-Funnel direkt am Point of Service. Steigern Sie Ihre Net Promoter Scores durch friktionsloses Micro-Engagement.",
             color: "orange",
-            features: ["Google Bewertungs-Boost", "Digitale Speisekarte", "TripAdvisor Integration", "Smart Tipping (Stripe)"],
+            features: ["Google Review Funnel", "Digitale Speisekarte (QR-Fallback)", "Multi-Platform Aggregation", "Integrated Payment Gateway (Stripe)"],
         },
     ];
 
@@ -40,10 +40,10 @@ export function FeaturesSection() {
 
                 <div className="text-center mb-16">
                     <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4">
-                        Ein Chip. <span className="text-blue-500">Drei Möglichkeiten.</span>
+                        Ein Chip. <span className="text-blue-500">Drei Use Cases.</span>
                     </h2>
                     <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-                        Wechseln Sie den Modus in Echtzeit über das Severmore Dashboard. Ohne App. Ohne Aufwand.
+                        Mode-Switch in Echtzeit via Cloud Dashboard. Zero-App-Dependency. Plug & Play Deployment.
                     </p>
                 </div>
 

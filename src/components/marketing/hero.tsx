@@ -53,7 +53,7 @@ export function Hero() {
                         </h1>
 
                         <p className="text-xl md:text-3xl font-light text-muted-foreground max-w-2xl mx-auto mb-24 leading-relaxed tracking-wide">
-                            Das Betriebssystem für Corporate Fashion.
+                            Die SaaS-Plattform für Wearable Intelligence.
                         </p>
 
 
