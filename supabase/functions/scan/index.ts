@@ -1,68 +1,63 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-// Setup Supabase client
 const supabaseUrl = Deno.env.get('SUPABASE_URL')!
 const supabaseServiceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey)
 
-// CORS headers
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
 Deno.serve(async (req) => {
-    // Handle CORS
     if (req.method === 'OPTIONS') {
         return new Response('ok', { headers: corsHeaders })
     }
 
     try {
         const url = new URL(req.url)
+        const accept = req.headers.get('accept') || ''
+        const wantsJson = accept.includes('application/json')
 
-        // 1. Get Chip UID from query param or path
-        // Example: /scan?uid=123 or /scan/123
         let chipUid = url.searchParams.get('uid')
         if (!chipUid) {
-            // Try to parse from path if not query param
             const pathParts = url.pathname.split('/')
-            // Assuming path is /functions/v1/scan/[uid]
             if (pathParts.length > 0) {
                 chipUid = pathParts[pathParts.length - 1]
             }
         }
 
         if (!chipUid) {
-            return new Response(JSON.stringify({ error: 'Missing UID' }), {
-                headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-                status: 400
-            })
+            if (wantsJson) {
+                return new Response(JSON.stringify({ error: 'Missing UID' }), {
+                    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+                    status: 400
+                })
+            }
+            return Response.redirect('https://nfcwear.de/?error=missing_uid', 302)
         }
 
-        // 2. Lookup Chip in Database
         const { data: chip, error: chipError } = await supabase
             .from('chips')
-            .select(`
-        *,
-        company:companies(name),
-        assigned_user:users(slug)
-      `)
+            .select(`*, company:companies(name), assigned_user:users(slug, id, ghost_mode, ghost_mode_until)`)
             .eq('uid', chipUid)
             .single()
 
         if (chipError || !chip) {
             console.error('Chip lookup error:', chipError)
-            // Chip not found -> Generic Fallback (e.g., Homepage or "Activate this chip")
-            // For now, let's redirect to a generic "Chip Not Found" or Home
+            if (wantsJson) {
+                return new Response(JSON.stringify({ error: 'chip_not_found' }), {
+                    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+                    status: 404
+                })
+            }
             return Response.redirect('https://nfcwear.de/?error=chip_not_found', 302)
         }
 
-        // 3. Analytics: Log Scan
+        // Log scan
         const userAgent = req.headers.get('user-agent') || 'unknown'
         const ipAddress = req.headers.get('x-forwarded-for') || 'unknown'
-
-        // Simple device type detection
         let deviceType = 'desktop'
         if (/mobile/i.test(userAgent)) deviceType = 'mobile'
         else if (/tablet/i.test(userAgent)) deviceType = 'tablet'
@@ -76,53 +71,96 @@ Deno.serve(async (req) => {
             mode_at_scan: chip.active_mode
         })
 
-        // 4. Routing Logic
-        // Default fallback
-        let redirectUrl = 'https://nfcwear.de'
+        // Build route path (relative, no domain)
+        let routePath = '/'
+        const assignedUser = chip.assigned_user as any
 
-        if (chip.active_mode === 'lost') {
-            // LOST MODE -> Finder Page
-            redirectUrl = `https://nfcwear.de/lost?chip=${chipUid}`
-        } else if (!chip.assigned_user_id) {
-            // UNASSIGNED -> Onboarding
-            redirectUrl = `https://nfcwear.de/onboarding?chip=${chipUid}`
-        } else if (chip.active_mode === 'corporate') {
-            // CORPORATE -> User Profile
-            if (chip.assigned_user?.slug) {
-                redirectUrl = `https://nfcwear.de/p/${chip.assigned_user.slug}`
-            } else {
-                // Fallback if slug missing but assigned
-                redirectUrl = `https://nfcwear.de/p/${chip.assigned_user_id}`
-            }
-        } else if (chip.active_mode === 'hospitality') {
-            // HOSPITALITY -> Menu/Link
-            // TODO: check if database has specific URL for hospitality, otherwise maybe use target_url
-            if (chip.menu_data?.url) {
-                redirectUrl = chip.menu_data.url
-            } else if (chip.target_url) {
-                redirectUrl = chip.target_url
-            }
-        } else if (chip.active_mode === 'campaign') {
-            // CAMPAIGN -> Target URL
-            if (chip.target_url) {
-                redirectUrl = chip.target_url
-            }
-        } else {
-            // Default generic handler for other modes or fallbacks
-            if (chip.target_url) {
-                redirectUrl = chip.target_url
+        // Ghost mode check
+        if (assignedUser?.ghost_mode) {
+            const ghostUntil = assignedUser.ghost_mode_until
+            const isStillGhosted = !ghostUntil || new Date(ghostUntil) > new Date()
+            if (isStillGhosted) {
+                routePath = assignedUser.slug ? `/p/${assignedUser.slug}` : `/p/${assignedUser.id}`
+                return jsonOrRedirect(wantsJson, routePath, corsHeaders)
             }
         }
 
-        // Perform Redirect
-        return Response.redirect(redirectUrl, 302)
+        switch (chip.active_mode) {
+            case 'corporate':
+                if (assignedUser?.slug) {
+                    routePath = `/p/${assignedUser.slug}`
+                } else if (chip.assigned_user_id) {
+                    routePath = `/p/${chip.assigned_user_id}`
+                } else {
+                    routePath = `/claim/${chipUid}`
+                }
+                break
+            case 'hospitality':
+                if (chip.menu_data?.url) {
+                    // External URL
+                    if (wantsJson) {
+                        return new Response(JSON.stringify({ redirect: chip.menu_data.url, external: true }), {
+                            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+                        })
+                    }
+                    return Response.redirect(chip.menu_data.url, 302)
+                } else if (chip.target_url) {
+                    if (wantsJson) {
+                        return new Response(JSON.stringify({ redirect: chip.target_url, external: true }), {
+                            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+                        })
+                    }
+                    return Response.redirect(chip.target_url, 302)
+                } else if (chip.company_id) {
+                    routePath = `/review/${chip.company_id}`
+                } else if (assignedUser) {
+                    routePath = assignedUser.slug ? `/p/${assignedUser.slug}` : `/p/${assignedUser.id}`
+                }
+                break
+            case 'campaign':
+                if (chip.target_url) {
+                    if (wantsJson) {
+                        return new Response(JSON.stringify({ redirect: chip.target_url, external: true }), {
+                            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+                        })
+                    }
+                    return Response.redirect(chip.target_url, 302)
+                } else if (chip.company_id) {
+                    routePath = `/campaign/${chip.company_id}`
+                } else if (assignedUser) {
+                    routePath = assignedUser.slug ? `/p/${assignedUser.slug}` : `/p/${assignedUser.id}`
+                }
+                break
+            case 'lost':
+                if (assignedUser) {
+                    routePath = assignedUser.slug ? `/p/${assignedUser.slug}` : `/p/${assignedUser.id}`
+                }
+                break
+            default:
+                if (assignedUser) {
+                    routePath = assignedUser.slug ? `/p/${assignedUser.slug}` : `/p/${assignedUser.id}`
+                } else if (!chip.assigned_user_id) {
+                    routePath = `/claim/${chipUid}`
+                }
+        }
+
+        return jsonOrRedirect(wantsJson, routePath, corsHeaders)
 
     } catch (error: unknown) {
         console.error('Scan function error:', error)
-        const message = error instanceof Error ? error.message : 'Unknown error';
+        const message = error instanceof Error ? error.message : 'Unknown error'
         return new Response(JSON.stringify({ error: message }), {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
             status: 500,
         })
     }
 })
+
+function jsonOrRedirect(wantsJson: boolean, routePath: string, corsHeaders: Record<string, string>) {
+    if (wantsJson) {
+        return new Response(JSON.stringify({ redirect: routePath, external: false }), {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        })
+    }
+    return Response.redirect(`https://nfcwear.de${routePath}`, 302)
+}
