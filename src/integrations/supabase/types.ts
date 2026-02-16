@@ -535,12 +535,14 @@ export type Database = {
           banner_pic: string | null
           bio: string | null
           company_name: string | null
+          email: string | null
           ghost_mode: boolean | null
           ghost_mode_until: string | null
           id: string | null
           job_title: string | null
           linkedin_url: string | null
           name: string | null
+          phone: string | null
           profile_pic: string | null
           slug: string | null
           social_links: Json | null
@@ -552,12 +554,14 @@ export type Database = {
           banner_pic?: string | null
           bio?: string | null
           company_name?: string | null
+          email?: string | null
           ghost_mode?: boolean | null
           ghost_mode_until?: string | null
           id?: string | null
           job_title?: string | null
           linkedin_url?: string | null
           name?: string | null
+          phone?: string | null
           profile_pic?: string | null
           slug?: string | null
           social_links?: Json | null
@@ -569,12 +573,14 @@ export type Database = {
           banner_pic?: string | null
           bio?: string | null
           company_name?: string | null
+          email?: string | null
           ghost_mode?: boolean | null
           ghost_mode_until?: string | null
           id?: string | null
           job_title?: string | null
           linkedin_url?: string | null
           name?: string | null
+          phone?: string | null
           profile_pic?: string | null
           slug?: string | null
           social_links?: Json | null

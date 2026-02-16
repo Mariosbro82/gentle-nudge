@@ -4,21 +4,20 @@ import { supabase } from "@/lib/supabase/client";
  * Get user by slug or ID
  */
 export async function getUserBySlug(slug: string) {
-    // Check if slug is a UUID
+    // Use public_profiles view to avoid exposing sensitive fields
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug);
 
     if (isUuid) {
         const { data } = await supabase
-            .from("users")
+            .from("public_profiles" as any)
             .select("*")
             .eq("id", slug)
             .single();
         if (data) return data;
     }
 
-    // Try by slug
     const { data: user } = await supabase
-        .from("users")
+        .from("public_profiles" as any)
         .select("*")
         .eq("slug", slug)
         .single();
