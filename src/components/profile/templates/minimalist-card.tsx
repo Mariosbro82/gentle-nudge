@@ -8,17 +8,15 @@ export function MinimalistCardTemplate({ user }: TemplateProps) {
         <div className="min-h-screen bg-zinc-950 text-white flex flex-col items-center justify-center px-4 py-12">
             <div className="w-full max-w-md">
                 {/* Banner strip */}
-                {user.banner ? (
+                {user.banner && (
                     <div
                         className="h-24 rounded-t-3xl bg-cover bg-center"
                         style={{ backgroundImage: `url(${user.banner})` }}
                     />
-                ) : (
-                    <div className="h-2 rounded-t-3xl bg-white/10" />
                 )}
 
                 {/* Card */}
-                <div className={`bg-white/5 ${user.banner ? "" : "rounded-t-3xl"} rounded-b-3xl p-8 border border-white/5`}>
+                <div className={`bg-white/5 rounded-3xl p-8 border border-white/5`}>
                     {/* Avatar */}
                     <div className="flex justify-center mb-6">
                         <div className="w-28 h-28 rounded-full bg-zinc-800 flex items-center justify-center text-3xl font-light text-white overflow-hidden ring-2 ring-white/10">
