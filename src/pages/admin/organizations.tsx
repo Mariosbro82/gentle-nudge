@@ -74,7 +74,11 @@ export default function AdminOrganizationsPage() {
     async function createOrg() {
         if (!newOrgName.trim()) return;
         setError(null);
-        const slug = newOrgName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+        let slug = newOrgName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+        // Append random suffix to avoid duplicate slug conflicts
+        const suffix = Math.random().toString(36).substring(2, 6);
+        const { data: existing } = await supabase.from("organizations").select("id").eq("slug", slug).maybeSingle();
+        if (existing) slug = `${slug}-${suffix}`;
         const { error: insertError } = await supabase.from("organizations").insert({ name: newOrgName, slug });
         if (insertError) {
             setError("Erstellen fehlgeschlagen: " + insertError.message);
