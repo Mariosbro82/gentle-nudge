@@ -10,16 +10,16 @@ export function PremiumGradientTemplate({ user }: TemplateProps) {
             {/* Banner */}
             {user.banner ? (
                 <div
-                    className="h-32 bg-cover bg-center"
+                    className="h-44 bg-cover bg-center"
                     style={{ backgroundImage: `url(${user.banner})` }}
                 />
             ) : (
-                <div className="h-32 bg-gradient-to-r from-blue-600 to-purple-600" />
+                <div className="h-44 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600" />
             )}
 
             {/* Profile Card */}
-            <div className="max-w-lg mx-auto px-4 -mt-16">
-                <div className="bg-zinc-900 rounded-2xl p-6 border border-white/10 backdrop-blur-sm">
+            <div className="max-w-lg mx-auto px-4 -mt-20">
+                <div className="bg-zinc-900 rounded-2xl p-6 shadow-2xl shadow-black/50">
                     {/* Avatar */}
                     <div className="flex justify-center -mt-12 mb-4">
                         <div className="w-24 h-24 rounded-full bg-zinc-800 border-4 border-zinc-900 flex items-center justify-center text-2xl font-bold text-white overflow-hidden">
