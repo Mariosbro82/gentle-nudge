@@ -6,25 +6,25 @@ export function USPSection() {
         {
             icon: <Monitor className="w-12 h-12 text-blue-400" />,
             title: "Messen & Expos",
-            description: "Konvertiere physische Touchpoints in qualifizierte MQLs. Teile Produktkataloge und Kontaktdaten via NFC-Handshake – direkt ins CRM deines Gegenübers.",
+            description: "Verwandle jeden Händedruck in einen qualifizierten Lead. Kontaktdaten und Kataloge werden per Tap direkt ins CRM übertragen.",
             gradient: "from-blue-500/20 to-cyan-500/20"
         },
         {
             icon: <Calendar className="w-12 h-12 text-purple-400" />,
             title: "Events & Festivals",
-            description: "Digitaler Check-in, Attendee-Tracking und Networking-Automation. Team-Wearables werden zur IoT-fähigen Event-Infrastruktur.",
+            description: "Digitaler Check-in, Networking und Attendee-Tracking. Teambekleidung wird zur smarten Event-Infrastruktur.",
             gradient: "from-purple-500/20 to-pink-500/20"
         },
         {
             icon: <Building2 className="w-12 h-12 text-indigo-400" />,
             title: "Enterprise",
-            description: "Corporate Identity als SaaS-Layer. White-Label Wearable Solutions mit SSO-Integration, Role-Based Access Control und Fleet Management.",
+            description: "Corporate Identity als SaaS-Lösung. White-Label Optionen mit Rollenmanagement und zentraler Geräteverwaltung.",
             gradient: "from-indigo-500/20 to-violet-500/20"
         },
         {
             icon: <Utensils className="w-12 h-12 text-pink-400" />,
             title: "Gastronomie & Hospitality",
-            description: "Point-of-Service Digitalisierung via Wearable Interface. Automated Review-Funnels, Digital Menus und Contactless Tipping.",
+            description: "Digitale Speisekarten, automatisierte Google Reviews und kontaktloses Trinkgeld – direkt über die Teamkleidung.",
             gradient: "from-pink-500/20 to-rose-500/20"
         }
     ];
@@ -34,7 +34,7 @@ export function USPSection() {
             <div className="container mx-auto px-6">
                 <div className="text-center mb-20">
                     <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-6">
-                        Vertikale SaaS-Lösungen
+                        Lösungen für jede Branche
                     </h2>
                     <p className="text-xl text-muted-foreground">
                         Branchenspezifische Wearable-Technologie mit messbarem ROI.

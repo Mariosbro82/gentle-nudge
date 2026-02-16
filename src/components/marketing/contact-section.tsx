@@ -27,7 +27,7 @@ export function ContactSection() {
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Handshake?</span>
                         </h2>
                         <p className="text-muted-foreground text-lg mb-10">
-                            Starten Sie Ihr Wearable-SaaS Deployment noch heute. Buchen Sie eine personalisierte Product Demo oder kontaktieren Sie unser Enterprise Sales Team.
+                            Starten Sie noch heute mit NFCwear und machen Sie Ihre Corporate Fashion messbar. Vereinbaren Sie eine Demo oder schreiben Sie uns.
                         </p>
 
                         <div className="flex gap-6 flex-col sm:flex-row">

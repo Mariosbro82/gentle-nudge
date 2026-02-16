@@ -9,28 +9,28 @@ export function FeaturesSection() {
             id: "corporate",
             icon: Briefcase,
             title: "Vertrieb",
-            subtitle: "Vom Wearable zum Lead-Funnel",
-            description: "Automatisiertes Lead-Capturing via NFC-Touchpoint. Jeder physische Kontakt wird zum qualifizierten CRM-Datensatz – mit Zero-Friction User Experience.",
+            subtitle: "Vom Hoodie zum Lead-Funnel",
+            description: "Automatisiertes Lead-Capturing per NFC-Tap. Jeder Kontakt wird direkt zum CRM-Datensatz – ohne manuelles Abtippen.",
             color: "blue",
-            features: ["Digitale vCard (RFC 6350)", "Bidirektionales Lead-Capturing", "CRM-Pipeline Integration", "Automated Follow-Up Workflows"],
+            features: ["Digitale vCard", "Bidirektionales Lead-Capturing", "CRM-Integration", "Automatische Follow-Up E-Mails"],
         },
         {
             id: "campaign",
             icon: Megaphone,
             title: "Kampagnen",
-            subtitle: "Omnichannel-Marketing am Körper",
-            description: "Multi-Tenant Kampagnensteuerung über das SaaS-Dashboard. A/B-Testing, Geo-Targeting und zeitgesteuerte Redirects – skalierbar für Enterprise-Rollouts.",
+            subtitle: "Marketing direkt am Körper",
+            description: "Steuere alle Chips zentral über das Dashboard. Zeitgesteuerte Redirects, Landing Pages und Kampagnen – skalierbar für jede Teamgröße.",
             color: "purple",
-            features: ["Zentrales Campaign Management", "Dynamic Link Routing", "Conversion-optimierte Landing Pages", "Scheduled Deployment & Rollback"],
+            features: ["Zentrales Campaign Management", "Dynamic Link Routing", "Conversion-optimierte Landing Pages", "Zeitgesteuerte Aktivierung"],
         },
         {
             id: "hospitality",
             icon: Utensils,
             title: "Bewertung",
-            subtitle: "Review-Automation ohne Medienbruch",
-            description: "Conversion-optimierter Review-Funnel direkt am Point of Service. Steigern Sie Ihre Net Promoter Scores durch friktionsloses Micro-Engagement.",
+            subtitle: "Mehr Reviews, weniger Aufwand",
+            description: "Google-Bewertungen und Trinkgeld per Scan – direkt am Point of Service. Ideal für Gastronomie und Hotellerie.",
             color: "orange",
-            features: ["Google Review Funnel", "Digitale Speisekarte (QR-Fallback)", "Multi-Platform Aggregation", "Integrated Payment Gateway (Stripe)"],
+            features: ["Google Review Funnel", "Digitale Speisekarte", "Multi-Platform Reviews", "Integriertes Payment (Stripe)"],
         },
     ];
 
@@ -40,10 +40,10 @@ export function FeaturesSection() {
 
                 <div className="text-center mb-16">
                     <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4">
-                        Ein Chip. <span className="text-blue-500">Drei Use Cases.</span>
+                        Ein Chip. <span className="text-blue-500">Drei Modi.</span>
                     </h2>
                     <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-                        Mode-Switch in Echtzeit via Cloud Dashboard. Zero-App-Dependency. Plug & Play Deployment.
+                        Wechsle den Modus in Echtzeit über das Cloud Dashboard. Ohne App, ohne Aufwand.
                     </p>
                 </div>
 

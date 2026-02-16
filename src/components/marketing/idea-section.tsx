@@ -15,8 +15,8 @@ export function IdeaSection() {
                         Unsere Idee
                     </h2>
                     <p className="text-lg text-muted-foreground leading-relaxed">
-                        Legacy Corporate Fashion ist ein Blindspot. Wir denken Textilien als <span className="text-blue-400 font-semibold">programmierbare IoT-Interfaces</span>.
-                        Was wäre, wenn dein Wearable gleichzeitig digitale Visitenkarte, Micro-Payment Terminal und Omnichannel-Marketing-Touchpoint wäre?
+                        Corporate Fashion war bisher ein blinder Fleck. Wir denken Textilien als <span className="text-blue-400 font-semibold">digitale Schnittstelle</span>.
+                        Was wäre, wenn dein Hoodie gleichzeitig Visitenkarte, Zahlungsterminal und Marketing-Kanal wäre?
                     </p>
                 </div>
 
@@ -29,9 +29,9 @@ export function IdeaSection() {
                             <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center mb-6 group-hover:bg-red-500/30 transition-colors">
                                 <UserX className="w-6 h-6 text-red-400" />
                             </div>
-                            <h4 className="text-xl font-bold text-foreground mb-3">Lead Leakage</h4>
+                            <h4 className="text-xl font-bold text-foreground mb-3">Leads gehen verloren</h4>
                             <p className="text-muted-foreground text-sm">
-                                Ohne automatisiertes Capturing gehen bis zu 70% qualifizierter MQLs auf Events verloren – ein massiver Revenue Gap.
+                                Ohne automatisiertes Capturing gehen bis zu 70% der Kontakte auf Events verloren – ein massiver Revenue Gap.
                             </p>
                         </div>
 
@@ -40,9 +40,9 @@ export function IdeaSection() {
                             <div className="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center mb-6 group-hover:bg-orange-500/30 transition-colors">
                                 <BarChart3 className="w-6 h-6 text-orange-400" />
                             </div>
-                            <h4 className="text-xl font-bold text-foreground mb-3">Zero Attribution</h4>
+                            <h4 className="text-xl font-bold text-foreground mb-3">Keine Messbarkeit</h4>
                             <p className="text-muted-foreground text-sm">
-                                Legacy Merch liefert keine Analytics. Ohne KPIs kein datengetriebenes Entscheiden – ein blinder Fleck in der Marketing-Pipeline.
+                                Klassisches Merch liefert keine Daten. Ohne KPIs kein fundiertes Entscheiden – ein blinder Fleck im Marketing.
                             </p>
                         </div>
 
@@ -51,9 +51,9 @@ export function IdeaSection() {
                             <div className="w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center mb-6 group-hover:bg-yellow-500/30 transition-colors">
                                 <Keyboard className="w-6 h-6 text-yellow-400" />
                             </div>
-                            <h4 className="text-xl font-bold text-foreground mb-3">Manual Data Entry</h4>
+                            <h4 className="text-xl font-bold text-foreground mb-3">Manueller Aufwand</h4>
                             <p className="text-muted-foreground text-sm">
-                                Analoge Visitenkarten erfordern manuelles Abtippen – ein fehleranfälliger Workflow mit hoher Time-to-CRM.
+                                Visitenkarten müssen mühsam abgetippt werden – ein fehleranfälliger Prozess mit unnötig langer Time-to-CRM.
                             </p>
                         </div>
                     </div>
@@ -69,7 +69,7 @@ export function IdeaSection() {
                                 Engineering trifft Fashion.
                             </h3>
                             <p className="text-lg text-muted-foreground mb-12">
-                                Jedes Wearable durchläuft einen rigorosen R&D-Prozess. Von der optimalen Chip-Positionierung bis zur Textilkomposition – Precision Engineering auf jedem Layer.
+                                Jedes Stück wird mit obsessiver Liebe zum Detail entwickelt. Von der optimalen Chip-Positionierung bis zur Textilkomposition – nichts wird dem Zufall überlassen.
                             </p>
 
                             <div className="space-y-8">
