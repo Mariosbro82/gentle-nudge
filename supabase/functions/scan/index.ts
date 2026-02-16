@@ -55,7 +55,7 @@ Deno.serve(async (req) => {
             console.error('Chip lookup error:', chipError)
             // Chip not found -> Generic Fallback (e.g., Homepage or "Activate this chip")
             // For now, let's redirect to a generic "Chip Not Found" or Home
-            return Response.redirect('https://nfc.wear.com/?error=chip_not_found', 302)
+            return Response.redirect('https://nfcwear.de/?error=chip_not_found', 302)
         }
 
         // 3. Analytics: Log Scan
@@ -78,21 +78,21 @@ Deno.serve(async (req) => {
 
         // 4. Routing Logic
         // Default fallback
-        let redirectUrl = 'https://nfc.wear.com'
+        let redirectUrl = 'https://nfcwear.de'
 
         if (chip.active_mode === 'lost') {
             // LOST MODE -> Finder Page
-            redirectUrl = `https://nfc.wear.com/lost?chip=${chipUid}`
+            redirectUrl = `https://nfcwear.de/lost?chip=${chipUid}`
         } else if (!chip.assigned_user_id) {
             // UNASSIGNED -> Onboarding
-            redirectUrl = `https://nfc.wear.com/onboarding?chip=${chipUid}`
+            redirectUrl = `https://nfcwear.de/onboarding?chip=${chipUid}`
         } else if (chip.active_mode === 'corporate') {
             // CORPORATE -> User Profile
             if (chip.assigned_user?.slug) {
-                redirectUrl = `https://nfc.wear.com/p/${chip.assigned_user.slug}`
+                redirectUrl = `https://nfcwear.de/p/${chip.assigned_user.slug}`
             } else {
                 // Fallback if slug missing but assigned
-                redirectUrl = `https://nfc.wear.com/p/${chip.assigned_user_id}`
+                redirectUrl = `https://nfcwear.de/p/${chip.assigned_user_id}`
             }
         } else if (chip.active_mode === 'hospitality') {
             // HOSPITALITY -> Menu/Link
