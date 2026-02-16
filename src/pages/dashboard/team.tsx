@@ -111,6 +111,16 @@ export default function TeamPage() {
         );
     }
 
+    if (!isOrgAdmin && !loading) {
+        return (
+            <div className="flex flex-col items-center justify-center h-64 text-center">
+                <Shield className="w-12 h-12 text-muted-foreground mb-4" />
+                <h2 className="text-lg font-medium text-foreground">Kein Zugriff</h2>
+                <p className="text-sm text-muted-foreground mt-1">Nur Org-Admins und Owner können die Team-Übersicht einsehen.</p>
+            </div>
+        );
+    }
+
     if (!org) {
         return (
             <div className="flex flex-col items-center justify-center h-64 text-center">
