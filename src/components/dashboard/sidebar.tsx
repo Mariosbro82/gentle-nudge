@@ -1,6 +1,7 @@
 "use client";
 
 import { Link, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import {
     LayoutDashboard,
     Smartphone,
@@ -15,18 +16,44 @@ import {
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/auth-context";
 import { ModeToggle } from "@/components/mode-toggle";
+import { supabase } from "@/lib/supabase/client";
 
 export function AdminSidebar({ onClose }: { onClose?: () => void }) {
     const location = useLocation();
-    const { signOut } = useAuth();
+    const { user, signOut } = useAuth();
+    const [isOrgAdmin, setIsOrgAdmin] = useState(false);
+
+    useEffect(() => {
+        if (!user) return;
+        (async () => {
+            const { data: myUser } = await supabase
+                .from("users")
+                .select("id")
+                .eq("auth_user_id", user.id)
+                .maybeSingle();
+            if (!myUser) return;
+
+            const { data: membership } = await supabase
+                .from("organization_members")
+                .select("role")
+                .eq("user_id", myUser.id)
+                .maybeSingle();
+
+            if (membership && (membership.role === "owner" || membership.role === "admin")) {
+                setIsOrgAdmin(true);
+            }
+        })();
+    }, [user]);
 
     const links = [
         { href: "/dashboard", label: "Übersicht", icon: LayoutDashboard },
         { href: "/dashboard/devices", label: "Geräte", icon: Smartphone },
         { href: "/dashboard/leads", label: "Kontakte", icon: Users },
         { href: "/dashboard/analytics", label: "Analyse", icon: BarChart },
-        { href: "/dashboard/team", label: "Team", icon: UsersRound },
-        { href: "/dashboard/top-performers", label: "Top Performer", icon: Trophy },
+        ...(isOrgAdmin ? [
+            { href: "/dashboard/team", label: "Team", icon: UsersRound },
+            { href: "/dashboard/top-performers", label: "Top Performer", icon: Trophy },
+        ] : []),
         { href: "/dashboard/settings", label: "Einstellungen", icon: Settings },
     ];
 

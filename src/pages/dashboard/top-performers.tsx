@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
 import { useAuth } from "@/contexts/auth-context";
-import { Trophy, Medal, Award, User, TrendingUp, Eye, Users2, Zap, Building2 } from "lucide-react";
+import { Trophy, Medal, Award, User, TrendingUp, Eye, Users2, Zap, Building2, Shield } from "lucide-react";
 
 interface Performer {
     user_id: string;
@@ -25,6 +25,7 @@ export default function TopPerformersPage() {
     const [performers, setPerformers] = useState<Performer[]>([]);
     const [loading, setLoading] = useState(true);
     const [noOrg, setNoOrg] = useState(false);
+    const [myRole, setMyRole] = useState<string | null>(null);
 
     useEffect(() => {
         if (user) loadPerformers();
@@ -48,6 +49,8 @@ export default function TopPerformersPage() {
                 .maybeSingle();
 
             if (!myMembership) { setNoOrg(true); setLoading(false); return; }
+
+            setMyRole(myMembership.role);
 
             // Get all org members
             const { data: orgMembers } = await supabase
@@ -114,6 +117,18 @@ export default function TopPerformersPage() {
         return (
             <div className="flex items-center justify-center h-64">
                 <div className="h-6 w-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+            </div>
+        );
+    }
+
+    const isOrgAdmin = myRole === "owner" || myRole === "admin";
+
+    if (!isOrgAdmin) {
+        return (
+            <div className="flex flex-col items-center justify-center h-64 text-center">
+                <Shield className="w-12 h-12 text-muted-foreground mb-4" />
+                <h2 className="text-lg font-medium text-foreground">Kein Zugriff</h2>
+                <p className="text-sm text-muted-foreground mt-1">Nur Org-Admins und Owner können das Ranking einsehen.</p>
             </div>
         );
     }
