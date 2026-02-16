@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Download, RefreshCw, Flame } from "lucide-react";
+import { Download, RefreshCw, Flame, Mail } from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
 import { useAuth } from "@/contexts/auth-context";
 import { getInterestedLeads } from "@/lib/api/analytics";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { FollowUpDialog } from "@/components/dashboard/follow-up-dialog";
 
 interface Lead {
     id: string;
@@ -25,6 +26,7 @@ export default function LeadsPage() {
     const { user } = useAuth();
     const [loading, setLoading] = useState(true);
     const [leads, setLeads] = useState<Lead[]>([]);
+    const [followUpLead, setFollowUpLead] = useState<Lead | null>(null);
 
     useEffect(() => {
         async function fetchLeads() {
@@ -124,7 +126,6 @@ export default function LeadsPage() {
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight">Kontakte</h1>
-                    <h1 className="text-3xl font-bold tracking-tight">Kontakte</h1>
                     <p className="text-muted-foreground">Erfasste Kontakte aus dem Visitenkarten-Modus.</p>
                 </div>
                 <div className="flex gap-2">
@@ -147,6 +148,7 @@ export default function LeadsPage() {
                             <TableHead>Stimmung</TableHead>
                             <TableHead>Nachricht & Links</TableHead>
                             <TableHead>Datum</TableHead>
+                            <TableHead className="w-12"></TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -220,12 +222,22 @@ export default function LeadsPage() {
                                         )}
                                     </TableCell>
                                     <TableCell className="text-muted-foreground">{new Date(lead.created_at || '').toLocaleDateString()}</TableCell>
+                                    <TableCell>
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            onClick={() => setFollowUpLead(lead)}
+                                            title="Follow-Up senden"
+                                        >
+                                            <Mail size={14} />
+                                        </Button>
+                                    </TableCell>
                                 </TableRow>
                             );
                         })}
                         {leads.length === 0 && (
                             <TableRow>
-                                <TableCell colSpan={6} className="text-center py-10 text-muted-foreground">
+                                <TableCell colSpan={7} className="text-center py-10 text-muted-foreground">
                                     Noch keine Kontakte erfasst.
                                 </TableCell>
                             </TableRow>
@@ -233,6 +245,13 @@ export default function LeadsPage() {
                     </TableBody>
                 </Table>
             </div>
+
+            <FollowUpDialog
+                open={!!followUpLead}
+                onOpenChange={(open) => !open && setFollowUpLead(null)}
+                lead={followUpLead}
+                onScheduled={() => setFollowUpLead(null)}
+            />
         </div>
     );
 }

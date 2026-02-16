@@ -137,6 +137,70 @@ export type Database = {
         }
         Relationships: []
       }
+      follow_up_emails: {
+        Row: {
+          body_html: string
+          created_at: string | null
+          delay_hours: number
+          error_message: string | null
+          id: string
+          lead_id: string
+          scheduled_at: string | null
+          sent_at: string | null
+          status: string
+          subject: string
+          user_id: string
+        }
+        Insert: {
+          body_html: string
+          created_at?: string | null
+          delay_hours?: number
+          error_message?: string | null
+          id?: string
+          lead_id: string
+          scheduled_at?: string | null
+          sent_at?: string | null
+          status?: string
+          subject: string
+          user_id: string
+        }
+        Update: {
+          body_html?: string
+          created_at?: string | null
+          delay_hours?: number
+          error_message?: string | null
+          id?: string
+          lead_id?: string
+          scheduled_at?: string | null
+          sent_at?: string | null
+          status?: string
+          subject?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "follow_up_emails_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "follow_up_emails_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "follow_up_emails_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       leads: {
         Row: {
           captured_by_user_id: string | null
@@ -389,6 +453,9 @@ export type Database = {
           company_id: string | null
           company_name: string | null
           created_at: string | null
+          default_followup_body_html: string | null
+          default_followup_delay_hours: number | null
+          default_followup_subject: string | null
           email: string
           ghost_mode: boolean | null
           ghost_mode_until: string | null
@@ -400,6 +467,8 @@ export type Database = {
           notes: string | null
           phone: string | null
           profile_pic: string | null
+          reply_to_email: string | null
+          reply_to_name: string | null
           role: string | null
           slug: string | null
           social_links: Json | null
@@ -417,6 +486,9 @@ export type Database = {
           company_id?: string | null
           company_name?: string | null
           created_at?: string | null
+          default_followup_body_html?: string | null
+          default_followup_delay_hours?: number | null
+          default_followup_subject?: string | null
           email: string
           ghost_mode?: boolean | null
           ghost_mode_until?: string | null
@@ -428,6 +500,8 @@ export type Database = {
           notes?: string | null
           phone?: string | null
           profile_pic?: string | null
+          reply_to_email?: string | null
+          reply_to_name?: string | null
           role?: string | null
           slug?: string | null
           social_links?: Json | null
@@ -445,6 +519,9 @@ export type Database = {
           company_id?: string | null
           company_name?: string | null
           created_at?: string | null
+          default_followup_body_html?: string | null
+          default_followup_delay_hours?: number | null
+          default_followup_subject?: string | null
           email?: string
           ghost_mode?: boolean | null
           ghost_mode_until?: string | null
@@ -456,6 +533,8 @@ export type Database = {
           notes?: string | null
           phone?: string | null
           profile_pic?: string | null
+          reply_to_email?: string | null
+          reply_to_name?: string | null
           role?: string | null
           slug?: string | null
           social_links?: Json | null
