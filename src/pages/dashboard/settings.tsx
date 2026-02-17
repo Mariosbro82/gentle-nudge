@@ -224,7 +224,7 @@ export default function SettingsPage() {
                     <CardDescription>Laden Sie ein Profilbild und Banner für Ihre digitale Visitenkarte hoch.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                    <ImageUpload type="profile" currentUrl={user?.profile_pic} authUserId={authUser?.id || ""} onUploaded={(url) => handleImageUploaded("profile", url)} onRemoved={() => handleImageRemoved("profile")} />
+                    <ImageUpload type="profile" currentUrl={user?.profile_pic} authUserId={authUser?.id || ""} onUploaded={(url) => handleImageUploaded("profile", url)} onRemoved={() => handleImageRemoved("profile")} objectPosition={user?.profile_pic_position || "50% 50%"} />
                     {user?.profile_pic && (
                         <FocalPointPicker
                             imageUrl={user.profile_pic}
@@ -234,7 +234,7 @@ export default function SettingsPage() {
                             label="Profilbild-Ausschnitt anpassen"
                         />
                     )}
-                    <ImageUpload type="banner" currentUrl={user?.banner_pic} authUserId={authUser?.id || ""} onUploaded={(url) => handleImageUploaded("banner", url)} onRemoved={() => handleImageRemoved("banner")} />
+                    <ImageUpload type="banner" currentUrl={user?.banner_pic} authUserId={authUser?.id || ""} onUploaded={(url) => handleImageUploaded("banner", url)} onRemoved={() => handleImageRemoved("banner")} objectPosition={user?.banner_pic_position || "50% 50%"} />
                     {user?.banner_pic && (
                         <FocalPointPicker
                             imageUrl={user.banner_pic}
@@ -471,7 +471,7 @@ export default function SettingsPage() {
                         <Label>Hintergrundbild</Label>
                         {user?.background_image ? (
                             <div className="relative rounded-xl overflow-hidden border border-border">
-                                <img src={user.background_image} alt="Background" className="w-full h-32 object-cover" />
+                                <img src={user.background_image} alt="Background" className="w-full h-32 object-cover" style={{ objectPosition: user?.background_position || '50% 50%' }} />
                                 <Button variant="destructive" size="sm" className="absolute top-2 right-2" onClick={() => handleBackgroundImageRemove()}>
                                     <X className="h-4 w-4 mr-1" /> Entfernen
                                 </Button>
