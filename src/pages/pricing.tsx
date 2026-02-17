@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/marketing/navbar";
 import { Footer } from "@/components/marketing/footer";
 import { PricingCard } from "@/components/ui/dark-gradient-pricing";
+import { RoiCalculator } from "@/components/marketing/roi-calculator";
 
 export default function PricingPage() {
     const tiers = [
@@ -77,6 +78,8 @@ export default function PricingPage() {
                     </div>
                 </div>
             </section>
+
+            <RoiCalculator />
 
             <Footer />
         </main>
