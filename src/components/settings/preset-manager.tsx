@@ -3,6 +3,8 @@ import { Save, Trash2, Zap, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/lib/supabase/client";
+import { PhonePreviewMini } from "@/components/settings/phone-preview-3d";
+import type { ProfileUser } from "@/types/profile";
 
 interface Preset {
     id: string;
@@ -16,9 +18,25 @@ interface Props {
     userId: string;
     currentConfig: Record<string, any>;
     onActivate: (presetData: Record<string, any>) => void;
+    baseUser: ProfileUser;
 }
 
-export function PresetManager({ userId, currentConfig, onActivate }: Props) {
+function buildPresetUser(baseUser: ProfileUser, presetData: Record<string, any>): ProfileUser {
+    return {
+        ...baseUser,
+        activeTemplate: presetData.active_template || baseUser.activeTemplate,
+        accentColor: presetData.accent_color || baseUser.accentColor,
+        backgroundColor: presetData.background_color || baseUser.backgroundColor,
+        bannerColor: presetData.banner_color || baseUser.bannerColor,
+        customLinks: presetData.custom_links || baseUser.customLinks,
+        couponCode: presetData.coupon_code || "",
+        couponDescription: presetData.coupon_description || "",
+        countdownTarget: presetData.countdown_target || null,
+        countdownLabel: presetData.countdown_label || "",
+    };
+}
+
+export function PresetManager({ userId, currentConfig, onActivate, baseUser }: Props) {
     const [presets, setPresets] = useState<Preset[]>([]);
     const [newName, setNewName] = useState("");
     const [loading, setLoading] = useState(true);
@@ -53,7 +71,6 @@ export function PresetManager({ userId, currentConfig, onActivate }: Props) {
     }
 
     async function activatePreset(preset: Preset) {
-        // Deactivate all, activate this one
         await supabase.from("profile_presets" as any).update({ is_active: false } as any).eq("user_id", userId);
         await supabase.from("profile_presets" as any).update({ is_active: true } as any).eq("id", preset.id);
         onActivate(preset.preset_data);
@@ -83,45 +100,65 @@ export function PresetManager({ userId, currentConfig, onActivate }: Props) {
                 </Button>
             </div>
 
-            {/* List presets */}
+            {/* Preset Grid with 3D previews */}
             {presets.length > 0 && (
-                <div className="space-y-2">
-                    {presets.map((preset) => (
-                        <div
-                            key={preset.id}
-                            className={`flex items-center justify-between p-3 rounded-lg border transition-colors ${
-                                preset.is_active
-                                    ? "border-blue-500/50 bg-blue-500/5"
-                                    : "border-border bg-card hover:bg-accent/30"
-                            }`}
-                        >
-                            <div className="flex items-center gap-3">
-                                {preset.is_active && <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />}
-                                <div>
-                                    <p className="text-sm font-medium">{preset.name}</p>
-                                    <p className="text-xs text-muted-foreground">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    {presets.map((preset) => {
+                        const presetUser = buildPresetUser(baseUser, preset.preset_data);
+                        return (
+                            <div
+                                key={preset.id}
+                                className={`relative rounded-xl border-2 p-3 transition-all cursor-pointer group ${
+                                    preset.is_active
+                                        ? "border-blue-500 bg-blue-500/5"
+                                        : "border-border bg-card hover:border-muted-foreground/30"
+                                }`}
+                                onClick={() => !preset.is_active && activatePreset(preset)}
+                            >
+                                {/* Mini 3D Phone Preview */}
+                                <div className="flex justify-center mb-3">
+                                    <PhonePreviewMini user={presetUser} />
+                                </div>
+
+                                {/* Preset Info */}
+                                <div className="text-center">
+                                    <p className="text-sm font-medium truncate">{preset.name}</p>
+                                    <p className="text-[10px] text-muted-foreground">
                                         {new Date(preset.created_at).toLocaleDateString("de-DE")}
                                     </p>
                                 </div>
-                            </div>
-                            <div className="flex items-center gap-1">
-                                {!preset.is_active && (
-                                    <Button type="button" variant="ghost" size="sm" onClick={() => activatePreset(preset)}>
-                                        <Zap className="h-4 w-4 mr-1" /> Aktivieren
-                                    </Button>
+
+                                {/* Active badge */}
+                                {preset.is_active && (
+                                    <div className="absolute top-2 right-2 px-1.5 py-0.5 rounded-full bg-blue-500 text-[9px] text-white font-medium">
+                                        Aktiv
+                                    </div>
                                 )}
-                                <Button
-                                    type="button"
-                                    variant="ghost"
-                                    size="icon-sm"
-                                    onClick={() => deletePreset(preset.id)}
-                                    className="text-red-400 hover:text-red-300"
-                                >
-                                    <Trash2 className="h-4 w-4" />
-                                </Button>
+
+                                {/* Actions overlay */}
+                                <div className="absolute top-2 left-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={(e) => { e.stopPropagation(); deletePreset(preset.id); }}
+                                        className="h-6 w-6 text-red-400 hover:text-red-300 bg-background/80 backdrop-blur-sm"
+                                    >
+                                        <Trash2 className="h-3 w-3" />
+                                    </Button>
+                                </div>
+
+                                {/* Activate hint */}
+                                {!preset.is_active && (
+                                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-background/40 backdrop-blur-[2px] rounded-xl">
+                                        <div className="flex items-center gap-1 text-xs font-medium bg-primary text-primary-foreground px-3 py-1.5 rounded-full shadow-lg">
+                                            <Zap className="h-3 w-3" /> Aktivieren
+                                        </div>
+                                    </div>
+                                )}
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             )}
 
