@@ -15,6 +15,7 @@ const AnalyticsPage = lazy(() => import("@/pages/dashboard/analytics"));
 const SettingsPage = lazy(() => import("@/pages/dashboard/settings"));
 const TeamPage = lazy(() => import("@/pages/dashboard/team"));
 const TopPerformersPage = lazy(() => import("@/pages/dashboard/top-performers"));
+const CampaignsPage = lazy(() => import("@/pages/dashboard/campaigns"));
 
 // Auth pages
 const LoginPage = lazy(() => import("@/pages/login"));
@@ -178,6 +179,7 @@ export default function App() {
                             <Route path="settings" element={<SettingsPage />} />
                             <Route path="team" element={<TeamPage />} />
                             <Route path="top-performers" element={<TopPerformersPage />} />
+                            <Route path="campaigns" element={<CampaignsPage />} />
                         </Route>
                     </Routes>
                 </ConditionalPasswordGate>
