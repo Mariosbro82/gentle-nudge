@@ -33,6 +33,9 @@ interface PublicProfile {
     coupon_description: string | null;
     countdown_target: string | null;
     countdown_label: string | null;
+    profile_pic_position: string | null;
+    banner_pic_position: string | null;
+    background_position: string | null;
 }
 
 export default function ProfilePage() {
@@ -78,6 +81,9 @@ export default function ProfilePage() {
                     couponDescription: data.coupon_description || "",
                     countdownTarget: data.countdown_target || null,
                     countdownLabel: data.countdown_label || "",
+                    profilePicPosition: data.profile_pic_position || "50% 50%",
+                    bannerPicPosition: data.banner_pic_position || "50% 50%",
+                    backgroundPosition: data.background_position || "50% 50%",
                 });
             } else {
                 setError(true);

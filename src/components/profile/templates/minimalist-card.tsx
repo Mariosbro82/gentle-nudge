@@ -8,7 +8,7 @@ import { ensureAbsoluteUrl } from "@/lib/utils";
 
 export function MinimalistCardTemplate({ user }: TemplateProps) {
     const bgStyle: React.CSSProperties = user.backgroundImage
-        ? { backgroundImage: `url(${user.backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+        ? { backgroundImage: `url(${user.backgroundImage})`, backgroundSize: 'cover', backgroundPosition: user.backgroundPosition || 'center' }
         : { backgroundColor: user.backgroundColor || '#0a0a0a' };
 
     const accent = user.accentColor || '#4f46e5';
@@ -17,7 +17,7 @@ export function MinimalistCardTemplate({ user }: TemplateProps) {
         <div className="min-h-screen text-white flex flex-col items-center justify-center px-4 py-12" style={bgStyle}>
             <div className="w-full max-w-md rounded-3xl overflow-hidden shadow-2xl shadow-black/50 border border-white/10">
                 {user.banner ? (
-                    <div className="h-24 bg-cover bg-center" style={{ backgroundImage: `url(${user.banner})` }} />
+                    <div className="h-24 bg-cover bg-center" style={{ backgroundImage: `url(${user.banner})`, backgroundPosition: user.bannerPicPosition || '50% 50%' }} />
                 ) : (
                     <div className="h-6" style={{ backgroundColor: user.bannerColor || '#4f46e5' }} />
                 )}
@@ -26,7 +26,7 @@ export function MinimalistCardTemplate({ user }: TemplateProps) {
                     <div className="flex justify-center mb-6">
                         <div className="w-28 h-28 rounded-full bg-zinc-800 flex items-center justify-center text-3xl font-light text-white overflow-hidden ring-2 ring-white/10">
                             {user.avatar ? (
-                                <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
+                                <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" style={{ objectPosition: user.profilePicPosition || '50% 50%' }} />
                             ) : (
                                 user.name.charAt(0).toUpperCase()
                             )}
@@ -39,19 +39,10 @@ export function MinimalistCardTemplate({ user }: TemplateProps) {
                         {user.company && <p className="text-zinc-500 text-xs mt-0.5">{user.company}</p>}
                     </div>
 
-                    {user.bio && (
-                        <p className="text-zinc-400 text-sm text-center mb-6 max-w-xs mx-auto leading-relaxed">{user.bio}</p>
-                    )}
+                    {user.bio && <p className="text-zinc-400 text-sm text-center mb-6 max-w-xs mx-auto leading-relaxed">{user.bio}</p>}
 
-                    {/* Countdown */}
-                    {user.countdownTarget && (
-                        <CountdownDisplay target={user.countdownTarget} label={user.countdownLabel} accentColor={accent} />
-                    )}
-
-                    {/* Coupon */}
-                    {user.couponCode && (
-                        <CouponDisplay code={user.couponCode} description={user.couponDescription} accentColor={accent} />
-                    )}
+                    {user.countdownTarget && <CountdownDisplay target={user.countdownTarget} label={user.countdownLabel} accentColor={accent} />}
+                    {user.couponCode && <CouponDisplay code={user.couponCode} description={user.couponDescription} accentColor={accent} />}
 
                     <div className="w-12 h-px bg-white/10 mx-auto mb-6" />
 

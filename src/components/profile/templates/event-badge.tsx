@@ -8,7 +8,7 @@ import { ensureAbsoluteUrl } from "@/lib/utils";
 
 export function EventBadgeTemplate({ user }: TemplateProps) {
     const bgStyle: React.CSSProperties = user.backgroundImage
-        ? { backgroundImage: `url(${user.backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+        ? { backgroundImage: `url(${user.backgroundImage})`, backgroundSize: 'cover', backgroundPosition: user.backgroundPosition || 'center' }
         : { backgroundColor: user.backgroundColor || '#09090b' };
 
     const accent = user.accentColor || '#7c3aed';
@@ -26,7 +26,7 @@ export function EventBadgeTemplate({ user }: TemplateProps) {
             </div>
 
             {user.banner ? (
-                <div className="h-28 bg-cover bg-center" style={{ backgroundImage: `url(${user.banner})` }} />
+                <div className="h-28 bg-cover bg-center" style={{ backgroundImage: `url(${user.banner})`, backgroundPosition: user.bannerPicPosition || '50% 50%' }} />
             ) : (
                 <div className="h-28" style={{ background: `linear-gradient(to bottom, ${accent}4D, transparent)` }} />
             )}
@@ -34,12 +34,11 @@ export function EventBadgeTemplate({ user }: TemplateProps) {
             <div className="max-w-lg mx-auto px-4 -mt-12">
                 <div className="bg-zinc-900 rounded-xl border border-white/10 overflow-hidden">
                     <div className="h-1" style={{ background: `linear-gradient(90deg, ${accent}, ${accent}cc, ${accent}66)` }} />
-
                     <div className="p-6">
                         <div className="flex items-start gap-4 mb-5">
                             <div className="w-20 h-20 rounded-xl bg-zinc-800 flex-shrink-0 flex items-center justify-center text-xl font-bold overflow-hidden border border-white/10">
                                 {user.avatar ? (
-                                    <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
+                                    <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" style={{ objectPosition: user.profilePicPosition || '50% 50%' }} />
                                 ) : (
                                     user.name.charAt(0).toUpperCase()
                                 )}
@@ -48,8 +47,7 @@ export function EventBadgeTemplate({ user }: TemplateProps) {
                                 <h1 className="text-xl font-bold truncate">{user.name}</h1>
                                 {user.title && (
                                     <p className="text-zinc-400 text-sm flex items-center gap-1.5 mt-0.5">
-                                        <Briefcase className="h-3.5 w-3.5 flex-shrink-0" />
-                                        {user.title}
+                                        <Briefcase className="h-3.5 w-3.5 flex-shrink-0" /> {user.title}
                                     </p>
                                 )}
                                 {user.company && <p className="text-zinc-500 text-xs mt-0.5">{user.company}</p>}
@@ -58,15 +56,8 @@ export function EventBadgeTemplate({ user }: TemplateProps) {
 
                         {user.bio && <p className="text-zinc-400 text-sm mb-5 leading-relaxed">{user.bio}</p>}
 
-                        {/* Countdown */}
-                        {user.countdownTarget && (
-                            <CountdownDisplay target={user.countdownTarget} label={user.countdownLabel} accentColor={accent} />
-                        )}
-
-                        {/* Coupon */}
-                        {user.couponCode && (
-                            <CouponDisplay code={user.couponCode} description={user.couponDescription} accentColor={accent} />
-                        )}
+                        {user.countdownTarget && <CountdownDisplay target={user.countdownTarget} label={user.countdownLabel} accentColor={accent} />}
+                        {user.couponCode && <CouponDisplay code={user.couponCode} description={user.couponDescription} accentColor={accent} />}
 
                         <div className="flex gap-2 mb-5">
                             {user.email && (
@@ -92,7 +83,6 @@ export function EventBadgeTemplate({ user }: TemplateProps) {
                             </a>
                         )}
 
-                        {/* Custom Links */}
                         {user.customLinks.length > 0 && (
                             <div className="space-y-2 mb-5">
                                 <CustomLinksDisplay links={user.customLinks} accentColor={accent} variant="button" />
