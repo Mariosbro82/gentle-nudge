@@ -8,11 +8,12 @@ interface ImageUploadProps {
     authUserId: string;
     onUploaded: (url: string) => void;
     onRemoved: () => void;
+    objectPosition?: string;
 }
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
-export function ImageUpload({ type, currentUrl, authUserId, onUploaded, onRemoved }: ImageUploadProps) {
+export function ImageUpload({ type, currentUrl, authUserId, onUploaded, onRemoved, objectPosition }: ImageUploadProps) {
     const inputRef = useRef<HTMLInputElement>(null);
     const [uploading, setUploading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -79,7 +80,7 @@ export function ImageUpload({ type, currentUrl, authUserId, onUploaded, onRemove
                         className="relative w-20 h-20 rounded-full bg-muted border-2 border-dashed border-border flex items-center justify-center overflow-hidden hover:border-blue-500/50 transition-colors group"
                     >
                         {currentUrl ? (
-                            <img src={currentUrl} alt="Profilbild" className="w-full h-full object-cover" />
+                            <img src={currentUrl} alt="Profilbild" className="w-full h-full object-cover" style={{ objectPosition: objectPosition || '50% 50%' }} />
                         ) : (
                             <Camera className="h-6 w-6 text-muted-foreground group-hover:text-blue-400 transition-colors" />
                         )}
@@ -115,7 +116,7 @@ export function ImageUpload({ type, currentUrl, authUserId, onUploaded, onRemove
                         className="relative w-full h-24 rounded-lg bg-muted border-2 border-dashed border-border flex items-center justify-center overflow-hidden hover:border-blue-500/50 transition-colors group"
                     >
                         {currentUrl ? (
-                            <img src={currentUrl} alt="Banner" className="w-full h-full object-cover" />
+                            <img src={currentUrl} alt="Banner" className="w-full h-full object-cover" style={{ objectPosition: objectPosition || '50% 50%' }} />
                         ) : (
                             <div className="flex flex-col items-center gap-1">
                                 <Camera className="h-5 w-5 text-muted-foreground group-hover:text-blue-400 transition-colors" />
