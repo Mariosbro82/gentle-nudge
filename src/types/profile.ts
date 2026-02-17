@@ -1,3 +1,9 @@
+export interface CustomLink {
+    title: string;
+    url: string;
+    icon?: string;
+}
+
 export interface ProfileUser {
     id: string;
     name: string;
@@ -16,6 +22,12 @@ export interface ProfileUser {
     backgroundImage: string;
     backgroundColor: string;
     bannerColor: string;
+    accentColor: string;
+    customLinks: CustomLink[];
+    couponCode: string;
+    couponDescription: string;
+    countdownTarget: string | null;
+    countdownLabel: string;
 }
 
 export interface TemplateProps {
