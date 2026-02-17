@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { supabase } from "@/lib/supabase/client";
 import { useAuth } from "@/contexts/auth-context";
 import { ImageUpload } from "@/components/settings/image-upload";
@@ -99,7 +100,6 @@ export default function SettingsPage() {
             } as any, { onConflict: "auth_user_id" });
             if (error) { alert(`Fehler beim Speichern: ${error.message}`); return; }
             setUser({ ...user, [field]: url });
-            alert(type === "profile" ? "Profilbild aktualisiert!" : "Banner aktualisiert!");
         } catch (err: any) {
             alert(`Ein unerwarteter Fehler ist aufgetreten: ${err.message || err}`);
         }
@@ -117,7 +117,6 @@ export default function SettingsPage() {
             } as any, { onConflict: "auth_user_id" });
             if (error) { alert(`Fehler beim Löschen: ${error.message}`); return; }
             setUser({ ...user, [field]: null });
-            alert("Bild erfolgreich entfernt.");
         } catch (err: any) {
             alert(`Ein unerwarteter Fehler ist aufgetreten: ${err.message || err}`);
         }
@@ -135,6 +134,7 @@ export default function SettingsPage() {
 
     async function handleBackgroundColorSave(color: string) {
         if (!authUser) return;
+        setUser({ ...user, background_color: color });
         await supabase.from("users").update({ background_color: color, updated_at: new Date().toISOString() } as any).eq("auth_user_id", authUser.id);
     }
 
@@ -159,6 +159,7 @@ export default function SettingsPage() {
 
     async function handleBannerColorSave(color: string) {
         if (!authUser) return;
+        setUser({ ...user, banner_color: color });
         await supabase.from("users").update({ banner_color: color, updated_at: new Date().toISOString() } as any).eq("auth_user_id", authUser.id);
     }
 
@@ -199,7 +200,6 @@ export default function SettingsPage() {
             setUser({ ...user, ...presetData });
             setActiveTemplate(presetData.active_template || activeTemplate);
             setCustomLinks(presetData.custom_links || []);
-            alert("Preset aktiviert!");
         }
     }
 
@@ -235,349 +235,368 @@ export default function SettingsPage() {
     if (loading) {
         return (
             <div className="flex items-center justify-center h-64">
-                <div className="h-6 w-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                <Loader2 className="h-6 w-6 animate-spin text-primary" />
             </div>
         );
     }
 
     return (
-        <div className="flex gap-8">
+        <div className="flex flex-col xl:flex-row gap-6 xl:gap-8">
             {/* Settings Column */}
-            <div className="space-y-8 flex-1 min-w-0 max-w-3xl">
-            <div>
-                <h1 className="text-3xl font-bold tracking-tight">Einstellungen</h1>
-                <p className="text-muted-foreground">Verwalten Sie Ihr Profil und Integrationen.</p>
-            </div>
+            <div className="flex-1 min-w-0 max-w-3xl space-y-6">
+                <div>
+                    <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Einstellungen</h1>
+                    <p className="text-sm text-muted-foreground mt-1">Verwalten Sie Ihr Profil und Integrationen.</p>
+                </div>
 
-            {/* Profile Images */}
-            <Card className="bg-card border-border">
-                <CardHeader>
-                    <CardTitle>Profilbilder</CardTitle>
-                    <CardDescription>Laden Sie ein Profilbild und Banner für Ihre digitale Visitenkarte hoch.</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                    <ImageUpload type="profile" currentUrl={user?.profile_pic} authUserId={authUser?.id || ""} onUploaded={(url) => handleImageUploaded("profile", url)} onRemoved={() => handleImageRemoved("profile")} objectPosition={user?.profile_pic_position || "50% 50%"} />
-                    {user?.profile_pic && (
-                        <FocalPointPicker
-                            imageUrl={user.profile_pic}
-                            position={user?.profile_pic_position || "50% 50%"}
-                            onChange={(pos) => handleMesfeFeatureSave("profile_pic_position", pos)}
-                            aspectRatio="1/1"
-                            label="Profilbild-Ausschnitt anpassen"
-                        />
-                    )}
-                    <ImageUpload type="banner" currentUrl={user?.banner_pic} authUserId={authUser?.id || ""} onUploaded={(url) => handleImageUploaded("banner", url)} onRemoved={() => handleImageRemoved("banner")} objectPosition={user?.banner_pic_position || "50% 50%"} />
-                    {user?.banner_pic && (
-                        <FocalPointPicker
-                            imageUrl={user.banner_pic}
-                            position={user?.banner_pic_position || "50% 50%"}
-                            onChange={(pos) => handleMesfeFeatureSave("banner_pic_position", pos)}
-                            aspectRatio="4/1"
-                            label="Banner-Ausschnitt anpassen"
-                        />
-                    )}
-                </CardContent>
-            </Card>
+                <form onSubmit={handleSave} className="contents">
 
-            {/* Profile Form */}
-            <form onSubmit={handleSave} className="contents">
-                <Card className="bg-card border-border mb-8">
-                    <CardHeader>
-                        <CardTitle>Persönliches Profil</CardTitle>
-                        <CardDescription>Diese Daten erscheinen auf Ihrer digitalen Visitenkarte.</CardDescription>
+                {/* ─── Profilbilder ─── */}
+                <Card>
+                    <CardHeader className="pb-4">
+                        <CardTitle className="text-lg">Profilbild</CardTitle>
+                        <CardDescription>Wird als rundes Avatar auf Ihrer Visitenkarte angezeigt.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        <div className="grid gap-2">
-                            <Label htmlFor="slug">Username / Handle (für Ihre URL)</Label>
-                            <div className="space-y-2">
-                                <div className="relative">
-                                    <Input id="slug" name="slug" value={username} onChange={(e) => checkUsername(e.target.value)} placeholder="fabian" className={`bg-input border-border pr-10 ${usernameStatus === 'available' ? 'border-green-500 ring-green-500/20' : usernameStatus === 'taken' || usernameStatus === 'invalid' ? 'border-red-500 ring-red-500/20' : ''}`} />
-                                    <div className="absolute right-3 top-2.5">
-                                        {usernameStatus === 'loading' && <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />}
-                                        {usernameStatus === 'available' && <Check className="w-4 h-4 text-green-500" />}
-                                        {(usernameStatus === 'taken' || usernameStatus === 'invalid') && <AlertCircle className="w-4 h-4 text-red-500" />}
-                                    </div>
-                                </div>
-                                {usernameMessage && (
-                                    <p className={`text-xs ${usernameStatus === 'available' ? 'text-green-500' : usernameStatus === 'taken' || usernameStatus === 'invalid' ? 'text-red-500' : 'text-muted-foreground'}`}>{usernameMessage}</p>
-                                )}
-                                <div className="flex justify-between items-center">
-                                    <p className="text-[10px] text-muted-foreground">Ihre öffentliche URL: <code className="bg-muted px-1 rounded">nfc.wear/p/{username || "..."}</code></p>
-                                    {user?.slug && (
-                                        <Button type="button" variant="outline" size="sm" asChild title="Profil öffnen">
-                                            <a href={`/p/${user.slug}`} target="_blank" rel="noopener noreferrer">
-                                                <ExternalLink className="h-3 w-3 mr-1" /> Öffnen
-                                            </a>
-                                        </Button>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                        <div className="grid gap-2"><Label htmlFor="name">Name</Label><Input id="name" name="name" defaultValue={user?.name} className="bg-input border-border" /></div>
-                        <div className="grid gap-2"><Label htmlFor="title">Job Title</Label><Input id="title" name="title" defaultValue={user?.job_title} className="bg-input border-border" /></div>
-                        <div className="grid gap-2"><Label htmlFor="bio">Bio</Label><Textarea id="bio" name="bio" defaultValue={user?.bio} className="bg-input border-border" /></div>
-                        <div className="grid gap-2"><Label htmlFor="email">Kontakt E-Mail (öffentlich)</Label><Input id="email" name="email" type="email" defaultValue={user?.email} className="bg-input border-border" /></div>
-                        <div className="grid gap-2"><Label htmlFor="phone">Telefon</Label><Input id="phone" name="phone" type="tel" defaultValue={user?.phone} className="bg-input border-border" /></div>
-                        <div className="grid gap-2"><Label htmlFor="website">Webseite</Label><Input id="website" name="website" defaultValue={user?.website} className="bg-input border-border" /></div>
-                        <div className="grid gap-2"><Label htmlFor="linkedin">LinkedIn URL</Label><Input id="linkedin" name="linkedin" defaultValue={user?.linkedin_url} className="bg-input border-border" /></div>
+                        <ImageUpload type="profile" currentUrl={user?.profile_pic} authUserId={authUser?.id || ""} onUploaded={(url) => handleImageUploaded("profile", url)} onRemoved={() => handleImageRemoved("profile")} objectPosition={user?.profile_pic_position || "50% 50%"} />
+                        {user?.profile_pic && (
+                            <FocalPointPicker
+                                imageUrl={user.profile_pic}
+                                position={user?.profile_pic_position || "50% 50%"}
+                                onChange={(pos) => handleMesfeFeatureSave("profile_pic_position", pos)}
+                                aspectRatio="1/1"
+                                label="Ausschnitt anpassen"
+                            />
+                        )}
                     </CardContent>
                 </Card>
 
-            {/* Custom Links */}
-            <Card className="bg-card border-border">
-                <CardHeader>
-                    <CardTitle>Zusätzliche Links</CardTitle>
-                    <CardDescription>Fügen Sie eigene Links hinzu (z.B. Calendly, Portfolio, Social Media).</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <CustomLinksEditor links={customLinks} onChange={setCustomLinks} />
-                    
-                </CardContent>
-            </Card>
-
-            {/* Accent Color */}
-            <Card className="bg-card border-border">
-                <CardHeader>
-                    <CardTitle>Button-Farbe</CardTitle>
-                    <CardDescription>Passen Sie die Akzentfarbe für Buttons und Icons in Ihrem Profil an.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <div className="flex items-center gap-3">
-                        <input
-                            type="color"
-                            value={user?.accent_color || "#4f46e5"}
-                            onChange={(e) => handleAccentColorSave(e.target.value)}
-                            className="w-12 h-10 rounded-lg border border-border cursor-pointer bg-transparent"
-                        />
-                        <span className="text-sm text-muted-foreground font-mono">{user?.accent_color || "#4f46e5"}</span>
-                        <div className="flex gap-2 ml-auto">
-                            {["#4f46e5", "#2563eb", "#7c3aed", "#dc2626", "#059669", "#d97706", "#ec4899", "#06b6d4"].map((color) => (
-                                <button
-                                    key={color}
-                                    type="button"
-                                    className={`w-8 h-8 rounded-full border-2 transition-all ${user?.accent_color === color ? "border-blue-500 scale-110" : "border-border hover:border-zinc-400"}`}
-                                    style={{ backgroundColor: color }}
-                                    onClick={() => handleAccentColorSave(color)}
-                                />
-                            ))}
-                        </div>
-                    </div>
-                </CardContent>
-            </Card>
-
-            {/* Messe-Features */}
-            <Card className="bg-card border-border">
-                <CardHeader>
-                    <CardTitle>Messe-Features</CardTitle>
-                    <CardDescription>Gutscheincodes, Countdown-Timer und mehr für Events und Messen.</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                    {/* Coupon */}
-                    <div className="space-y-3">
-                        <Label className="text-base font-medium">Gutscheincode</Label>
-                        <div className="grid grid-cols-2 gap-3">
-                            <div className="space-y-1">
-                                <Label htmlFor="coupon-code" className="text-xs text-muted-foreground">Code</Label>
-                                <Input
-                                    id="coupon-code"
-                                    placeholder="MESSE2026"
-                                    value={user?.coupon_code || ""}
-                                    onChange={(e) => handleMesfeFeatureSave("coupon_code", e.target.value)}
-                                    className="bg-input border-border font-mono"
-                                />
-                            </div>
-                            <div className="space-y-1">
-                                <Label htmlFor="coupon-desc" className="text-xs text-muted-foreground">Beschreibung</Label>
-                                <Input
-                                    id="coupon-desc"
-                                    placeholder="10% Rabatt auf Ihren Einkauf"
-                                    value={user?.coupon_description || ""}
-                                    onChange={(e) => handleMesfeFeatureSave("coupon_description", e.target.value)}
-                                    className="bg-input border-border"
-                                />
-                            </div>
-                        </div>
-                        {user?.coupon_code && (
-                            <Button type="button" variant="ghost" size="sm" className="text-red-400" onClick={() => { handleMesfeFeatureSave("coupon_code", null); handleMesfeFeatureSave("coupon_description", null); }}>
-                                <X className="h-3 w-3 mr-1" /> Gutschein entfernen
-                            </Button>
-                        )}
-                    </div>
-
-                    {/* Countdown */}
-                    <div className="space-y-3">
-                        <Label className="text-base font-medium">Countdown-Timer</Label>
-                        <div className="grid grid-cols-2 gap-3">
-                            <div className="space-y-1">
-                                <Label htmlFor="countdown-target" className="text-xs text-muted-foreground">Zieldatum & Uhrzeit</Label>
-                                <Input
-                                    id="countdown-target"
-                                    type="datetime-local"
-                                    value={user?.countdown_target ? new Date(user.countdown_target).toISOString().slice(0, 16) : ""}
-                                    onChange={(e) => handleMesfeFeatureSave("countdown_target", e.target.value ? new Date(e.target.value).toISOString() : null)}
-                                    className="bg-input border-border"
-                                />
-                            </div>
-                            <div className="space-y-1">
-                                <Label htmlFor="countdown-label" className="text-xs text-muted-foreground">Label</Label>
-                                <Input
-                                    id="countdown-label"
-                                    placeholder="Event startet in..."
-                                    value={user?.countdown_label || ""}
-                                    onChange={(e) => handleMesfeFeatureSave("countdown_label", e.target.value)}
-                                    className="bg-input border-border"
-                                />
-                            </div>
-                        </div>
-                        {user?.countdown_target && (
-                            <Button type="button" variant="ghost" size="sm" className="text-red-400" onClick={() => { handleMesfeFeatureSave("countdown_target", null); handleMesfeFeatureSave("countdown_label", null); }}>
-                                <X className="h-3 w-3 mr-1" /> Timer entfernen
-                            </Button>
-                        )}
-                    </div>
-                </CardContent>
-            </Card>
-
-            {/* Template Selector */}
-            <Card className="bg-card border-border">
-                <CardHeader>
-                    <CardTitle>Profil-Vorlage</CardTitle>
-                    <CardDescription>
-                        Wählen Sie ein Design für Ihre digitale Visitenkarte.
-                        {user?.slug && (
-                            <a href={`/p/${user.slug}`} target="_blank" rel="noopener noreferrer" className="ml-2 text-blue-400 hover:text-blue-300 inline-flex items-center gap-1">
-                                Vorschau <ExternalLink className="h-3 w-3" />
-                            </a>
-                        )}
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <TemplateSelector activeTemplateId={activeTemplate} onSelect={setActiveTemplate} />
-                    
-                </CardContent>
-            </Card>
-
-            {/* Presets */}
-            <Card className="bg-card border-border">
-                <CardHeader>
-                    <CardTitle>Profil-Presets</CardTitle>
-                    <CardDescription>Speichern Sie verschiedene Konfigurationen und wechseln Sie schnell zwischen Events.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    {user?.id && (
-                        <PresetManager
-                            userId={user.id}
-                            currentConfig={getCurrentPresetConfig()}
-                            onActivate={handlePresetActivate}
-                            baseUser={previewUser}
-                        />
-                    )}
-                </CardContent>
-            </Card>
-
-            {/* Background Settings */}
-            <Card className="bg-card border-border">
-                <CardHeader>
-                    <CardTitle>Profil-Hintergrund</CardTitle>
-                    <CardDescription>Wählen Sie eine Hintergrundfarbe oder laden Sie ein Hintergrundbild für Ihr Profil hoch.</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                    <div className="space-y-2">
-                        <Label htmlFor="bg-color">Hintergrundfarbe</Label>
-                        <div className="flex items-center gap-3">
-                            <input type="color" id="bg-color" value={user?.background_color || "#0a0a0a"} onChange={(e) => { setUser({ ...user, background_color: e.target.value }); handleBackgroundColorSave(e.target.value); }} className="w-12 h-10 rounded-lg border border-border cursor-pointer bg-transparent" />
-                            <span className="text-sm text-muted-foreground font-mono">{user?.background_color || "#0a0a0a"}</span>
-                            <div className="flex gap-2 ml-auto">
-                                {["#0a0a0a", "#1a1a2e", "#0f172a", "#1c1917", "#052e16"].map((color) => (
-                                    <button key={color} type="button" className={`w-8 h-8 rounded-full border-2 transition-all ${user?.background_color === color ? "border-blue-500 scale-110" : "border-border hover:border-zinc-400"}`} style={{ backgroundColor: color }} onClick={() => { setUser({ ...user, background_color: color }); handleBackgroundColorSave(color); }} />
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="space-y-2">
-                        <Label>Hintergrundbild</Label>
-                        {user?.background_image ? (
-                            <div className="relative rounded-xl overflow-hidden border border-border">
-                                <img src={user.background_image} alt="Background" className="w-full h-32 object-cover" style={{ objectPosition: user?.background_position || '50% 50%' }} />
-                                <Button variant="destructive" size="sm" className="absolute top-2 right-2" onClick={() => handleBackgroundImageRemove()}>
-                                    <X className="h-4 w-4 mr-1" /> Entfernen
-                                </Button>
-                            </div>
-                        ) : (
-                            <div>
-                                <label className="flex flex-col items-center justify-center h-28 rounded-xl border-2 border-dashed border-border hover:border-zinc-400 cursor-pointer transition-colors">
-                                    <Upload className="h-6 w-6 text-muted-foreground mb-2" />
-                                    <span className="text-sm text-muted-foreground">Bild hochladen</span>
-                                    <input type="file" accept="image/*" className="hidden" onChange={(e) => handleBackgroundImageUpload(e.target.files?.[0])} />
-                                </label>
-                            </div>
-                        )}
-                        <p className="text-xs text-muted-foreground">Das Hintergrundbild wird hinter der Profilkarte angezeigt. Empfohlene Größe: 1080x1920px.</p>
-                        {user?.background_image && (
+                {/* ─── Banner ─── */}
+                <Card>
+                    <CardHeader className="pb-4">
+                        <CardTitle className="text-lg">Banner</CardTitle>
+                        <CardDescription>Der obere Bereich Ihres Profils. Bild oder Farbe wählbar.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <ImageUpload type="banner" currentUrl={user?.banner_pic} authUserId={authUser?.id || ""} onUploaded={(url) => handleImageUploaded("banner", url)} onRemoved={() => handleImageRemoved("banner")} objectPosition={user?.banner_pic_position || "50% 50%"} />
+                        {user?.banner_pic && (
                             <FocalPointPicker
-                                imageUrl={user.background_image}
-                                position={user?.background_position || "50% 50%"}
-                                onChange={(pos) => handleMesfeFeatureSave("background_position", pos)}
-                                aspectRatio="9/16"
-                                label="Hintergrund-Ausschnitt anpassen"
+                                imageUrl={user.banner_pic}
+                                position={user?.banner_pic_position || "50% 50%"}
+                                onChange={(pos) => handleMesfeFeatureSave("banner_pic_position", pos)}
+                                aspectRatio="4/1"
+                                label="Ausschnitt anpassen"
                             />
                         )}
-                    </div>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="banner-color">Banner-Farbe</Label>
-                        <p className="text-xs text-muted-foreground">Wird als farbiger Banner angezeigt, wenn kein Banner-Bild hochgeladen ist.</p>
-                        <div className="flex items-center gap-3">
-                            <input type="color" id="banner-color" value={user?.banner_color || "#4f46e5"} onChange={(e) => { setUser({ ...user, banner_color: e.target.value }); handleBannerColorSave(e.target.value); }} className="w-12 h-10 rounded-lg border border-border cursor-pointer bg-transparent" />
-                            <span className="text-sm text-muted-foreground font-mono">{user?.banner_color || "#4f46e5"}</span>
-                            <div className="flex gap-2 ml-auto">
-                                {["#4f46e5", "#2563eb", "#7c3aed", "#dc2626", "#059669", "#d97706"].map((color) => (
-                                    <button key={color} type="button" className={`w-8 h-8 rounded-full border-2 transition-all ${user?.banner_color === color ? "border-blue-500 scale-110" : "border-border hover:border-zinc-400"}`} style={{ backgroundColor: color }} onClick={() => { setUser({ ...user, banner_color: color }); handleBannerColorSave(color); }} />
+                        <Separator className="my-2" />
+
+                        <div className="space-y-2">
+                            <Label htmlFor="banner-color">Banner-Farbe (Fallback)</Label>
+                            <p className="text-xs text-muted-foreground">Wird angezeigt wenn kein Banner-Bild hochgeladen ist.</p>
+                            <div className="flex flex-wrap items-center gap-3">
+                                <input type="color" id="banner-color" value={user?.banner_color || "#4f46e5"} onChange={(e) => handleBannerColorSave(e.target.value)} className="w-10 h-9 rounded-lg border border-border cursor-pointer bg-transparent flex-shrink-0" />
+                                <span className="text-xs text-muted-foreground font-mono">{user?.banner_color || "#4f46e5"}</span>
+                                <div className="flex gap-1.5 flex-wrap">
+                                    {["#4f46e5", "#2563eb", "#7c3aed", "#dc2626", "#059669", "#d97706"].map((color) => (
+                                        <button key={color} type="button" className={`w-7 h-7 rounded-full border-2 transition-all ${user?.banner_color === color ? "border-primary scale-110" : "border-border hover:border-muted-foreground/30"}`} style={{ backgroundColor: color }} onClick={() => handleBannerColorSave(color)} />
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                {/* ─── Hintergrund ─── */}
+                <Card>
+                    <CardHeader className="pb-4">
+                        <CardTitle className="text-lg">Hintergrund</CardTitle>
+                        <CardDescription>Der gesamte Hintergrund hinter der Profilkarte.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="bg-color">Hintergrundfarbe</Label>
+                            <div className="flex flex-wrap items-center gap-3">
+                                <input type="color" id="bg-color" value={user?.background_color || "#0a0a0a"} onChange={(e) => handleBackgroundColorSave(e.target.value)} className="w-10 h-9 rounded-lg border border-border cursor-pointer bg-transparent flex-shrink-0" />
+                                <span className="text-xs text-muted-foreground font-mono">{user?.background_color || "#0a0a0a"}</span>
+                                <div className="flex gap-1.5 flex-wrap">
+                                    {["#0a0a0a", "#1a1a2e", "#0f172a", "#1c1917", "#052e16"].map((color) => (
+                                        <button key={color} type="button" className={`w-7 h-7 rounded-full border-2 transition-all ${user?.background_color === color ? "border-primary scale-110" : "border-border hover:border-muted-foreground/30"}`} style={{ backgroundColor: color }} onClick={() => handleBackgroundColorSave(color)} />
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        <Separator className="my-2" />
+
+                        <div className="space-y-2">
+                            <Label>Hintergrundbild</Label>
+                            {user?.background_image ? (
+                                <div className="relative rounded-xl overflow-hidden border border-border">
+                                    <img src={user.background_image} alt="Background" className="w-full h-28 sm:h-32 object-cover" style={{ objectPosition: user?.background_position || '50% 50%' }} />
+                                    <Button variant="destructive" size="sm" className="absolute top-2 right-2" onClick={() => handleBackgroundImageRemove()}>
+                                        <X className="h-3 w-3 mr-1" /> Entfernen
+                                    </Button>
+                                </div>
+                            ) : (
+                                <label className="flex flex-col items-center justify-center h-24 sm:h-28 rounded-xl border-2 border-dashed border-border hover:border-muted-foreground/30 cursor-pointer transition-colors">
+                                    <Upload className="h-5 w-5 text-muted-foreground mb-1.5" />
+                                    <span className="text-xs text-muted-foreground">Bild hochladen</span>
+                                    <input type="file" accept="image/*" className="hidden" onChange={(e) => handleBackgroundImageUpload(e.target.files?.[0])} />
+                                </label>
+                            )}
+                            <p className="text-[10px] text-muted-foreground">Empfohlene Größe: 1080×1920px</p>
+                            {user?.background_image && (
+                                <FocalPointPicker
+                                    imageUrl={user.background_image}
+                                    position={user?.background_position || "50% 50%"}
+                                    onChange={(pos) => handleMesfeFeatureSave("background_position", pos)}
+                                    aspectRatio="9/16"
+                                    label="Ausschnitt anpassen"
+                                />
+                            )}
+                        </div>
+                    </CardContent>
+                </Card>
+
+                {/* ─── Persönliches Profil ─── */}
+                <Card>
+                    <CardHeader className="pb-4">
+                        <CardTitle className="text-lg">Persönliches Profil</CardTitle>
+                        <CardDescription>Diese Daten erscheinen auf Ihrer digitalen Visitenkarte.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="slug">Username / Handle</Label>
+                            <div className="relative">
+                                <Input id="slug" name="slug" value={username} onChange={(e) => checkUsername(e.target.value)} placeholder="fabian" className={`bg-input border-border pr-10 ${usernameStatus === 'available' ? 'border-green-500/50 ring-1 ring-green-500/20' : usernameStatus === 'taken' || usernameStatus === 'invalid' ? 'border-red-500/50 ring-1 ring-red-500/20' : ''}`} />
+                                <div className="absolute right-3 top-2.5">
+                                    {usernameStatus === 'loading' && <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />}
+                                    {usernameStatus === 'available' && <Check className="w-4 h-4 text-green-500" />}
+                                    {(usernameStatus === 'taken' || usernameStatus === 'invalid') && <AlertCircle className="w-4 h-4 text-red-500" />}
+                                </div>
+                            </div>
+                            {usernameMessage && (
+                                <p className={`text-xs ${usernameStatus === 'available' ? 'text-green-500' : usernameStatus === 'taken' || usernameStatus === 'invalid' ? 'text-red-500' : 'text-muted-foreground'}`}>{usernameMessage}</p>
+                            )}
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+                                <p className="text-[10px] text-muted-foreground">URL: <code className="bg-muted px-1 rounded">nfc.wear/p/{username || "..."}</code></p>
+                                {user?.slug && (
+                                    <Button type="button" variant="outline" size="sm" asChild>
+                                        <a href={`/p/${user.slug}`} target="_blank" rel="noopener noreferrer">
+                                            <ExternalLink className="h-3 w-3 mr-1" /> Profil öffnen
+                                        </a>
+                                    </Button>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="space-y-1.5">
+                                <Label htmlFor="name">Name</Label>
+                                <Input id="name" name="name" defaultValue={user?.name} className="bg-input border-border" />
+                            </div>
+                            <div className="space-y-1.5">
+                                <Label htmlFor="title">Job Title</Label>
+                                <Input id="title" name="title" defaultValue={user?.job_title} className="bg-input border-border" />
+                            </div>
+                        </div>
+
+                        <div className="space-y-1.5">
+                            <Label htmlFor="bio">Bio</Label>
+                            <Textarea id="bio" name="bio" defaultValue={user?.bio} className="bg-input border-border min-h-[80px]" />
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="space-y-1.5">
+                                <Label htmlFor="email">E-Mail (öffentlich)</Label>
+                                <Input id="email" name="email" type="email" defaultValue={user?.email} className="bg-input border-border" />
+                            </div>
+                            <div className="space-y-1.5">
+                                <Label htmlFor="phone">Telefon</Label>
+                                <Input id="phone" name="phone" type="tel" defaultValue={user?.phone} className="bg-input border-border" />
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="space-y-1.5">
+                                <Label htmlFor="website">Webseite</Label>
+                                <Input id="website" name="website" defaultValue={user?.website} className="bg-input border-border" />
+                            </div>
+                            <div className="space-y-1.5">
+                                <Label htmlFor="linkedin">LinkedIn URL</Label>
+                                <Input id="linkedin" name="linkedin" defaultValue={user?.linkedin_url} className="bg-input border-border" />
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                {/* ─── Custom Links ─── */}
+                <Card>
+                    <CardHeader className="pb-4">
+                        <CardTitle className="text-lg">Zusätzliche Links</CardTitle>
+                        <CardDescription>Calendly, Portfolio, Social Media etc.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <CustomLinksEditor links={customLinks} onChange={setCustomLinks} />
+                    </CardContent>
+                </Card>
+
+                {/* ─── Akzentfarbe ─── */}
+                <Card>
+                    <CardHeader className="pb-4">
+                        <CardTitle className="text-lg">Button-Farbe</CardTitle>
+                        <CardDescription>Akzentfarbe für Buttons und Icons.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="flex flex-wrap items-center gap-3">
+                            <input
+                                type="color"
+                                value={user?.accent_color || "#4f46e5"}
+                                onChange={(e) => handleAccentColorSave(e.target.value)}
+                                className="w-10 h-9 rounded-lg border border-border cursor-pointer bg-transparent flex-shrink-0"
+                            />
+                            <span className="text-xs text-muted-foreground font-mono">{user?.accent_color || "#4f46e5"}</span>
+                            <div className="flex gap-1.5 flex-wrap">
+                                {["#4f46e5", "#2563eb", "#7c3aed", "#dc2626", "#059669", "#d97706", "#ec4899", "#06b6d4"].map((color) => (
+                                    <button
+                                        key={color}
+                                        type="button"
+                                        className={`w-7 h-7 rounded-full border-2 transition-all ${user?.accent_color === color ? "border-primary scale-110" : "border-border hover:border-muted-foreground/30"}`}
+                                        style={{ backgroundColor: color }}
+                                        onClick={() => handleAccentColorSave(color)}
+                                    />
                                 ))}
                             </div>
                         </div>
-                    </div>
-                </CardContent>
-            </Card>
+                    </CardContent>
+                </Card>
 
-            {/* Ghost Mode */}
-            <Card className="bg-card border-border">
-                <CardHeader>
-                    <CardTitle>Ghost-Modus</CardTitle>
-                    <CardDescription>Machen Sie Ihr Profil temporär unsichtbar für NFC-Scanner.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <GhostModeToggle ghostMode={user?.ghost_mode || false} ghostModeUntil={user?.ghost_mode_until || null} onChange={handleGhostModeChange} saving={ghostSaving} />
-                </CardContent>
-            </Card>
+                {/* ─── Messe-Features ─── */}
+                <Card>
+                    <CardHeader className="pb-4">
+                        <CardTitle className="text-lg">Messe-Features</CardTitle>
+                        <CardDescription>Gutscheincodes und Countdown-Timer für Events.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-5">
+                        {/* Coupon */}
+                        <div className="space-y-3">
+                            <Label className="text-sm font-medium">Gutscheincode</Label>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div className="space-y-1">
+                                    <Label htmlFor="coupon-code" className="text-xs text-muted-foreground">Code</Label>
+                                    <Input id="coupon-code" placeholder="MESSE2026" value={user?.coupon_code || ""} onChange={(e) => handleMesfeFeatureSave("coupon_code", e.target.value)} className="bg-input border-border font-mono" />
+                                </div>
+                                <div className="space-y-1">
+                                    <Label htmlFor="coupon-desc" className="text-xs text-muted-foreground">Beschreibung</Label>
+                                    <Input id="coupon-desc" placeholder="10% Rabatt" value={user?.coupon_description || ""} onChange={(e) => handleMesfeFeatureSave("coupon_description", e.target.value)} className="bg-input border-border" />
+                                </div>
+                            </div>
+                            {user?.coupon_code && (
+                                <Button type="button" variant="ghost" size="sm" className="text-destructive hover:text-destructive/80 -ml-2" onClick={() => { handleMesfeFeatureSave("coupon_code", null); handleMesfeFeatureSave("coupon_description", null); }}>
+                                    <X className="h-3 w-3 mr-1" /> Entfernen
+                                </Button>
+                            )}
+                        </div>
 
-            {/* Webhook Integration */}
-            <Card className="bg-card border-border">
-                <CardHeader>
-                    <CardTitle>Integrationen</CardTitle>
-                    <CardDescription>Verbinden Sie externe Tools wie Zapier oder Make.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <WebhookSettings webhookUrl={user?.webhook_url || null} authUserId={authUser?.id || ""} email={user?.email || authUser?.email || ""} onChange={(url) => setUser({ ...user, webhook_url: url })} />
-                </CardContent>
-            </Card>
+                        <Separator />
 
-            {/* Sticky Save Button */}
-            <div className="sticky bottom-4 z-50 flex justify-end">
-                <Button type="submit" size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-black/30" disabled={saving || (!isAvailable && username !== user?.slug)}>
-                    {saving ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : null}
-                    Profil Speichern
-                </Button>
+                        {/* Countdown */}
+                        <div className="space-y-3">
+                            <Label className="text-sm font-medium">Countdown-Timer</Label>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div className="space-y-1">
+                                    <Label htmlFor="countdown-target" className="text-xs text-muted-foreground">Zieldatum</Label>
+                                    <Input id="countdown-target" type="datetime-local" value={user?.countdown_target ? new Date(user.countdown_target).toISOString().slice(0, 16) : ""} onChange={(e) => handleMesfeFeatureSave("countdown_target", e.target.value ? new Date(e.target.value).toISOString() : null)} className="bg-input border-border" />
+                                </div>
+                                <div className="space-y-1">
+                                    <Label htmlFor="countdown-label" className="text-xs text-muted-foreground">Label</Label>
+                                    <Input id="countdown-label" placeholder="Event startet in..." value={user?.countdown_label || ""} onChange={(e) => handleMesfeFeatureSave("countdown_label", e.target.value)} className="bg-input border-border" />
+                                </div>
+                            </div>
+                            {user?.countdown_target && (
+                                <Button type="button" variant="ghost" size="sm" className="text-destructive hover:text-destructive/80 -ml-2" onClick={() => { handleMesfeFeatureSave("countdown_target", null); handleMesfeFeatureSave("countdown_label", null); }}>
+                                    <X className="h-3 w-3 mr-1" /> Entfernen
+                                </Button>
+                            )}
+                        </div>
+                    </CardContent>
+                </Card>
+
+                {/* ─── Template ─── */}
+                <Card>
+                    <CardHeader className="pb-4">
+                        <CardTitle className="text-lg">Profil-Vorlage</CardTitle>
+                        <CardDescription>
+                            Design für Ihre digitale Visitenkarte.
+                            {user?.slug && (
+                                <a href={`/p/${user.slug}`} target="_blank" rel="noopener noreferrer" className="ml-2 text-primary hover:text-primary/80 inline-flex items-center gap-1 text-xs">
+                                    Vorschau <ExternalLink className="h-3 w-3" />
+                                </a>
+                            )}
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <TemplateSelector activeTemplateId={activeTemplate} onSelect={setActiveTemplate} />
+                    </CardContent>
+                </Card>
+
+                {/* ─── Presets ─── */}
+                <Card>
+                    <CardHeader className="pb-4">
+                        <CardTitle className="text-lg">Profil-Presets</CardTitle>
+                        <CardDescription>Konfigurationen speichern und schnell wechseln.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        {user?.id && (
+                            <PresetManager
+                                userId={user.id}
+                                currentConfig={getCurrentPresetConfig()}
+                                onActivate={handlePresetActivate}
+                                baseUser={previewUser}
+                            />
+                        )}
+                    </CardContent>
+                </Card>
+
+                {/* ─── Ghost Mode ─── */}
+                <Card>
+                    <CardHeader className="pb-4">
+                        <CardTitle className="text-lg">Ghost-Modus</CardTitle>
+                        <CardDescription>Profil temporär unsichtbar für Scanner.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <GhostModeToggle ghostMode={user?.ghost_mode || false} ghostModeUntil={user?.ghost_mode_until || null} onChange={handleGhostModeChange} saving={ghostSaving} />
+                    </CardContent>
+                </Card>
+
+                {/* ─── Integrationen ─── */}
+                <Card>
+                    <CardHeader className="pb-4">
+                        <CardTitle className="text-lg">Integrationen</CardTitle>
+                        <CardDescription>Externe Tools wie Zapier oder Make verbinden.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <WebhookSettings webhookUrl={user?.webhook_url || null} authUserId={authUser?.id || ""} email={user?.email || authUser?.email || ""} onChange={(url) => setUser({ ...user, webhook_url: url })} />
+                    </CardContent>
+                </Card>
+
+                {/* ─── Sticky Save ─── */}
+                <div className="sticky bottom-4 z-50 flex justify-end pb-2">
+                    <Button type="submit" size="lg" className="shadow-lg shadow-black/20" disabled={saving || (!isAvailable && username !== user?.slug)}>
+                        {saving && <Loader2 className="animate-spin mr-2 h-4 w-4" />}
+                        Profil Speichern
+                    </Button>
+                </div>
+
+                </form>
             </div>
-            </form>
-            </div>
 
-            {/* Sticky 3D Phone Preview */}
-            <div className="hidden xl:block w-[320px] flex-shrink-0">
-                <div className="sticky top-8">
-                    <p className="text-xs text-muted-foreground text-center mb-4">Live-Vorschau</p>
-                    <PhonePreview3D user={previewUser} />
+            {/* ─── Sticky 3D Phone Preview (Desktop) ─── */}
+            <div className="hidden xl:block w-[300px] flex-shrink-0">
+                <div className="sticky top-6">
+                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground text-center mb-3 font-medium">Live-Vorschau</p>
+                    <PhonePreview3D user={previewUser} scale={0.95} />
                 </div>
             </div>
         </div>
