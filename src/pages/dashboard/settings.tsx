@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { ExternalLink, Loader2, Upload, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,9 +14,10 @@ import { WebhookSettings } from "@/components/settings/webhook-settings";
 import { CustomLinksEditor } from "@/components/settings/custom-links-editor";
 import { PresetManager } from "@/components/settings/preset-manager";
 import { FocalPointPicker } from "@/components/settings/focal-point-picker";
+import { PhonePreview3D } from "@/components/settings/phone-preview-3d";
 import { useUsernameAvailability } from "@/hooks/use-username-availability";
 import { Check, AlertCircle } from "lucide-react";
-import type { CustomLink } from "@/types/profile";
+import type { CustomLink, ProfileUser } from "@/types/profile";
 
 export default function SettingsPage() {
     const { user: authUser } = useAuth();
@@ -202,6 +203,35 @@ export default function SettingsPage() {
         }
     }
 
+    const previewUser: ProfileUser = useMemo(() => ({
+        id: user?.id || "",
+        name: user?.name || "Ihr Name",
+        title: user?.job_title || "",
+        company: user?.company_name || "",
+        bio: user?.bio || "",
+        email: user?.email || "",
+        phone: user?.phone || "",
+        website: user?.website || "",
+        linkedin: user?.linkedin_url || "",
+        avatar: user?.profile_pic || "",
+        banner: user?.banner_pic || "",
+        activeTemplate: activeTemplate,
+        ghostMode: false,
+        ghostModeUntil: null,
+        backgroundImage: user?.background_image || "",
+        backgroundColor: user?.background_color || "#0a0a0a",
+        bannerColor: user?.banner_color || "#4f46e5",
+        accentColor: user?.accent_color || "#4f46e5",
+        customLinks: customLinks,
+        couponCode: user?.coupon_code || "",
+        couponDescription: user?.coupon_description || "",
+        countdownTarget: user?.countdown_target || null,
+        countdownLabel: user?.countdown_label || "",
+        profilePicPosition: user?.profile_pic_position || "50% 50%",
+        bannerPicPosition: user?.banner_pic_position || "50% 50%",
+        backgroundPosition: user?.background_position || "50% 50%",
+    }), [user, activeTemplate, customLinks]);
+
     if (loading) {
         return (
             <div className="flex items-center justify-center h-64">
@@ -211,7 +241,9 @@ export default function SettingsPage() {
     }
 
     return (
-        <div className="space-y-8 max-w-4xl">
+        <div className="flex gap-8">
+            {/* Settings Column */}
+            <div className="space-y-8 flex-1 min-w-0 max-w-3xl">
             <div>
                 <h1 className="text-3xl font-bold tracking-tight">Einstellungen</h1>
                 <p className="text-muted-foreground">Verwalten Sie Ihr Profil und Integrationen.</p>
@@ -437,6 +469,7 @@ export default function SettingsPage() {
                             userId={user.id}
                             currentConfig={getCurrentPresetConfig()}
                             onActivate={handlePresetActivate}
+                            baseUser={previewUser}
                         />
                     )}
                 </CardContent>
@@ -538,6 +571,15 @@ export default function SettingsPage() {
                 </Button>
             </div>
             </form>
+            </div>
+
+            {/* Sticky 3D Phone Preview */}
+            <div className="hidden xl:block w-[320px] flex-shrink-0">
+                <div className="sticky top-8">
+                    <p className="text-xs text-muted-foreground text-center mb-4">Live-Vorschau</p>
+                    <PhonePreview3D user={previewUser} />
+                </div>
+            </div>
         </div>
     );
 }
