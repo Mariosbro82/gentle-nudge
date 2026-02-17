@@ -17,6 +17,7 @@ const DURATION_OPTIONS = [
     { label: "24 Stunden", value: 24 },
     { label: "3 Tage", value: 72 },
     { label: "7 Tage", value: 168 },
+    { label: "Benutzerdefiniert", value: -1 },
 ] as const;
 
 function computeUntil(hours: number | null): string | null {
@@ -39,6 +40,9 @@ function getRemainingText(until: string | null): string | null {
 
 export function GhostModeToggle({ ghostMode, ghostModeUntil, onChange, saving }: GhostModeToggleProps) {
     const [selectedDuration, setSelectedDuration] = useState<number | null>(null);
+    const [customDate, setCustomDate] = useState<string>(
+        ghostModeUntil ? new Date(ghostModeUntil).toISOString().slice(0, 16) : ""
+    );
     const remainingText = ghostMode ? getRemainingText(ghostModeUntil) : null;
 
     function handleToggle(checked: boolean) {
@@ -46,13 +50,26 @@ export function GhostModeToggle({ ghostMode, ghostModeUntil, onChange, saving }:
             onChange(true, computeUntil(selectedDuration));
         } else {
             onChange(false, null);
+            setSelectedDuration(null);
+            setCustomDate("");
         }
     }
 
     function handleDurationChange(hours: number | null) {
         setSelectedDuration(hours);
+        if (hours === -1) {
+            // Custom mode - don't change until user picks a date
+            return;
+        }
         if (ghostMode) {
             onChange(true, computeUntil(hours));
+        }
+    }
+
+    function handleCustomDateChange(value: string) {
+        setCustomDate(value);
+        if (value && ghostMode) {
+            onChange(true, new Date(value).toISOString());
         }
     }
 
@@ -82,13 +99,13 @@ export function GhostModeToggle({ ghostMode, ghostModeUntil, onChange, saving }:
             </div>
 
             {ghostMode && (
-                <div className="pl-[52px] space-y-2">
+                <div className="pl-[52px] space-y-3">
                     <p className="text-xs text-muted-foreground">Dauer:</p>
                     <div className="flex flex-wrap gap-2">
                         {DURATION_OPTIONS.map((opt) => {
                             const isSelected =
-                                (!ghostModeUntil && opt.value === null) ||
-                                (selectedDuration === opt.value && ghostMode);
+                                selectedDuration === opt.value ||
+                                (!ghostModeUntil && opt.value === null && selectedDuration === null);
                             return (
                                 <button
                                     key={opt.label}
@@ -105,7 +122,21 @@ export function GhostModeToggle({ ghostMode, ghostModeUntil, onChange, saving }:
                             );
                         })}
                     </div>
-                    <p className="text-xs text-muted-foreground mt-1">
+
+                    {selectedDuration === -1 && (
+                        <div className="space-y-1">
+                            <label className="text-xs text-muted-foreground">Ghost-Modus aktiv bis:</label>
+                            <input
+                                type="datetime-local"
+                                value={customDate}
+                                onChange={(e) => handleCustomDateChange(e.target.value)}
+                                min={new Date().toISOString().slice(0, 16)}
+                                className="flex h-9 w-full max-w-xs rounded-md border border-border bg-input px-3 py-1 text-sm text-foreground shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                            />
+                        </div>
+                    )}
+
+                    <p className="text-xs text-muted-foreground">
                         Im Ghost-Modus sehen Scanner nur eine Platzhalter-Seite.
                     </p>
                 </div>
