@@ -31,6 +31,8 @@ export function RoiCalculator() {
   const [avgLeadsPerEvent, setAvgLeadsPerEvent] = useState(30);
   const [manualEntryMinutes, setManualEntryMinutes] = useState(5);
   const [hourlyLaborCost, setHourlyLaborCost] = useState(35);
+  const [hoodieCount, setHoodieCount] = useState(6);
+  const [crewneckCount, setCrewneckCount] = useState(4);
 
   const results = useMemo(() => {
     const selectedPlan = PLANS[plan];
@@ -44,7 +46,9 @@ export function RoiCalculator() {
 
     // === NFCwear Kosten ===
     const nfcSubscription = selectedPlan.monthlyPrice * 12;
-    const nfcOneTimeHardware = teamSize * 39; // €39 per NFC-Tag (einmalig)
+    const nfcHoodieHardware = hoodieCount * 89;   // €89 per Hoodie
+    const nfcCrewneckHardware = crewneckCount * 79; // €79 per Crewneck
+    const nfcOneTimeHardware = nfcHoodieHardware + nfcCrewneckHardware;
     const totalNfcCostYear1 = nfcSubscription + nfcOneTimeHardware;
     const totalNfcCostYear2 = nfcSubscription; // no hardware
 
@@ -80,7 +84,7 @@ export function RoiCalculator() {
       timeSavedHours,
       roiYear1,
     };
-  }, [plan, teamSize, paperCostPerPerson, printRunsPerYear, eventsPerYear, avgLeadsPerEvent, manualEntryMinutes, hourlyLaborCost]);
+  }, [plan, teamSize, paperCostPerPerson, printRunsPerYear, eventsPerYear, avgLeadsPerEvent, manualEntryMinutes, hourlyLaborCost, hoodieCount, crewneckCount]);
 
   const fmt = (v: number) => v.toLocaleString("de-DE");
   const isPositive = results.savingsYear1 > 0;
@@ -198,8 +202,18 @@ export function RoiCalculator() {
                   <span className="text-muted-foreground">Abo ({PLANS[plan].name})</span>
                   <span className="font-medium text-foreground tabular-nums">{fmt(results.nfcSubscription)} € / Jahr</span>
                 </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <Label className="text-xs text-muted-foreground">Hoodies (à 89 €)</Label>
+                    <Input type="number" value={hoodieCount} onChange={(e) => setHoodieCount(Math.max(0, Number(e.target.value) || 0))} className="mt-1 text-right font-mono" min={0} />
+                  </div>
+                  <div>
+                    <Label className="text-xs text-muted-foreground">Crewnecks (à 79 €)</Label>
+                    <Input type="number" value={crewneckCount} onChange={(e) => setCrewneckCount(Math.max(0, Number(e.target.value) || 0))} className="mt-1 text-right font-mono" min={0} />
+                  </div>
+                </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Hardware ({teamSize}× NFC-Tag à 39 €)</span>
+                  <span className="text-muted-foreground">Hardware gesamt</span>
                   <span className="font-medium text-foreground tabular-nums">{fmt(results.nfcOneTimeHardware)} € einmalig</span>
                 </div>
 
