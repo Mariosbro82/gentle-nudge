@@ -15,6 +15,8 @@ import { WebhookSettings } from "@/components/settings/webhook-settings";
 import { CustomLinksEditor } from "@/components/settings/custom-links-editor";
 import { PresetManager } from "@/components/settings/preset-manager";
 import { FocalPointPicker } from "@/components/settings/focal-point-picker";
+import { VideoUpload } from "@/components/settings/video-upload";
+import { FileVaultManager } from "@/components/settings/file-vault-manager";
 import { PhonePreview3D } from "@/components/settings/phone-preview-3d";
 import { useUsernameAvailability } from "@/hooks/use-username-availability";
 import { Check, AlertCircle } from "lucide-react";
@@ -230,6 +232,7 @@ export default function SettingsPage() {
         profilePicPosition: user?.profile_pic_position || "50% 50%",
         bannerPicPosition: user?.banner_pic_position || "50% 50%",
         backgroundPosition: user?.background_position || "50% 50%",
+        videoUrl: user?.video_url || "",
     }), [user, activeTemplate, customLinks]);
 
     if (loading) {
@@ -555,6 +558,41 @@ export default function SettingsPage() {
                                 onActivate={handlePresetActivate}
                                 baseUser={previewUser}
                             />
+                        )}
+                    </CardContent>
+                </Card>
+
+                {/* ─── Video Greeting ─── */}
+                <Card>
+                    <CardHeader className="pb-4">
+                        <CardTitle className="text-lg">Video-Begrüßung</CardTitle>
+                        <CardDescription>Kurzes Loom-Style Greeting-Video für Ihr Profil.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <VideoUpload
+                            currentUrl={user?.video_url || null}
+                            authUserId={authUser?.id || ""}
+                            onUploaded={async (url) => {
+                                await supabase.from("users").update({ video_url: url, updated_at: new Date().toISOString() } as any).eq("auth_user_id", authUser?.id || "");
+                                setUser({ ...user, video_url: url });
+                            }}
+                            onRemoved={async () => {
+                                await supabase.from("users").update({ video_url: null, updated_at: new Date().toISOString() } as any).eq("auth_user_id", authUser?.id || "");
+                                setUser({ ...user, video_url: null });
+                            }}
+                        />
+                    </CardContent>
+                </Card>
+
+                {/* ─── File Vault ─── */}
+                <Card>
+                    <CardHeader className="pb-4">
+                        <CardTitle className="text-lg">Dateien / Ressourcen</CardTitle>
+                        <CardDescription>PDFs, Dokumente und Dateien, die auf Ihrem Profil angezeigt werden.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        {user?.id && (
+                            <FileVaultManager userId={user.id} authUserId={authUser?.id || ""} />
                         )}
                     </CardContent>
                 </Card>

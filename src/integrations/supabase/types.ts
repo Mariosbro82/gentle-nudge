@@ -137,6 +137,38 @@ export type Database = {
         }
         Relationships: []
       }
+      file_clicks: {
+        Row: {
+          clicked_at: string | null
+          file_id: string
+          id: string
+          ip_address: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          clicked_at?: string | null
+          file_id: string
+          id?: string
+          ip_address?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          clicked_at?: string | null
+          file_id?: string
+          id?: string
+          ip_address?: string | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "file_clicks_file_id_fkey"
+            columns: ["file_id"]
+            isOneToOne: false
+            referencedRelation: "user_files"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       follow_up_emails: {
         Row: {
           body_html: string
@@ -567,6 +599,57 @@ export type Database = {
           },
         ]
       }
+      user_files: {
+        Row: {
+          created_at: string | null
+          download_count: number | null
+          file_name: string
+          file_size: number | null
+          file_type: string | null
+          file_url: string
+          id: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          download_count?: number | null
+          file_name: string
+          file_size?: number | null
+          file_type?: string | null
+          file_url: string
+          id?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          download_count?: number | null
+          file_name?: string
+          file_size?: number | null
+          file_type?: string | null
+          file_url?: string
+          id?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_files_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_files_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string | null
@@ -630,6 +713,7 @@ export type Database = {
           social_links: Json | null
           updated_at: string | null
           vcard_data: Json | null
+          video_url: string | null
           view_count: number | null
           webhook_url: string | null
           website: string | null
@@ -675,6 +759,7 @@ export type Database = {
           social_links?: Json | null
           updated_at?: string | null
           vcard_data?: Json | null
+          video_url?: string | null
           view_count?: number | null
           webhook_url?: string | null
           website?: string | null
@@ -720,6 +805,7 @@ export type Database = {
           social_links?: Json | null
           updated_at?: string | null
           vcard_data?: Json | null
+          video_url?: string | null
           view_count?: number | null
           webhook_url?: string | null
           website?: string | null
@@ -884,6 +970,7 @@ export type Database = {
           profile_pic_position: string | null
           slug: string | null
           social_links: Json | null
+          video_url: string | null
           view_count: number | null
           website: string | null
         }
@@ -915,6 +1002,7 @@ export type Database = {
           profile_pic_position?: string | null
           slug?: string | null
           social_links?: Json | null
+          video_url?: string | null
           view_count?: number | null
           website?: string | null
         }
@@ -946,6 +1034,7 @@ export type Database = {
           profile_pic_position?: string | null
           slug?: string | null
           social_links?: Json | null
+          video_url?: string | null
           view_count?: number | null
           website?: string | null
         }

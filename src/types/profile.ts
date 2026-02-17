@@ -31,6 +31,7 @@ export interface ProfileUser {
     profilePicPosition: string;
     bannerPicPosition: string;
     backgroundPosition: string;
+    videoUrl: string;
 }
 
 export interface TemplateProps {
