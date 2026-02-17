@@ -3,6 +3,8 @@ import { ContactForm } from "@/components/profile/contact-form";
 import { CustomLinksDisplay } from "@/components/profile/shared/custom-links-display";
 import { CouponDisplay } from "@/components/profile/shared/coupon-display";
 import { CountdownDisplay } from "@/components/profile/shared/countdown-display";
+import { VideoGreeting } from "@/components/profile/shared/video-greeting";
+import { ResourcesSection } from "@/components/profile/shared/resources-section";
 import type { TemplateProps } from "@/types/profile";
 import { ensureAbsoluteUrl } from "@/lib/utils";
 
@@ -36,13 +38,19 @@ export function EventBadgeTemplate({ user }: TemplateProps) {
                     <div className="h-1" style={{ background: `linear-gradient(90deg, ${accent}, ${accent}cc, ${accent}66)` }} />
                     <div className="p-6">
                         <div className="flex items-start gap-4 mb-5">
-                            <div className="w-20 h-20 rounded-xl bg-zinc-800 flex-shrink-0 flex items-center justify-center text-xl font-bold overflow-hidden border border-white/10">
-                                {user.avatar ? (
-                                    <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" style={{ objectPosition: user.profilePicPosition || '50% 50%' }} />
-                                ) : (
-                                    user.name.charAt(0).toUpperCase()
-                                )}
-                            </div>
+                            {user.videoUrl ? (
+                                <div className="flex-shrink-0">
+                                    <VideoGreeting videoUrl={user.videoUrl} />
+                                </div>
+                            ) : (
+                                <div className="w-20 h-20 rounded-xl bg-zinc-800 flex-shrink-0 flex items-center justify-center text-xl font-bold overflow-hidden border border-white/10">
+                                    {user.avatar ? (
+                                        <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" style={{ objectPosition: user.profilePicPosition || '50% 50%' }} />
+                                    ) : (
+                                        user.name.charAt(0).toUpperCase()
+                                    )}
+                                </div>
+                            )}
                             <div className="min-w-0">
                                 <h1 className="text-xl font-bold truncate">{user.name}</h1>
                                 {user.title && (
@@ -90,6 +98,8 @@ export function EventBadgeTemplate({ user }: TemplateProps) {
                         )}
 
                         <ContactForm recipientUserId={user.id} recipientName={user.name} />
+
+                        <ResourcesSection userId={user.id} accentColor={accent} />
                     </div>
                 </div>
             </div>

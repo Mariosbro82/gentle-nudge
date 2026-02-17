@@ -3,6 +3,8 @@ import { ContactForm } from "@/components/profile/contact-form";
 import { CustomLinksDisplay } from "@/components/profile/shared/custom-links-display";
 import { CouponDisplay } from "@/components/profile/shared/coupon-display";
 import { CountdownDisplay } from "@/components/profile/shared/countdown-display";
+import { VideoGreeting } from "@/components/profile/shared/video-greeting";
+import { ResourcesSection } from "@/components/profile/shared/resources-section";
 import type { TemplateProps } from "@/types/profile";
 import { ensureAbsoluteUrl } from "@/lib/utils";
 
@@ -24,13 +26,17 @@ export function MinimalistCardTemplate({ user }: TemplateProps) {
 
                 <div className="bg-zinc-900/95 backdrop-blur-sm p-8">
                     <div className="flex justify-center mb-6">
-                        <div className="w-28 h-28 rounded-full bg-zinc-800 flex items-center justify-center text-3xl font-light text-white overflow-hidden ring-2 ring-white/10">
-                            {user.avatar ? (
-                                <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" style={{ objectPosition: user.profilePicPosition || '50% 50%' }} />
-                            ) : (
-                                user.name.charAt(0).toUpperCase()
-                            )}
-                        </div>
+                        {user.videoUrl ? (
+                            <VideoGreeting videoUrl={user.videoUrl} />
+                        ) : (
+                            <div className="w-28 h-28 rounded-full bg-zinc-800 flex items-center justify-center text-3xl font-light text-white overflow-hidden ring-2 ring-white/10">
+                                {user.avatar ? (
+                                    <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" style={{ objectPosition: user.profilePicPosition || '50% 50%' }} />
+                                ) : (
+                                    user.name.charAt(0).toUpperCase()
+                                )}
+                            </div>
+                        )}
                     </div>
 
                     <div className="text-center mb-4">
@@ -71,6 +77,8 @@ export function MinimalistCardTemplate({ user }: TemplateProps) {
                     </div>
 
                     <ContactForm recipientUserId={user.id} recipientName={user.name} />
+
+                    <ResourcesSection userId={user.id} accentColor={accent} />
                 </div>
             </div>
         </div>

@@ -84,6 +84,7 @@ export default function ProfilePage() {
                     profilePicPosition: data.profile_pic_position || "50% 50%",
                     bannerPicPosition: data.banner_pic_position || "50% 50%",
                     backgroundPosition: data.background_position || "50% 50%",
+                    videoUrl: (data as any).video_url || "",
                 });
             } else {
                 setError(true);

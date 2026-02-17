@@ -4,6 +4,8 @@ import { ContactForm } from "@/components/profile/contact-form";
 import { CustomLinksDisplay } from "@/components/profile/shared/custom-links-display";
 import { CouponDisplay } from "@/components/profile/shared/coupon-display";
 import { CountdownDisplay } from "@/components/profile/shared/countdown-display";
+import { VideoGreeting } from "@/components/profile/shared/video-greeting";
+import { ResourcesSection } from "@/components/profile/shared/resources-section";
 import type { TemplateProps } from "@/types/profile";
 import { ensureAbsoluteUrl } from "@/lib/utils";
 
@@ -24,14 +26,19 @@ export function PremiumGradientTemplate({ user }: TemplateProps) {
 
             <div className="max-w-lg mx-auto px-4 -mt-20">
                 <div className="bg-zinc-900 rounded-2xl p-6 shadow-2xl shadow-black/50">
+                    {/* Avatar or Video Greeting */}
                     <div className="flex justify-center -mt-12 mb-4">
-                        <div className="w-24 h-24 rounded-full bg-zinc-800 border-4 border-zinc-900 flex items-center justify-center text-2xl font-bold text-white overflow-hidden">
-                            {user.avatar ? (
-                                <img src={user.avatar} alt={user.name} className="w-full h-full rounded-full object-cover" style={{ objectPosition: user.profilePicPosition || '50% 50%' }} />
-                            ) : (
-                                user.name.charAt(0).toUpperCase()
-                            )}
-                        </div>
+                        {user.videoUrl ? (
+                            <VideoGreeting videoUrl={user.videoUrl} />
+                        ) : (
+                            <div className="w-24 h-24 rounded-full bg-zinc-800 border-4 border-zinc-900 flex items-center justify-center text-2xl font-bold text-white overflow-hidden">
+                                {user.avatar ? (
+                                    <img src={user.avatar} alt={user.name} className="w-full h-full rounded-full object-cover" style={{ objectPosition: user.profilePicPosition || '50% 50%' }} />
+                                ) : (
+                                    user.name.charAt(0).toUpperCase()
+                                )}
+                            </div>
+                        )}
                     </div>
 
                     <div className="text-center mb-6">
@@ -70,6 +77,8 @@ export function PremiumGradientTemplate({ user }: TemplateProps) {
                     </div>
 
                     <ContactForm recipientUserId={user.id} recipientName={user.name} />
+
+                    <ResourcesSection userId={user.id} accentColor={accent} />
                 </div>
             </div>
         </div>
