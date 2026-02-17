@@ -248,7 +248,7 @@ export default function SettingsPage() {
             </Card>
 
             {/* Profile Form */}
-            <form onSubmit={handleSave}>
+            <form onSubmit={handleSave} className="contents">
                 <Card className="bg-card border-border mb-8">
                     <CardHeader>
                         <CardTitle>Persönliches Profil</CardTitle>
@@ -288,13 +288,8 @@ export default function SettingsPage() {
                         <div className="grid gap-2"><Label htmlFor="phone">Telefon</Label><Input id="phone" name="phone" type="tel" defaultValue={user?.phone} className="bg-input border-border" /></div>
                         <div className="grid gap-2"><Label htmlFor="website">Webseite</Label><Input id="website" name="website" defaultValue={user?.website} className="bg-input border-border" /></div>
                         <div className="grid gap-2"><Label htmlFor="linkedin">LinkedIn URL</Label><Input id="linkedin" name="linkedin" defaultValue={user?.linkedin_url} className="bg-input border-border" /></div>
-                        <Button type="submit" className="w-fit bg-primary text-primary-foreground hover:bg-primary/90" disabled={saving || (!isAvailable && username !== user?.slug)}>
-                            {saving ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : null}
-                            Profil Speichern
-                        </Button>
                     </CardContent>
                 </Card>
-            </form>
 
             {/* Custom Links */}
             <Card className="bg-card border-border">
@@ -304,7 +299,7 @@ export default function SettingsPage() {
                 </CardHeader>
                 <CardContent>
                     <CustomLinksEditor links={customLinks} onChange={setCustomLinks} />
-                    <p className="text-xs text-muted-foreground mt-3">Klicken Sie &quot;Profil Speichern&quot; oben, um die Links zu übernehmen.</p>
+                    
                 </CardContent>
             </Card>
 
@@ -426,7 +421,7 @@ export default function SettingsPage() {
                 </CardHeader>
                 <CardContent>
                     <TemplateSelector activeTemplateId={activeTemplate} onSelect={setActiveTemplate} />
-                    <p className="text-xs text-muted-foreground mt-3">Klicken Sie &quot;Profil Speichern&quot; oben, um die Vorlage zu übernehmen.</p>
+                    
                 </CardContent>
             </Card>
 
@@ -534,6 +529,15 @@ export default function SettingsPage() {
                     <WebhookSettings webhookUrl={user?.webhook_url || null} authUserId={authUser?.id || ""} email={user?.email || authUser?.email || ""} onChange={(url) => setUser({ ...user, webhook_url: url })} />
                 </CardContent>
             </Card>
+
+            {/* Sticky Save Button */}
+            <div className="sticky bottom-4 z-50 flex justify-end">
+                <Button type="submit" size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-black/30" disabled={saving || (!isAvailable && username !== user?.slug)}>
+                    {saving ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : null}
+                    Profil Speichern
+                </Button>
+            </div>
+            </form>
         </div>
     );
 }
