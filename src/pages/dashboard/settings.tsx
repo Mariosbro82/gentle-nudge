@@ -13,6 +13,7 @@ import { GhostModeToggle } from "@/components/settings/ghost-mode-toggle";
 import { WebhookSettings } from "@/components/settings/webhook-settings";
 import { CustomLinksEditor } from "@/components/settings/custom-links-editor";
 import { PresetManager } from "@/components/settings/preset-manager";
+import { FocalPointPicker } from "@/components/settings/focal-point-picker";
 import { useUsernameAvailability } from "@/hooks/use-username-availability";
 import { Check, AlertCircle } from "lucide-react";
 import type { CustomLink } from "@/types/profile";
@@ -224,7 +225,25 @@ export default function SettingsPage() {
                 </CardHeader>
                 <CardContent className="space-y-6">
                     <ImageUpload type="profile" currentUrl={user?.profile_pic} authUserId={authUser?.id || ""} onUploaded={(url) => handleImageUploaded("profile", url)} onRemoved={() => handleImageRemoved("profile")} />
+                    {user?.profile_pic && (
+                        <FocalPointPicker
+                            imageUrl={user.profile_pic}
+                            position={user?.profile_pic_position || "50% 50%"}
+                            onChange={(pos) => handleMesfeFeatureSave("profile_pic_position", pos)}
+                            aspectRatio="1/1"
+                            label="Profilbild-Ausschnitt anpassen"
+                        />
+                    )}
                     <ImageUpload type="banner" currentUrl={user?.banner_pic} authUserId={authUser?.id || ""} onUploaded={(url) => handleImageUploaded("banner", url)} onRemoved={() => handleImageRemoved("banner")} />
+                    {user?.banner_pic && (
+                        <FocalPointPicker
+                            imageUrl={user.banner_pic}
+                            position={user?.banner_pic_position || "50% 50%"}
+                            onChange={(pos) => handleMesfeFeatureSave("banner_pic_position", pos)}
+                            aspectRatio="4/1"
+                            label="Banner-Ausschnitt anpassen"
+                        />
+                    )}
                 </CardContent>
             </Card>
 
@@ -467,6 +486,15 @@ export default function SettingsPage() {
                             </div>
                         )}
                         <p className="text-xs text-muted-foreground">Das Hintergrundbild wird hinter der Profilkarte angezeigt. Empfohlene Größe: 1080x1920px.</p>
+                        {user?.background_image && (
+                            <FocalPointPicker
+                                imageUrl={user.background_image}
+                                position={user?.background_position || "50% 50%"}
+                                onChange={(pos) => handleMesfeFeatureSave("background_position", pos)}
+                                aspectRatio="9/16"
+                                label="Hintergrund-Ausschnitt anpassen"
+                            />
+                        )}
                     </div>
 
                     <div className="space-y-2">

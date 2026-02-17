@@ -28,6 +28,9 @@ export interface ProfileUser {
     couponDescription: string;
     countdownTarget: string | null;
     countdownLabel: string;
+    profilePicPosition: string;
+    bannerPicPosition: string;
+    backgroundPosition: string;
 }
 
 export interface TemplateProps {

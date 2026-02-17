@@ -595,8 +595,10 @@ export type Database = {
           auth_user_id: string | null
           background_color: string | null
           background_image: string | null
+          background_position: string | null
           banner_color: string | null
           banner_pic: string | null
+          banner_pic_position: string | null
           bio: string | null
           company_id: string | null
           company_name: string | null
@@ -620,6 +622,7 @@ export type Database = {
           notes: string | null
           phone: string | null
           profile_pic: string | null
+          profile_pic_position: string | null
           reply_to_email: string | null
           reply_to_name: string | null
           role: string | null
@@ -637,8 +640,10 @@ export type Database = {
           auth_user_id?: string | null
           background_color?: string | null
           background_image?: string | null
+          background_position?: string | null
           banner_color?: string | null
           banner_pic?: string | null
+          banner_pic_position?: string | null
           bio?: string | null
           company_id?: string | null
           company_name?: string | null
@@ -662,6 +667,7 @@ export type Database = {
           notes?: string | null
           phone?: string | null
           profile_pic?: string | null
+          profile_pic_position?: string | null
           reply_to_email?: string | null
           reply_to_name?: string | null
           role?: string | null
@@ -679,8 +685,10 @@ export type Database = {
           auth_user_id?: string | null
           background_color?: string | null
           background_image?: string | null
+          background_position?: string | null
           banner_color?: string | null
           banner_pic?: string | null
+          banner_pic_position?: string | null
           bio?: string | null
           company_id?: string | null
           company_name?: string | null
@@ -704,6 +712,7 @@ export type Database = {
           notes?: string | null
           phone?: string | null
           profile_pic?: string | null
+          profile_pic_position?: string | null
           reply_to_email?: string | null
           reply_to_name?: string | null
           role?: string | null
@@ -852,8 +861,10 @@ export type Database = {
           active_template: string | null
           background_color: string | null
           background_image: string | null
+          background_position: string | null
           banner_color: string | null
           banner_pic: string | null
+          banner_pic_position: string | null
           bio: string | null
           company_name: string | null
           countdown_label: string | null
@@ -870,6 +881,7 @@ export type Database = {
           name: string | null
           phone: string | null
           profile_pic: string | null
+          profile_pic_position: string | null
           slug: string | null
           social_links: Json | null
           view_count: number | null
@@ -880,8 +892,10 @@ export type Database = {
           active_template?: string | null
           background_color?: string | null
           background_image?: string | null
+          background_position?: string | null
           banner_color?: string | null
           banner_pic?: string | null
+          banner_pic_position?: string | null
           bio?: string | null
           company_name?: string | null
           countdown_label?: string | null
@@ -898,6 +912,7 @@ export type Database = {
           name?: string | null
           phone?: string | null
           profile_pic?: string | null
+          profile_pic_position?: string | null
           slug?: string | null
           social_links?: Json | null
           view_count?: number | null
@@ -908,8 +923,10 @@ export type Database = {
           active_template?: string | null
           background_color?: string | null
           background_image?: string | null
+          background_position?: string | null
           banner_color?: string | null
           banner_pic?: string | null
+          banner_pic_position?: string | null
           bio?: string | null
           company_name?: string | null
           countdown_label?: string | null
@@ -926,6 +943,7 @@ export type Database = {
           name?: string | null
           phone?: string | null
           profile_pic?: string | null
+          profile_pic_position?: string | null
           slug?: string | null
           social_links?: Json | null
           view_count?: number | null
