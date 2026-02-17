@@ -11,6 +11,7 @@ import {
     BarChart,
     UsersRound,
     Trophy,
+    Megaphone,
     X
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -49,6 +50,7 @@ export function AdminSidebar({ onClose }: { onClose?: () => void }) {
         { href: "/dashboard", label: "Übersicht", icon: LayoutDashboard },
         { href: "/dashboard/devices", label: "Geräte", icon: Smartphone },
         { href: "/dashboard/leads", label: "Kontakte", icon: Users },
+        { href: "/dashboard/campaigns", label: "Kampagnen", icon: Megaphone },
         { href: "/dashboard/analytics", label: "Analyse", icon: BarChart },
         ...(isOrgAdmin ? [
             { href: "/dashboard/team", label: "Team", icon: UsersRound },

@@ -74,6 +74,7 @@ export async function submitLead(leadData: {
     lead_email: string;
     lead_phone?: string;
     notes?: string;
+    marketing_consent?: boolean;
 }) {
     try {
         const { data, error } = await supabase.functions.invoke('submit-lead', {

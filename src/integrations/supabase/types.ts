@@ -244,6 +244,7 @@ export type Database = {
           lead_email: string | null
           lead_name: string | null
           lead_phone: string | null
+          marketing_consent: boolean | null
           notes: string | null
           sentiment: Database["public"]["Enums"]["sentiment_type"] | null
         }
@@ -257,6 +258,7 @@ export type Database = {
           lead_email?: string | null
           lead_name?: string | null
           lead_phone?: string | null
+          marketing_consent?: boolean | null
           notes?: string | null
           sentiment?: Database["public"]["Enums"]["sentiment_type"] | null
         }
@@ -270,6 +272,7 @@ export type Database = {
           lead_email?: string | null
           lead_name?: string | null
           lead_phone?: string | null
+          marketing_consent?: boolean | null
           notes?: string | null
           sentiment?: Database["public"]["Enums"]["sentiment_type"] | null
         }

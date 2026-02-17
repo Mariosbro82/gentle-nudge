@@ -22,7 +22,7 @@ Deno.serve(async (req) => {
         )
 
         const body = await req.json()
-        const { captured_by_user_id, lead_name, lead_email, lead_phone, notes, sentiment } = body
+        const { captured_by_user_id, lead_name, lead_email, lead_phone, notes, sentiment, marketing_consent } = body
 
         // Validate required fields
         if (!captured_by_user_id || !UUID_REGEX.test(captured_by_user_id)) {
@@ -75,7 +75,8 @@ Deno.serve(async (req) => {
                     lead_phone: sanitizedPhone,
                     notes: sanitizedNotes,
                     sentiment: validSentiment,
-                    ip_address: ip
+                    ip_address: ip,
+                    marketing_consent: marketing_consent === true
                 }
             ])
             .select()

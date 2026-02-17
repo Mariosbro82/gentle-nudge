@@ -17,6 +17,7 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [showLinks, setShowLinks] = useState(false);
+  const [consent, setConsent] = useState(false);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -28,7 +29,7 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!form.name || !form.email) return;
+    if (!form.name || !form.email || !consent) return;
 
     setSubmitting(true);
 
@@ -46,6 +47,7 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
       lead_email: form.email.trim(),
       lead_phone: form.phone.trim() || undefined,
       notes: notes || undefined,
+      marketing_consent: consent,
     });
 
     setSubmitting(false);
@@ -174,7 +176,20 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
               />
             </div>
           </div>
-        )}
+         )}
+
+        {/* DSGVO Consent */}
+        <label className="flex items-start gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={consent}
+            onChange={(e) => setConsent(e.target.checked)}
+            className="mt-1 rounded border-border"
+          />
+          <span className="text-xs text-muted-foreground leading-relaxed">
+            Ich stimme zu, dass meine Daten zur Kontaktaufnahme gespeichert und verarbeitet werden. *
+          </span>
+        </label>
       </div>
 
       <div className="flex gap-2">
@@ -188,7 +203,7 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
         </Button>
         <Button
           type="submit"
-          disabled={submitting || !form.name || !form.email}
+          disabled={submitting || !form.name || !form.email || !consent}
           className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500"
         >
           {submitting ? (
