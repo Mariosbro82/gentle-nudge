@@ -6,7 +6,6 @@ import { getTemplate } from "@/components/profile/templates";
 import type { ProfileUser } from "@/types/profile";
 import { logProfileView } from "@/lib/api/analytics";
 
-// Type for the public_profiles view (excludes sensitive fields)
 interface PublicProfile {
     id: string;
     name: string | null;
@@ -28,6 +27,12 @@ interface PublicProfile {
     background_image: string | null;
     background_color: string | null;
     banner_color: string | null;
+    accent_color: string | null;
+    custom_links: any[] | null;
+    coupon_code: string | null;
+    coupon_description: string | null;
+    countdown_target: string | null;
+    countdown_label: string | null;
 }
 
 export default function ProfilePage() {
@@ -40,7 +45,6 @@ export default function ProfilePage() {
         async function fetchUser() {
             if (!userId) return;
 
-            // Use public_profiles view to avoid exposing sensitive fields like webhook_url, notes, auth_user_id
             let { data } = await supabase.from("public_profiles" as any).select("*").eq("slug", userId).single() as { data: PublicProfile | null };
 
             if (!data) {
@@ -50,9 +54,6 @@ export default function ProfilePage() {
 
             if (data) {
                 logProfileView(data.id);
-            }
-
-            if (data) {
                 setUser({
                     id: data.id,
                     name: data.name || "No Name",
@@ -71,6 +72,12 @@ export default function ProfilePage() {
                     backgroundImage: data.background_image || "",
                     backgroundColor: data.background_color || "#0a0a0a",
                     bannerColor: data.banner_color || "#4f46e5",
+                    accentColor: data.accent_color || "#4f46e5",
+                    customLinks: data.custom_links || [],
+                    couponCode: data.coupon_code || "",
+                    couponDescription: data.coupon_description || "",
+                    countdownTarget: data.countdown_target || null,
+                    countdownLabel: data.countdown_label || "",
                 });
             } else {
                 setError(true);

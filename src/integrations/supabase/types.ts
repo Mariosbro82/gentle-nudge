@@ -427,6 +427,51 @@ export type Database = {
         }
         Relationships: []
       }
+      profile_presets: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          preset_data: Json
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          preset_data?: Json
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          preset_data?: Json
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profile_presets_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "profile_presets_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profile_views: {
         Row: {
           country: string | null
@@ -545,6 +590,7 @@ export type Database = {
       }
       users: {
         Row: {
+          accent_color: string | null
           active_template: string | null
           auth_user_id: string | null
           background_color: string | null
@@ -554,7 +600,12 @@ export type Database = {
           bio: string | null
           company_id: string | null
           company_name: string | null
+          countdown_label: string | null
+          countdown_target: string | null
+          coupon_code: string | null
+          coupon_description: string | null
           created_at: string | null
+          custom_links: Json | null
           default_followup_body_html: string | null
           default_followup_delay_hours: number | null
           default_followup_subject: string | null
@@ -581,6 +632,7 @@ export type Database = {
           website: string | null
         }
         Insert: {
+          accent_color?: string | null
           active_template?: string | null
           auth_user_id?: string | null
           background_color?: string | null
@@ -590,7 +642,12 @@ export type Database = {
           bio?: string | null
           company_id?: string | null
           company_name?: string | null
+          countdown_label?: string | null
+          countdown_target?: string | null
+          coupon_code?: string | null
+          coupon_description?: string | null
           created_at?: string | null
+          custom_links?: Json | null
           default_followup_body_html?: string | null
           default_followup_delay_hours?: number | null
           default_followup_subject?: string | null
@@ -617,6 +674,7 @@ export type Database = {
           website?: string | null
         }
         Update: {
+          accent_color?: string | null
           active_template?: string | null
           auth_user_id?: string | null
           background_color?: string | null
@@ -626,7 +684,12 @@ export type Database = {
           bio?: string | null
           company_id?: string | null
           company_name?: string | null
+          countdown_label?: string | null
+          countdown_target?: string | null
+          coupon_code?: string | null
+          coupon_description?: string | null
           created_at?: string | null
+          custom_links?: Json | null
           default_followup_body_html?: string | null
           default_followup_delay_hours?: number | null
           default_followup_subject?: string | null
@@ -785,6 +848,7 @@ export type Database = {
     Views: {
       public_profiles: {
         Row: {
+          accent_color: string | null
           active_template: string | null
           background_color: string | null
           background_image: string | null
@@ -792,6 +856,11 @@ export type Database = {
           banner_pic: string | null
           bio: string | null
           company_name: string | null
+          countdown_label: string | null
+          countdown_target: string | null
+          coupon_code: string | null
+          coupon_description: string | null
+          custom_links: Json | null
           email: string | null
           ghost_mode: boolean | null
           ghost_mode_until: string | null
@@ -807,6 +876,7 @@ export type Database = {
           website: string | null
         }
         Insert: {
+          accent_color?: string | null
           active_template?: string | null
           background_color?: string | null
           background_image?: string | null
@@ -814,6 +884,11 @@ export type Database = {
           banner_pic?: string | null
           bio?: string | null
           company_name?: string | null
+          countdown_label?: string | null
+          countdown_target?: string | null
+          coupon_code?: string | null
+          coupon_description?: string | null
+          custom_links?: Json | null
           email?: string | null
           ghost_mode?: boolean | null
           ghost_mode_until?: string | null
@@ -829,6 +904,7 @@ export type Database = {
           website?: string | null
         }
         Update: {
+          accent_color?: string | null
           active_template?: string | null
           background_color?: string | null
           background_image?: string | null
@@ -836,6 +912,11 @@ export type Database = {
           banner_pic?: string | null
           bio?: string | null
           company_name?: string | null
+          countdown_label?: string | null
+          countdown_target?: string | null
+          coupon_code?: string | null
+          coupon_description?: string | null
+          custom_links?: Json | null
           email?: string | null
           ghost_mode?: boolean | null
           ghost_mode_until?: string | null
