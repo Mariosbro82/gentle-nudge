@@ -46,8 +46,8 @@ export function RoiCalculator() {
 
     // === NFCwear Kosten ===
     const nfcSubscription = selectedPlan.monthlyPrice * 12;
-    const nfcHoodieHardware = hoodieCount * 89;   // €89 per Hoodie
-    const nfcCrewneckHardware = crewneckCount * 79; // €79 per Crewneck
+    const nfcHoodieHardware = hoodieCount * 39.95;   // €39,95 per Hoodie
+    const nfcCrewneckHardware = crewneckCount * 24.95; // €24,95 per T-Shirt
     const nfcOneTimeHardware = nfcHoodieHardware + nfcCrewneckHardware;
     const totalNfcCostYear1 = nfcSubscription + nfcOneTimeHardware;
     const totalNfcCostYear2 = nfcSubscription; // no hardware
@@ -204,11 +204,11 @@ export function RoiCalculator() {
                 </div>
                 <div className="grid grid-cols-2 gap-2.5">
                   <div>
-                    <Label className="text-xs text-muted-foreground">Hoodies (à 89 €)</Label>
+                    <Label className="text-xs text-muted-foreground">Hoodies (à 39,95 €)</Label>
                     <Input type="number" value={hoodieCount} onChange={(e) => setHoodieCount(Math.max(0, Number(e.target.value) || 0))} className="mt-1 text-right font-mono" min={0} />
                   </div>
                   <div>
-                    <Label className="text-xs text-muted-foreground">Crewnecks (à 79 €)</Label>
+                    <Label className="text-xs text-muted-foreground">T-Shirts (à 24,95 €)</Label>
                     <Input type="number" value={crewneckCount} onChange={(e) => setCrewneckCount(Math.max(0, Number(e.target.value) || 0))} className="mt-1 text-right font-mono" min={0} />
                   </div>
                 </div>
@@ -304,7 +304,7 @@ export function RoiCalculator() {
 
         <p className="text-xs text-muted-foreground text-center mt-6 max-w-2xl mx-auto">
           Berechnung basiert auf Ihren Eingaben. Druckkosten = Mitarbeitende × Kosten/Person × Druckläufe. 
-          Personalkosten = Leads × Minuten/Lead × Stundenlohn ÷ 60. Hardware: Hoodie à €89, Crewneck à €79.
+          Personalkosten = Leads × Minuten/Lead × Stundenlohn ÷ 60. Hardware: Hoodie à €39,95, T-Shirt à €24,95.
         </p>
       </div>
     </motion.section>
