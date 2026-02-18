@@ -80,6 +80,12 @@ export default function SustainabilityPage() {
             {/* ESG Bento Grid */}
             <section className="py-24 px-6">
                 <div className="max-w-7xl mx-auto">
+                    <div className="text-center mb-16">
+                        <h2 className="text-3xl md:text-5xl font-bold mb-6 text-foreground">Unsere Werte</h2>
+                        <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+                            Was uns antreibt und von anderen unterscheidet.
+                        </p>
+                    </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
                         {[
                             {
