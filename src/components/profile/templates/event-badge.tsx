@@ -34,7 +34,7 @@ export function EventBadgeTemplate({ user }: TemplateProps) {
             )}
 
             <div className="max-w-lg mx-auto px-4 -mt-12">
-                <div className="bg-zinc-900 rounded-xl border border-white/10 overflow-hidden">
+                <div className="bg-white/[0.06] backdrop-blur-2xl backdrop-saturate-150 rounded-xl border border-white/[0.12] ring-1 ring-white/[0.05] overflow-hidden">
                     <div className="h-1" style={{ background: `linear-gradient(90deg, ${accent}, ${accent}cc, ${accent}66)` }} />
                     <div className="p-6">
                         <div className="flex items-start gap-4 mb-5">

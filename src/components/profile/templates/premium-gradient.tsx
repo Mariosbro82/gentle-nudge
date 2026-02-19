@@ -52,7 +52,7 @@ export function PremiumGradientTemplate({ user }: TemplateProps) {
             )}
 
             <div className="max-w-lg mx-auto px-4 -mt-20">
-                <div className="bg-zinc-900/95 backdrop-blur-sm rounded-2xl p-6 shadow-2xl shadow-black/50">
+                <div className="bg-white/[0.06] backdrop-blur-2xl backdrop-saturate-150 rounded-2xl p-6 shadow-2xl shadow-black/40 border border-white/[0.12] ring-1 ring-white/[0.05]">
                     {/* Avatar or Video Greeting */}
                     <div className="flex justify-center -mt-12 mb-4">
                         {user.videoUrl ? (

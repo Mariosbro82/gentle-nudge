@@ -246,13 +246,19 @@ export default function SettingsPage() {
     return (
         <div className="flex flex-col xl:flex-row gap-6 xl:gap-8">
             {/* Settings Column */}
-            <div className="flex-1 min-w-0 max-w-3xl space-y-6">
+            <div className="flex-1 min-w-0 max-w-3xl space-y-8">
                 <div>
                     <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Einstellungen</h1>
                     <p className="text-sm text-muted-foreground mt-1">Verwalten Sie Ihr Profil und Integrationen.</p>
                 </div>
 
                 <form onSubmit={handleSave} className="contents">
+
+                {/* ═══════ ERSCHEINUNGSBILD ═══════ */}
+                <div className="space-y-1 pt-2">
+                    <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Erscheinungsbild</h2>
+                    <Separator />
+                </div>
 
                 {/* ─── Profilbilder ─── */}
                 <Card>
@@ -310,6 +316,13 @@ export default function SettingsPage() {
                     </CardContent>
                 </Card>
 
+                {/* ─── Trennlinie zwischen Banner & Hintergrund ─── */}
+                <div className="relative flex items-center gap-3 py-1">
+                    <div className="flex-1 h-px bg-border" />
+                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-medium whitespace-nowrap">Seitenhintergrund</span>
+                    <div className="flex-1 h-px bg-border" />
+                </div>
+
                 {/* ─── Hintergrund ─── */}
                 <Card>
                     <CardHeader className="pb-4">
@@ -361,6 +374,12 @@ export default function SettingsPage() {
                         </div>
                     </CardContent>
                 </Card>
+
+                {/* ═══════ PERSÖNLICHE DATEN ═══════ */}
+                <div className="space-y-1 pt-4">
+                    <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Persönliche Daten</h2>
+                    <Separator />
+                </div>
 
                 {/* ─── Persönliches Profil ─── */}
                 <Card>
@@ -475,6 +494,12 @@ export default function SettingsPage() {
                     </CardContent>
                 </Card>
 
+                {/* ═══════ MESSE & EVENTS ═══════ */}
+                <div className="space-y-1 pt-4">
+                    <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Messe & Events</h2>
+                    <Separator />
+                </div>
+
                 {/* ─── Messe-Features ─── */}
                 <Card>
                     <CardHeader className="pb-4">
@@ -525,6 +550,12 @@ export default function SettingsPage() {
                         </div>
                     </CardContent>
                 </Card>
+
+                {/* ═══════ VORLAGEN & ERWEITERT ═══════ */}
+                <div className="space-y-1 pt-4">
+                    <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Vorlagen & Erweitert</h2>
+                    <Separator />
+                </div>
 
                 {/* ─── Template ─── */}
                 <Card>
@@ -596,6 +627,12 @@ export default function SettingsPage() {
                         )}
                     </CardContent>
                 </Card>
+
+                {/* ═══════ DATENSCHUTZ & INTEGRATIONEN ═══════ */}
+                <div className="space-y-1 pt-4">
+                    <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Datenschutz & Integrationen</h2>
+                    <Separator />
+                </div>
 
                 {/* ─── Ghost Mode ─── */}
                 <Card>
