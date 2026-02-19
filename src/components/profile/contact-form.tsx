@@ -83,7 +83,7 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mt-6 space-y-4 rounded-2xl border border-border bg-card p-5">
+    <form onSubmit={handleSubmit} className="mt-6 space-y-4 rounded-2xl border border-white/[0.1] bg-white/[0.04] backdrop-blur-xl p-5">
       <h3 className="text-center text-lg font-semibold text-foreground">
         Kontaktdaten senden
       </h3>

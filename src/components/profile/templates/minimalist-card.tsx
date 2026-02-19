@@ -17,14 +17,14 @@ export function MinimalistCardTemplate({ user }: TemplateProps) {
 
     return (
         <div className="min-h-screen text-white flex flex-col items-center justify-center px-4 py-12" style={bgStyle}>
-            <div className="w-full max-w-md rounded-3xl overflow-hidden shadow-2xl shadow-black/50 border border-white/10">
+            <div className="w-full max-w-md rounded-3xl overflow-hidden shadow-2xl shadow-black/40 border border-white/[0.12] ring-1 ring-white/[0.05]">
                 {user.banner ? (
                     <div className="h-24 bg-cover bg-center" style={{ backgroundImage: `url(${user.banner})`, backgroundPosition: user.bannerPicPosition || '50% 50%' }} />
                 ) : (
                     <div className="h-6" style={{ backgroundColor: user.bannerColor || '#4f46e5' }} />
                 )}
 
-                <div className="bg-zinc-900/95 backdrop-blur-sm p-8">
+                <div className="bg-white/[0.06] backdrop-blur-2xl backdrop-saturate-150 p-8">
                     <div className="flex justify-center mb-6">
                         {user.videoUrl ? (
                             <VideoGreeting videoUrl={user.videoUrl} />
