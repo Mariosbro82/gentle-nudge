@@ -173,8 +173,14 @@ export default function SettingsPage() {
 
     async function handleMesfeFeatureSave(field: string, value: any) {
         if (!authUser) return;
-        setUser({ ...user, [field]: value });
+        setUser((prev: any) => ({ ...prev, [field]: value }));
         await supabase.from("users").update({ [field]: value, updated_at: new Date().toISOString() } as any).eq("auth_user_id", authUser.id);
+    }
+
+    async function handleMesfeFeatureBatchSave(updates: Record<string, any>) {
+        if (!authUser) return;
+        setUser((prev: any) => ({ ...prev, ...updates }));
+        await supabase.from("users").update({ ...updates, updated_at: new Date().toISOString() } as any).eq("auth_user_id", authUser.id);
     }
 
     function getCurrentPresetConfig() {
@@ -521,7 +527,7 @@ export default function SettingsPage() {
                                 </div>
                             </div>
                             {user?.coupon_code && (
-                                <Button type="button" variant="ghost" size="sm" className="text-destructive hover:text-destructive/80 -ml-2" onClick={() => { handleMesfeFeatureSave("coupon_code", null); handleMesfeFeatureSave("coupon_description", null); }}>
+                                <Button type="button" variant="ghost" size="sm" className="text-destructive hover:text-destructive/80 -ml-2" onClick={() => handleMesfeFeatureBatchSave({ coupon_code: null, coupon_description: null })}>
                                     <X className="h-3 w-3 mr-1" /> Entfernen
                                 </Button>
                             )}
@@ -543,7 +549,7 @@ export default function SettingsPage() {
                                 </div>
                             </div>
                             {user?.countdown_target && (
-                                <Button type="button" variant="ghost" size="sm" className="text-destructive hover:text-destructive/80 -ml-2" onClick={() => { handleMesfeFeatureSave("countdown_target", null); handleMesfeFeatureSave("countdown_label", null); }}>
+                                <Button type="button" variant="ghost" size="sm" className="text-destructive hover:text-destructive/80 -ml-2" onClick={() => handleMesfeFeatureBatchSave({ countdown_target: null, countdown_label: null })}>
                                     <X className="h-3 w-3 mr-1" /> Entfernen
                                 </Button>
                             )}
