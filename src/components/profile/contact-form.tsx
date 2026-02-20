@@ -58,10 +58,17 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
 
   if (submitted) {
     return (
-      <div className="mt-6 rounded-2xl border border-green-500/20 bg-green-500/5 p-6 text-center">
+      <div
+        className="mt-6 rounded-2xl border border-green-500/20 p-6 text-center"
+        style={{
+          background: 'rgba(34, 197, 94, 0.08)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+        }}
+      >
         <CheckCircle className="mx-auto mb-3 h-10 w-10 text-green-400" />
-        <h3 className="text-lg font-semibold text-foreground">Kontakt gesendet!</h3>
-        <p className="mt-1 text-sm text-muted-foreground">
+        <h3 className="text-lg font-semibold text-white">Kontakt gesendet!</h3>
+        <p className="mt-1 text-sm text-white/60">
           {recipientName} hat deine Kontaktdaten erhalten.
         </p>
       </div>
@@ -73,7 +80,7 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
       <div className="mt-6 space-y-3">
         <Button
           onClick={() => setOpen(true)}
-          className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500"
+          className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white shadow-lg"
         >
           <UserPlus className="mr-2 h-4 w-4" />
           Kontakt austauschen
@@ -83,17 +90,30 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mt-6 space-y-4 rounded-2xl border border-white/[0.1] bg-white/[0.04] backdrop-blur-xl p-5">
-      <h3 className="text-center text-lg font-semibold text-foreground">
+    <form
+      onSubmit={handleSubmit}
+      className="mt-6 space-y-4 rounded-2xl border border-white/[0.12] ring-1 ring-white/[0.06] p-5 overflow-hidden relative"
+      style={{
+        background: 'linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.04) 100%)',
+        backdropFilter: 'blur(30px) saturate(150%)',
+        WebkitBackdropFilter: 'blur(30px) saturate(150%)',
+      }}
+    >
+      {/* Glass highlight */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        background: 'linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 50%)',
+      }} />
+
+      <h3 className="relative z-10 text-center text-lg font-semibold text-white">
         Kontaktdaten senden
       </h3>
-      <p className="text-center text-sm text-muted-foreground">
+      <p className="relative z-10 text-center text-sm text-white/60">
         Teile deine Infos mit {recipientName}
       </p>
 
-      <div className="space-y-3">
+      <div className="relative z-10 space-y-3">
         <div>
-          <Label htmlFor="contact-name">Name *</Label>
+          <Label htmlFor="contact-name" className="text-white/80">Name *</Label>
           <Input
             id="contact-name"
             placeholder="Dein Name"
@@ -101,11 +121,12 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
             onChange={(e) => setForm({ ...form, name: e.target.value })}
             required
             maxLength={100}
+            className="bg-white/[0.06] border-white/[0.12] text-white placeholder:text-white/30 focus:border-white/25"
           />
         </div>
 
         <div>
-          <Label htmlFor="contact-email">E-Mail *</Label>
+          <Label htmlFor="contact-email" className="text-white/80">E-Mail *</Label>
           <Input
             id="contact-email"
             type="email"
@@ -114,11 +135,12 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
             onChange={(e) => setForm({ ...form, email: e.target.value })}
             required
             maxLength={255}
+            className="bg-white/[0.06] border-white/[0.12] text-white placeholder:text-white/30 focus:border-white/25"
           />
         </div>
 
         <div>
-          <Label htmlFor="contact-phone">Telefon</Label>
+          <Label htmlFor="contact-phone" className="text-white/80">Telefon</Label>
           <Input
             id="contact-phone"
             type="tel"
@@ -126,25 +148,26 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
             value={form.phone}
             onChange={(e) => setForm({ ...form, phone: e.target.value })}
             maxLength={30}
+            className="bg-white/[0.06] border-white/[0.12] text-white placeholder:text-white/30 focus:border-white/25"
           />
         </div>
 
         <div>
-          <Label htmlFor="contact-message">Nachricht</Label>
+          <Label htmlFor="contact-message" className="text-white/80">Nachricht</Label>
           <Textarea
             id="contact-message"
             placeholder="Hallo, wir haben uns auf der Messe getroffen..."
             value={form.message}
             onChange={(e) => setForm({ ...form, message: e.target.value })}
             maxLength={500}
-            className="min-h-[80px]"
+            className="min-h-[80px] bg-white/[0.06] border-white/[0.12] text-white placeholder:text-white/30 focus:border-white/25"
           />
         </div>
 
         <button
           type="button"
           onClick={() => setShowLinks(!showLinks)}
-          className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          className="flex items-center gap-1.5 text-sm text-white/50 hover:text-white/80 transition-colors"
         >
           <Link className="h-3.5 w-3.5" />
           Links hinzufügen
@@ -154,7 +177,7 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
         {showLinks && (
           <div className="space-y-3 pl-1">
             <div>
-              <Label htmlFor="contact-website">Website</Label>
+              <Label htmlFor="contact-website" className="text-white/80">Website</Label>
               <Input
                 id="contact-website"
                 type="url"
@@ -162,10 +185,11 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
                 value={form.website}
                 onChange={(e) => setForm({ ...form, website: e.target.value })}
                 maxLength={255}
+                className="bg-white/[0.06] border-white/[0.12] text-white placeholder:text-white/30 focus:border-white/25"
               />
             </div>
             <div>
-              <Label htmlFor="contact-linkedin">LinkedIn</Label>
+              <Label htmlFor="contact-linkedin" className="text-white/80">LinkedIn</Label>
               <Input
                 id="contact-linkedin"
                 type="url"
@@ -173,6 +197,7 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
                 value={form.linkedin}
                 onChange={(e) => setForm({ ...form, linkedin: e.target.value })}
                 maxLength={255}
+                className="bg-white/[0.06] border-white/[0.12] text-white placeholder:text-white/30 focus:border-white/25"
               />
             </div>
           </div>
@@ -184,19 +209,19 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
             type="checkbox"
             checked={consent}
             onChange={(e) => setConsent(e.target.checked)}
-            className="mt-1 rounded border-border"
+            className="mt-1 rounded border-white/20"
           />
-          <span className="text-xs text-muted-foreground leading-relaxed">
+          <span className="text-xs text-white/50 leading-relaxed">
             Ich stimme zu, dass meine Daten zur Kontaktaufnahme gespeichert und verarbeitet werden. *
           </span>
         </label>
       </div>
 
-      <div className="flex gap-2">
+      <div className="relative z-10 flex gap-2">
         <Button
           type="button"
           variant="outline"
-          className="flex-1"
+          className="flex-1 border-white/15 text-white/80 hover:bg-white/10 hover:text-white bg-transparent"
           onClick={() => setOpen(false)}
         >
           Abbrechen
@@ -204,7 +229,7 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
         <Button
           type="submit"
           disabled={submitting || !form.name || !form.email || !consent}
-          className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500"
+          className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white"
         >
           {submitting ? (
             <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />

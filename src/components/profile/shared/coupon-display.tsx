@@ -19,8 +19,15 @@ export function CouponDisplay({ code, description, accentColor }: Props) {
     };
 
     return (
-        <div className="rounded-xl border border-dashed border-white/20 p-4 text-center space-y-2 my-4">
-            <div className="flex items-center justify-center gap-2 text-sm text-zinc-400">
+        <div
+            className="rounded-xl border border-dashed border-white/[0.18] p-4 text-center space-y-2 my-4 overflow-hidden relative"
+            style={{
+                background: 'rgba(255,255,255,0.05)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+            }}
+        >
+            <div className="flex items-center justify-center gap-2 text-sm text-white/70">
                 <Ticket className="h-4 w-4" />
                 <span>{description || "Gutschein"}</span>
             </div>

@@ -52,13 +52,27 @@ export function PremiumGradientTemplate({ user }: TemplateProps) {
             )}
 
             <div className="max-w-lg mx-auto px-4 -mt-20">
-                <div className="bg-white/[0.06] backdrop-blur-2xl backdrop-saturate-150 rounded-2xl p-6 shadow-2xl shadow-black/40 border border-white/[0.12] ring-1 ring-white/[0.05]">
+                {/* Liquid Glass Card */}
+                <div
+                    className="relative rounded-2xl p-6 shadow-2xl shadow-black/50 border border-white/[0.15] ring-1 ring-white/[0.08] overflow-hidden"
+                    style={{
+                        background: 'linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.09) 100%)',
+                        backdropFilter: 'blur(40px) saturate(180%)',
+                        WebkitBackdropFilter: 'blur(40px) saturate(180%)',
+                    }}
+                >
+                    {/* Glass highlight */}
+                    <div className="absolute inset-0 pointer-events-none" style={{
+                        background: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 50%)',
+                        borderRadius: 'inherit',
+                    }} />
+
                     {/* Avatar or Video Greeting */}
-                    <div className="flex justify-center -mt-12 mb-4">
+                    <div className="relative z-10 flex justify-center -mt-12 mb-4">
                         {user.videoUrl ? (
                             <VideoGreeting videoUrl={user.videoUrl} />
                         ) : (
-                            <div className="w-24 h-24 rounded-xl bg-zinc-800 border-4 border-zinc-900 flex items-center justify-center text-2xl font-bold text-white overflow-hidden shadow-lg">
+                            <div className="w-24 h-24 rounded-xl bg-zinc-800/80 border-2 border-white/20 flex items-center justify-center text-2xl font-bold text-white overflow-hidden shadow-lg shadow-black/40">
                                 {user.avatar ? (
                                     <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" style={{ objectPosition: user.profilePicPosition || '50% 50%' }} />
                                 ) : (
@@ -69,75 +83,77 @@ export function PremiumGradientTemplate({ user }: TemplateProps) {
                     </div>
 
                     {/* Name & Title */}
-                    <div className="text-center mb-5">
-                        <h1 className="text-2xl font-bold">{user.name}</h1>
+                    <div className="relative z-10 text-center mb-5">
+                        <h1 className="text-2xl font-bold text-white drop-shadow-sm">{user.name}</h1>
                         {(user.title || user.company) && (
-                            <p className="text-zinc-400 text-sm mt-1">
+                            <p className="text-white/70 text-sm mt-1 drop-shadow-sm">
                                 {user.title}{user.title && user.company ? " at " : ""}{user.company}
                             </p>
                         )}
                     </div>
 
-                    {user.bio && <p className="text-zinc-400 text-sm text-center mb-5 leading-relaxed">{user.bio}</p>}
+                    {user.bio && <p className="relative z-10 text-white/70 text-sm text-center mb-5 leading-relaxed drop-shadow-sm">{user.bio}</p>}
 
-                    {user.countdownTarget && <CountdownDisplay target={user.countdownTarget} label={user.countdownLabel} accentColor={accent} />}
-                    {user.couponCode && <CouponDisplay code={user.couponCode} description={user.couponDescription} accentColor={accent} />}
+                    <div className="relative z-10">
+                        {user.countdownTarget && <CountdownDisplay target={user.countdownTarget} label={user.countdownLabel} accentColor={accent} />}
+                        {user.couponCode && <CouponDisplay code={user.couponCode} description={user.couponDescription} accentColor={accent} />}
 
-                    {/* Contact Info with Icons */}
-                    <div className="space-y-1 mb-5">
-                        {user.phone && (
-                            <a href={`tel:${user.phone}`} className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors group">
-                                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: `${accent}20` }}>
-                                    <Phone className="h-4 w-4" style={{ color: accent }} />
-                                </div>
-                                <span className="text-sm text-zinc-300 group-hover:text-white transition-colors">{user.phone}</span>
-                            </a>
-                        )}
-                        {user.email && (
-                            <a href={`mailto:${user.email}`} className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors group">
-                                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: `${accent}20` }}>
-                                    <Mail className="h-4 w-4" style={{ color: accent }} />
-                                </div>
-                                <span className="text-sm text-zinc-300 group-hover:text-white transition-colors">{user.email}</span>
-                            </a>
-                        )}
-                        {user.website && (
-                            <a href={ensureAbsoluteUrl(user.website)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors group">
-                                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: `${accent}20` }}>
-                                    <Globe className="h-4 w-4" style={{ color: accent }} />
-                                </div>
-                                <span className="text-sm text-zinc-300 group-hover:text-white transition-colors truncate">{user.website.replace(/^https?:\/\//, '')}</span>
-                            </a>
-                        )}
-                        {user.linkedin && (
-                            <a href={ensureAbsoluteUrl(user.linkedin)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors group">
-                                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: `${accent}20` }}>
-                                    <Linkedin className="h-4 w-4" style={{ color: accent }} />
-                                </div>
-                                <span className="text-sm text-zinc-300 group-hover:text-white transition-colors">LinkedIn</span>
-                            </a>
-                        )}
-                    </div>
-
-                    {/* Add to Contacts Button */}
-                    <Button
-                        className="w-full rounded-xl py-5 text-sm font-semibold mb-4"
-                        style={{ backgroundColor: accent }}
-                        onClick={() => handleAddToContacts(user)}
-                    >
-                        <UserPlus className="mr-2 h-4 w-4" /> Kontakt speichern
-                    </Button>
-
-                    {/* Custom Links */}
-                    {user.customLinks.length > 0 && (
-                        <div className="space-y-2 mb-4">
-                            <CustomLinksDisplay links={user.customLinks} accentColor={accent} variant="button" />
+                        {/* Contact Info with Icons */}
+                        <div className="space-y-1 mb-5">
+                            {user.phone && (
+                                <a href={`tel:${user.phone}`} className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/10 transition-colors group" style={{ background: 'rgba(255,255,255,0.04)' }}>
+                                    <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: `${accent}25` }}>
+                                        <Phone className="h-4 w-4" style={{ color: accent }} />
+                                    </div>
+                                    <span className="text-sm text-white/90 group-hover:text-white transition-colors">{user.phone}</span>
+                                </a>
+                            )}
+                            {user.email && (
+                                <a href={`mailto:${user.email}`} className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/10 transition-colors group" style={{ background: 'rgba(255,255,255,0.04)' }}>
+                                    <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: `${accent}25` }}>
+                                        <Mail className="h-4 w-4" style={{ color: accent }} />
+                                    </div>
+                                    <span className="text-sm text-white/90 group-hover:text-white transition-colors">{user.email}</span>
+                                </a>
+                            )}
+                            {user.website && (
+                                <a href={ensureAbsoluteUrl(user.website)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/10 transition-colors group" style={{ background: 'rgba(255,255,255,0.04)' }}>
+                                    <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: `${accent}25` }}>
+                                        <Globe className="h-4 w-4" style={{ color: accent }} />
+                                    </div>
+                                    <span className="text-sm text-white/90 group-hover:text-white transition-colors truncate">{user.website.replace(/^https?:\/\//, '')}</span>
+                                </a>
+                            )}
+                            {user.linkedin && (
+                                <a href={ensureAbsoluteUrl(user.linkedin)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/10 transition-colors group" style={{ background: 'rgba(255,255,255,0.04)' }}>
+                                    <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: `${accent}25` }}>
+                                        <Linkedin className="h-4 w-4" style={{ color: accent }} />
+                                    </div>
+                                    <span className="text-sm text-white/90 group-hover:text-white transition-colors">LinkedIn</span>
+                                </a>
+                            )}
                         </div>
-                    )}
 
-                    <ContactForm recipientUserId={user.id} recipientName={user.name} />
+                        {/* Add to Contacts Button */}
+                        <Button
+                            className="w-full rounded-xl py-5 text-sm font-semibold mb-4 text-white shadow-lg"
+                            style={{ backgroundColor: accent }}
+                            onClick={() => handleAddToContacts(user)}
+                        >
+                            <UserPlus className="mr-2 h-4 w-4" /> Kontakt speichern
+                        </Button>
 
-                    <ResourcesSection userId={user.id} accentColor={accent} />
+                        {/* Custom Links */}
+                        {user.customLinks.length > 0 && (
+                            <div className="space-y-2 mb-4">
+                                <CustomLinksDisplay links={user.customLinks} accentColor={accent} variant="button" />
+                            </div>
+                        )}
+
+                        <ContactForm recipientUserId={user.id} recipientName={user.name} />
+
+                        <ResourcesSection userId={user.id} accentColor={accent} />
+                    </div>
                 </div>
             </div>
         </div>
