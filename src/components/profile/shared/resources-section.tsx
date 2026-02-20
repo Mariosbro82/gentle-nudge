@@ -51,12 +51,9 @@ export function ResourcesSection({ userId, accentColor }: ResourcesSectionProps)
     }, [userId]);
 
     async function trackClick(fileId: string) {
-        // Track in file_clicks
         await supabase.from("file_clicks" as any).insert({
             file_id: fileId,
         } as any);
-        // Increment download_count
-        // Using RPC would be better but for now just fire and forget
     }
 
     if (loading || files.length === 0) return null;
@@ -77,16 +74,19 @@ export function ResourcesSection({ userId, accentColor }: ResourcesSectionProps)
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={() => trackClick(file.id)}
-                        className="flex items-center gap-3 p-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-colors group"
+                        className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-colors group border border-white/[0.10]"
+                        style={{
+                            background: 'rgba(255,255,255,0.05)',
+                        }}
                     >
                         {getFileIcon(file.file_type)}
                         <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium text-white truncate">{file.file_name}</p>
                             {file.file_size && (
-                                <p className="text-[10px] text-zinc-500">{formatFileSize(file.file_size)}</p>
+                                <p className="text-[10px] text-white/40">{formatFileSize(file.file_size)}</p>
                             )}
                         </div>
-                        <Download className="h-4 w-4 text-zinc-500 group-hover:text-white transition-colors flex-shrink-0" />
+                        <Download className="h-4 w-4 text-white/40 group-hover:text-white transition-colors flex-shrink-0" />
                     </a>
                 ))}
             </div>

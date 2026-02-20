@@ -19,9 +19,10 @@ export function CustomLinksDisplay({ links, variant = "button" }: Props) {
                         href={link.url.startsWith("http") ? link.url : `https://${link.url}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-white/10 text-sm hover:bg-white/5 transition-colors"
+                        className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm text-white/90 hover:text-white hover:bg-white/10 transition-colors"
+                        style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)' }}
                     >
-                        <ExternalLink className="h-4 w-4 text-zinc-400" />
+                        <ExternalLink className="h-4 w-4 text-white/50" />
                         {link.title}
                     </a>
                 ))}
@@ -37,7 +38,8 @@ export function CustomLinksDisplay({ links, variant = "button" }: Props) {
                     href={link.url.startsWith("http") ? link.url : `https://${link.url}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg border border-white/10 text-sm hover:bg-white/5 transition-colors"
+                    className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg text-sm text-white/90 hover:text-white hover:bg-white/10 transition-colors"
+                    style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)' }}
                 >
                     <ExternalLink className="h-4 w-4" />
                     {link.title}

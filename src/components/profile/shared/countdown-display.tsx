@@ -40,9 +40,16 @@ export function CountdownDisplay({ target, label, accentColor }: Props) {
     ];
 
     return (
-        <div className="rounded-xl border border-white/10 p-4 my-4 text-center space-y-3">
+        <div
+            className="rounded-xl border border-white/[0.12] p-4 my-4 text-center space-y-3 overflow-hidden relative"
+            style={{
+                background: 'rgba(255,255,255,0.05)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+            }}
+        >
             {label && (
-                <div className="flex items-center justify-center gap-2 text-sm text-zinc-400">
+                <div className="flex items-center justify-center gap-2 text-sm text-white/70">
                     <Clock className="h-4 w-4" />
                     <span>{label}</span>
                 </div>
@@ -52,11 +59,11 @@ export function CountdownDisplay({ target, label, accentColor }: Props) {
                     <div key={b.label} className="text-center">
                         <div
                             className="text-2xl font-bold font-mono w-14 h-14 flex items-center justify-center rounded-lg"
-                            style={{ backgroundColor: `${accentColor}15`, color: accentColor }}
+                            style={{ backgroundColor: `${accentColor}20`, color: accentColor }}
                         >
                             {String(b.value).padStart(2, "0")}
                         </div>
-                        <span className="text-[10px] text-zinc-500 mt-1 block">{b.label}</span>
+                        <span className="text-[10px] text-white/45 mt-1 block">{b.label}</span>
                     </div>
                 ))}
             </div>
