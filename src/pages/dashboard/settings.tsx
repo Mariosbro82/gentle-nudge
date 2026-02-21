@@ -242,6 +242,9 @@ export default function SettingsPage() {
         bannerPicPosition: user?.banner_pic_position || "50% 50%",
         backgroundPosition: user?.background_position || "50% 50%",
         videoUrl: user?.video_url || "",
+        customGreeting: user?.custom_greeting || "Willkommen auf meinem Profil 👋",
+        avatarStyle: user?.avatar_style || "image",
+        avatarEmoji: user?.avatar_emoji || "👋",
     }), [user, activeTemplate, customLinks]);
 
     if (loading) {
@@ -657,6 +660,92 @@ export default function SettingsPage() {
                                 baseUser={previewUser}
                             />
                         )}
+                    </CardContent>
+                </Card>
+
+                {/* ─── Welcome Screen & Avatar ─── */}
+                <Card className="rounded-xl border-border/50">
+                    <CardHeader className="pb-4">
+                        <CardTitle className="text-lg">Welcome Screen & Avatar</CardTitle>
+                        <CardDescription>Begrüßungstext und Avatar-Stil für die Scan-Animation.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-5">
+                        {/* Avatar Style Toggle */}
+                        <div className="space-y-2">
+                            <Label className="text-sm font-medium">Avatar-Typ</Label>
+                            <div className="inline-flex rounded-lg border border-border bg-muted/30 p-0.5">
+                                <button
+                                    type="button"
+                                    className={`px-4 py-1.5 text-xs font-medium rounded-md transition-all ${(user?.avatar_style || "image") === "image" ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+                                    onClick={() => handleMesfeFeatureSave("avatar_style", "image")}
+                                >
+                                    📷 Eigenes Foto
+                                </button>
+                                <button
+                                    type="button"
+                                    className={`px-4 py-1.5 text-xs font-medium rounded-md transition-all ${user?.avatar_style === "emoji" ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+                                    onClick={() => handleMesfeFeatureSave("avatar_style", "emoji")}
+                                >
+                                    🎭 Emoji / Icon
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Conditional: Emoji picker */}
+                        {user?.avatar_style === "emoji" && (
+                            <div className="space-y-2">
+                                <Label htmlFor="avatar-emoji">Emoji / Icon</Label>
+                                <Input
+                                    id="avatar-emoji"
+                                    value={user?.avatar_emoji || "👋"}
+                                    maxLength={4}
+                                    onChange={(e) => handleMesfeFeatureSave("avatar_emoji", e.target.value)}
+                                    className="bg-input border-border w-24 text-center text-2xl"
+                                    placeholder="👋"
+                                />
+                                <div className="flex gap-2 flex-wrap">
+                                    {["👋", "🚀", "💼", "🎯", "⚡", "🔥", "💎", "🤝"].map((em) => (
+                                        <button
+                                            key={em}
+                                            type="button"
+                                            className={`w-10 h-10 rounded-lg text-xl flex items-center justify-center border transition-all ${user?.avatar_emoji === em ? "border-primary bg-primary/10 scale-110" : "border-border hover:border-muted-foreground/50"}`}
+                                            onClick={() => handleMesfeFeatureSave("avatar_emoji", em)}
+                                        >
+                                            {em}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Conditional: Photo hint */}
+                        {(user?.avatar_style || "image") === "image" && (
+                            <p className="text-xs text-muted-foreground">Dein Profilbild wird als animierter Avatar in der Begrüßung gezeigt. Lade es oben unter "Profilbild" hoch.</p>
+                        )}
+
+                        <Separator />
+
+                        {/* Custom Greeting */}
+                        <div className="space-y-2">
+                            <Label htmlFor="custom-greeting">Begrüßungstext</Label>
+                            <Textarea
+                                id="custom-greeting"
+                                value={user?.custom_greeting || "Willkommen auf meinem Profil 👋"}
+                                maxLength={60}
+                                rows={2}
+                                onChange={(e) => handleMesfeFeatureSave("custom_greeting", e.target.value)}
+                                className="bg-input border-border resize-none"
+                                placeholder="Hey, schön dich kennenzulernen!"
+                            />
+                            <div className="flex items-center justify-between">
+                                <p className="text-[10px] text-muted-foreground">
+                                    Variablen: <code className="bg-muted px-1 rounded">{"{{name}}"}</code> = dein Name
+                                </p>
+                                <span className="text-[10px] text-muted-foreground">
+                                    {(user?.custom_greeting || "Willkommen auf meinem Profil 👋").length}/60
+                                </span>
+                            </div>
+                        </div>
                     </CardContent>
                 </Card>
 

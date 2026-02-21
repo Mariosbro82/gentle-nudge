@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { supabase } from "@/lib/supabase/client";
 import { GhostPage } from "@/components/profile/ghost-page";
@@ -6,6 +6,7 @@ import { getTemplate } from "@/components/profile/templates";
 import { LanguageSwitcher } from "@/components/profile/language-switcher";
 import { LiveStatusBadge } from "@/components/profile/live-status-badge";
 import { AiChat } from "@/components/profile/ai-chat";
+import { WelcomeAnimation } from "@/components/profile/welcome-animation";
 import { detectLanguage, t, type SupportedLang } from "@/lib/i18n";
 import type { ProfileUser } from "@/types/profile";
 import { logProfileView } from "@/lib/api/analytics";
@@ -53,6 +54,9 @@ export default function ProfilePage() {
     const [liveStatus, setLiveStatus] = useState<{ text: string | null; color: string | null }>({ text: null, color: null });
     const [profileId, setProfileId] = useState<string | null>(null);
     const [isReturning, setIsReturning] = useState(false);
+    const [showGreeting, setShowGreeting] = useState(true);
+
+    const handleGreetingComplete = useCallback(() => setShowGreeting(false), []);
 
     // Contextual Memory: recognize returning visitors via localStorage
     useEffect(() => {
@@ -112,6 +116,9 @@ export default function ProfilePage() {
                     bannerPicPosition: data.banner_pic_position || "50% 50%",
                     backgroundPosition: data.background_position || "50% 50%",
                     videoUrl: (data as any).video_url || "",
+                    customGreeting: (data as any).custom_greeting || "Willkommen auf meinem Profil 👋",
+                    avatarStyle: (data as any).avatar_style || "image",
+                    avatarEmoji: (data as any).avatar_emoji || "👋",
                 });
             } else {
                 setError(true);
@@ -152,9 +159,14 @@ export default function ProfilePage() {
     const Template = getTemplate(user.activeTemplate);
     return (
         <div className="relative">
+            {/* Welcome Animation (first visit only) */}
+            {showGreeting && !isReturning && (
+                <WelcomeAnimation user={user} onComplete={handleGreetingComplete} />
+            )}
+
             {/* Returning visitor banner */}
             {isReturning && (
-                <div className="fixed top-0 left-0 right-0 z-[60] bg-primary/90 backdrop-blur-sm text-primary-foreground text-center py-2.5 px-4 text-sm font-medium shadow-lg">
+                <div className="fixed top-0 left-0 right-0 z-[60] bg-primary/90 backdrop-blur-sm text-primary-foreground text-center py-2.5 px-4 text-sm font-medium shadow-lg animate-fade-in">
                     👋 Willkommen zurück! Suchst du noch eine bestimmte Info?
                 </div>
             )}

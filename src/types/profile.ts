@@ -32,6 +32,9 @@ export interface ProfileUser {
     bannerPicPosition: string;
     backgroundPosition: string;
     videoUrl: string;
+    customGreeting: string;
+    avatarStyle: "image" | "emoji";
+    avatarEmoji: string;
 }
 
 export interface TemplateProps {
