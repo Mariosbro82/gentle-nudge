@@ -1,0 +1,301 @@
+'use client'
+
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { ChevronRight, Menu, X } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { AnimatedGroup } from '@/components/ui/animated-group'
+import { cn } from '@/lib/utils'
+import { useScroll } from 'motion/react'
+
+const transitionVariants = {
+    item: {
+        hidden: {
+            opacity: 0,
+            filter: 'blur(12px)',
+            y: 12,
+        },
+        visible: {
+            opacity: 1,
+            filter: 'blur(0px)',
+            y: 0,
+            transition: {
+                type: 'spring' as const,
+                bounce: 0.3,
+                duration: 1.5,
+            },
+        },
+    },
+}
+
+export function HeroSection() {
+    return (
+        <>
+            <HeroHeader />
+            <main className="overflow-hidden">
+                <section>
+                    <div className="relative pt-24 md:pt-36">
+                        <AnimatedGroup
+                            variants={transitionVariants}
+                            className="absolute inset-0 -z-10"
+                        >
+                            <div className="absolute top-0 left-1/2 -translate-x-1/2 h-56 w-full max-w-lg bg-primary/20 blur-3xl rounded-full" />
+                        </AnimatedGroup>
+
+                        <div className="absolute inset-0 -z-10 size-full [background:radial-gradient(125%_125%_at_50%_10%,transparent_40%,hsl(var(--primary))_100%)] opacity-20" />
+
+                        <div className="mx-auto max-w-7xl px-6">
+                            <div className="text-center sm:mx-auto lg:mr-auto lg:mt-0">
+                                <AnimatedGroup
+                                    variants={transitionVariants}
+                                    className="flex flex-col items-center"
+                                >
+                                    <Link
+                                        to="/pricing"
+                                        className="hover:bg-primary/10 glass-card group mx-auto flex max-w-fit items-center gap-4 rounded-full border px-5 py-2 text-sm transition-all duration-300"
+                                    >
+                                        <span className="text-foreground">Jetzt Sonderpreis sichern 🏆</span>
+                                        <ChevronRight className="size-4 text-muted-foreground group-hover:translate-x-0.5 transition-transform" />
+                                    </Link>
+
+                                    <h1 className="mt-8 max-w-4xl text-balance text-5xl font-bold md:text-7xl lg:mt-16 text-foreground">
+                                        Kleidung, die{' '}
+                                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-zinc-900 dark:from-blue-400 dark:via-purple-400 dark:to-white">
+                                            verbindet.
+                                        </span>
+                                    </h1>
+
+                                    <p className="mx-auto mt-8 max-w-2xl text-balance text-lg text-muted-foreground">
+                                        Die SaaS-Plattform für smarte Corporate Fashion. Verwandeln Sie jeden Hoodie in eine Revenue Machine mit messbarem ROI.
+                                    </p>
+
+                                    <div className="mt-12 flex flex-col items-center gap-4 sm:flex-row">
+                                        <div>
+                                            <Button
+                                                size="lg"
+                                                className="rounded-full px-6 text-base"
+                                                asChild
+                                            >
+                                                <Link to="/login">
+                                                    <span className="text-nowrap">Jetzt starten</span>
+                                                    <ChevronRight className="ml-1 size-4" />
+                                                </Link>
+                                            </Button>
+                                        </div>
+
+                                        <Button
+                                            size="lg"
+                                            variant="ghost"
+                                            className="rounded-full px-6 text-base"
+                                            asChild
+                                        >
+                                            <Link to="/contact">
+                                                Demo buchen
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                </AnimatedGroup>
+                            </div>
+                        </div>
+
+                        <AnimatedGroup
+                            variants={{
+                                item: {
+                                    hidden: { opacity: 0, y: 20 },
+                                    visible: {
+                                        opacity: 1,
+                                        y: 0,
+                                        transition: { type: 'spring' as const, bounce: 0.3, duration: 2 },
+                                    },
+                                },
+                            }}
+                            className="relative mx-auto mt-16 max-w-5xl px-6"
+                        >
+                            <div className="glass-card-strong rounded-2xl p-1.5">
+                                <img
+                                    src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=2800&q=80&auto=format"
+                                    alt="NFCwear Dashboard Preview"
+                                    className="rounded-xl w-full"
+                                    width={2800}
+                                    height={1800}
+                                />
+                            </div>
+                        </AnimatedGroup>
+                    </div>
+                </section>
+
+                <section className="py-16 md:py-24">
+                    <div className="mx-auto max-w-7xl px-6">
+                        <div className="text-center">
+                            <p className="text-sm font-medium text-muted-foreground">
+                                Vertraut von führenden Unternehmen
+                            </p>
+                        </div>
+                        <div className="mx-auto mt-10 flex max-w-4xl flex-wrap items-center justify-center gap-x-12 gap-y-8 opacity-60">
+                            <img src="/assets/integrations/salesforce.png" alt="Salesforce" className="h-6 object-contain" />
+                            <img src="/assets/integrations/hubspot.png" alt="HubSpot" className="h-6 object-contain" />
+                            <img src="/assets/integrations/pipedrive.png" alt="Pipedrive" className="h-6 object-contain" />
+                            <img src="/assets/integrations/zapier.png" alt="Zapier" className="h-6 object-contain" />
+                        </div>
+                    </div>
+                </section>
+
+                {/* Login-style section */}
+                <section className="py-16 md:py-24 border-t border-border/40">
+                    <div className="mx-auto max-w-7xl px-6">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                            <div className="space-y-6">
+                                <h2 className="text-3xl font-bold text-foreground">
+                                    Willkommen zurück
+                                </h2>
+                                <p className="text-muted-foreground text-lg">
+                                    Verwalten Sie Ihre NFC-Chips und Kampagnen zentral. Loggen Sie sich ein, um Ihr Dashboard zu nutzen.
+                                </p>
+                                <div className="glass-card rounded-2xl p-8 space-y-6">
+                                    <div className="space-y-1">
+                                        <h3 className="text-2xl font-bold text-foreground">Login</h3>
+                                        <p className="text-sm text-muted-foreground">Geben Sie Ihre Zugangsdaten ein.</p>
+                                    </div>
+                                    <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+                                        <div className="space-y-2">
+                                            <label className="text-sm font-medium text-foreground">Email</label>
+                                            <input
+                                                type="email"
+                                                placeholder="admin@severmore.de"
+                                                className="glass-input w-full h-10 rounded-md px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <div className="flex items-center justify-between">
+                                                <label className="text-sm font-medium text-foreground">Passwort</label>
+                                                <Link to="/forgot-password" className="text-xs text-primary hover:text-primary/80">Vergessen?</Link>
+                                            </div>
+                                            <input
+                                                type="password"
+                                                className="glass-input w-full h-10 rounded-md px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                                            />
+                                        </div>
+                                        <div className="flex gap-4 pt-2">
+                                            <Button className="flex-1 rounded-full" asChild>
+                                                <Link to="/login">Anmelden</Link>
+                                            </Button>
+                                            <Button variant="outline" className="flex-1 rounded-full" asChild>
+                                                <Link to="/login">Registrieren</Link>
+                                            </Button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div className="hidden lg:block">
+                                <div className="glass-card-strong rounded-2xl p-1.5">
+                                    <img
+                                        src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format"
+                                        alt="Dashboard Analytics"
+                                        className="rounded-xl w-full"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </>
+    )
+}
+
+const menuItems = [
+    { name: 'Plattform', href: '/platform' },
+    { name: 'Lösungen', href: '/solutions' },
+    { name: 'Preise', href: '/pricing' },
+    { name: 'About Us', href: '/about' },
+]
+
+export const HeroHeader = () => {
+    const [menuState, setMenuState] = React.useState(false)
+    const [scrolled, setScrolled] = React.useState(false)
+
+    const { scrollYProgress } = useScroll()
+
+    React.useEffect(() => {
+        const unsubscribe = scrollYProgress.on('change', (latest) => {
+            setScrolled(latest > 0.05)
+        })
+        return () => unsubscribe()
+    }, [scrollYProgress])
+
+    return (
+        <header>
+            <nav
+                data-scrolled={scrolled}
+                className={cn(
+                    'fixed z-50 w-full transition-all duration-300',
+                    'data-[scrolled=true]:glass-card-strong data-[scrolled=true]:shadow-lg'
+                )}
+            >
+                <div className="mx-auto max-w-7xl px-6 py-4">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-8">
+                            <Link to="/" className="flex items-center gap-2">
+                                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-white shadow-[0_0_15px_rgba(37,99,235,0.5)]">
+                                    N
+                                </div>
+                                <span className="font-bold text-lg tracking-tight text-foreground">NFCwear</span>
+                            </Link>
+
+                            <button
+                                onClick={() => setMenuState(!menuState)}
+                                aria-label={menuState ? 'Close Menu' : 'Open Menu'}
+                                className="relative z-20 -m-2.5 block cursor-pointer p-2.5 lg:hidden"
+                            >
+                                {menuState ? <X className="size-5" /> : <Menu className="size-5" />}
+                            </button>
+
+                            {/* Mobile menu */}
+                            <div className={cn(
+                                'absolute inset-x-0 top-full glass-card-strong p-6 lg:hidden transition-all duration-300',
+                                menuState ? 'visible opacity-100' : 'invisible opacity-0'
+                            )}>
+                                <div className="flex flex-col gap-4">
+                                    {menuItems.map((item) => (
+                                        <Link
+                                            key={item.name}
+                                            to={item.href}
+                                            className="text-lg font-medium text-foreground/80 hover:text-primary transition-colors"
+                                            onClick={() => setMenuState(false)}
+                                        >
+                                            {item.name}
+                                        </Link>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Desktop menu */}
+                        <div className="hidden lg:flex items-center gap-8">
+                            <div className="flex items-center gap-6 text-sm font-medium text-foreground/80">
+                                {menuItems.map((item) => (
+                                    <Link
+                                        key={item.name}
+                                        to={item.href}
+                                        className="hover:text-primary transition-colors"
+                                    >
+                                        {item.name}
+                                    </Link>
+                                ))}
+                            </div>
+
+                            <div className="flex items-center gap-3">
+                                <Button variant="ghost" size="sm" className="rounded-full" asChild>
+                                    <Link to="/login">Login</Link>
+                                </Button>
+                                <Button size="sm" className="rounded-full" asChild>
+                                    <Link to="/login">Registrieren</Link>
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </header>
+    )
+}
