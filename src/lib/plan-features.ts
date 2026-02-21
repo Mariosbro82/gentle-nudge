@@ -40,6 +40,7 @@ export const PLAN_FEATURES: Record<PlanType, PlanConfig> = {
             webhooks: false,
             csv_export: false,
             ghost_mode: true,
+            campaigns: false,
         },
         limits: {
             maxChips: 5,
@@ -70,6 +71,7 @@ export const PLAN_FEATURES: Record<PlanType, PlanConfig> = {
             webhooks: true,
             csv_export: true,
             ghost_mode: true,
+            campaigns: true,
         },
         limits: {
             maxChips: 50,
@@ -100,6 +102,7 @@ export const PLAN_FEATURES: Record<PlanType, PlanConfig> = {
             webhooks: true,
             csv_export: true,
             ghost_mode: true,
+            campaigns: true,
         },
         limits: {
             maxChips: Infinity,
@@ -129,6 +132,7 @@ export const FEATURE_LABELS: Record<string, string> = {
     webhooks: "Webhook-Integration",
     csv_export: "CSV Export",
     ghost_mode: "Ghost Mode",
+    campaigns: "KI-Kampagnen",
 };
 
 export function hasFeature(plan: PlanType | null | undefined, feature: string): boolean {
