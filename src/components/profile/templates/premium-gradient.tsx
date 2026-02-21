@@ -76,6 +76,7 @@ export function PremiumGradientTemplate({ user, lang = "de" }: TemplateProps) {
             ) : (
                 <div className="h-44" style={{ background: `linear-gradient(135deg, ${user.bannerColor || '#4f46e5'}, ${user.bannerColor || '#4f46e5'}88)` }} />
             )}
+            <div className="h-px w-full bg-white/[0.12]" />
 
             <div className="max-w-lg mx-auto px-4 -mt-20">
                 {/* Liquid Glass Card */}
