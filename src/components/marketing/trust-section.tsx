@@ -7,7 +7,7 @@ const TrustIcon = ({ children, delay }: { children: React.ReactNode; delay: numb
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay }}
-        className="w-24 h-24 mb-6 rounded-2xl bg-card border border-border flex items-center justify-center relative overflow-hidden group shadow-2xl"
+        className="w-24 h-24 mb-6 rounded-2xl glass-card flex items-center justify-center relative overflow-hidden group shadow-2xl"
     >
         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         {children}
@@ -20,7 +20,7 @@ const TrustCard = ({ icon, title, description, delay }: { icon: React.ReactNode;
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay }}
-        className="flex flex-col items-center text-center p-8 rounded-3xl bg-background border border-border relative overflow-hidden hover:border-foreground/20 transition-colors duration-300"
+        className="flex flex-col items-center text-center p-8 rounded-3xl glass-card relative overflow-hidden hover:border-foreground/20 transition-colors duration-300"
     >
         {/* Glow effect */}
         <div className="absolute -top-20 -right-20 w-64 h-64 bg-blue-500/5 blur-3xl rounded-full pointer-events-none" />

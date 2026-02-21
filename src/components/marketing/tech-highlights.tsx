@@ -22,7 +22,7 @@ export function TechHighlights() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {features.map((f, i) => (
-                        <div key={i} className="p-6 rounded-2xl bg-card border border-border hover:border-blue-500/30 transition-all hover:-translate-y-1">
+                        <div key={i} className="p-6 rounded-2xl glass-card hover:border-blue-500/30 transition-all hover:-translate-y-1">
                             <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 mb-4">
                                 {f.icon}
                             </div>

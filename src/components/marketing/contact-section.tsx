@@ -31,7 +31,7 @@ export function ContactSection() {
                         </p>
 
                         <div className="flex gap-6 flex-col sm:flex-row">
-                            <div className="flex-1 p-6 rounded-xl bg-card border border-border hover:border-blue-500/30 transition-colors">
+                            <div className="flex-1 p-6 rounded-xl glass-card hover:border-blue-500/30 transition-colors">
                                 <div className="flex items-center gap-4 mb-4">
                                     <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400">
                                         <Calendar size={20} />
@@ -62,7 +62,7 @@ export function ContactSection() {
                     </div>
 
                     {/* Right Col: Form */}
-                    <div className="p-8 rounded-2xl bg-card border border-border backdrop-blur-sm">
+                    <div className="p-8 rounded-2xl glass-card-strong">
                         <h3 className="text-xl font-bold text-foreground mb-6">Kontakt aufnehmen</h3>
                         <form className="space-y-4">
                             <div className="grid grid-cols-2 gap-4">

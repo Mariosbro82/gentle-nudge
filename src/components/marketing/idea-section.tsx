@@ -25,7 +25,7 @@ export function IdeaSection() {
                     <h3 className="text-2xl font-bold text-foreground mb-8 text-center">Das Problem</h3>
                     <div className="grid md:grid-cols-3 gap-8">
                         {/* Problem 1 */}
-                        <div className="p-8 rounded-3xl bg-card border border-border backdrop-blur-md hover:bg-accent/50 transition-all group flex flex-col items-center text-center">
+                        <div className="p-8 rounded-3xl glass-card hover:bg-accent/50 transition-all group flex flex-col items-center text-center">
                             <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center mb-6 group-hover:bg-red-500/30 transition-colors">
                                 <UserX className="w-6 h-6 text-red-400" />
                             </div>
@@ -36,7 +36,7 @@ export function IdeaSection() {
                         </div>
 
                         {/* Problem 2 */}
-                        <div className="p-8 rounded-3xl bg-card border border-border backdrop-blur-md hover:bg-accent/50 transition-all group flex flex-col items-center text-center">
+                        <div className="p-8 rounded-3xl glass-card hover:bg-accent/50 transition-all group flex flex-col items-center text-center">
                             <div className="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center mb-6 group-hover:bg-orange-500/30 transition-colors">
                                 <BarChart3 className="w-6 h-6 text-orange-400" />
                             </div>
@@ -47,7 +47,7 @@ export function IdeaSection() {
                         </div>
 
                         {/* Problem 3 */}
-                        <div className="p-8 rounded-3xl bg-card border border-border backdrop-blur-md hover:bg-accent/50 transition-all group flex flex-col items-center text-center">
+                        <div className="p-8 rounded-3xl glass-card hover:bg-accent/50 transition-all group flex flex-col items-center text-center">
                             <div className="w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center mb-6 group-hover:bg-yellow-500/30 transition-colors">
                                 <Keyboard className="w-6 h-6 text-yellow-400" />
                             </div>
@@ -75,7 +75,7 @@ export function IdeaSection() {
                             <div className="space-y-8">
                                 {/* Feature 1 */}
                                 <div className="flex gap-4">
-                                    <div className="w-12 h-12 rounded-2xl bg-card flex items-center justify-center flex-shrink-0">
+                                    <div className="w-12 h-12 rounded-2xl glass-subtle flex items-center justify-center flex-shrink-0">
                                         <Cpu className="w-6 h-6 text-blue-400" />
                                     </div>
                                     <div>
@@ -88,7 +88,7 @@ export function IdeaSection() {
 
                                 {/* Feature 2 */}
                                 <div className="flex gap-4">
-                                    <div className="w-12 h-12 rounded-2xl bg-card flex items-center justify-center flex-shrink-0">
+                                    <div className="w-12 h-12 rounded-2xl glass-subtle flex items-center justify-center flex-shrink-0">
                                         <Circle className="w-6 h-6 text-purple-400" />
                                     </div>
                                     <div>
@@ -101,7 +101,7 @@ export function IdeaSection() {
 
                                 {/* Feature 3 */}
                                 <div className="flex gap-4">
-                                    <div className="w-12 h-12 rounded-2xl bg-card flex items-center justify-center flex-shrink-0">
+                                    <div className="w-12 h-12 rounded-2xl glass-subtle flex items-center justify-center flex-shrink-0">
                                         <Layers className="w-6 h-6 text-pink-400" />
                                     </div>
                                     <div>
@@ -115,7 +115,7 @@ export function IdeaSection() {
                         </div>
 
                         {/* Technical Drawing Placeholder */}
-                        <div className="relative aspect-[4/5] bg-card rounded-3xl border border-border flex items-center justify-center overflow-hidden">
+                        <div className="relative aspect-[4/5] glass-card rounded-3xl flex items-center justify-center overflow-hidden">
                             <video
                                 src="/assets/best-render-vid.mp4"
                                 autoPlay

@@ -66,7 +66,7 @@ export function Hero() {
                             <Button size="lg" className="h-16 px-10 rounded-full bg-foreground text-background hover:bg-zinc-800 dark:hover:bg-zinc-200 text-lg font-semibold shadow-[0_0_40px_-10px_rgba(0,0,0,0.3)] dark:shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)] transition-all hover:scale-105" onClick={() => window.location.href = 'mailto:contact@nfcwear.com'}>
                                 Demo buchen
                             </Button>
-                            <Button size="lg" variant="outline" className="h-16 px-10 rounded-full border-zinc-200 bg-white/50 dark:border-white/10 dark:bg-white/5 backdrop-blur-md hover:bg-zinc-100 dark:hover:bg-white/10 text-foreground text-lg transition-all hover:scale-105" onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}>
+                            <Button size="lg" variant="outline" className="h-16 px-10 rounded-full glass-card text-foreground text-lg transition-all hover:scale-105" onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}>
                                 Mehr erfahren <ArrowRight className="ml-2 w-5 h-5" />
                             </Button>
                         </div>
