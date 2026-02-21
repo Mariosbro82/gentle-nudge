@@ -29,7 +29,7 @@ const milestones = [
         year: "—",
         title: "Das ist erst der Anfang.",
         desc: "Abitur in der Tasche, Studium im Blick. NFCwear wird zur führenden Plattform für intelligente Textilien in Europa.",
-        image: "/images/journey/founders-team-new.jpg",
+        image: "/images/journey/founders-team.jpg",
         accent: "Zukunft",
     },
 ];
@@ -57,7 +57,7 @@ function MilestoneCard({ milestone, index }: { milestone: typeof milestones[0]; 
                     <img
                         src={milestone.image}
                         alt={milestone.title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                         loading="lazy"
                     />
                     {/* Subtle overlay */}
