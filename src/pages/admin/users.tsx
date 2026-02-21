@@ -2,31 +2,25 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow
+    Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger
+    DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
+    DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Users, MoreHorizontal, Search, Eye, Ghost, Shield, ShieldAlert } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AdminUser } from "@/types/admin";
+import { PLAN_FEATURES, type PlanType } from "@/lib/plan-features";
 
 export default function AdminUsersPage() {
     const [users, setUsers] = useState<AdminUser[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState("");
+    const [userPlans, setUserPlans] = useState<Record<string, PlanType>>({});
 
     const fetchUsers = async () => {
         setLoading(true);
@@ -37,7 +31,20 @@ export default function AdminUsersPage() {
                 .order('created_at', { ascending: false });
 
             if (error) throw error;
-            setUsers(data as unknown as AdminUser[]); // Cast for now, types updated but strictly typed might need partial
+            setUsers(data as unknown as AdminUser[]);
+
+            // Fetch plans via company_id
+            const companyIds = [...new Set((data || []).filter((u: any) => u.company_id).map((u: any) => u.company_id))];
+            if (companyIds.length > 0) {
+                const { data: companies } = await supabase.from("companies").select("id, plan").in("id", companyIds);
+                const planMap: Record<string, PlanType> = {};
+                (companies || []).forEach((c: any) => {
+                    (data || []).filter((u: any) => u.company_id === c.id).forEach((u: any) => {
+                        planMap[u.id] = (c.plan as PlanType) || "starter";
+                    });
+                });
+                setUserPlans(planMap);
+            }
         } catch (error) {
             console.error("Error fetching users:", error);
             alert("Failed to load users");
@@ -124,6 +131,7 @@ export default function AdminUsersPage() {
                     <TableHeader>
                         <TableRow className="border-zinc-800 hover:bg-zinc-900/50">
                             <TableHead className="text-zinc-400">User</TableHead>
+                            <TableHead className="text-zinc-400">Plan</TableHead>
                             <TableHead className="text-zinc-400">Role</TableHead>
                             <TableHead className="text-zinc-400">Status</TableHead>
                             <TableHead className="text-zinc-400">Joined</TableHead>
@@ -133,13 +141,13 @@ export default function AdminUsersPage() {
                     <TableBody>
                         {loading ? (
                             <TableRow>
-                                <TableCell colSpan={5} className="h-24 text-center text-zinc-500">
+                                <TableCell colSpan={6} className="h-24 text-center text-zinc-500">
                                     Loading users...
                                 </TableCell>
                             </TableRow>
                         ) : filteredUsers.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={5} className="h-24 text-center text-zinc-500">
+                                <TableCell colSpan={6} className="h-24 text-center text-zinc-500">
                                     No users found.
                                 </TableCell>
                             </TableRow>
@@ -151,6 +159,28 @@ export default function AdminUsersPage() {
                                             <span className="font-medium text-white">{user.full_name || 'Unnamed User'}</span>
                                             <span className="text-xs text-zinc-500">{user.email}</span>
                                         </div>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Select
+                                            value={userPlans[user.id] || "starter"}
+                                            onValueChange={async (val) => {
+                                                const plan = val as PlanType;
+                                                const companyId = (user as any).company_id;
+                                                if (companyId) {
+                                                    await supabase.from("companies").update({ plan } as any).eq("id", companyId);
+                                                }
+                                                setUserPlans(prev => ({ ...prev, [user.id]: plan }));
+                                            }}
+                                        >
+                                            <SelectTrigger className="w-[110px] bg-zinc-900 border-zinc-800 text-xs h-8">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent className="bg-zinc-900 border-zinc-800">
+                                                {(Object.keys(PLAN_FEATURES) as PlanType[]).map((p) => (
+                                                    <SelectItem key={p} value={p}>{PLAN_FEATURES[p].name}</SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
                                     </TableCell>
                                     <TableCell>
                                         <Badge variant="outline" className={
