@@ -733,25 +733,25 @@ export default function SettingsPage() {
             </div>
 
             {/* ─── Sticky 3D Phone Preview (Desktop) ─── */}
-            <div className="hidden lg:flex w-[340px] flex-shrink-0 flex-col items-center">
-                <div className="sticky top-20">
-                    <div className="flex flex-col items-center gap-4">
-                        <div className="flex items-center gap-2">
-                            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                            <p className="text-xs text-muted-foreground font-medium">Live-Vorschau</p>
-                        </div>
-                        <PhonePreview3D user={previewUser} scale={1} />
-                        {user?.slug && (
-                            <Button variant="outline" size="sm" className="mt-2 text-xs" asChild>
-                                <a href={`/p/${user.slug}`} target="_blank" rel="noopener noreferrer">
-                                    <ExternalLink className="h-3 w-3 mr-1.5" />
-                                    Profil in neuem Tab öffnen
-                                </a>
-                            </Button>
-                        )}
+            <aside className="hidden lg:block w-[340px] flex-shrink-0">
+                <div className="sticky top-24 flex flex-col items-center">
+                    <div className="flex items-center gap-2 mb-5">
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        <p className="text-[11px] text-muted-foreground font-medium tracking-wide">Live-Vorschau</p>
                     </div>
+                    <div className="flex justify-center w-full">
+                        <PhonePreview3D user={previewUser} scale={1} rotateY={0} rotateX={0} />
+                    </div>
+                    {user?.slug && (
+                        <Button variant="outline" size="sm" className="mt-5 text-xs" asChild>
+                            <a href={`/p/${user.slug}`} target="_blank" rel="noopener noreferrer">
+                                <ExternalLink className="h-3 w-3 mr-1.5" />
+                                Profil öffnen
+                            </a>
+                        </Button>
+                    )}
                 </div>
-            </div>
+            </aside>
         </div>
     );
 }
