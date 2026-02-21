@@ -56,9 +56,9 @@ export function PremiumGradientTemplate({ user }: TemplateProps) {
                 <div
                     className="relative rounded-2xl p-6 shadow-2xl shadow-black/50 border border-white/[0.15] ring-1 ring-white/[0.08] overflow-hidden"
                     style={{
-                        background: 'linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.09) 100%)',
-                        backdropFilter: 'blur(40px) saturate(180%)',
-                        WebkitBackdropFilter: 'blur(40px) saturate(180%)',
+                        background: 'linear-gradient(135deg, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.60) 100%)',
+                        backdropFilter: 'blur(60px) saturate(180%)',
+                        WebkitBackdropFilter: 'blur(60px) saturate(180%)',
                     }}
                 >
                     {/* Glass highlight */}

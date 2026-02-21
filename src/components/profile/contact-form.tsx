@@ -92,11 +92,11 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
   return (
     <form
       onSubmit={handleSubmit}
-      className="mt-6 space-y-4 rounded-2xl border border-white/[0.12] ring-1 ring-white/[0.06] p-5 overflow-hidden relative"
+      className="mt-6 space-y-4 rounded-2xl border border-white/[0.15] ring-1 ring-white/[0.08] p-5 overflow-hidden relative"
       style={{
-        background: 'linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.04) 100%)',
-        backdropFilter: 'blur(30px) saturate(150%)',
-        WebkitBackdropFilter: 'blur(30px) saturate(150%)',
+        background: 'linear-gradient(180deg, rgba(0,0,0,0.70) 0%, rgba(0,0,0,0.60) 100%)',
+        backdropFilter: 'blur(60px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(60px) saturate(180%)',
       }}
     >
       {/* Glass highlight */}
@@ -104,16 +104,16 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
         background: 'linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 50%)',
       }} />
 
-      <h3 className="relative z-10 text-center text-lg font-semibold text-white">
+      <h3 className="relative z-10 text-center text-lg font-semibold text-white drop-shadow-md">
         Kontaktdaten senden
       </h3>
-      <p className="relative z-10 text-center text-sm text-white/60">
+      <p className="relative z-10 text-center text-sm text-white/80 drop-shadow-sm">
         Teile deine Infos mit {recipientName}
       </p>
 
       <div className="relative z-10 space-y-3">
         <div>
-          <Label htmlFor="contact-name" className="text-white/80">Name *</Label>
+          <Label htmlFor="contact-name" className="text-white/90 drop-shadow-sm">Name *</Label>
           <Input
             id="contact-name"
             placeholder="Dein Name"
@@ -121,12 +121,12 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
             onChange={(e) => setForm({ ...form, name: e.target.value })}
             required
             maxLength={100}
-            className="bg-white/[0.06] border-white/[0.12] text-white placeholder:text-white/30 focus:border-white/25"
+            className="bg-black/30 border-white/[0.15] text-white placeholder:text-white/40 focus:border-white/30"
           />
         </div>
 
         <div>
-          <Label htmlFor="contact-email" className="text-white/80">E-Mail *</Label>
+          <Label htmlFor="contact-email" className="text-white/90 drop-shadow-sm">E-Mail *</Label>
           <Input
             id="contact-email"
             type="email"
@@ -135,12 +135,12 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
             onChange={(e) => setForm({ ...form, email: e.target.value })}
             required
             maxLength={255}
-            className="bg-white/[0.06] border-white/[0.12] text-white placeholder:text-white/30 focus:border-white/25"
+            className="bg-black/30 border-white/[0.15] text-white placeholder:text-white/40 focus:border-white/30"
           />
         </div>
 
         <div>
-          <Label htmlFor="contact-phone" className="text-white/80">Telefon</Label>
+          <Label htmlFor="contact-phone" className="text-white/90 drop-shadow-sm">Telefon</Label>
           <Input
             id="contact-phone"
             type="tel"
@@ -148,26 +148,26 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
             value={form.phone}
             onChange={(e) => setForm({ ...form, phone: e.target.value })}
             maxLength={30}
-            className="bg-white/[0.06] border-white/[0.12] text-white placeholder:text-white/30 focus:border-white/25"
+            className="bg-black/30 border-white/[0.15] text-white placeholder:text-white/40 focus:border-white/30"
           />
         </div>
 
         <div>
-          <Label htmlFor="contact-message" className="text-white/80">Nachricht</Label>
+          <Label htmlFor="contact-message" className="text-white/90 drop-shadow-sm">Nachricht</Label>
           <Textarea
             id="contact-message"
             placeholder="Hallo, wir haben uns auf der Messe getroffen..."
             value={form.message}
             onChange={(e) => setForm({ ...form, message: e.target.value })}
             maxLength={500}
-            className="min-h-[80px] bg-white/[0.06] border-white/[0.12] text-white placeholder:text-white/30 focus:border-white/25"
+            className="min-h-[80px] bg-black/30 border-white/[0.15] text-white placeholder:text-white/40 focus:border-white/30"
           />
         </div>
 
         <button
           type="button"
           onClick={() => setShowLinks(!showLinks)}
-          className="flex items-center gap-1.5 text-sm text-white/50 hover:text-white/80 transition-colors"
+          className="flex items-center gap-1.5 text-sm text-white/70 hover:text-white transition-colors drop-shadow-sm"
         >
           <Link className="h-3.5 w-3.5" />
           Links hinzufügen
@@ -177,7 +177,7 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
         {showLinks && (
           <div className="space-y-3 pl-1">
             <div>
-              <Label htmlFor="contact-website" className="text-white/80">Website</Label>
+          <Label htmlFor="contact-website" className="text-white/90 drop-shadow-sm">Website</Label>
               <Input
                 id="contact-website"
                 type="url"
@@ -185,11 +185,11 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
                 value={form.website}
                 onChange={(e) => setForm({ ...form, website: e.target.value })}
                 maxLength={255}
-                className="bg-white/[0.06] border-white/[0.12] text-white placeholder:text-white/30 focus:border-white/25"
+                className="bg-black/30 border-white/[0.15] text-white placeholder:text-white/40 focus:border-white/30"
               />
             </div>
             <div>
-              <Label htmlFor="contact-linkedin" className="text-white/80">LinkedIn</Label>
+              <Label htmlFor="contact-linkedin" className="text-white/90 drop-shadow-sm">LinkedIn</Label>
               <Input
                 id="contact-linkedin"
                 type="url"
@@ -197,7 +197,7 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
                 value={form.linkedin}
                 onChange={(e) => setForm({ ...form, linkedin: e.target.value })}
                 maxLength={255}
-                className="bg-white/[0.06] border-white/[0.12] text-white placeholder:text-white/30 focus:border-white/25"
+                className="bg-black/30 border-white/[0.15] text-white placeholder:text-white/40 focus:border-white/30"
               />
             </div>
           </div>
@@ -211,7 +211,7 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
             onChange={(e) => setConsent(e.target.checked)}
             className="mt-1 rounded border-white/20"
           />
-          <span className="text-xs text-white/50 leading-relaxed">
+          <span className="text-xs text-white/70 leading-relaxed drop-shadow-sm">
             Ich stimme zu, dass meine Daten zur Kontaktaufnahme gespeichert und verarbeitet werden. *
           </span>
         </label>

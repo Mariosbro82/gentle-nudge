@@ -74,9 +74,9 @@ export function ResourcesSection({ userId, accentColor }: ResourcesSectionProps)
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={() => trackClick(file.id)}
-                        className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-colors group border border-white/[0.10]"
+                        className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/15 transition-colors group border border-white/[0.12]"
                         style={{
-                            background: 'rgba(255,255,255,0.05)',
+                            background: 'rgba(0,0,0,0.35)',
                         }}
                     >
                         {getFileIcon(file.file_type)}
