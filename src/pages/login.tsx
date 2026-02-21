@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2 } from "lucide-react";
+import { Loader2, KeyRound, ArrowLeft } from "lucide-react";
 import { SidebarDashboard } from "@/components/ui/sidebar-dashboard";
 import { Navbar } from "@/components/marketing/navbar";
 
@@ -15,6 +15,9 @@ export default function LoginPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
+    const [ssoMode, setSsoMode] = useState(false);
+    const [ssoEmail, setSsoEmail] = useState("");
+    const [ssoLoading, setSsoLoading] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -61,6 +64,40 @@ export default function LoginPage() {
         }
     };
 
+    const handleSsoLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setSsoLoading(true);
+        setError(null);
+
+        const domain = ssoEmail.split("@")[1];
+        if (!domain) {
+            setError("Bitte geben Sie eine gültige Firmen-E-Mail-Adresse ein.");
+            setSsoLoading(false);
+            return;
+        }
+
+        try {
+            const { data, error } = await supabase.auth.signInWithSSO({ domain });
+
+            if (error) {
+                if (error.message.includes("No SSO provider") || error.message.includes("not found")) {
+                    setError(`Die Domain "${domain}" ist nicht für Single Sign-On registriert. Bitte kontaktieren Sie Ihren Administrator.`);
+                } else {
+                    setError(error.message);
+                }
+                setSsoLoading(false);
+                return;
+            }
+
+            if (data?.url) {
+                window.location.href = data.url;
+            }
+        } catch {
+            setError("SSO-Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.");
+            setSsoLoading(false);
+        }
+    };
+
     return (
         <div className="min-h-screen bg-background flex flex-col">
             <Navbar />
@@ -76,61 +113,132 @@ export default function LoginPage() {
 
                         <Card className="bg-card border-border shadow-2xl">
                             <CardHeader className="space-y-1">
-                                <CardTitle className="text-2xl font-bold text-foreground">Login</CardTitle>
-                                <CardDescription>Geben Sie Ihre Zugangsdaten ein.</CardDescription>
+                                <CardTitle className="text-2xl font-bold text-foreground">
+                                    {ssoMode ? "SSO Login" : "Login"}
+                                </CardTitle>
+                                <CardDescription>
+                                    {ssoMode
+                                        ? "Melden Sie sich mit Ihrem Unternehmenskonto an."
+                                        : "Geben Sie Ihre Zugangsdaten ein."}
+                                </CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <form onSubmit={handleLogin} className="space-y-4">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="email">Email</Label>
-                                        <Input
-                                            id="email"
-                                            type="email"
-                                            placeholder="admin@severmore.de"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                            className="bg-input border-border text-foreground"
-                                            required
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <div className="flex items-center justify-between">
-                                            <Label htmlFor="password">Passwort</Label>
-                                            <Link to="/forgot-password" className="text-xs text-blue-400 hover:text-blue-300">Vergessen?</Link>
+                                {ssoMode ? (
+                                    /* SSO Login Form */
+                                    <form onSubmit={handleSsoLogin} className="space-y-4">
+                                        <div className="space-y-2">
+                                            <Label htmlFor="sso-email">Firmen-E-Mail-Adresse</Label>
+                                            <Input
+                                                id="sso-email"
+                                                type="email"
+                                                placeholder="vorname@firma.de"
+                                                value={ssoEmail}
+                                                onChange={(e) => setSsoEmail(e.target.value)}
+                                                className="bg-input border-border text-foreground"
+                                                required
+                                            />
+                                            <p className="text-xs text-muted-foreground">
+                                                Wir leiten Sie zum Identity Provider Ihres Unternehmens weiter.
+                                            </p>
                                         </div>
-                                        <Input
-                                            id="password"
-                                            type="password"
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
-                                            className="bg-input border-border text-foreground"
-                                            required
-                                        />
-                                    </div>
 
-                                    {error && (
-                                        <div className="p-3 rounded-md bg-red-500/10 border border-red-500/20 text-red-400 text-sm">{error}</div>
-                                    )}
+                                        {error && (
+                                            <div className="p-3 rounded-md bg-destructive/10 border border-destructive/20 text-destructive text-sm">{error}</div>
+                                        )}
 
-                                    {successMessage && (
-                                        <div className="p-3 rounded-md bg-green-500/10 border border-green-500/20 text-green-500 text-sm">{successMessage}</div>
-                                    )}
-
-                                    <div className="flex gap-4 pt-2">
-                                        <Button type="submit" className="flex-1 h-10 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold" disabled={isLoading}>
-                                            {isLoading ? <Loader2 className="animate-spin" /> : "Anmelden"}
+                                        <Button
+                                            type="submit"
+                                            className="w-full h-10 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold"
+                                            disabled={ssoLoading}
+                                        >
+                                            {ssoLoading ? <Loader2 className="animate-spin" /> : "Weiter mit SSO"}
                                         </Button>
+
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            className="w-full text-muted-foreground hover:text-foreground"
+                                            onClick={() => { setSsoMode(false); setError(null); }}
+                                        >
+                                            <ArrowLeft className="mr-2 h-4 w-4" /> Zurück zum Standard-Login
+                                        </Button>
+                                    </form>
+                                ) : (
+                                    /* Standard Login Form */
+                                    <div className="space-y-4">
+                                        <form onSubmit={handleLogin} className="space-y-4">
+                                            <div className="space-y-2">
+                                                <Label htmlFor="email">Email</Label>
+                                                <Input
+                                                    id="email"
+                                                    type="email"
+                                                    placeholder="admin@severmore.de"
+                                                    value={email}
+                                                    onChange={(e) => setEmail(e.target.value)}
+                                                    className="bg-input border-border text-foreground"
+                                                    required
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <div className="flex items-center justify-between">
+                                                    <Label htmlFor="password">Passwort</Label>
+                                                    <Link to="/forgot-password" className="text-xs text-primary hover:text-primary/80">Vergessen?</Link>
+                                                </div>
+                                                <Input
+                                                    id="password"
+                                                    type="password"
+                                                    value={password}
+                                                    onChange={(e) => setPassword(e.target.value)}
+                                                    className="bg-input border-border text-foreground"
+                                                    required
+                                                />
+                                            </div>
+
+                                            {error && (
+                                                <div className="p-3 rounded-md bg-destructive/10 border border-destructive/20 text-destructive text-sm">{error}</div>
+                                            )}
+
+                                            {successMessage && (
+                                                <div className="p-3 rounded-md bg-green-500/10 border border-green-500/20 text-green-500 text-sm">{successMessage}</div>
+                                            )}
+
+                                            <div className="flex gap-4 pt-2">
+                                                <Button type="submit" className="flex-1 h-10 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold" disabled={isLoading}>
+                                                    {isLoading ? <Loader2 className="animate-spin" /> : "Anmelden"}
+                                                </Button>
+                                                <Button
+                                                    type="button"
+                                                    variant="outline"
+                                                    className="flex-1 h-10 border-border text-foreground hover:bg-accent font-semibold"
+                                                    onClick={handleSignUp}
+                                                    disabled={isLoading}
+                                                >
+                                                    {isLoading ? <Loader2 className="animate-spin" /> : "Registrieren"}
+                                                </Button>
+                                            </div>
+                                        </form>
+
+                                        {/* SSO Divider */}
+                                        <div className="relative my-2">
+                                            <div className="absolute inset-0 flex items-center">
+                                                <span className="w-full border-t border-border" />
+                                            </div>
+                                            <div className="relative flex justify-center text-xs uppercase">
+                                                <span className="bg-card px-2 text-muted-foreground">oder</span>
+                                            </div>
+                                        </div>
+
+                                        {/* SSO Button */}
                                         <Button
                                             type="button"
                                             variant="outline"
-                                            className="flex-1 h-10 border-border text-foreground hover:bg-accent font-semibold"
-                                            onClick={handleSignUp}
-                                            disabled={isLoading}
+                                            className="w-full h-10 border-border text-foreground hover:bg-accent font-medium"
+                                            onClick={() => { setSsoMode(true); setError(null); setSuccessMessage(null); }}
                                         >
-                                            {isLoading ? <Loader2 className="animate-spin" /> : "Registrieren"}
+                                            <KeyRound className="mr-2 h-4 w-4" /> Mit Single Sign-On (SSO) anmelden
                                         </Button>
                                     </div>
-                                </form>
+                                )}
                             </CardContent>
                         </Card>
                     </div>
