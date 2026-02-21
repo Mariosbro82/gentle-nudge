@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Download, RefreshCw, Flame, Mail } from "lucide-react";
+import { Download, RefreshCw, Flame, Mail, Users as UsersIcon } from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
 import { useAuth } from "@/contexts/auth-context";
 import { getInterestedLeads } from "@/lib/api/analytics";
@@ -115,8 +115,16 @@ export default function LeadsPage() {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center h-64">
-                <div className="h-6 w-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+            <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                    <div className="space-y-2"><div className="h-7 w-32 bg-muted/60 rounded-lg animate-pulse" /><div className="h-4 w-56 bg-muted/40 rounded animate-pulse" /></div>
+                    <div className="flex gap-2"><div className="h-9 w-28 bg-muted/60 rounded-lg animate-pulse" /><div className="h-9 w-28 bg-muted/60 rounded-lg animate-pulse" /></div>
+                </div>
+                <div className="rounded-xl border border-border/50 bg-card overflow-hidden">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                        <div key={i} className="p-4 border-b border-border/30 last:border-0 flex gap-4"><div className="h-4 flex-1 bg-muted/60 rounded animate-pulse" /><div className="h-4 flex-1 bg-muted/40 rounded animate-pulse" /><div className="h-4 w-20 bg-muted/40 rounded animate-pulse" /></div>
+                    ))}
+                </div>
             </div>
         );
     }
@@ -125,8 +133,8 @@ export default function LeadsPage() {
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight">Kontakte</h1>
-                    <p className="text-muted-foreground">Erfasste Kontakte aus dem Visitenkarten-Modus.</p>
+                    <h1 className="text-2xl font-bold tracking-tight">Kontakte</h1>
+                    <p className="text-sm text-muted-foreground mt-0.5">Erfasste Kontakte aus dem Visitenkarten-Modus.</p>
                 </div>
                 <div className="flex gap-2">
                     <Button variant="outline" className="border-border" onClick={exportToCSV}>
@@ -138,7 +146,7 @@ export default function LeadsPage() {
                 </div>
             </div>
 
-            <div className="rounded-md border border-border bg-card">
+            <div className="rounded-xl border border-border/50 bg-card overflow-hidden">
                 <Table>
                     <TableHeader>
                         <TableRow className="border-border hover:bg-muted/50">
@@ -237,8 +245,14 @@ export default function LeadsPage() {
                         })}
                         {leads.length === 0 && (
                             <TableRow>
-                                <TableCell colSpan={7} className="text-center py-10 text-muted-foreground">
-                                    Noch keine Kontakte erfasst.
+                                <TableCell colSpan={7} className="p-0">
+                                    <div className="flex flex-col items-center justify-center py-16 text-center">
+                                        <div className="w-14 h-14 rounded-2xl bg-muted/50 border border-border/50 flex items-center justify-center mb-4">
+                                            <UsersIcon className="w-6 h-6 text-muted-foreground/50" />
+                                        </div>
+                                        <h3 className="text-sm font-semibold text-foreground">Noch keine Kontakte</h3>
+                                        <p className="text-xs text-muted-foreground mt-1 max-w-xs">Sobald jemand Ihr NFC-Profil scannt und das Kontaktformular ausfüllt, erscheinen die Leads hier.</p>
+                                    </div>
                                 </TableCell>
                             </TableRow>
                         )}
