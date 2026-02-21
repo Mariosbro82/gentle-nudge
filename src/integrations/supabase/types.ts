@@ -735,6 +735,7 @@ export type Database = {
         Row: {
           accent_color: string | null
           active_template: string | null
+          ai_knowledge: string | null
           auth_user_id: string | null
           avatar_emoji: string | null
           avatar_style: string | null
@@ -786,6 +787,7 @@ export type Database = {
         Insert: {
           accent_color?: string | null
           active_template?: string | null
+          ai_knowledge?: string | null
           auth_user_id?: string | null
           avatar_emoji?: string | null
           avatar_style?: string | null
@@ -837,6 +839,7 @@ export type Database = {
         Update: {
           accent_color?: string | null
           active_template?: string | null
+          ai_knowledge?: string | null
           auth_user_id?: string | null
           avatar_emoji?: string | null
           avatar_style?: string | null

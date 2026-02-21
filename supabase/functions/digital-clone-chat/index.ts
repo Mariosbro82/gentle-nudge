@@ -18,14 +18,14 @@ serve(async (req) => {
       });
     }
 
-    // Fetch profile data to build system prompt
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
+    // Fetch full profile including ai_knowledge from users table
     const { data: profile } = await supabase
-      .from("public_profiles")
-      .select("name, job_title, company_name, bio, website")
+      .from("users")
+      .select("name, job_title, company_name, bio, website, ai_knowledge")
       .eq("id", profileId)
       .single();
 
@@ -36,13 +36,17 @@ serve(async (req) => {
       });
     }
 
-    const systemPrompt = `Du bist der freundliche digitale Assistent von ${profile.name || "dieser Person"}.${
+    let systemPrompt = `Du bist der freundliche digitale Assistent von ${profile.name || "dieser Person"}.${
       profile.job_title ? ` ${profile.name} arbeitet als ${profile.job_title}` : ""
     }${profile.company_name ? ` bei ${profile.company_name}` : ""}.${
       profile.bio ? ` Hier ist die Bio: "${profile.bio}"` : ""
-    }${profile.website ? ` Website: ${profile.website}` : ""}.
+    }${profile.website ? ` Website: ${profile.website}` : ""}.\n\n`;
 
-Beantworte Fragen höflich, kurz und professionell basierend auf diesen Informationen. Wenn du etwas nicht weißt, sage das ehrlich. Antworte in der Sprache des Nutzers. Halte Antworten unter 150 Wörtern.`;
+    if (profile.ai_knowledge) {
+      systemPrompt += `Hier sind zusätzliche Informationen, die ${profile.name} bereitgestellt hat. Nutze diese als Wissensgrundlage:\n\n${profile.ai_knowledge}\n\n`;
+    }
+
+    systemPrompt += `Beantworte Fragen höflich, kurz und professionell basierend auf diesen Informationen. Wenn du etwas nicht weißt, sage das ehrlich. Antworte in der Sprache des Nutzers. Halte Antworten unter 150 Wörtern.`;
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
@@ -59,7 +63,7 @@ Beantworte Fragen höflich, kurz und professionell basierend auf diesen Informat
         model: "google/gemini-3-flash-preview",
         messages: [
           { role: "system", content: systemPrompt },
-          ...messages.slice(-10), // Limit context window
+          ...messages.slice(-10),
         ],
         stream: true,
       }),

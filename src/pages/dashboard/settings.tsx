@@ -836,6 +836,27 @@ export default function SettingsPage() {
                     </CardContent>
                 </Card>
 
+                {/* ─── KI-Assistent Wissensbasis ─── */}
+                <Card className="rounded-xl border-border/50">
+                    <CardHeader className="pb-4">
+                        <CardTitle className="text-lg">🤖 KI-Assistent</CardTitle>
+                        <CardDescription>Gib deiner KI zusätzliches Wissen – z.B. häufige Fragen, Gesprächspunkte, Produktinfos oder persönliche Facts.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                        <Textarea
+                            value={user?.ai_knowledge || ""}
+                            rows={8}
+                            onChange={(e) => setUser({ ...user, ai_knowledge: e.target.value })}
+                            onBlur={(e) => handleMesfeFeatureSave("ai_knowledge", e.target.value)}
+                            className="bg-input border-border resize-y"
+                            placeholder={`Beispiel:\n- Ich bin spezialisiert auf NFC-Technologie für Unternehmen\n- Unsere Produkte: Smart Hoodies, Polos, Accessoires\n- Preise starten ab 89€ pro Stück\n- FAQ: "Was ist NFC?" → Near Field Communication...`}
+                        />
+                        <p className="text-[10px] text-muted-foreground">
+                            Dieses Wissen wird deinem KI-Assistenten als Kontext mitgegeben. Je detaillierter, desto besser die Antworten.
+                        </p>
+                    </CardContent>
+                </Card>
+
                 {/* ═══════ DATENSCHUTZ & INTEGRATIONEN ═══════ */}
                 <div className="pt-2">
                     <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Datenschutz & Integrationen</h2>
