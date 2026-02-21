@@ -1,12 +1,11 @@
 'use client'
 
-import React from 'react'
+
 import { Link } from 'react-router-dom'
-import { ChevronRight, Menu, X } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { AnimatedGroup } from '@/components/ui/animated-group'
-import { cn } from '@/lib/utils'
-import { useScroll } from 'motion/react'
+import { Navbar } from '@/components/marketing/navbar'
 import { InteractiveDemoDashboard } from '@/components/marketing/interactive-demo-dashboard'
 
 const transitionVariants = {
@@ -32,7 +31,7 @@ const transitionVariants = {
 export function HeroSection() {
     return (
         <>
-            <HeroHeader />
+            <Navbar />
             <main className="overflow-hidden">
                 <section>
                     <div className="relative pt-24 md:pt-36">
@@ -138,99 +137,3 @@ export function HeroSection() {
     )
 }
 
-const menuItems = [
-    { name: 'Plattform', href: '/platform' },
-    { name: 'Lösungen', href: '/solutions' },
-    { name: 'Preise', href: '/pricing' },
-    { name: 'About Us', href: '/about' },
-]
-
-export const HeroHeader = () => {
-    const [menuState, setMenuState] = React.useState(false)
-    const [scrolled, setScrolled] = React.useState(false)
-
-    const { scrollYProgress } = useScroll()
-
-    React.useEffect(() => {
-        const unsubscribe = scrollYProgress.on('change', (latest) => {
-            setScrolled(latest > 0.05)
-        })
-        return () => unsubscribe()
-    }, [scrollYProgress])
-
-    return (
-        <header>
-            <nav
-                data-scrolled={scrolled}
-                className={cn(
-                    'fixed z-50 w-full transition-all duration-300',
-                    'data-[scrolled=true]:glass-card-strong data-[scrolled=true]:shadow-lg'
-                )}
-            >
-                <div className="mx-auto max-w-7xl px-6 py-4">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-8">
-                            <Link to="/" className="flex items-center gap-2">
-                                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-white shadow-[0_0_15px_rgba(37,99,235,0.5)]">
-                                    N
-                                </div>
-                                <span className="font-bold text-lg tracking-tight text-foreground">NFCwear</span>
-                            </Link>
-
-                            <button
-                                onClick={() => setMenuState(!menuState)}
-                                aria-label={menuState ? 'Close Menu' : 'Open Menu'}
-                                className="relative z-20 -m-2.5 block cursor-pointer p-2.5 lg:hidden"
-                            >
-                                {menuState ? <X className="size-5" /> : <Menu className="size-5" />}
-                            </button>
-
-                            {/* Mobile menu */}
-                            <div className={cn(
-                                'absolute inset-x-0 top-full glass-card-strong p-6 lg:hidden transition-all duration-300',
-                                menuState ? 'visible opacity-100' : 'invisible opacity-0'
-                            )}>
-                                <div className="flex flex-col gap-4">
-                                    {menuItems.map((item) => (
-                                        <Link
-                                            key={item.name}
-                                            to={item.href}
-                                            className="text-lg font-medium text-foreground/80 hover:text-primary transition-colors"
-                                            onClick={() => setMenuState(false)}
-                                        >
-                                            {item.name}
-                                        </Link>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Desktop menu */}
-                        <div className="hidden lg:flex items-center gap-8">
-                            <div className="flex items-center gap-6 text-sm font-medium text-foreground/80">
-                                {menuItems.map((item) => (
-                                    <Link
-                                        key={item.name}
-                                        to={item.href}
-                                        className="hover:text-primary transition-colors"
-                                    >
-                                        {item.name}
-                                    </Link>
-                                ))}
-                            </div>
-
-                            <div className="flex items-center gap-3">
-                                <Button variant="ghost" size="sm" className="rounded-full" asChild>
-                                    <Link to="/login">Login</Link>
-                                </Button>
-                                <Button size="sm" className="rounded-full" asChild>
-                                    <Link to="/login">Registrieren</Link>
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </header>
-    )
-}
