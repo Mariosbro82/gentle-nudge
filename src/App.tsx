@@ -87,6 +87,7 @@ function NfcLayout() {
 import ScrollToTop from "@/components/ScrollToTop";
 import { PasswordGate } from "@/components/PasswordGate";
 import { WhatsAppButton } from "@/components/marketing/whatsapp-button";
+import { PwaInstallPrompt } from "@/components/pwa-install-prompt";
 
 // Wrapper that conditionally applies PasswordGate (skip for public NFC routes)
 function ConditionalPasswordGate({ children }: { children: React.ReactNode }) {
@@ -104,6 +105,7 @@ export default function App() {
             <AuthProvider>
                 <ScrollToTop />
                 <WhatsAppButton />
+                <PwaInstallPrompt />
                 <ConditionalPasswordGate>
                     <Routes>
                         {/* Public routes */}

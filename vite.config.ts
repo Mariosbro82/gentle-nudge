@@ -2,14 +2,10 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
+import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-    // Base path for GitHub Pages - use repo name for project pages
-    // Change to "/" if using custom domain or user/org pages
-    // "deep dive": dynamically detect if running in GitHub Actions to set the correct base path.
-    // We use GITHUB_REPOSITORY (e.g. "owner/repo") to extract the repo name for the base path.
-    // If not in GH Actions (e.g. Lovable/Local), fallback to "/".
     base: mode === "production" && process.env.GITHUB_ACTIONS === "true"
         ? "/" + (process.env.GITHUB_REPOSITORY?.split('/')[1] || "") + "/"
         : "/",
@@ -20,6 +16,26 @@ export default defineConfig(({ mode }) => ({
     plugins: [
         react(),
         mode === 'development' && componentTagger(),
+        VitePWA({
+            registerType: "autoUpdate",
+            includeAssets: ["favicon.ico", "pwa-icon-192.png", "pwa-icon-512.png"],
+            manifest: false, // We use the static manifest.json in public/
+            workbox: {
+                globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
+                navigateFallback: "/index.html",
+                navigateFallbackDenylist: [/^\/~oauth/],
+                runtimeCaching: [
+                    {
+                        urlPattern: /^https:\/\/.*supabase\.co\/.*/i,
+                        handler: "NetworkFirst",
+                        options: {
+                            cacheName: "supabase-api",
+                            expiration: { maxEntries: 50, maxAgeSeconds: 300 },
+                        },
+                    },
+                ],
+            },
+        }),
     ].filter(Boolean),
     resolve: {
         alias: {
@@ -32,4 +48,3 @@ export default defineConfig(({ mode }) => ({
         assetsDir: 'assets',
     },
 }));
-
