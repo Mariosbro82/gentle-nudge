@@ -59,16 +59,17 @@ export function ModeSwitcher({ mode, onChange }: ModeSwitcherProps) {
   );
 }
 
-/** Wrap mode-dependent content sections for smooth enter/exit */
+/** Wrap mode-dependent content sections for smooth cross-fade */
 export function ModeContent({ mode, children }: { mode: DashboardMode; children: React.ReactNode }) {
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="popLayout" initial={false}>
       <motion.div
         key={mode}
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -12 }}
-        transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+        initial={{ opacity: 0, filter: "blur(4px)", scale: 0.98 }}
+        animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
+        exit={{ opacity: 0, filter: "blur(4px)", scale: 0.98 }}
+        transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+        style={{ willChange: "opacity, filter, transform" }}
       >
         {children}
       </motion.div>
