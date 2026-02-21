@@ -45,7 +45,7 @@ export function PhonePreview3D({ user, className = "", scale = 1, rotateY = 0, r
                         style={{ borderRadius: "1.8rem" }}
                     >
                         {/* Dynamic Island */}
-                        <div className="absolute top-[6px] left-1/2 -translate-x-1/2 w-[80px] h-[22px] bg-black rounded-full z-20" />
+                        <div className="absolute z-20" style={{ top: 6, left: "50%", transform: "translateX(-50%)", width: 76, height: 20, backgroundColor: "black", borderRadius: 9999 }} />
 
                         {/* Status bar */}
                         <div className="absolute top-1.5 left-7 right-7 flex justify-between items-center z-10 text-white/50 text-[8px] font-medium">
