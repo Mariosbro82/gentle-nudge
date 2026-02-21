@@ -6,6 +6,7 @@ import { GoogleGeminiEffect } from "@/components/ui/google-gemini-effect";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 export function Hero() {
     const ref = React.useRef(null);
@@ -40,10 +41,10 @@ export function Hero() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
                     >
-                        <span className="px-4 py-1.5 rounded-full border border-yellow-500/30 bg-yellow-500/10 backdrop-blur-md text-sm text-yellow-600 dark:text-yellow-200 inline-flex items-center gap-2 mb-8">
+                        <Link to="/about" className="px-4 py-1.5 rounded-full border border-yellow-500/30 bg-yellow-500/10 backdrop-blur-md text-sm text-yellow-600 dark:text-yellow-200 inline-flex items-center gap-2 mb-8 hover:bg-yellow-500/20 transition-colors cursor-pointer">
                             <Sparkles size={14} className="text-yellow-500 dark:text-yellow-400" />
                             Sonderpreis U21 Gewinner 2025 🏆
-                        </span>
+                        </Link>
 
                         <h1 className="text-4xl md:text-7xl lg:text-8xl font-bold tracking-tight text-foreground mb-8">
                             Kleidung, die <br />
