@@ -124,7 +124,7 @@ function CodeBackground() {
 
       <div
         ref={containerRef}
-        className="absolute inset-0 overflow-hidden font-mono text-xs leading-6 opacity-[0.07] p-8 pt-16"
+        className="absolute inset-0 overflow-hidden font-mono text-sm leading-7 opacity-[0.18] p-8 pt-16"
       >
         {visibleLines.map((line) => (
           <div key={line.id} className="whitespace-pre text-foreground">
