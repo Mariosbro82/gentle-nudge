@@ -1,42 +1,46 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { AdminSidebar } from "./sidebar";
-import { Menu } from "lucide-react";
+import { TopBar } from "./top-bar";
 import { cn } from "@/lib/utils";
 
 export function DashboardLayout() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [collapsed, setCollapsed] = useState(false);
 
     return (
-        <div className="min-h-screen bg-background text-foreground selection:bg-primary/30 font-sans antialiased">
-            {/* Mobile Header */}
-            <div className="md:hidden flex items-center justify-between p-4 border-b border-border bg-background sticky top-0 z-40">
-                <span className="font-bold text-lg">NFCwear Admin</span>
-                <button onClick={() => setIsSidebarOpen(true)} className="text-zinc-400 hover:text-white">
-                    <Menu size={24} />
-                </button>
-            </div>
-
+        <div className="min-h-screen bg-background text-foreground font-sans antialiased">
             {/* Sidebar - Desktop (Fixed) & Mobile (Overlay) */}
             <div className={cn(
-                "fixed inset-y-0 left-0 z-50 w-64 bg-sidebar border-r border-border transition-transform duration-300 ease-in-out md:translate-x-0 h-full",
-                isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+                "fixed inset-y-0 left-0 z-50 transition-all duration-300 ease-in-out md:translate-x-0 h-full",
+                collapsed ? "md:w-[68px]" : "md:w-64",
+                isSidebarOpen ? "translate-x-0 w-64" : "-translate-x-full"
             )}>
-                <AdminSidebar onClose={() => setIsSidebarOpen(false)} />
+                <AdminSidebar
+                    onClose={() => setIsSidebarOpen(false)}
+                    collapsed={collapsed}
+                    onToggleCollapse={() => setCollapsed(!collapsed)}
+                />
             </div>
 
             {/* Overlay backdrop for mobile */}
             {isSidebarOpen && (
                 <div
-                    className="fixed inset-0 z-40 bg-overlay/80 md:hidden backdrop-blur-sm"
+                    className="fixed inset-0 z-40 bg-overlay/60 md:hidden backdrop-blur-sm"
                     onClick={() => setIsSidebarOpen(false)}
                 />
             )}
 
             {/* Main Content */}
-            <main className="md:ml-64 p-4 md:p-8">
-                <Outlet />
-            </main>
+            <div className={cn(
+                "transition-all duration-300 ease-in-out min-h-screen",
+                collapsed ? "md:ml-[68px]" : "md:ml-64"
+            )}>
+                <TopBar onMenuClick={() => setIsSidebarOpen(true)} />
+                <main className="p-4 md:p-8 max-w-[1400px]">
+                    <Outlet />
+                </main>
+            </div>
         </div>
     );
 }

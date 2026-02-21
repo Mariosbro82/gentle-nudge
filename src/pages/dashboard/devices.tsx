@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Edit, Trash, Loader2, AlertTriangle } from "lucide-react";
+import { Plus, Edit, Trash, Loader2, AlertTriangle, Smartphone } from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
 import { useAuth } from "@/contexts/auth-context";
 import { BulkImportDialog } from "@/components/chips/bulk-import-dialog";
@@ -167,8 +167,16 @@ export default function DevicesPage() {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center h-64">
-                <div className="h-6 w-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+            <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                    <div className="space-y-2"><div className="h-7 w-28 bg-muted/60 rounded-lg animate-pulse" /><div className="h-4 w-64 bg-muted/40 rounded animate-pulse" /></div>
+                    <div className="h-9 w-36 bg-muted/60 rounded-lg animate-pulse" />
+                </div>
+                <div className="rounded-xl border border-border/50 bg-card overflow-hidden">
+                    {Array.from({ length: 4 }).map((_, i) => (
+                        <div key={i} className="p-4 border-b border-border/30 last:border-0 flex gap-4"><div className="h-4 flex-1 bg-muted/60 rounded animate-pulse" /><div className="h-4 flex-1 bg-muted/40 rounded animate-pulse" /><div className="h-4 w-20 bg-muted/40 rounded animate-pulse" /></div>
+                    ))}
+                </div>
             </div>
         );
     }
@@ -177,8 +185,8 @@ export default function DevicesPage() {
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight">Geräte</h1>
-                    <p className="text-muted-foreground">Verwalten Sie alle NFC-Chips und deren aktive Modi.</p>
+                    <h1 className="text-2xl font-bold tracking-tight">Geräte</h1>
+                    <p className="text-sm text-muted-foreground mt-0.5">Verwalten Sie alle NFC-Chips und deren aktive Modi.</p>
                 </div>
 
                 {/* Add Chip Dialog */}
@@ -248,7 +256,7 @@ export default function DevicesPage() {
                 </Dialog>
             </div>
 
-            <div className="rounded-md border border-border bg-card">
+            <div className="rounded-xl border border-border/50 bg-card overflow-hidden">
                 <Table>
                     <TableHeader>
                         <TableRow className="border-border hover:bg-muted/50">
@@ -317,8 +325,14 @@ export default function DevicesPage() {
                         ))}
                         {devices.length === 0 && (
                             <TableRow>
-                                <TableCell colSpan={5} className="text-center py-10 text-muted-foreground">
-                                    Keine Geräte gefunden. Fügen Sie eines hinzu.
+                                <TableCell colSpan={5} className="p-0">
+                                    <div className="flex flex-col items-center justify-center py-16 text-center">
+                                        <div className="w-14 h-14 rounded-2xl bg-muted/50 border border-border/50 flex items-center justify-center mb-4">
+                                            <Smartphone className="w-6 h-6 text-muted-foreground/50" />
+                                        </div>
+                                        <h3 className="text-sm font-semibold text-foreground">Keine Geräte gefunden</h3>
+                                        <p className="text-xs text-muted-foreground mt-1 max-w-xs">Registrieren Sie Ihren ersten NFC-Chip, um loszulegen.</p>
+                                    </div>
                                 </TableCell>
                             </TableRow>
                         )}
