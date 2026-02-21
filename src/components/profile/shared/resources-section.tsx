@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { FileText, FileSpreadsheet, File, Download, FolderOpen } from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
+import { t, type SupportedLang } from "@/lib/i18n";
 
 interface UserFile {
     id: string;
@@ -13,6 +14,7 @@ interface UserFile {
 interface ResourcesSectionProps {
     userId: string;
     accentColor?: string;
+    lang?: SupportedLang;
 }
 
 function getFileIcon(type: string | null) {
@@ -33,7 +35,7 @@ function formatFileSize(bytes: number | null) {
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-export function ResourcesSection({ userId, accentColor }: ResourcesSectionProps) {
+export function ResourcesSection({ userId, accentColor, lang = "de" }: ResourcesSectionProps) {
     const [files, setFiles] = useState<UserFile[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -64,7 +66,7 @@ export function ResourcesSection({ userId, accentColor }: ResourcesSectionProps)
         <div className="mt-6">
             <div className="flex items-center gap-2 mb-3">
                 <FolderOpen className="h-4 w-4" style={{ color: accent }} />
-                <h3 className="text-sm font-semibold text-white">Ressourcen</h3>
+                <h3 className="text-sm font-semibold text-white">{t("resources", lang)}</h3>
             </div>
             <div className="space-y-2">
                 {files.map((file) => (

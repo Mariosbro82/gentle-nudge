@@ -7,8 +7,9 @@ import { VideoGreeting } from "@/components/profile/shared/video-greeting";
 import { ResourcesSection } from "@/components/profile/shared/resources-section";
 import type { TemplateProps } from "@/types/profile";
 import { ensureAbsoluteUrl } from "@/lib/utils";
+import { t } from "@/lib/i18n";
 
-export function MinimalistCardTemplate({ user }: TemplateProps) {
+export function MinimalistCardTemplate({ user, lang = "de" }: TemplateProps) {
     const bgStyle: React.CSSProperties = user.backgroundImage
         ? { backgroundImage: `url(${user.backgroundImage})`, backgroundSize: 'cover', backgroundPosition: user.backgroundPosition || 'center' }
         : { backgroundColor: user.backgroundColor || '#0a0a0a' };
@@ -69,17 +70,17 @@ export function MinimalistCardTemplate({ user }: TemplateProps) {
                         <div className="flex justify-center gap-3 flex-wrap mb-6">
                             {user.email && (
                                 <a href={`mailto:${user.email}`} className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm text-white/90 hover:text-white hover:bg-white/10 transition-colors" style={{ background: 'rgba(255,255,255,0.06)', border: `1px solid ${accent}33` }}>
-                                    <Mail className="h-4 w-4" style={{ color: accent }} /> E-Mail
+                                    <Mail className="h-4 w-4" style={{ color: accent }} /> {t("email", lang)}
                                 </a>
                             )}
                             {user.phone && (
                                 <a href={`tel:${user.phone}`} className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm text-white/90 hover:text-white hover:bg-white/10 transition-colors" style={{ background: 'rgba(255,255,255,0.06)', border: `1px solid ${accent}33` }}>
-                                    <Phone className="h-4 w-4" style={{ color: accent }} /> Anrufen
+                                    <Phone className="h-4 w-4" style={{ color: accent }} /> {t("call", lang)}
                                 </a>
                             )}
                             {user.website && (
                                 <a href={ensureAbsoluteUrl(user.website)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm text-white/90 hover:text-white hover:bg-white/10 transition-colors" style={{ background: 'rgba(255,255,255,0.06)', border: `1px solid ${accent}33` }}>
-                                    <Globe className="h-4 w-4" style={{ color: accent }} /> Web
+                                    <Globe className="h-4 w-4" style={{ color: accent }} /> {t("web", lang)}
                                 </a>
                             )}
                             {user.linkedin && (
@@ -90,9 +91,9 @@ export function MinimalistCardTemplate({ user }: TemplateProps) {
                             <CustomLinksDisplay links={user.customLinks} accentColor={accent} variant="pill" />
                         </div>
 
-                        <ContactForm recipientUserId={user.id} recipientName={user.name} />
+                        <ContactForm recipientUserId={user.id} recipientName={user.name} lang={lang} />
 
-                        <ResourcesSection userId={user.id} accentColor={accent} />
+                        <ResourcesSection userId={user.id} accentColor={accent} lang={lang} />
                     </div>
                 </div>
             </div>
