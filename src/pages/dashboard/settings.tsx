@@ -23,6 +23,8 @@ import { ModeSwitcher, ModeContent, type DashboardMode } from "@/components/sett
 import { useUsernameAvailability } from "@/hooks/use-username-availability";
 import { Check, AlertCircle } from "lucide-react";
 import type { CustomLink, ProfileUser } from "@/types/profile";
+import { FeatureGate } from "@/components/dashboard/feature-gate";
+import type { PlanType } from "@/lib/plan-features";
 
 export default function SettingsPage() {
     const { user: authUser } = useAuth();
@@ -33,6 +35,7 @@ export default function SettingsPage() {
     const [activeTemplate, setActiveTemplate] = useState("premium-gradient");
     const [customLinks, setCustomLinks] = useState<CustomLink[]>([]);
     const [dashboardMode, setDashboardMode] = useState<DashboardMode>("corporate");
+    const [userPlan, setUserPlan] = useState<PlanType>("starter");
 
     const {
         username,
@@ -55,6 +58,31 @@ export default function SettingsPage() {
             setUser(p);
             setActiveTemplate(p?.active_template || "premium-gradient");
             setCustomLinks(p?.custom_links || []);
+
+            // Fetch plan from organization
+            if (p?.id) {
+                const { data: membership } = await supabase
+                    .from("organization_members")
+                    .select("organization_id")
+                    .eq("user_id", p.id)
+                    .maybeSingle();
+                if (membership?.organization_id) {
+                    const { data: org } = await supabase
+                        .from("organizations")
+                        .select("plan")
+                        .eq("id", membership.organization_id)
+                        .single();
+                    if (org?.plan) setUserPlan(org.plan as PlanType);
+                } else if (p?.company_id) {
+                    const { data: company } = await supabase
+                        .from("companies")
+                        .select("plan")
+                        .eq("id", p.company_id)
+                        .single();
+                    if (company?.plan) setUserPlan(company.plan as PlanType);
+                }
+            }
+
             setLoading(false);
         }
         fetchProfile();
@@ -750,6 +778,7 @@ export default function SettingsPage() {
                 </Card>
 
                 {/* ─── Video Greeting ─── */}
+                <FeatureGate feature="video_greeting" plan={userPlan} label="Video-Begrüßung">
                 <Card className="rounded-xl border-border/50">
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg">Video-Begrüßung</CardTitle>
@@ -770,6 +799,7 @@ export default function SettingsPage() {
                         />
                     </CardContent>
                 </Card>
+                </FeatureGate>
 
                 {/* ─── File Vault ─── */}
                 <Card className="rounded-xl border-border/50">
@@ -809,6 +839,7 @@ export default function SettingsPage() {
                 </Card>
 
                 {/* ─── Integrationen ─── */}
+                <FeatureGate feature="webhooks" plan={userPlan} label="Webhook-Integration">
                 <Card className="rounded-xl border-border/50">
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg">Integrationen</CardTitle>
@@ -818,6 +849,7 @@ export default function SettingsPage() {
                         <WebhookSettings webhookUrl={user?.webhook_url || null} authUserId={authUser?.id || ""} email={user?.email || authUser?.email || ""} onChange={(url) => setUser({ ...user, webhook_url: url })} />
                     </CardContent>
                 </Card>
+                </FeatureGate>
 
                 {/* ─── Sticky Save ─── */}
                 <div className="sticky bottom-4 z-50 flex justify-end pb-2">
