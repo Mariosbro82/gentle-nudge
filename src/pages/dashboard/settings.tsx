@@ -18,6 +18,7 @@ import { FocalPointPicker } from "@/components/settings/focal-point-picker";
 import { VideoUpload } from "@/components/settings/video-upload";
 import { FileVaultManager } from "@/components/settings/file-vault-manager";
 import { PhonePreview3D } from "@/components/settings/phone-preview-3d";
+import { ModeSwitcher, type DashboardMode } from "@/components/settings/mode-switcher";
 import { useUsernameAvailability } from "@/hooks/use-username-availability";
 import { Check, AlertCircle } from "lucide-react";
 import type { CustomLink, ProfileUser } from "@/types/profile";
@@ -30,6 +31,7 @@ export default function SettingsPage() {
     const [ghostSaving, setGhostSaving] = useState(false);
     const [activeTemplate, setActiveTemplate] = useState("premium-gradient");
     const [customLinks, setCustomLinks] = useState<CustomLink[]>([]);
+    const [dashboardMode, setDashboardMode] = useState<DashboardMode>("corporate");
 
     const {
         username,
@@ -257,6 +259,8 @@ export default function SettingsPage() {
                     <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Einstellungen</h1>
                     <p className="text-sm text-muted-foreground mt-1">Verwalten Sie Ihr Profil und Integrationen.</p>
                 </div>
+
+                <ModeSwitcher mode={dashboardMode} onChange={setDashboardMode} />
 
                 <form onSubmit={handleSave} className="contents">
 
@@ -500,13 +504,16 @@ export default function SettingsPage() {
                     </CardContent>
                 </Card>
 
-                {/* ═══════ MESSE & EVENTS ═══════ */}
+                {/* ═══════ MODE-SPECIFIC SECTIONS ═══════ */}
+
+                {/* ── Vertrieb: Messe & Events ── */}
+                {dashboardMode === "corporate" && (
+                <>
                 <div className="space-y-1 pt-4">
                     <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Messe & Events</h2>
                     <Separator />
                 </div>
 
-                {/* ─── Messe-Features ─── */}
                 <Card>
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg">Messe-Features</CardTitle>
@@ -556,6 +563,70 @@ export default function SettingsPage() {
                         </div>
                     </CardContent>
                 </Card>
+                </>
+                )}
+
+                {/* ── Kampagnen Mode ── */}
+                {dashboardMode === "campaign" && (
+                <>
+                <div className="space-y-1 pt-4">
+                    <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Kampagnen</h2>
+                    <Separator />
+                </div>
+
+                <Card>
+                    <CardHeader className="pb-4">
+                        <CardTitle className="text-lg">Kampagnen-Steuerung</CardTitle>
+                        <CardDescription>Leiten Sie alle NFC-Chips auf eine zentrale URL um.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="space-y-1.5">
+                            <Label htmlFor="campaign-url">Ziel-URL</Label>
+                            <Input id="campaign-url" placeholder="https://ihre-landingpage.de/messe" className="bg-input border-border" />
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div className="space-y-1.5">
+                                <Label htmlFor="campaign-start" className="text-xs text-muted-foreground">Startdatum</Label>
+                                <Input id="campaign-start" type="datetime-local" className="bg-input border-border" />
+                            </div>
+                            <div className="space-y-1.5">
+                                <Label htmlFor="campaign-end" className="text-xs text-muted-foreground">Enddatum</Label>
+                                <Input id="campaign-end" type="datetime-local" className="bg-input border-border" />
+                            </div>
+                        </div>
+                        <p className="text-xs text-muted-foreground">Im Kampagnen-Modus werden alle Chips Ihres Teams auf diese URL umgeleitet. Perfekt für Messen und Events.</p>
+                    </CardContent>
+                </Card>
+                </>
+                )}
+
+                {/* ── Bewertung Mode ── */}
+                {dashboardMode === "hospitality" && (
+                <>
+                <div className="space-y-1 pt-4">
+                    <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Bewertungen</h2>
+                    <Separator />
+                </div>
+
+                <Card>
+                    <CardHeader className="pb-4">
+                        <CardTitle className="text-lg">Review-Einstellungen</CardTitle>
+                        <CardDescription>Konfigurieren Sie Ihre Google-Bewertungsseite und weitere Plattformen.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="space-y-1.5">
+                            <Label htmlFor="google-review-url">Google Maps URL</Label>
+                            <Input id="google-review-url" placeholder="https://g.page/r/IhrUnternehmen/review" className="bg-input border-border" />
+                        </div>
+                        <div className="space-y-1.5">
+                            <Label htmlFor="tripadvisor-url">TripAdvisor URL (optional)</Label>
+                            <Input id="tripadvisor-url" placeholder="https://tripadvisor.com/..." className="bg-input border-border" />
+                        </div>
+                        <p className="text-xs text-muted-foreground">Im Bewertungs-Modus werden Kunden direkt zu Ihrem Google-Bewertungsprofil weitergeleitet. Ideal für Gastronomie und Hotels.</p>
+                    </CardContent>
+                </Card>
+                </>
+                )}
 
                 {/* ═══════ VORLAGEN & ERWEITERT ═══════ */}
                 <div className="space-y-1 pt-4">
