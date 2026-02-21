@@ -967,7 +967,6 @@ export type Database = {
           coupon_code: string | null
           coupon_description: string | null
           custom_links: Json | null
-          email: string | null
           ghost_mode: boolean | null
           ghost_mode_until: string | null
           id: string | null
@@ -976,7 +975,6 @@ export type Database = {
           live_status_color: string | null
           live_status_text: string | null
           name: string | null
-          phone: string | null
           profile_pic: string | null
           profile_pic_position: string | null
           slug: string | null
@@ -1001,7 +999,6 @@ export type Database = {
           coupon_code?: string | null
           coupon_description?: string | null
           custom_links?: Json | null
-          email?: string | null
           ghost_mode?: boolean | null
           ghost_mode_until?: string | null
           id?: string | null
@@ -1010,7 +1007,6 @@ export type Database = {
           live_status_color?: string | null
           live_status_text?: string | null
           name?: string | null
-          phone?: string | null
           profile_pic?: string | null
           profile_pic_position?: string | null
           slug?: string | null
@@ -1035,7 +1031,6 @@ export type Database = {
           coupon_code?: string | null
           coupon_description?: string | null
           custom_links?: Json | null
-          email?: string | null
           ghost_mode?: boolean | null
           ghost_mode_until?: string | null
           id?: string | null
@@ -1044,7 +1039,6 @@ export type Database = {
           live_status_color?: string | null
           live_status_text?: string | null
           name?: string | null
-          phone?: string | null
           profile_pic?: string | null
           profile_pic_position?: string | null
           slug?: string | null

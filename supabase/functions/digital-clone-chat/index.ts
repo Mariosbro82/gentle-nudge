@@ -25,7 +25,7 @@ serve(async (req) => {
 
     const { data: profile } = await supabase
       .from("public_profiles")
-      .select("name, job_title, company_name, bio, website, email")
+      .select("name, job_title, company_name, bio, website")
       .eq("id", profileId)
       .single();
 
