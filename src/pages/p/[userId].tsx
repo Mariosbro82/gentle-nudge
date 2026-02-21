@@ -52,6 +52,22 @@ export default function ProfilePage() {
     const [lang, setLang] = useState<SupportedLang>(detectLanguage());
     const [liveStatus, setLiveStatus] = useState<{ text: string | null; color: string | null }>({ text: null, color: null });
     const [profileId, setProfileId] = useState<string | null>(null);
+    const [isReturning, setIsReturning] = useState(false);
+
+    // Contextual Memory: recognize returning visitors via localStorage
+    useEffect(() => {
+        if (!profileId) return;
+        const key = `nfc_visit_${profileId}`;
+        const prev = localStorage.getItem(key);
+        if (prev) {
+            const lastDate = new Date(prev).toDateString();
+            const today = new Date().toDateString();
+            if (lastDate === today) {
+                setIsReturning(true);
+            }
+        }
+        localStorage.setItem(key, new Date().toISOString());
+    }, [profileId]);
 
     useEffect(() => {
         async function fetchUser() {
@@ -136,8 +152,14 @@ export default function ProfilePage() {
     const Template = getTemplate(user.activeTemplate);
     return (
         <div className="relative">
+            {/* Returning visitor banner */}
+            {isReturning && (
+                <div className="fixed top-0 left-0 right-0 z-[60] bg-primary/90 backdrop-blur-sm text-primary-foreground text-center py-2.5 px-4 text-sm font-medium shadow-lg">
+                    👋 Willkommen zurück! Suchst du noch eine bestimmte Info?
+                </div>
+            )}
             {/* Top bar with language switcher and live status */}
-            <div className="absolute top-3 left-3 right-3 z-50 flex items-center justify-between">
+            <div className={`absolute ${isReturning ? 'top-14' : 'top-3'} left-3 right-3 z-50 flex items-center justify-between transition-all`}>
                 <div>
                     {liveStatus.text && profileId && (
                         <LiveStatusBadge userId={profileId} initialText={liveStatus.text} initialColor={liveStatus.color} />
