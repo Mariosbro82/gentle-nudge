@@ -440,6 +440,7 @@ export type Database = {
           name: string
           plan: Database["public"]["Enums"]["plan_type"] | null
           slug: string | null
+          template_config: Json | null
           updated_at: string
         }
         Insert: {
@@ -449,6 +450,7 @@ export type Database = {
           name: string
           plan?: Database["public"]["Enums"]["plan_type"] | null
           slug?: string | null
+          template_config?: Json | null
           updated_at?: string
         }
         Update: {
@@ -458,6 +460,7 @@ export type Database = {
           name?: string
           plan?: Database["public"]["Enums"]["plan_type"] | null
           slug?: string | null
+          template_config?: Json | null
           updated_at?: string
         }
         Relationships: []

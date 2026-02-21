@@ -10,6 +10,7 @@ import { WelcomeAnimation } from "@/components/profile/welcome-animation";
 import { detectLanguage, t, type SupportedLang } from "@/lib/i18n";
 import type { ProfileUser } from "@/types/profile";
 import { logProfileView } from "@/lib/api/analytics";
+import type { OrgTemplateConfig } from "@/hooks/use-org-template";
 
 interface PublicProfile {
     id: string;
@@ -88,6 +89,31 @@ export default function ProfilePage() {
                 logProfileView(data.id);
                 setProfileId(data.id);
                 setLiveStatus({ text: (data as any).live_status_text || null, color: (data as any).live_status_color || null });
+
+                // Fetch org template config for corporate design merging
+                let orgConfig: OrgTemplateConfig | null = null;
+                const { data: membership } = await supabase
+                    .from("organization_members")
+                    .select("organization_id")
+                    .eq("user_id", data.id)
+                    .maybeSingle();
+                
+                if (membership?.organization_id) {
+                    const { data: org } = await supabase
+                        .from("organizations")
+                        .select("template_config, logo_url")
+                        .eq("id", membership.organization_id)
+                        .single();
+                    if (org?.template_config) {
+                        orgConfig = org.template_config as OrgTemplateConfig;
+                    }
+                }
+
+                // Merge: org config overrides user data for locked design fields
+                const colors = orgConfig?.global_colors;
+                const mandatoryLinks = orgConfig?.mandatory_links || [];
+                const userLinks = data.custom_links || [];
+
                 setUser({
                     id: data.id,
                     name: data.name || "No Name",
@@ -104,10 +130,13 @@ export default function ProfilePage() {
                     ghostMode: data.ghost_mode || false,
                     ghostModeUntil: data.ghost_mode_until || null,
                     backgroundImage: data.background_image || "",
-                    backgroundColor: data.background_color || "#0a0a0a",
-                    bannerColor: data.banner_color || "#4f46e5",
-                    accentColor: data.accent_color || "#4f46e5",
-                    customLinks: data.custom_links || [],
+                    backgroundColor: colors?.background || data.background_color || "#0a0a0a",
+                    bannerColor: colors?.banner || data.banner_color || "#4f46e5",
+                    accentColor: colors?.accent || data.accent_color || "#4f46e5",
+                    customLinks: [
+                        ...mandatoryLinks.map(l => ({ title: l.title, url: l.url })),
+                        ...userLinks,
+                    ],
                     couponCode: data.coupon_code || "",
                     couponDescription: data.coupon_description || "",
                     countdownTarget: data.countdown_target || null,
