@@ -49,10 +49,10 @@ function MilestoneCard({ milestone, index }: { milestone: typeof milestones[0]; 
         <motion.div
             ref={ref}
             style={{ opacity, y }}
-            className={`grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-0 items-center ${isEven ? "" : "md:direction-rtl"}`}
+            className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center"
         >
             {/* Image */}
-            <div className={`md:col-span-5 ${isEven ? "md:col-start-1" : "md:col-start-8"}`} style={{ direction: "ltr" }}>
+            <div className={`md:col-span-5 ${isEven ? "md:col-start-1 md:order-1" : "md:col-start-8 md:order-3"}`}>
                 <div className="relative overflow-hidden rounded-2xl aspect-[4/3] group">
                     <img
                         src={milestone.image}
@@ -60,9 +60,7 @@ function MilestoneCard({ milestone, index }: { milestone: typeof milestones[0]; 
                         className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                         loading="lazy"
                     />
-                    {/* Subtle overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
-                    {/* Year overlay */}
                     <div className="absolute bottom-4 left-4">
                         <span className="text-white/90 text-6xl font-black tracking-tighter leading-none" style={{ fontFeatureSettings: "'tnum'" }}>
                             {milestone.year}
@@ -71,15 +69,13 @@ function MilestoneCard({ milestone, index }: { milestone: typeof milestones[0]; 
                 </div>
             </div>
 
-            {/* Connector line (desktop) */}
-            <div className="hidden md:flex md:col-span-2 items-center justify-center" style={{ direction: "ltr" }}>
-                <div className="w-full h-px bg-border relative">
-                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full border-2 border-foreground/20 bg-background" />
-                </div>
+            {/* Connector dot (desktop) */}
+            <div className="hidden md:flex md:col-span-2 md:col-start-6 md:order-2 items-center justify-center">
+                <div className="w-3 h-3 rounded-full border-2 border-foreground/20 bg-background" />
             </div>
 
             {/* Text */}
-            <div className={`md:col-span-5 ${isEven ? "md:col-start-8" : "md:col-start-1"}`} style={{ direction: "ltr" }}>
+            <div className={`md:col-span-5 ${isEven ? "md:col-start-8 md:order-3" : "md:col-start-1 md:order-1"}`}>
                 <div className="space-y-3">
                     <span className="text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground">
                         {milestone.accent}
@@ -107,7 +103,7 @@ export function HistorySection() {
     return (
         <section id="history" ref={containerRef} className="py-24 md:py-40 bg-background relative">
             <div className="container mx-auto px-6">
-                {/* Header — editorial, left-aligned */}
+                {/* Header */}
                 <div className="max-w-3xl mb-20 md:mb-32">
                     <span className="text-xs font-mono uppercase tracking-[0.25em] text-muted-foreground mb-4 block">
                         Unsere Reise
