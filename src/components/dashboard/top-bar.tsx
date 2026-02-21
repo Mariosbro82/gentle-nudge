@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useLocation, Link } from "react-router-dom";
-import { ChevronRight, Search, Menu, QrCode } from "lucide-react";
+import { ChevronRight, Search, Menu, QrCode, Download } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { QRCodeSVG } from "qrcode.react";
@@ -25,6 +26,26 @@ export function TopBar({ onMenuClick }: TopBarProps) {
     const [qrOpen, setQrOpen] = useState(false);
     const currentLabel = ROUTE_LABELS[location.pathname] || "Dashboard";
     const isRoot = location.pathname === "/dashboard";
+
+    const handleDownloadQr = () => {
+        const container = document.getElementById("qr-code-container");
+        const svg = container?.querySelector("svg");
+        if (!svg) return;
+        const svgData = new XMLSerializer().serializeToString(svg);
+        const canvas = document.createElement("canvas");
+        canvas.width = 400;
+        canvas.height = 400;
+        const ctx = canvas.getContext("2d");
+        const img = new Image();
+        img.onload = () => {
+            ctx?.drawImage(img, 0, 0, 400, 400);
+            const a = document.createElement("a");
+            a.download = "qr-code.png";
+            a.href = canvas.toDataURL("image/png");
+            a.click();
+        };
+        img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)));
+    };
 
     return (
         <div className="h-14 border-b border-border/50 bg-background/80 backdrop-blur-xl sticky top-0 z-30 flex items-center justify-between px-4 md:px-6 gap-4">
@@ -69,7 +90,7 @@ export function TopBar({ onMenuClick }: TopBarProps) {
                             <DialogTitle className="text-center">QR-Code</DialogTitle>
                         </DialogHeader>
                         <div className="flex flex-col items-center gap-4 py-4">
-                            <div className="p-4 bg-white rounded-xl">
+                            <div className="p-4 bg-white rounded-xl" id="qr-code-container">
                                 <QRCodeSVG
                                     value={typeof window !== "undefined" ? window.location.href : ""}
                                     size={200}
@@ -81,6 +102,10 @@ export function TopBar({ onMenuClick }: TopBarProps) {
                             <p className="text-sm text-muted-foreground text-center max-w-[220px]">
                                 Scanne mich mit der Kamera, falls NFC nicht verfügbar ist.
                             </p>
+                            <Button variant="outline" size="sm" className="gap-2" onClick={handleDownloadQr}>
+                                <Download size={14} />
+                                Als PNG herunterladen
+                            </Button>
                         </div>
                     </DialogContent>
                 </Dialog>
