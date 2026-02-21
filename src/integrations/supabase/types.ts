@@ -679,6 +679,8 @@ export type Database = {
           accent_color: string | null
           active_template: string | null
           auth_user_id: string | null
+          avatar_emoji: string | null
+          avatar_style: string | null
           background_color: string | null
           background_image: string | null
           background_position: string | null
@@ -693,6 +695,7 @@ export type Database = {
           coupon_code: string | null
           coupon_description: string | null
           created_at: string | null
+          custom_greeting: string | null
           custom_links: Json | null
           default_followup_body_html: string | null
           default_followup_delay_hours: number | null
@@ -727,6 +730,8 @@ export type Database = {
           accent_color?: string | null
           active_template?: string | null
           auth_user_id?: string | null
+          avatar_emoji?: string | null
+          avatar_style?: string | null
           background_color?: string | null
           background_image?: string | null
           background_position?: string | null
@@ -741,6 +746,7 @@ export type Database = {
           coupon_code?: string | null
           coupon_description?: string | null
           created_at?: string | null
+          custom_greeting?: string | null
           custom_links?: Json | null
           default_followup_body_html?: string | null
           default_followup_delay_hours?: number | null
@@ -775,6 +781,8 @@ export type Database = {
           accent_color?: string | null
           active_template?: string | null
           auth_user_id?: string | null
+          avatar_emoji?: string | null
+          avatar_style?: string | null
           background_color?: string | null
           background_image?: string | null
           background_position?: string | null
@@ -789,6 +797,7 @@ export type Database = {
           coupon_code?: string | null
           coupon_description?: string | null
           created_at?: string | null
+          custom_greeting?: string | null
           custom_links?: Json | null
           default_followup_body_html?: string | null
           default_followup_delay_hours?: number | null
@@ -954,6 +963,8 @@ export type Database = {
         Row: {
           accent_color: string | null
           active_template: string | null
+          avatar_emoji: string | null
+          avatar_style: string | null
           background_color: string | null
           background_image: string | null
           background_position: string | null
@@ -966,6 +977,7 @@ export type Database = {
           countdown_target: string | null
           coupon_code: string | null
           coupon_description: string | null
+          custom_greeting: string | null
           custom_links: Json | null
           ghost_mode: boolean | null
           ghost_mode_until: string | null
@@ -986,6 +998,8 @@ export type Database = {
         Insert: {
           accent_color?: string | null
           active_template?: string | null
+          avatar_emoji?: string | null
+          avatar_style?: string | null
           background_color?: string | null
           background_image?: string | null
           background_position?: string | null
@@ -998,6 +1012,7 @@ export type Database = {
           countdown_target?: string | null
           coupon_code?: string | null
           coupon_description?: string | null
+          custom_greeting?: string | null
           custom_links?: Json | null
           ghost_mode?: boolean | null
           ghost_mode_until?: string | null
@@ -1018,6 +1033,8 @@ export type Database = {
         Update: {
           accent_color?: string | null
           active_template?: string | null
+          avatar_emoji?: string | null
+          avatar_style?: string | null
           background_color?: string | null
           background_image?: string | null
           background_position?: string | null
@@ -1030,6 +1047,7 @@ export type Database = {
           countdown_target?: string | null
           coupon_code?: string | null
           coupon_description?: string | null
+          custom_greeting?: string | null
           custom_links?: Json | null
           ghost_mode?: boolean | null
           ghost_mode_until?: string | null
