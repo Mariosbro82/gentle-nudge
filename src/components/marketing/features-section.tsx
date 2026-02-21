@@ -55,7 +55,7 @@ export function FeaturesSection() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.2 }}
-                            className="p-8 rounded-2xl bg-card border border-border hover:border-foreground/20 hover:bg-accent/50 transition-all group"
+                            className="p-8 rounded-2xl glass-card hover:border-foreground/20 transition-all group"
                         >
                             <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-6 bg-${mode.color}-500/10 text-${mode.color}-500 group-hover:scale-110 transition-transform duration-300`}>
                                 <mode.icon size={28} className={

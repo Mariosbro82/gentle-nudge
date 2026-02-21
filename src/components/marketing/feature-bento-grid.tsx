@@ -47,7 +47,7 @@ export function FeatureBentoGrid() {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="md:col-span-2 md:row-span-2 rounded-3xl bg-card border border-border p-8 pb-28 md:pb-8 flex flex-col justify-between overflow-hidden relative group"
+                        className="md:col-span-2 md:row-span-2 rounded-3xl glass-card p-8 pb-28 md:pb-8 flex flex-col justify-between overflow-hidden relative group"
                     >
                         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
@@ -82,7 +82,7 @@ export function FeatureBentoGrid() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.1 }}
-                        className="md:col-span-2 md:row-span-1 rounded-3xl bg-card border border-border p-8 flex items-center justify-between relative overflow-hidden group"
+                        className="md:col-span-2 md:row-span-1 rounded-3xl glass-card p-8 flex items-center justify-between relative overflow-hidden group"
                     >
                         <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
@@ -113,7 +113,7 @@ export function FeatureBentoGrid() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.2 }}
-                        className="md:col-span-1 md:row-span-1 rounded-3xl bg-card border border-border p-6 flex flex-col relative overflow-hidden group"
+                        className="md:col-span-1 md:row-span-1 rounded-3xl glass-card p-6 flex flex-col relative overflow-hidden group"
                     >
                         <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
@@ -140,7 +140,7 @@ export function FeatureBentoGrid() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.3 }}
-                        className="md:col-span-1 md:row-span-1 rounded-3xl bg-card border border-border p-6 flex flex-col relative overflow-hidden group"
+                        className="md:col-span-1 md:row-span-1 rounded-3xl glass-card p-6 flex flex-col relative overflow-hidden group"
                     >
                         <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 

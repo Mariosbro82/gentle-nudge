@@ -3,7 +3,7 @@ import { Twitter, Linkedin, Instagram } from "lucide-react";
 
 export function Footer() {
     return (
-        <footer className="bg-background border-t border-border pt-16 pb-8">
+        <footer className="glass-card-strong rounded-none border-x-0 border-b-0 pt-16 pb-8">
             <div className="container mx-auto px-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-12 mb-16">
                     {/* Brand Column */}
@@ -17,13 +17,13 @@ export function Footer() {
                             Corporate Fashion trifft NFC-Technologie.
                         </p>
                         <div className="flex gap-4">
-                            <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-all">
+                            <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg glass-subtle flex items-center justify-center text-muted-foreground hover:text-foreground transition-all">
                                 <Twitter size={18} />
                             </a>
-                            <a href="https://www.linkedin.com/company/severmore-ug-haftungsbeschr%C3%A4nkt/posts/?feedView=all&viewAsMember=" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-all">
+                            <a href="https://www.linkedin.com/company/severmore-ug-haftungsbeschr%C3%A4nkt/posts/?feedView=all&viewAsMember=" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg glass-subtle flex items-center justify-center text-muted-foreground hover:text-foreground transition-all">
                                 <Linkedin size={18} />
                             </a>
-                            <a href="https://www.instagram.com/severmore.clo/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-all">
+                            <a href="https://www.instagram.com/severmore.clo/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg glass-subtle flex items-center justify-center text-muted-foreground hover:text-foreground transition-all">
                                 <Instagram size={18} />
                             </a>
                         </div>

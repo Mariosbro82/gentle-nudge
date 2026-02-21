@@ -30,7 +30,7 @@ export function AnalyticsSection() {
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="w-full max-w-5xl rounded-xl border border-border shadow-2xl bg-card overflow-hidden backdrop-blur-xl"
+                    className="w-full max-w-5xl rounded-xl glass-card-strong shadow-2xl overflow-hidden"
                 >
                     {/* Window Header */}
                     <div className="h-10 bg-muted border-b border-border flex items-center px-4 gap-2">

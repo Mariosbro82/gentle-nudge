@@ -28,13 +28,13 @@ export function RoiSection() {
                             </p>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
-                                <div className="p-4 rounded-lg bg-card border border-border hover:border-purple-500/30 transition-colors">
+                                <div className="p-4 rounded-lg glass-card hover:border-purple-500/30 transition-colors">
                                     <h4 className="flex items-center gap-2 text-foreground font-semibold mb-1">
                                         <Zap className="text-yellow-400" size={18} /> 60% mehr Leads
                                     </h4>
                                     <p className="text-sm text-muted-foreground">durch friktionsloses Capturing per NFC-Tap.</p>
                                 </div>
-                                <div className="p-4 rounded-lg bg-card border border-border hover:border-purple-500/30 transition-colors">
+                                <div className="p-4 rounded-lg glass-card hover:border-purple-500/30 transition-colors">
                                     <h4 className="flex items-center gap-2 text-foreground font-semibold mb-1">
                                         <BarChart3 className="text-green-400" size={18} /> Full-Funnel Analytics
                                     </h4>
@@ -49,7 +49,7 @@ export function RoiSection() {
                         initial={{ opacity: 0, scale: 0.9 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
-                        className="relative h-[500px] w-full bg-gradient-to-br from-card to-background rounded-2xl border border-border overflow-hidden flex flex-col items-center justify-center p-8 shadow-2xl"
+                        className="relative h-[500px] w-full glass-card rounded-2xl overflow-hidden flex flex-col items-center justify-center p-8 shadow-2xl"
                     >
                         <div className="absolute inset-0 bg-grid-white/[0.02]" />
 

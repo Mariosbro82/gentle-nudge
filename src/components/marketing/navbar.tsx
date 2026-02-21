@@ -12,7 +12,7 @@ export function Navbar() {
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className="fixed top-0 left-0 right-0 z-50 h-16 border-b border-white/5 bg-white/5 dark:bg-black/5 backdrop-blur-xl px-6 flex items-center justify-between"
+      className="fixed top-0 left-0 right-0 z-50 h-16 glass-card-strong rounded-none border-x-0 border-t-0 px-6 flex items-center justify-between"
     >
       <Link to="/" className="flex items-center gap-2">
         <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-white shadow-[0_0_15px_rgba(37,99,235,0.5)]">
@@ -48,7 +48,7 @@ export function Navbar() {
 
       {/* Mobile Menu Overlay */}
       {isOpen && (
-        <div className="absolute top-16 left-0 right-0 bg-white dark:bg-black border-b border-white/10 p-6 flex flex-col gap-4 shadow-2xl lg:hidden max-h-[calc(100vh-4rem)] overflow-y-auto">
+        <div className="absolute top-16 left-0 right-0 glass-card-strong rounded-none border-x-0 border-t-0 p-6 flex flex-col gap-4 shadow-2xl lg:hidden max-h-[calc(100vh-4rem)] overflow-y-auto">
           <Link to="/" className="text-lg font-medium text-foreground/80" onClick={() => setIsOpen(false)}>Home</Link>
           <Link to="/platform" className="text-lg font-medium text-foreground/80" onClick={() => setIsOpen(false)}>Plattform</Link>
           <Link to="/solutions" className="text-lg font-medium text-foreground/80" onClick={() => setIsOpen(false)}>Lösungen</Link>
