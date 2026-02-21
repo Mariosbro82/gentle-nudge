@@ -14,9 +14,10 @@ const PHONE_W = 280;
 const PHONE_H = 580;
 const CONTENT_W = 390;
 const CONTENT_H = 844;
-const SCALE = PHONE_W / CONTENT_W;
+const INNER_SCALE = PHONE_W / CONTENT_W;
+const BORDER_RADIUS = "2.2rem";
 
-export function PhonePreview3D({ user, className = "", scale = 1, rotateY = -8, rotateX = 5 }: PhonePreview3DProps) {
+export function PhonePreview3D({ user, className = "", scale = 1, rotateY = 0, rotateX = 0 }: PhonePreview3DProps) {
     const Template = useMemo(() => getTemplate(user.activeTemplate), [user.activeTemplate]);
 
     return (
@@ -30,33 +31,40 @@ export function PhonePreview3D({ user, className = "", scale = 1, rotateY = -8, 
             >
                 {/* Phone Frame */}
                 <div
-                    className="relative rounded-[2.5rem] border-[6px] border-zinc-800 bg-black shadow-2xl shadow-black/60"
-                    style={{ width: PHONE_W, height: PHONE_H, overflow: "hidden" }}
+                    className="relative bg-black shadow-2xl shadow-black/40"
+                    style={{
+                        width: PHONE_W + 12,
+                        height: PHONE_H + 12,
+                        borderRadius: BORDER_RADIUS,
+                        padding: 6,
+                    }}
                 >
-                    {/* Notch */}
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-b-2xl z-20" />
+                    {/* Inner screen bezel */}
+                    <div
+                        className="relative w-full h-full overflow-hidden"
+                        style={{ borderRadius: "1.8rem" }}
+                    >
+                        {/* Dynamic Island */}
+                        <div className="absolute top-2 left-1/2 -translate-x-1/2 w-[90px] h-[26px] bg-black rounded-full z-20" />
 
-                    {/* Status bar */}
-                    <div className="absolute top-1 left-8 right-8 flex justify-between items-center z-10 text-white/60 text-[8px] px-1">
-                        <span>9:41</span>
-                        <div className="flex items-center gap-1">
-                            <div className="w-3 h-1.5 border border-white/60 rounded-sm">
-                                <div className="w-2 h-full bg-white/60 rounded-sm" />
+                        {/* Status bar */}
+                        <div className="absolute top-1.5 left-7 right-7 flex justify-between items-center z-10 text-white/50 text-[8px] font-medium">
+                            <span>9:41</span>
+                            <div className="flex items-center gap-1">
+                                <div className="w-3.5 h-[7px] border border-white/50 rounded-[2px]">
+                                    <div className="w-[9px] h-full bg-white/50 rounded-[1px]" />
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    {/* Profile Content – scaled down, clipped to phone bounds */}
-                    <div
-                        className="absolute inset-0 overflow-hidden"
-                        style={{ borderRadius: "inherit" }}
-                    >
+                        {/* Profile Content – scaled to fit */}
                         <div
-                            className="origin-top-left pointer-events-none"
+                            className="origin-top-left overflow-y-auto overflow-x-hidden pointer-events-none"
                             style={{
                                 width: CONTENT_W,
                                 height: CONTENT_H,
-                                transform: `scale(${SCALE})`,
+                                transform: `scale(${INNER_SCALE})`,
+                                transformOrigin: "top left",
                             }}
                         >
                             <Template user={user} />
@@ -65,19 +73,13 @@ export function PhonePreview3D({ user, className = "", scale = 1, rotateY = -8, 
 
                     {/* Screen reflection */}
                     <div
-                        className="absolute inset-0 pointer-events-none z-10"
+                        className="absolute inset-[6px] pointer-events-none z-10"
                         style={{
-                            background: "linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.03) 100%)",
-                            borderRadius: "inherit",
+                            background: "linear-gradient(145deg, rgba(255,255,255,0.06) 0%, transparent 35%, transparent 65%, rgba(255,255,255,0.02) 100%)",
+                            borderRadius: "1.8rem",
                         }}
                     />
                 </div>
-
-                {/* 3D Shadow */}
-                <div
-                    className="absolute -bottom-4 left-4 right-4 h-8 rounded-full blur-2xl opacity-40 bg-black"
-                    style={{ transform: "translateZ(-20px)" }}
-                />
             </div>
         </div>
     );
