@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { AnimatedGroup } from '@/components/ui/animated-group'
 import { cn } from '@/lib/utils'
 import { useScroll } from 'motion/react'
+import { InteractiveDemoDashboard } from '@/components/marketing/interactive-demo-dashboard'
 
 const transitionVariants = {
     item: {
@@ -111,15 +112,7 @@ export function HeroSection() {
                             }}
                             className="relative mx-auto mt-16 max-w-5xl px-6"
                         >
-                            <div className="glass-card-strong rounded-2xl p-1.5">
-                                <img
-                                    src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=2800&q=80&auto=format"
-                                    alt="NFCwear Dashboard Preview"
-                                    className="rounded-xl w-full"
-                                    width={2800}
-                                    height={1800}
-                                />
-                            </div>
+                            <InteractiveDemoDashboard />
                         </AnimatedGroup>
                     </div>
                 </section>
