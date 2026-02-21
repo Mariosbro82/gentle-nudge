@@ -121,7 +121,7 @@ export function HeroSection() {
                     <div className="mx-auto max-w-7xl px-6">
                         <div className="text-center">
                             <p className="text-sm font-medium text-muted-foreground">
-                                Vertraut von führenden Unternehmen
+                                Mögliche Integrationen
                             </p>
                         </div>
                         <div className="mx-auto mt-10 flex max-w-4xl flex-wrap items-center justify-center gap-x-12 gap-y-8 opacity-60">
