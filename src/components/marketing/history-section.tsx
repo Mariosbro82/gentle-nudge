@@ -8,7 +8,7 @@ const milestones = [
         year: "2023",
         title: "Zwei Schüler. Ein Klassenzimmer.",
         desc: "Im Klassenzimmer des Gymnasium Winsen entwerfen Tjark & Noah mit 16 Jahren das erste Konzept für Connected Fashion. Die Idee: Schulkleidung war ihnen zu analog.",
-        image: "/images/journey/founders-1.jpg",
+        image: "/images/journey/founders-team.jpg",
         accent: "Kapitel I",
     },
     {
@@ -29,7 +29,7 @@ const milestones = [
         year: "—",
         title: "Das ist erst der Anfang.",
         desc: "Abitur in der Tasche, Studium im Blick. NFCwear wird zur führenden Plattform für intelligente Textilien in Europa.",
-        image: "/images/journey/founders-team.jpg",
+        image: "/images/journey/founders-team-new.jpg",
         accent: "Zukunft",
     },
 ];
