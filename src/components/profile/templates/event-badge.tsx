@@ -33,6 +33,7 @@ export function EventBadgeTemplate({ user, lang = "de" }: TemplateProps) {
             ) : (
                 <div className="h-28" style={{ background: `linear-gradient(to bottom, ${accent}4D, transparent)` }} />
             )}
+            <div className="h-px w-full bg-white/[0.12]" />
 
             <div className="max-w-lg mx-auto px-4 -mt-12">
                 {/* Liquid Glass Card */}
