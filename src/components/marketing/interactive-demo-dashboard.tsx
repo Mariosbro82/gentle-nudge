@@ -553,35 +553,189 @@ function TeamView() {
 }
 
 function SettingsView() {
-  const settingSections = [
-    { label: "Profil bearbeiten", desc: "Name, Bio, Foto, Kontaktdaten" },
-    { label: "Template wählen", desc: "Design für öffentliches Profil" },
-    { label: "Webhook-Integration", desc: "CRM-Anbindung via Zapier, Salesforce" },
-    { label: "Follow-Up E-Mails", desc: "Automatische Nachfass-E-Mails" },
-    { label: "Ghost Mode", desc: "Profil temporär deaktivieren" },
+  const fields = [
+    { label: "Name", value: "Max Mustermann" },
+    { label: "Position", value: "Sales Director" },
+    { label: "Unternehmen", value: "TechCorp GmbH" },
+    { label: "E-Mail", value: "max@techcorp.de" },
+    { label: "Telefon", value: "+49 170 1234567" },
   ];
 
   return (
     <PageTransition>
-      <div className="space-y-4">
-        <h3 className="text-sm md:text-base font-semibold text-foreground">Einstellungen</h3>
-        <div className="space-y-2">
-          {settingSections.map((s, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.08 * i }}
-              className="glass-card rounded-lg p-3 flex items-center justify-between cursor-pointer hover:bg-accent/30 transition-colors group"
-            >
-              <div>
-                <p className="text-xs font-medium text-foreground">{s.label}</p>
-                <p className="text-[9px] text-muted-foreground">{s.desc}</p>
-              </div>
-              <ChevronRight className="size-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-            </motion.div>
-          ))}
+      <div className="flex gap-4 h-full">
+        {/* Left: Settings form */}
+        <div className="flex-1 space-y-3 min-w-0">
+          <h3 className="text-sm md:text-base font-semibold text-foreground">Einstellungen</h3>
+          
+          <div className="space-y-2">
+            {fields.map((f, i) => (
+              <motion.div
+                key={f.label}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.06 * i }}
+                className="space-y-1"
+              >
+                <label className="text-[9px] font-medium text-muted-foreground uppercase tracking-wider">{f.label}</label>
+                <div className="glass-card rounded-md px-2.5 py-1.5 text-[11px] text-foreground">{f.value}</div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Template selector mini */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="space-y-1.5"
+          >
+            <label className="text-[9px] font-medium text-muted-foreground uppercase tracking-wider">Template</label>
+            <div className="flex gap-1.5">
+              {["Premium", "Minimal", "Event"].map((t, i) => (
+                <span
+                  key={t}
+                  className={`text-[9px] px-2.5 py-1 rounded-md cursor-pointer transition-colors ${
+                    i === 0 ? "bg-primary/15 text-primary border border-primary/30" : "glass-card text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Action buttons */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="flex gap-2 pt-1"
+          >
+            <span className="text-[10px] px-3 py-1.5 rounded-lg bg-primary text-primary-foreground font-medium cursor-pointer">Profil speichern</span>
+            <span className="text-[10px] px-3 py-1.5 rounded-lg glass-card text-muted-foreground cursor-pointer hover:text-foreground transition-colors">Ghost Mode</span>
+          </motion.div>
         </div>
+
+        {/* Right: Phone Preview */}
+        <motion.div
+          initial={{ opacity: 0, x: 20, rotateY: -15 }}
+          animate={{ opacity: 1, x: 0, rotateY: -8 }}
+          transition={{ delay: 0.3, duration: 0.6, type: "spring", bounce: 0.3 }}
+          className="hidden md:flex items-center justify-center"
+          style={{ perspective: "1200px" }}
+        >
+          <div
+            className="relative transition-transform duration-500 ease-out"
+            style={{
+              transform: "rotateY(-8deg) rotateX(5deg) scale(0.58)",
+              transformStyle: "preserve-3d",
+            }}
+          >
+            {/* Phone Frame */}
+            <div
+              className="relative rounded-[2.5rem] border-[6px] border-zinc-800 bg-black shadow-2xl shadow-black/60"
+              style={{ width: 280, height: 580, overflow: "hidden" }}
+            >
+              {/* Notch */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-b-2xl z-20" />
+
+              {/* Status bar */}
+              <div className="absolute top-1 left-8 right-8 flex justify-between items-center z-10 text-white/60 text-[8px] px-1">
+                <span>9:41</span>
+                <div className="flex items-center gap-1">
+                  <div className="w-3 h-1.5 border border-white/60 rounded-sm">
+                    <div className="w-2 h-full bg-white/60 rounded-sm" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Profile Card Content */}
+              <div className="absolute inset-0 overflow-hidden" style={{ borderRadius: "inherit" }}>
+                <div className="w-full h-full flex flex-col">
+                  {/* Banner */}
+                  <div className="h-28 bg-gradient-to-br from-primary via-primary/80 to-accent relative">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.15),transparent)]" />
+                  </div>
+                  
+                  {/* Avatar */}
+                  <div className="flex justify-center -mt-10 relative z-10">
+                    <div className="w-20 h-20 rounded-full border-4 border-black bg-gradient-to-br from-primary/30 to-accent/30 flex items-center justify-center">
+                      <span className="text-2xl font-bold text-primary-foreground">MM</span>
+                    </div>
+                  </div>
+
+                  {/* Info */}
+                  <div className="flex flex-col items-center px-6 pt-3 pb-4 text-center">
+                    <motion.p 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.6 }}
+                      className="text-sm font-bold text-white"
+                    >
+                      Max Mustermann
+                    </motion.p>
+                    <motion.p 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.7 }}
+                      className="text-[10px] text-white/60 mt-0.5"
+                    >
+                      Sales Director · TechCorp GmbH
+                    </motion.p>
+                    <motion.p
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.8 }}
+                      className="text-[9px] text-white/40 mt-2 leading-relaxed"
+                    >
+                      Digitale Visitenkarte powered by NFCwear
+                    </motion.p>
+
+                    {/* Action buttons */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.9 }}
+                      className="flex gap-2 mt-4"
+                    >
+                      {["Kontakt", "E-Mail", "LinkedIn"].map((btn) => (
+                        <span key={btn} className="text-[8px] px-3 py-1.5 rounded-full bg-white/10 text-white/80 border border-white/10">{btn}</span>
+                      ))}
+                    </motion.div>
+
+                    {/* Links */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 1.0 }}
+                      className="w-full mt-4 space-y-1.5"
+                    >
+                      {["📁 Unser Portfolio", "📅 Termin buchen"].map((link) => (
+                        <div key={link} className="w-full text-[9px] py-2 rounded-lg bg-white/5 text-white/70 border border-white/10 text-center">{link}</div>
+                      ))}
+                    </motion.div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Screen reflection */}
+              <div
+                className="absolute inset-0 pointer-events-none z-10"
+                style={{
+                  background: "linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.03) 100%)",
+                  borderRadius: "inherit",
+                }}
+              />
+            </div>
+
+            {/* 3D Shadow */}
+            <div
+              className="absolute -bottom-4 left-4 right-4 h-8 rounded-full blur-2xl opacity-40 bg-black"
+              style={{ transform: "translateZ(-20px)" }}
+            />
+          </div>
+        </motion.div>
       </div>
     </PageTransition>
   );
