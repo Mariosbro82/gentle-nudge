@@ -8,6 +8,7 @@ import { VideoGreeting } from "@/components/profile/shared/video-greeting";
 import { ResourcesSection } from "@/components/profile/shared/resources-section";
 import type { TemplateProps } from "@/types/profile";
 import { ensureAbsoluteUrl } from "@/lib/utils";
+import { t, type SupportedLang } from "@/lib/i18n";
 
 function generateVCard(user: { name: string; title: string; company: string; email: string; phone: string; website: string; linkedin: string }) {
     const lines = [
@@ -36,13 +37,14 @@ function handleAddToContacts(user: { name: string; title: string; company: strin
     URL.revokeObjectURL(url);
 }
 
-async function handleShare(userName: string) {
+async function handleShare(userName: string, lang: SupportedLang) {
     const url = window.location.href;
-    const text = `Schau dir das Profil von ${userName} an – könnte interessant für dich sein!`;
+    const text = t("share_text", lang).replace("{{name}}", userName);
+    const title = t("share_title", lang).replace("{{name}}", userName);
 
     if (navigator.share) {
         try {
-            await navigator.share({ title: `Profil von ${userName}`, text, url });
+            await navigator.share({ title, text, url });
             return;
         } catch {
             // User cancelled or share failed, fall through to fallback
@@ -52,16 +54,15 @@ async function handleShare(userName: string) {
     // Fallback: show choice between WhatsApp and Email
     const waText = encodeURIComponent(`${text}\n${url}`);
     const waUrl = `https://wa.me/?text=${waText}`;
-    const mailSubject = encodeURIComponent(`Profil von ${userName}`);
+    const mailSubject = encodeURIComponent(title);
     const mailBody = encodeURIComponent(`${text}\n\n${url}`);
     const mailUrl = `mailto:?subject=${mailSubject}&body=${mailBody}`;
 
-    // Try WhatsApp first (most common on mobile)
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     window.open(isMobile ? waUrl : mailUrl, '_blank');
 }
 
-export function PremiumGradientTemplate({ user }: TemplateProps) {
+export function PremiumGradientTemplate({ user, lang = "de" }: TemplateProps) {
     const bgStyle: React.CSSProperties = user.backgroundImage
         ? { backgroundImage: `url(${user.backgroundImage})`, backgroundSize: 'cover', backgroundPosition: user.backgroundPosition || 'center' }
         : { backgroundColor: user.backgroundColor || '#000000' };
@@ -112,7 +113,7 @@ export function PremiumGradientTemplate({ user }: TemplateProps) {
                         <h1 className="text-2xl font-bold text-white drop-shadow-sm">{user.name}</h1>
                         {(user.title || user.company) && (
                             <p className="text-white/70 text-sm mt-1 drop-shadow-sm">
-                                {user.title}{user.title && user.company ? " at " : ""}{user.company}
+                                {user.title}{user.title && user.company ? ` ${t("at", lang)} ` : ""}{user.company}
                             </p>
                         )}
                     </div>
@@ -165,16 +166,16 @@ export function PremiumGradientTemplate({ user }: TemplateProps) {
                             style={{ backgroundColor: accent }}
                             onClick={() => handleAddToContacts(user)}
                         >
-                            <UserPlus className="mr-2 h-4 w-4" /> Kontakt speichern
+                            <UserPlus className="mr-2 h-4 w-4" /> {t("save_contact", lang)}
                         </Button>
 
                         {/* Share / Warm Handoff */}
                         <Button
                             variant="outline"
                             className="w-full rounded-xl py-5 text-sm font-semibold mb-4 border-white/15 text-white/90 hover:bg-white/10 hover:text-white bg-transparent"
-                            onClick={() => handleShare(user.name)}
+                            onClick={() => handleShare(user.name, lang)}
                         >
-                            <Share2 className="mr-2 h-4 w-4" /> An Kollegen weiterleiten
+                            <Share2 className="mr-2 h-4 w-4" /> {t("share_forward", lang)}
                         </Button>
 
                         {/* Custom Links */}
@@ -184,9 +185,9 @@ export function PremiumGradientTemplate({ user }: TemplateProps) {
                             </div>
                         )}
 
-                        <ContactForm recipientUserId={user.id} recipientName={user.name} />
+                        <ContactForm recipientUserId={user.id} recipientName={user.name} lang={lang} />
 
-                        <ResourcesSection userId={user.id} accentColor={accent} />
+                        <ResourcesSection userId={user.id} accentColor={accent} lang={lang} />
                     </div>
                 </div>
 
@@ -199,7 +200,7 @@ export function PremiumGradientTemplate({ user }: TemplateProps) {
                         className="flex items-center gap-1.5 text-white/25 hover:text-white/45 transition-colors text-xs"
                     >
                         <Sparkles className="h-3 w-3" />
-                        <span>Powered by <span className="font-medium">NFCwear</span>. Create your smart profile.</span>
+                        <span>Powered by <span className="font-medium">NFCwear</span>. {t("powered_by_nfcwear", lang)}</span>
                     </a>
                 </div>
             </div>

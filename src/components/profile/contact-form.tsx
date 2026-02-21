@@ -6,13 +6,15 @@ import { Label } from "@/components/ui/label";
 
 import { UserPlus, Send, CheckCircle, Link, ChevronDown, ChevronUp } from "lucide-react";
 import { submitLead } from "@/lib/api/analytics";
+import { t, type SupportedLang } from "@/lib/i18n";
 
 interface ContactFormProps {
   recipientUserId: string;
   recipientName: string;
+  lang?: SupportedLang;
 }
 
-export function ContactForm({ recipientUserId, recipientName }: ContactFormProps) {
+export function ContactForm({ recipientUserId, recipientName, lang = "de" }: ContactFormProps) {
   const [open, setOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -34,7 +36,7 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
     setSubmitting(true);
 
     const notes = [
-      form.message && `Nachricht: ${form.message}`,
+      form.message && `${t("contact_form_message", lang)}: ${form.message}`,
       form.website && `Website: ${form.website}`,
       form.linkedin && `LinkedIn: ${form.linkedin}`,
     ]
@@ -67,9 +69,9 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
         }}
       >
         <CheckCircle className="mx-auto mb-3 h-10 w-10 text-green-400" />
-        <h3 className="text-lg font-semibold text-white">Kontakt gesendet!</h3>
+        <h3 className="text-lg font-semibold text-white">{t("contact_form_success_title", lang)}</h3>
         <p className="mt-1 text-sm text-white/60">
-          {recipientName} hat deine Kontaktdaten erhalten.
+          {recipientName} {t("contact_form_success_text", lang)}
         </p>
       </div>
     );
@@ -83,7 +85,7 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
           className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white shadow-lg"
         >
           <UserPlus className="mr-2 h-4 w-4" />
-          Kontakt austauschen
+          {t("contact_exchange", lang)}
         </Button>
       </div>
     );
@@ -105,18 +107,18 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
       }} />
 
       <h3 className="relative z-10 text-center text-lg font-semibold text-white drop-shadow-md">
-        Kontaktdaten senden
+        {t("contact_form_title", lang)}
       </h3>
       <p className="relative z-10 text-center text-sm text-white/80 drop-shadow-sm">
-        Teile deine Infos mit {recipientName}
+        {t("contact_form_subtitle", lang)} {recipientName}
       </p>
 
       <div className="relative z-10 space-y-3">
         <div>
-          <Label htmlFor="contact-name" className="text-white/90 drop-shadow-sm">Name *</Label>
+          <Label htmlFor="contact-name" className="text-white/90 drop-shadow-sm">{t("contact_form_name", lang)}</Label>
           <Input
             id="contact-name"
-            placeholder="Dein Name"
+            placeholder={t("contact_form_name_placeholder", lang)}
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
             required
@@ -126,11 +128,11 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
         </div>
 
         <div>
-          <Label htmlFor="contact-email" className="text-white/90 drop-shadow-sm">E-Mail *</Label>
+          <Label htmlFor="contact-email" className="text-white/90 drop-shadow-sm">{t("contact_form_email", lang)}</Label>
           <Input
             id="contact-email"
             type="email"
-            placeholder="deine@email.de"
+            placeholder={t("contact_form_email_placeholder", lang)}
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
             required
@@ -140,11 +142,11 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
         </div>
 
         <div>
-          <Label htmlFor="contact-phone" className="text-white/90 drop-shadow-sm">Telefon</Label>
+          <Label htmlFor="contact-phone" className="text-white/90 drop-shadow-sm">{t("contact_form_phone", lang)}</Label>
           <Input
             id="contact-phone"
             type="tel"
-            placeholder="+49 123 456789"
+            placeholder={t("contact_form_phone_placeholder", lang)}
             value={form.phone}
             onChange={(e) => setForm({ ...form, phone: e.target.value })}
             maxLength={30}
@@ -153,10 +155,10 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
         </div>
 
         <div>
-          <Label htmlFor="contact-message" className="text-white/90 drop-shadow-sm">Nachricht</Label>
+          <Label htmlFor="contact-message" className="text-white/90 drop-shadow-sm">{t("contact_form_message", lang)}</Label>
           <Textarea
             id="contact-message"
-            placeholder="Hallo, wir haben uns auf der Messe getroffen..."
+            placeholder={t("contact_form_message_placeholder", lang)}
             value={form.message}
             onChange={(e) => setForm({ ...form, message: e.target.value })}
             maxLength={500}
@@ -170,7 +172,7 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
           className="flex items-center gap-1.5 text-sm text-white/70 hover:text-white transition-colors drop-shadow-sm"
         >
           <Link className="h-3.5 w-3.5" />
-          Links hinzufügen
+          {t("add_links", lang)}
           {showLinks ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
         </button>
 
@@ -181,7 +183,7 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
               <Input
                 id="contact-website"
                 type="url"
-                placeholder="https://deine-website.de"
+                placeholder="https://..."
                 value={form.website}
                 onChange={(e) => setForm({ ...form, website: e.target.value })}
                 maxLength={255}
@@ -193,7 +195,7 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
               <Input
                 id="contact-linkedin"
                 type="url"
-                placeholder="https://linkedin.com/in/dein-profil"
+                placeholder="https://linkedin.com/in/..."
                 value={form.linkedin}
                 onChange={(e) => setForm({ ...form, linkedin: e.target.value })}
                 maxLength={255}
@@ -212,7 +214,7 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
             className="mt-1 rounded border-white/20"
           />
           <span className="text-xs text-white/70 leading-relaxed drop-shadow-sm">
-            Ich stimme zu, dass meine Daten zur Kontaktaufnahme gespeichert und verarbeitet werden. *
+            {t("contact_form_consent", lang)}
           </span>
         </label>
       </div>
@@ -224,7 +226,7 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
           className="flex-1 border-white/15 text-white/80 hover:bg-white/10 hover:text-white bg-transparent"
           onClick={() => setOpen(false)}
         >
-          Abbrechen
+          {t("contact_form_cancel", lang)}
         </Button>
         <Button
           type="submit"
@@ -236,7 +238,7 @@ export function ContactForm({ recipientUserId, recipientName }: ContactFormProps
           ) : (
             <>
               <Send className="mr-2 h-4 w-4" />
-              Senden
+              {t("contact_form_submit", lang)}
             </>
           )}
         </Button>

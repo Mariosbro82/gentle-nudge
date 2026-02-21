@@ -196,7 +196,7 @@ export default function ProfilePage() {
             {/* Returning visitor banner */}
             {isReturning && (
                 <div className="fixed top-0 left-0 right-0 z-[60] bg-primary/90 backdrop-blur-sm text-primary-foreground text-center py-2.5 px-4 text-sm font-medium shadow-lg animate-fade-in">
-                    👋 Willkommen zurück! Suchst du noch eine bestimmte Info?
+                    👋 {t("welcome_back", lang)}
                 </div>
             )}
             {/* Top bar with language switcher and live status */}
@@ -209,7 +209,7 @@ export default function ProfilePage() {
                 <LanguageSwitcher currentLang={lang} onLangChange={setLang} />
             </div>
 
-            <Template user={user} />
+            <Template user={user} lang={lang} />
 
             {/* AI Chat FAB */}
             {profileId && (

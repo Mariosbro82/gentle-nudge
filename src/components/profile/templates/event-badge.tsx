@@ -7,8 +7,9 @@ import { VideoGreeting } from "@/components/profile/shared/video-greeting";
 import { ResourcesSection } from "@/components/profile/shared/resources-section";
 import type { TemplateProps } from "@/types/profile";
 import { ensureAbsoluteUrl } from "@/lib/utils";
+import { t } from "@/lib/i18n";
 
-export function EventBadgeTemplate({ user }: TemplateProps) {
+export function EventBadgeTemplate({ user, lang = "de" }: TemplateProps) {
     const bgStyle: React.CSSProperties = user.backgroundImage
         ? { backgroundImage: `url(${user.backgroundImage})`, backgroundSize: 'cover', backgroundPosition: user.backgroundPosition || 'center' }
         : { backgroundColor: user.backgroundColor || '#09090b' };
@@ -21,9 +22,9 @@ export function EventBadgeTemplate({ user }: TemplateProps) {
                 <div className="max-w-lg mx-auto flex items-center justify-between">
                     <div className="flex items-center gap-2 text-sm">
                         <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                        <span className="font-medium text-white">Live Event</span>
+                        <span className="font-medium text-white">{t("live_event", lang)}</span>
                     </div>
-                    <span className="text-xs text-white/80">Powered by Severmore</span>
+                    <span className="text-xs text-white/80">{t("powered_by", lang)}</span>
                 </div>
             </div>
 
@@ -85,12 +86,12 @@ export function EventBadgeTemplate({ user }: TemplateProps) {
                         <div className="flex gap-2 mb-5">
                             {user.email && (
                                 <a href={`mailto:${user.email}`} className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm text-white/90 hover:text-white hover:bg-white/10 transition-colors" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}>
-                                    <Mail className="h-4 w-4" /> E-Mail
+                                    <Mail className="h-4 w-4" /> {t("email", lang)}
                                 </a>
                             )}
                             {user.phone && (
                                 <a href={`tel:${user.phone}`} className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm text-white/90 hover:text-white hover:bg-white/10 transition-colors" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}>
-                                    <Phone className="h-4 w-4" /> Anrufen
+                                    <Phone className="h-4 w-4" /> {t("call", lang)}
                                 </a>
                             )}
                             {user.linkedin && (
@@ -102,7 +103,7 @@ export function EventBadgeTemplate({ user }: TemplateProps) {
 
                         {user.website && (
                             <a href={ensureAbsoluteUrl(user.website)} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg text-sm text-white/90 hover:text-white hover:bg-white/10 transition-colors mb-5" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}>
-                                <Globe className="h-4 w-4" /> Website besuchen
+                                <Globe className="h-4 w-4" /> {t("visit_website", lang)}
                             </a>
                         )}
 
@@ -112,16 +113,16 @@ export function EventBadgeTemplate({ user }: TemplateProps) {
                             </div>
                         )}
 
-                        <ContactForm recipientUserId={user.id} recipientName={user.name} />
+                        <ContactForm recipientUserId={user.id} recipientName={user.name} lang={lang} />
 
-                        <ResourcesSection userId={user.id} accentColor={accent} />
+                        <ResourcesSection userId={user.id} accentColor={accent} lang={lang} />
                     </div>
                 </div>
             </div>
 
             <div className="max-w-lg mx-auto px-4 py-6 text-center">
                 <a href="https://nfc.severmore.de" className="text-xs text-white/30 hover:text-white/50 transition-colors">
-                    Auch so eine Karte? &rarr; nfc.severmore.de
+                    {t("also_card", lang)} &rarr; nfc.severmore.de
                 </a>
             </div>
         </div>

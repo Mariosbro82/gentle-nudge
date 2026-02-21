@@ -39,6 +39,7 @@ export interface ProfileUser {
 
 export interface TemplateProps {
     user: ProfileUser;
+    lang?: import("@/lib/i18n").SupportedLang;
 }
 
 export type TemplateId = "premium-gradient" | "minimalist-card" | "event-badge";
