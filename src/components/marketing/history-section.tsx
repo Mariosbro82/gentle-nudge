@@ -1,99 +1,141 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 
-export function HistorySection() {
-    const steps = [
-        {
-            year: "2023",
-            title: "Der Ursprung",
-            subtitle: "Zwei Schüler, eine Idee.",
-            desc: "Im Klassenzimmer des Gymnasium Winsen entstand der Plan: Warum ist Schulkleidung so ... analog? Tjark & Noah (damals 16) entwerfen das erste Konzept für 'Connected Fashion'."
-        },
-        {
-            year: "2024",
-            title: "Gegen alle Widerstände",
-            subtitle: "Keine Geschäftsfähigkeit? Kein Problem.",
-            desc: "Banken winkten ab, das Familiengericht ließ uns 6 Monate warten. Doch wir gaben nicht auf. Gründung der Severmore UG – als jüngste Unternehmer der Region."
-        },
-        {
-            year: "2025",
-            title: "Die Anerkennung",
-            subtitle: "Sonderpreis U21 & Durchbruch.",
-            desc: "Der Beweis, dass Alter nur eine Zahl ist. Gewinn des Gründungspreises Landkreis Harburg. Launch der Jubiläums-Kollektion für unsere eigene Schule."
-        },
-        {
-            year: "Zukunft",
-            title: "Die Vision: Severmore",
-            subtitle: "Ingenieurskunst trifft Business.",
-            desc: "Abitur in der Tasche, Studium im Blick. Wir skalieren NFCwear zur führenden Plattform für intelligente Textilien in Europa. Das ist erst der Anfang."
-        }
-    ];
+const milestones = [
+    {
+        year: "2023",
+        title: "Zwei Schüler. Ein Klassenzimmer.",
+        desc: "Im Klassenzimmer des Gymnasium Winsen entwerfen Tjark & Noah mit 16 Jahren das erste Konzept für Connected Fashion. Die Idee: Schulkleidung war ihnen zu analog.",
+        image: "/images/journey/founders-1.jpg",
+        accent: "Kapitel I",
+    },
+    {
+        year: "2024",
+        title: "Gegen alle Widerstände.",
+        desc: "Banken winkten ab. Das Familiengericht ließ 6 Monate warten. Trotzdem: Gründung der Severmore UG — als jüngste Unternehmer der Region.",
+        image: "/images/journey/founding-signing.jpg",
+        accent: "Kapitel II",
+    },
+    {
+        year: "2025",
+        title: "Sonderpreis U21.",
+        desc: "Gewinn des Gründungspreises Landkreis Harburg. Launch der Jubiläums-Kollektion. Der Beweis: Alter ist nur eine Zahl.",
+        image: "/images/journey/award-ceremony-new.jpg",
+        accent: "Kapitel III",
+    },
+    {
+        year: "—",
+        title: "Das ist erst der Anfang.",
+        desc: "Abitur in der Tasche, Studium im Blick. NFCwear wird zur führenden Plattform für intelligente Textilien in Europa.",
+        image: "/images/journey/founders-team-new.jpg",
+        accent: "Zukunft",
+    },
+];
+
+function MilestoneCard({ milestone, index }: { milestone: typeof milestones[0]; index: number }) {
+    const ref = useRef<HTMLDivElement>(null);
+    const { scrollYProgress } = useScroll({
+        target: ref,
+        offset: ["start end", "center center"],
+    });
+    const opacity = useTransform(scrollYProgress, [0, 0.6], [0, 1]);
+    const y = useTransform(scrollYProgress, [0, 0.6], [60, 0]);
+
+    const isEven = index % 2 === 0;
 
     return (
-        <section id="history" className="py-32 bg-background relative overflow-hidden">
-            {/* Background elements */}
-            <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20 pointer-events-none" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-900/10 rounded-full blur-[120px] pointer-events-none" />
+        <motion.div
+            ref={ref}
+            style={{ opacity, y }}
+            className={`grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-0 items-center ${isEven ? "" : "md:direction-rtl"}`}
+        >
+            {/* Image */}
+            <div className={`md:col-span-5 ${isEven ? "md:col-start-1" : "md:col-start-8"}`} style={{ direction: "ltr" }}>
+                <div className="relative overflow-hidden rounded-2xl aspect-[4/3] group">
+                    <img
+                        src={milestone.image}
+                        alt={milestone.title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        loading="lazy"
+                    />
+                    {/* Subtle overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+                    {/* Year overlay */}
+                    <div className="absolute bottom-4 left-4">
+                        <span className="text-white/90 text-6xl font-black tracking-tighter leading-none" style={{ fontFeatureSettings: "'tnum'" }}>
+                            {milestone.year}
+                        </span>
+                    </div>
+                </div>
+            </div>
 
-            <div className="container mx-auto px-6 relative z-10">
-                <div className="text-center mb-24">
-                    <span className="px-3 py-1 rounded-full bg-muted text-muted-foreground border border-border text-xs font-mono mb-6 inline-block tracking-widest uppercase">
+            {/* Connector line (desktop) */}
+            <div className="hidden md:flex md:col-span-2 items-center justify-center" style={{ direction: "ltr" }}>
+                <div className="w-full h-px bg-border relative">
+                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full border-2 border-foreground/20 bg-background" />
+                </div>
+            </div>
+
+            {/* Text */}
+            <div className={`md:col-span-5 ${isEven ? "md:col-start-8" : "md:col-start-1"}`} style={{ direction: "ltr" }}>
+                <div className="space-y-3">
+                    <span className="text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground">
+                        {milestone.accent}
+                    </span>
+                    <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground leading-tight">
+                        {milestone.title}
+                    </h3>
+                    <p className="text-muted-foreground leading-relaxed text-base max-w-md">
+                        {milestone.desc}
+                    </p>
+                </div>
+            </div>
+        </motion.div>
+    );
+}
+
+export function HistorySection() {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ["start end", "end start"],
+    });
+    const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
+    return (
+        <section id="history" ref={containerRef} className="py-24 md:py-40 bg-background relative">
+            <div className="container mx-auto px-6">
+                {/* Header — editorial, left-aligned */}
+                <div className="max-w-3xl mb-20 md:mb-32">
+                    <span className="text-xs font-mono uppercase tracking-[0.25em] text-muted-foreground mb-4 block">
                         Unsere Reise
                     </span>
-                    <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-6">Von Schülern zu <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Pionieren.</span></h2>
-                    <p className="text-muted-foreground max-w-2xl mx-auto text-lg leading-relaxed">
-                        Severmore ist mehr als eine Firma. Es ist der Beweis, dass man mit 16 Jahren Industrien verändern kann.
+                    <h2 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight text-foreground leading-[0.95]">
+                        Von der Schulbank
+                        <br />
+                        zum Startup.
+                    </h2>
+                    <p className="text-muted-foreground text-lg mt-6 max-w-xl leading-relaxed">
+                        Severmore ist der Beweis, dass man mit 16 Jahren
+                        Industrien verändern kann. Kein VC, kein MBA — nur Überzeugung.
                     </p>
                 </div>
 
-                <div className="relative max-w-5xl mx-auto">
-                    {/* Central Line */}
-                    <div className="absolute left-[19px] md:left-1/2 top-0 bottom-0 w-1 bg-border rounded-full overflow-hidden">
+                {/* Timeline */}
+                <div className="relative">
+                    {/* Vertical progress line (desktop only) */}
+                    <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px bg-border">
                         <motion.div
-                            initial={{ height: 0 }}
-                            whileInView={{ height: "100%" }}
-                            transition={{ duration: 2, ease: "linear" }}
-                            className="w-full bg-gradient-to-b from-blue-500 via-purple-500 to-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.6)]"
+                            className="w-full bg-foreground/20 origin-top"
+                            style={{ height: lineHeight }}
                         />
                     </div>
 
-                    <div className="space-y-24">
-                        {steps.map((step, i) => (
-                            <motion.div
-                                key={i}
-                                initial={{ opacity: 0, y: 50 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ margin: "-100px" }}
-                                transition={{ duration: 0.6, delay: i * 0.1 }}
-                                className={`relative flex flex-col md:flex-row gap-12 ${i % 2 === 0 ? 'md:flex-row-reverse' : ''}`}
-                            >
-
-                                {/* Center Node */}
-                                <div className="absolute left-0 md:left-1/2 w-10 h-10 -ml-5 bg-background border-4 border-border rounded-full z-20 flex items-center justify-center shadow-xl group">
-                                    <div className="w-3 h-3 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-500 shadow-[0_0_10px_rgba(59,130,246,1)]" />
-                                </div>
-
-                                {/* Spacer for layout balance */}
-                                <div className="flex-1 hidden md:block" />
-
-                                {/* Content Card */}
-                                <div className="flex-1 pl-12 md:pl-0">
-                                    <div className={`relative p-8 rounded-3xl bg-card border border-border backdrop-blur-sm hover:border-blue-500/20 transition-all duration-500 group ${i % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
-
-                                        {/* Year Badge */}
-                                        <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 font-bold font-mono text-sm mb-6 ${i % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
-                                            {step.year}
-                                        </div>
-
-                                        <h3 className="text-2xl font-bold text-foreground mb-2 group-hover:text-blue-200 transition-colors">{step.title}</h3>
-                                        <div className="text-lg font-medium text-muted-foreground mb-4">{step.subtitle}</div>
-                                        <p className="text-muted-foreground leading-relaxed">
-                                            {step.desc}
-                                        </p>
-                                    </div>
-                                </div>
-                            </motion.div>
+                    <div className="space-y-16 md:space-y-28">
+                        {milestones.map((milestone, i) => (
+                            <MilestoneCard key={i} milestone={milestone} index={i} />
                         ))}
                     </div>
                 </div>
