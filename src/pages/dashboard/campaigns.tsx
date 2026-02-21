@@ -23,6 +23,7 @@ import {
   Mail,
   RefreshCw,
   Shield,
+  Clock,
 } from "lucide-react";
 
 interface Lead {
@@ -53,6 +54,7 @@ export default function CampaignsPage() {
   const [language, setLanguage] = useState("Deutsch");
   const [generatedSubject, setGeneratedSubject] = useState("");
   const [generatedBody, setGeneratedBody] = useState("");
+  const [delayHours, setDelayHours] = useState("0");
   const [generating, setGenerating] = useState(false);
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
@@ -122,14 +124,16 @@ export default function CampaignsPage() {
     setError("");
 
     try {
+      const hours = parseInt(delayHours) || 0;
+      const scheduledAt = new Date(Date.now() + hours * 60 * 60 * 1000);
       const { error: insertError } = await supabase.from("follow_up_emails").insert({
         lead_id: selectedLead.id,
         user_id: profile.id,
         subject: generatedSubject,
         body_html: generatedBody,
-        delay_hours: 0,
+        delay_hours: hours,
         status: "pending",
-        scheduled_at: new Date().toISOString(),
+        scheduled_at: scheduledAt.toISOString(),
       });
 
       if (insertError) throw insertError;
@@ -260,6 +264,25 @@ export default function CampaignsPage() {
               </div>
             </div>
 
+            <div>
+              <Label className="text-xs flex items-center gap-1"><Clock className="h-3 w-3" /> Zeitversatz</Label>
+              <Select value={delayHours} onValueChange={setDelayHours}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="0">Sofort senden</SelectItem>
+                  <SelectItem value="1">Nach 1 Stunde</SelectItem>
+                  <SelectItem value="6">Nach 6 Stunden</SelectItem>
+                  <SelectItem value="12">Nach 12 Stunden</SelectItem>
+                  <SelectItem value="24">Nach 1 Tag</SelectItem>
+                  <SelectItem value="48">Nach 2 Tagen</SelectItem>
+                  <SelectItem value="72">Nach 3 Tagen</SelectItem>
+                  <SelectItem value="168">Nach 1 Woche</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
             <Button
               onClick={generateEmail}
               disabled={!selectedLead || generating}
@@ -343,7 +366,7 @@ export default function CampaignsPage() {
               ) : (
                 <Send className="h-4 w-4" />
               )}
-              {sent ? "Gesendet" : "Senden"}
+              {sent ? "Geplant ✓" : parseInt(delayHours) > 0 ? "Planen" : "Senden"}
             </Button>
           </div>
 

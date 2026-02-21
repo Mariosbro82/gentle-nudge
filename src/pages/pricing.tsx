@@ -29,6 +29,7 @@ export default function PricingPage() {
             benefits: [
                 { text: "Bis zu 50 NFC-Tags", checked: true },
                 { text: "Advanced Analytics", checked: true },
+                { text: "KI-Kampagnen & Follow-ups", checked: true },
                 { text: "Team Management", checked: true },
                 { text: "Priority Support", checked: true },
                 { text: "API Zugriff", checked: true },
@@ -43,6 +44,7 @@ export default function PricingPage() {
             href: "mailto:contact@severmore.com",
             benefits: [
                 { text: "Unbegrenzte NFC-Tags", checked: true },
+                { text: "KI-Kampagnen & Follow-ups", checked: true },
                 { text: "Dedicated Success Manager", checked: true },
                 { text: "SLA 99.9%", checked: true },
                 { text: "SSO & Audit Logs", checked: true },
