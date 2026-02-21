@@ -10,11 +10,11 @@ interface PhonePreview3DProps {
     rotateX?: number;
 }
 
-const PHONE_W = 280;
-const PHONE_H = 580;
 const CONTENT_W = 390;
 const CONTENT_H = 844;
-const INNER_SCALE = PHONE_W / CONTENT_W;
+const INNER_SCALE = 280 / CONTENT_W;
+const PHONE_W = Math.round(CONTENT_W * INNER_SCALE);
+const PHONE_H = Math.round(CONTENT_H * INNER_SCALE);
 const BORDER_RADIUS = "2.2rem";
 
 export function PhonePreview3D({ user, className = "", scale = 1, rotateY = 0, rotateX = 0 }: PhonePreview3DProps) {
