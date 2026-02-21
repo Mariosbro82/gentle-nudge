@@ -1,4 +1,4 @@
-import { Mail, Phone, Globe, Linkedin, UserPlus, Share2 } from "lucide-react";
+import { Mail, Phone, Globe, Linkedin, UserPlus, Share2, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ContactForm } from "@/components/profile/contact-form";
 import { CustomLinksDisplay } from "@/components/profile/shared/custom-links-display";
@@ -188,6 +188,19 @@ export function PremiumGradientTemplate({ user }: TemplateProps) {
 
                         <ResourcesSection userId={user.id} accentColor={accent} />
                     </div>
+                </div>
+
+                {/* Powered by Footer */}
+                <div className="py-8 flex justify-center">
+                    <a
+                        href={`https://severmore.com?ref=${user.id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 text-white/25 hover:text-white/45 transition-colors text-xs"
+                    >
+                        <Sparkles className="h-3 w-3" />
+                        <span>Powered by <span className="font-medium">NFCwear</span>. Create your smart profile.</span>
+                    </a>
                 </div>
             </div>
         </div>
