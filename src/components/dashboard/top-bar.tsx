@@ -1,6 +1,9 @@
+import { useState } from "react";
 import { useLocation, Link } from "react-router-dom";
-import { ChevronRight, Search, Menu } from "lucide-react";
+import { ChevronRight, Search, Menu, QrCode } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { QRCodeSVG } from "qrcode.react";
 
 const ROUTE_LABELS: Record<string, string> = {
     "/dashboard": "Übersicht",
@@ -19,6 +22,7 @@ interface TopBarProps {
 
 export function TopBar({ onMenuClick }: TopBarProps) {
     const location = useLocation();
+    const [qrOpen, setQrOpen] = useState(false);
     const currentLabel = ROUTE_LABELS[location.pathname] || "Dashboard";
     const isRoot = location.pathname === "/dashboard";
 
@@ -52,14 +56,43 @@ export function TopBar({ onMenuClick }: TopBarProps) {
                 </nav>
             </div>
 
-            {/* Right: Search */}
-            <button className="hidden sm:flex items-center gap-2 h-9 px-3 rounded-lg border border-border/50 bg-muted/30 text-muted-foreground hover:bg-muted/50 hover:text-foreground transition-all text-sm cursor-pointer max-w-[240px] w-full">
-                <Search size={14} className="shrink-0" />
-                <span className="flex-1 text-left truncate">Suchen…</span>
-                <kbd className="hidden md:inline-flex h-5 items-center gap-0.5 rounded border border-border/50 bg-muted/50 px-1.5 text-[10px] font-mono text-muted-foreground shrink-0">
-                    ⌘K
-                </kbd>
-            </button>
+            {/* Right: QR + Search */}
+            <div className="flex items-center gap-2">
+                <Dialog open={qrOpen} onOpenChange={setQrOpen}>
+                    <DialogTrigger asChild>
+                        <button className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors" aria-label="QR-Code anzeigen">
+                            <QrCode size={18} />
+                        </button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-xs">
+                        <DialogHeader>
+                            <DialogTitle className="text-center">QR-Code</DialogTitle>
+                        </DialogHeader>
+                        <div className="flex flex-col items-center gap-4 py-4">
+                            <div className="p-4 bg-white rounded-xl">
+                                <QRCodeSVG
+                                    value={typeof window !== "undefined" ? window.location.href : ""}
+                                    size={200}
+                                    fgColor="hsl(var(--primary))"
+                                    bgColor="#ffffff"
+                                    level="M"
+                                />
+                            </div>
+                            <p className="text-sm text-muted-foreground text-center max-w-[220px]">
+                                Scanne mich mit der Kamera, falls NFC nicht verfügbar ist.
+                            </p>
+                        </div>
+                    </DialogContent>
+                </Dialog>
+
+                <button className="hidden sm:flex items-center gap-2 h-9 px-3 rounded-lg border border-border/50 bg-muted/30 text-muted-foreground hover:bg-muted/50 hover:text-foreground transition-all text-sm cursor-pointer max-w-[240px] w-full">
+                    <Search size={14} className="shrink-0" />
+                    <span className="flex-1 text-left truncate">Suchen…</span>
+                    <kbd className="hidden md:inline-flex h-5 items-center gap-0.5 rounded border border-border/50 bg-muted/50 px-1.5 text-[10px] font-mono text-muted-foreground shrink-0">
+                        ⌘K
+                    </kbd>
+                </button>
+            </div>
         </div>
     );
 }
