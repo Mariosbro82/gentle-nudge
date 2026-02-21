@@ -11,6 +11,10 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@capacitor/android": "^8.1.0",
+    "@capacitor/cli": "^8.1.0",
+    "@capacitor/core": "^8.1.0",
+    "@capacitor/ios": "^8.1.0",
     "@hookform/resolvers": "^5.2.2",
     "@supabase/supabase-js": "^2.95.3",
     "@types/papaparse": "^5.5.2",
@@ -32,7 +36,6 @@
     "recharts": "^3.7.0",
     "tailwind-merge": "^3.4.0",
     "ua-parser-js": "^2.0.9",
-    "vite-plugin-pwa": "^1.2.0",
     "xlsx": "^0.18.5",
     "zod": "^4.3.6"
   },
