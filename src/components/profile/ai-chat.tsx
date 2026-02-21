@@ -7,7 +7,9 @@ import type { ProfileUser } from "@/types/profile";
 
 type Message = { role: "user" | "assistant"; content: string };
 
-const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/digital-clone-chat`;
+const SUPABASE_URL = "https://owxuoejwnxspzuleeyqi.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im93eHVvZWp3bnhzcHp1bGVleXFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA2NzM4NDgsImV4cCI6MjA4NjI0OTg0OH0.snwR-UPW1Qrm_pqT6qSWVmAYHR5nsL1-xaxwz9LZotA";
+const CHAT_URL = `${SUPABASE_URL}/functions/v1/digital-clone-chat`;
 
 function TypingIndicator() {
   return (
@@ -56,7 +58,7 @@ export function AiChat({ user, label }: { user: ProfileUser; label: string }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
         },
         body: JSON.stringify({
           messages: allMessages,
