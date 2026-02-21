@@ -140,64 +140,6 @@ export function HeroSection() {
                     </div>
                 </section>
 
-                {/* Login-style section */}
-                <section className="py-16 md:py-24 border-t border-border/40">
-                    <div className="mx-auto max-w-7xl px-6">
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                            <div className="space-y-6">
-                                <h2 className="text-3xl font-bold text-foreground">
-                                    Willkommen zurück
-                                </h2>
-                                <p className="text-muted-foreground text-lg">
-                                    Verwalten Sie Ihre NFC-Chips und Kampagnen zentral. Loggen Sie sich ein, um Ihr Dashboard zu nutzen.
-                                </p>
-                                <div className="glass-card rounded-2xl p-8 space-y-6">
-                                    <div className="space-y-1">
-                                        <h3 className="text-2xl font-bold text-foreground">Login</h3>
-                                        <p className="text-sm text-muted-foreground">Geben Sie Ihre Zugangsdaten ein.</p>
-                                    </div>
-                                    <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-                                        <div className="space-y-2">
-                                            <label className="text-sm font-medium text-foreground">Email</label>
-                                            <input
-                                                type="email"
-                                                placeholder="admin@severmore.de"
-                                                className="glass-input w-full h-10 rounded-md px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                                            />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <div className="flex items-center justify-between">
-                                                <label className="text-sm font-medium text-foreground">Passwort</label>
-                                                <Link to="/forgot-password" className="text-xs text-primary hover:text-primary/80">Vergessen?</Link>
-                                            </div>
-                                            <input
-                                                type="password"
-                                                className="glass-input w-full h-10 rounded-md px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                                            />
-                                        </div>
-                                        <div className="flex gap-4 pt-2">
-                                            <Button className="flex-1 rounded-full" asChild>
-                                                <Link to="/login">Anmelden</Link>
-                                            </Button>
-                                            <Button variant="outline" className="flex-1 rounded-full" asChild>
-                                                <Link to="/login">Registrieren</Link>
-                                            </Button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div className="hidden lg:block">
-                                <div className="glass-card-strong rounded-2xl p-1.5">
-                                    <img
-                                        src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format"
-                                        alt="Dashboard Analytics"
-                                        className="rounded-xl w-full"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
             </main>
         </>
     )
