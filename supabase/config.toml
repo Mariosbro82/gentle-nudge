@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.generate-followup]
 verify_jwt = false
+
+[functions.digital-clone-chat]
+verify_jwt = false
