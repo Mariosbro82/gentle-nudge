@@ -19,21 +19,11 @@ export default defineConfig(({ mode }) => ({
         VitePWA({
             registerType: "autoUpdate",
             includeAssets: ["favicon.ico", "pwa-icon-192.png", "pwa-icon-512.png"],
-            manifest: false, // We use the static manifest.json in public/
+            manifest: false,
             workbox: {
-                globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
-                navigateFallback: "/index.html",
-                navigateFallbackDenylist: [/^\/~oauth/],
-                runtimeCaching: [
-                    {
-                        urlPattern: /^https:\/\/.*supabase\.co\/.*/i,
-                        handler: "NetworkFirst",
-                        options: {
-                            cacheName: "supabase-api",
-                            expiration: { maxEntries: 50, maxAgeSeconds: 300 },
-                        },
-                    },
-                ],
+                globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
+                navigateFallback: null,
+                maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
             },
         }),
     ].filter(Boolean),
