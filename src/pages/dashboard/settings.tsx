@@ -25,9 +25,13 @@ import { Check, AlertCircle } from "lucide-react";
 import type { CustomLink, ProfileUser } from "@/types/profile";
 import { FeatureGate } from "@/components/dashboard/feature-gate";
 import type { PlanType } from "@/lib/plan-features";
+import { useOrgTemplate, isFieldLocked } from "@/hooks/use-org-template";
+import { LockedFieldWrapper } from "@/components/settings/locked-field-wrapper";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export default function SettingsPage() {
     const { user: authUser } = useAuth();
+    const { templateConfig, isOrgAdmin } = useOrgTemplate();
     const [user, setUser] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -36,6 +40,9 @@ export default function SettingsPage() {
     const [customLinks, setCustomLinks] = useState<CustomLink[]>([]);
     const [dashboardMode, setDashboardMode] = useState<DashboardMode>("corporate");
     const [userPlan, setUserPlan] = useState<PlanType>("starter");
+
+    // Helper: check if field is locked for non-admin employees
+    const fieldLocked = (field: string) => !isOrgAdmin && isFieldLocked(templateConfig, field);
 
     const {
         username,
@@ -284,6 +291,7 @@ export default function SettingsPage() {
     }
 
     return (
+        <TooltipProvider>
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
             {/* Settings Column */}
             <div className="flex-1 min-w-0 space-y-6">
@@ -304,6 +312,7 @@ export default function SettingsPage() {
                 </div>
 
                 {/* ─── Profilbilder ─── */}
+                <LockedFieldWrapper locked={fieldLocked("profile_pic")}>
                 <Card className="rounded-xl border-border/50">
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg">Profilbild</CardTitle>
@@ -322,8 +331,10 @@ export default function SettingsPage() {
                         )}
                     </CardContent>
                 </Card>
+                </LockedFieldWrapper>
 
                 {/* ─── Banner ─── */}
+                <LockedFieldWrapper locked={fieldLocked("banner")}>
                 <Card className="rounded-xl border-border/50">
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg">Banner</CardTitle>
@@ -358,6 +369,7 @@ export default function SettingsPage() {
                         </div>
                     </CardContent>
                 </Card>
+                </LockedFieldWrapper>
 
                 {/* ─── Trennlinie zwischen Banner & Hintergrund ─── */}
                 <div className="relative flex items-center gap-3 py-1">
@@ -367,6 +379,7 @@ export default function SettingsPage() {
                 </div>
 
                 {/* ─── Hintergrund ─── */}
+                <LockedFieldWrapper locked={fieldLocked("design")}>
                 <Card className="rounded-xl border-border/50">
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg">Hintergrund</CardTitle>
@@ -417,6 +430,7 @@ export default function SettingsPage() {
                         </div>
                     </CardContent>
                 </Card>
+                </LockedFieldWrapper>
 
                 {/* ═══════ PERSÖNLICHE DATEN ═══════ */}
                 <div className="pt-2">
@@ -466,10 +480,12 @@ export default function SettingsPage() {
                             </div>
                         </div>
 
+                        <LockedFieldWrapper locked={fieldLocked("bio")}>
                         <div className="space-y-1.5">
                             <Label htmlFor="bio">Bio</Label>
                             <Textarea id="bio" name="bio" defaultValue={user?.bio} className="bg-input border-border min-h-[80px]" />
                         </div>
+                        </LockedFieldWrapper>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="space-y-1.5">
@@ -496,6 +512,7 @@ export default function SettingsPage() {
                 </Card>
 
                 {/* ─── Custom Links ─── */}
+                <LockedFieldWrapper locked={fieldLocked("custom_links")}>
                 <Card className="rounded-xl border-border/50">
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg">Zusätzliche Links</CardTitle>
@@ -505,8 +522,10 @@ export default function SettingsPage() {
                         <CustomLinksEditor links={customLinks} onChange={setCustomLinks} />
                     </CardContent>
                 </Card>
+                </LockedFieldWrapper>
 
                 {/* ─── Akzentfarbe ─── */}
+                <LockedFieldWrapper locked={fieldLocked("design")}>
                 <Card className="rounded-xl border-border/50">
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg">Button-Farbe</CardTitle>
@@ -535,6 +554,7 @@ export default function SettingsPage() {
                         </div>
                     </CardContent>
                 </Card>
+                </LockedFieldWrapper>
 
                 {/* ═══════ MODE-SPECIFIC SECTIONS ═══════ */}
                 <ModeContent mode={dashboardMode}>
@@ -692,6 +712,7 @@ export default function SettingsPage() {
                 </Card>
 
                 {/* ─── Welcome Screen & Avatar ─── */}
+                <LockedFieldWrapper locked={fieldLocked("custom_greeting")}>
                 <Card className="rounded-xl border-border/50">
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg">Welcome Screen & Avatar</CardTitle>
@@ -776,6 +797,7 @@ export default function SettingsPage() {
                         </div>
                     </CardContent>
                 </Card>
+                </LockedFieldWrapper>
 
                 {/* ─── Video Greeting ─── */}
                 <FeatureGate feature="video_greeting" plan={userPlan} label="Video-Begrüßung">
@@ -883,5 +905,6 @@ export default function SettingsPage() {
                 </div>
             </aside>
         </div>
+        </TooltipProvider>
     );
 }

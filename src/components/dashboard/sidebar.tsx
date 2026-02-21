@@ -13,6 +13,7 @@ import {
     ChevronsLeft,
     ChevronsRight,
     HelpCircle,
+    Shield,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/auth-context";
@@ -67,6 +68,7 @@ export function AdminSidebar({ onClose, collapsed, onToggleCollapse }: AdminSide
         ...(isOrgAdmin ? [
             { href: "/dashboard/team", label: "Team", icon: UsersRound },
             { href: "/dashboard/top-performers", label: "Top Performer", icon: Trophy },
+            { href: "/dashboard/corporate-design", label: "Corporate Design", icon: Shield },
         ] : []),
         { href: "/dashboard/support", label: "Support", icon: HelpCircle },
         { href: "/dashboard/settings", label: "Einstellungen", icon: Settings },
