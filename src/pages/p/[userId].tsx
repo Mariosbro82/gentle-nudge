@@ -3,6 +3,10 @@ import { useParams } from "react-router-dom";
 import { supabase } from "@/lib/supabase/client";
 import { GhostPage } from "@/components/profile/ghost-page";
 import { getTemplate } from "@/components/profile/templates";
+import { LanguageSwitcher } from "@/components/profile/language-switcher";
+import { LiveStatusBadge } from "@/components/profile/live-status-badge";
+import { AiChat } from "@/components/profile/ai-chat";
+import { detectLanguage, t, type SupportedLang } from "@/lib/i18n";
 import type { ProfileUser } from "@/types/profile";
 import { logProfileView } from "@/lib/api/analytics";
 
@@ -36,6 +40,8 @@ interface PublicProfile {
     profile_pic_position: string | null;
     banner_pic_position: string | null;
     background_position: string | null;
+    live_status_text?: string | null;
+    live_status_color?: string | null;
 }
 
 export default function ProfilePage() {
@@ -43,6 +49,9 @@ export default function ProfilePage() {
     const [user, setUser] = useState<ProfileUser | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
+    const [lang, setLang] = useState<SupportedLang>(detectLanguage());
+    const [liveStatus, setLiveStatus] = useState<{ text: string | null; color: string | null }>({ text: null, color: null });
+    const [profileId, setProfileId] = useState<string | null>(null);
 
     useEffect(() => {
         async function fetchUser() {
@@ -57,6 +66,8 @@ export default function ProfilePage() {
 
             if (data) {
                 logProfileView(data.id);
+                setProfileId(data.id);
+                setLiveStatus({ text: (data as any).live_status_text || null, color: (data as any).live_status_color || null });
                 setUser({
                     id: data.id,
                     name: data.name || "No Name",
@@ -123,5 +134,24 @@ export default function ProfilePage() {
     }
 
     const Template = getTemplate(user.activeTemplate);
-    return <Template user={user} />;
+    return (
+        <div className="relative">
+            {/* Top bar with language switcher and live status */}
+            <div className="absolute top-3 left-3 right-3 z-50 flex items-center justify-between">
+                <div>
+                    {liveStatus.text && profileId && (
+                        <LiveStatusBadge userId={profileId} initialText={liveStatus.text} initialColor={liveStatus.color} />
+                    )}
+                </div>
+                <LanguageSwitcher currentLang={lang} onLangChange={setLang} />
+            </div>
+
+            <Template user={user} />
+
+            {/* AI Chat FAB */}
+            {profileId && (
+                <AiChat user={user} label={t("chat_with_ai", lang)} />
+            )}
+        </div>
+    );
 }

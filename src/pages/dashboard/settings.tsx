@@ -18,6 +18,7 @@ import { FocalPointPicker } from "@/components/settings/focal-point-picker";
 import { VideoUpload } from "@/components/settings/video-upload";
 import { FileVaultManager } from "@/components/settings/file-vault-manager";
 import { PhonePreview3D } from "@/components/settings/phone-preview-3d";
+import { LiveStatusWidget } from "@/components/dashboard/live-status-widget";
 import { ModeSwitcher, ModeContent, type DashboardMode } from "@/components/settings/mode-switcher";
 import { useUsernameAvailability } from "@/hooks/use-username-availability";
 import { Check, AlertCircle } from "lucide-react";
@@ -698,6 +699,14 @@ export default function SettingsPage() {
                 <div className="pt-2">
                     <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Datenschutz & Integrationen</h2>
                 </div>
+
+                {/* ─── Live Status ─── */}
+                <LiveStatusWidget
+                    currentText={user?.live_status_text || null}
+                    currentColor={user?.live_status_color || null}
+                    userId={user?.id || ""}
+                    onUpdate={(text, color) => setUser({ ...user, live_status_text: text, live_status_color: color })}
+                />
 
                 {/* ─── Ghost Mode ─── */}
                 <Card className="rounded-xl border-border/50">

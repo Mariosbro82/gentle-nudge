@@ -704,6 +704,8 @@ export type Database = {
           id: string
           job_title: string | null
           linkedin_url: string | null
+          live_status_color: string | null
+          live_status_text: string | null
           name: string | null
           notes: string | null
           phone: string | null
@@ -750,6 +752,8 @@ export type Database = {
           id?: string
           job_title?: string | null
           linkedin_url?: string | null
+          live_status_color?: string | null
+          live_status_text?: string | null
           name?: string | null
           notes?: string | null
           phone?: string | null
@@ -796,6 +800,8 @@ export type Database = {
           id?: string
           job_title?: string | null
           linkedin_url?: string | null
+          live_status_color?: string | null
+          live_status_text?: string | null
           name?: string | null
           notes?: string | null
           phone?: string | null
@@ -967,6 +973,8 @@ export type Database = {
           id: string | null
           job_title: string | null
           linkedin_url: string | null
+          live_status_color: string | null
+          live_status_text: string | null
           name: string | null
           phone: string | null
           profile_pic: string | null
@@ -999,6 +1007,8 @@ export type Database = {
           id?: string | null
           job_title?: string | null
           linkedin_url?: string | null
+          live_status_color?: string | null
+          live_status_text?: string | null
           name?: string | null
           phone?: string | null
           profile_pic?: string | null
@@ -1031,6 +1041,8 @@ export type Database = {
           id?: string | null
           job_title?: string | null
           linkedin_url?: string | null
+          live_status_color?: string | null
+          live_status_text?: string | null
           name?: string | null
           phone?: string | null
           profile_pic?: string | null
