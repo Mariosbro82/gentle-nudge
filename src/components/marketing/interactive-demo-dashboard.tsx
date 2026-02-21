@@ -13,6 +13,10 @@ import {
   Globe,
   Clock,
   Star,
+  Trophy,
+  Settings,
+  Megaphone,
+  UserCog,
 } from "lucide-react";
 
 const DEMO_STATS = [
@@ -37,9 +41,17 @@ const DEMO_DEVICES = [
   { uid: "NFC-004", user: "Eva Klein", mode: "Corporate", lastScan: "vor 3 Std.", status: "offline" },
 ];
 
+const DEMO_RANKING = [
+  { name: "Max Müller", role: "Sales Lead", scans: 342, leads: 67, score: 677, avatar: "MM" },
+  { name: "Lisa Wagner", role: "Account Manager", scans: 298, leads: 54, score: 568, avatar: "LW" },
+  { name: "Tom Braun", role: "Business Dev", scans: 256, leads: 41, score: 461, avatar: "TB" },
+  { name: "Eva Klein", role: "Sales Rep", scans: 189, leads: 32, score: 349, avatar: "EK" },
+  { name: "Sarah Koch", role: "Marketing", scans: 145, leads: 28, score: 285, avatar: "SK" },
+];
+
 const CHART_DATA = [35, 52, 41, 68, 55, 82, 63, 91, 78, 95, 72, 60, 85, 92, 88];
 
-type Tab = "dashboard" | "leads" | "devices" | "analytics";
+type Tab = "dashboard" | "leads" | "devices" | "analytics" | "ranking" | "campaigns" | "team" | "settings";
 
 export function InteractiveDemoDashboard() {
   const [activeTab, setActiveTab] = useState<Tab>("dashboard");
@@ -48,7 +60,11 @@ export function InteractiveDemoDashboard() {
     { label: "Dashboard", icon: BarChart3, tab: "dashboard" },
     { label: "Leads", icon: Users, tab: "leads" },
     { label: "Geräte", icon: Smartphone, tab: "devices" },
+    { label: "Ranking", icon: Trophy, tab: "ranking" },
+    { label: "Kampagnen", icon: Megaphone, tab: "campaigns" },
+    { label: "Team", icon: UserCog, tab: "team" },
     { label: "Analytics", icon: TrendingUp, tab: "analytics" },
+    { label: "Einstellungen", icon: Settings, tab: "settings" },
   ];
 
   return (
@@ -97,7 +113,11 @@ export function InteractiveDemoDashboard() {
             {activeTab === "dashboard" && <DashboardView key="dashboard" />}
             {activeTab === "leads" && <LeadsView key="leads" />}
             {activeTab === "devices" && <DevicesView key="devices" />}
+            {activeTab === "ranking" && <RankingView key="ranking" />}
+            {activeTab === "campaigns" && <CampaignsView key="campaigns" />}
+            {activeTab === "team" && <TeamView key="team" />}
             {activeTab === "analytics" && <AnalyticsView key="analytics" />}
+            {activeTab === "settings" && <SettingsView key="settings" />}
           </AnimatePresence>
         </div>
       </div>
@@ -370,6 +390,198 @@ function AnalyticsView() {
             ))}
           </div>
         </motion.div>
+      </div>
+    </PageTransition>
+  );
+}
+
+function RankingView() {
+  return (
+    <PageTransition>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-sm md:text-base font-semibold text-foreground">Team Ranking</h3>
+          <span className="text-[10px] glass-card rounded-full px-2.5 py-1 text-muted-foreground">Letzte 30 Tage</span>
+        </div>
+
+        {/* Top 3 Podium */}
+        <div className="grid grid-cols-3 gap-2 items-end">
+          {[DEMO_RANKING[1], DEMO_RANKING[0], DEMO_RANKING[2]].map((person, i) => {
+            const heights = ["h-20", "h-28", "h-16"];
+            const medals = ["🥈", "🥇", "🥉"];
+            return (
+              <motion.div
+                key={person.name}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 * i }}
+                className="flex flex-col items-center gap-1"
+              >
+                <span className="text-lg">{medals[i]}</span>
+                <div className="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center text-primary text-[10px] font-bold">
+                  {person.avatar}
+                </div>
+                <p className="text-[10px] font-medium text-foreground text-center truncate w-full">{person.name}</p>
+                <div className={`w-full ${heights[i]} bg-primary/10 rounded-t-lg flex items-center justify-center border border-primary/20`}>
+                  <span className="text-xs font-bold text-primary">{person.score}</span>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* Full list */}
+        <div className="space-y-1.5">
+          {DEMO_RANKING.map((person, i) => (
+            <motion.div
+              key={person.name}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.5 + 0.06 * i }}
+              className="glass-card rounded-lg p-2.5 flex items-center justify-between"
+            >
+              <div className="flex items-center gap-2.5">
+                <span className="text-[10px] font-bold text-muted-foreground w-4 text-center">#{i + 1}</span>
+                <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary text-[9px] font-bold">
+                  {person.avatar}
+                </div>
+                <div>
+                  <p className="text-[11px] font-medium text-foreground">{person.name}</p>
+                  <p className="text-[9px] text-muted-foreground">{person.role}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 text-[9px] text-muted-foreground">
+                <span>{person.scans} Scans</span>
+                <span>{person.leads} Leads</span>
+                <span className="font-bold text-primary">{person.score} Pts</span>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </PageTransition>
+  );
+}
+
+function CampaignsView() {
+  const campaigns = [
+    { name: "Messe München 2026", status: "Aktiv", chips: 12, scans: 847, conversion: "32%" },
+    { name: "Partner Event Berlin", status: "Aktiv", chips: 8, scans: 423, conversion: "28%" },
+    { name: "Q1 Sales Push", status: "Beendet", chips: 24, scans: 1.203, conversion: "41%" },
+  ];
+
+  return (
+    <PageTransition>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-sm md:text-base font-semibold text-foreground">Kampagnen</h3>
+          <span className="text-[10px] glass-card rounded-full px-2.5 py-1 text-primary cursor-pointer hover:bg-primary/10 transition-colors">+ Neue Kampagne</span>
+        </div>
+
+        <div className="space-y-2">
+          {campaigns.map((c, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 * i }}
+              className="glass-card rounded-lg p-3 cursor-pointer hover:bg-accent/30 transition-colors"
+            >
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-xs font-medium text-foreground">{c.name}</p>
+                <span className={`text-[9px] px-2 py-0.5 rounded-full font-medium ${c.status === "Aktiv" ? "bg-green-500/15 text-green-400" : "bg-muted text-muted-foreground"}`}>
+                  {c.status}
+                </span>
+              </div>
+              <div className="flex items-center gap-4 text-[9px] text-muted-foreground">
+                <span>{c.chips} Chips</span>
+                <span>{c.scans} Scans</span>
+                <span className="text-primary font-medium">{c.conversion} Conv.</span>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </PageTransition>
+  );
+}
+
+function TeamView() {
+  const members = [
+    { name: "Max Müller", role: "Admin", email: "max@company.de", status: "Aktiv" },
+    { name: "Lisa Wagner", role: "Mitglied", email: "lisa@company.de", status: "Aktiv" },
+    { name: "Tom Braun", role: "Mitglied", email: "tom@company.de", status: "Aktiv" },
+    { name: "Eva Klein", role: "Viewer", email: "eva@company.de", status: "Eingeladen" },
+  ];
+
+  return (
+    <PageTransition>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-sm md:text-base font-semibold text-foreground">Team</h3>
+          <span className="text-[10px] glass-card rounded-full px-2.5 py-1 text-primary cursor-pointer hover:bg-primary/10 transition-colors">+ Einladen</span>
+        </div>
+
+        <div className="space-y-2">
+          {members.map((m, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.08 * i }}
+              className="glass-card rounded-lg p-3 flex items-center justify-between"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-bold">
+                  {m.name.split(" ").map(n => n[0]).join("")}
+                </div>
+                <div>
+                  <p className="text-xs font-medium text-foreground">{m.name}</p>
+                  <p className="text-[9px] text-muted-foreground">{m.email}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-[9px] px-2 py-0.5 rounded-full bg-accent text-muted-foreground">{m.role}</span>
+                <span className={`text-[9px] ${m.status === "Aktiv" ? "text-green-400" : "text-yellow-400"}`}>{m.status}</span>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </PageTransition>
+  );
+}
+
+function SettingsView() {
+  const settingSections = [
+    { label: "Profil bearbeiten", desc: "Name, Bio, Foto, Kontaktdaten" },
+    { label: "Template wählen", desc: "Design für öffentliches Profil" },
+    { label: "Webhook-Integration", desc: "CRM-Anbindung via Zapier, Salesforce" },
+    { label: "Follow-Up E-Mails", desc: "Automatische Nachfass-E-Mails" },
+    { label: "Ghost Mode", desc: "Profil temporär deaktivieren" },
+  ];
+
+  return (
+    <PageTransition>
+      <div className="space-y-4">
+        <h3 className="text-sm md:text-base font-semibold text-foreground">Einstellungen</h3>
+        <div className="space-y-2">
+          {settingSections.map((s, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.08 * i }}
+              className="glass-card rounded-lg p-3 flex items-center justify-between cursor-pointer hover:bg-accent/30 transition-colors group"
+            >
+              <div>
+                <p className="text-xs font-medium text-foreground">{s.label}</p>
+                <p className="text-[9px] text-muted-foreground">{s.desc}</p>
+              </div>
+              <ChevronRight className="size-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+            </motion.div>
+          ))}
+        </div>
       </div>
     </PageTransition>
   );
