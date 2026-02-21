@@ -1,24 +1,39 @@
 import { MessageCircle, X } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
 const WHATSAPP_NUMBER = "4915565824919";
 const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=Hey%20Severmore%20Team%2C%20ich%20habe%20eine%20Frage%20%F0%9F%91%8B`;
+const POPUP_STORAGE_KEY = "nfcwear_wa_popup_shown";
 
 export function WhatsAppButton() {
   const [showPopup, setShowPopup] = useState(false);
   const [dismissed, setDismissed] = useState(false);
+  const location = useLocation();
 
+  // Hide on profile pages
+  const isProfilePage = location.pathname.startsWith("/p/");
+  
   useEffect(() => {
+    if (isProfilePage) return;
+    const alreadyShown = sessionStorage.getItem(POPUP_STORAGE_KEY);
+    if (alreadyShown) {
+      setDismissed(true);
+      return;
+    }
     const timer = setTimeout(() => {
       if (!dismissed) setShowPopup(true);
     }, 4000);
     return () => clearTimeout(timer);
-  }, [dismissed]);
+  }, [dismissed, isProfilePage]);
+
+  if (isProfilePage) return null;
 
   function handleDismiss() {
     setShowPopup(false);
     setDismissed(true);
+    sessionStorage.setItem(POPUP_STORAGE_KEY, "1");
   }
 
   return (

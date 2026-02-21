@@ -128,12 +128,13 @@ export function AiChat({ user, label }: { user: ProfileUser; label: string }) {
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
           <button
-            className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-5 py-3 rounded-full text-sm font-semibold text-white shadow-2xl shadow-black/40 transition-transform hover:scale-105 active:scale-95"
+            className="fixed bottom-6 left-6 z-50 flex items-center gap-2 px-5 py-3 rounded-full text-sm font-semibold shadow-2xl shadow-black/40 transition-transform hover:scale-105 active:scale-95"
             style={{
-              background: 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.08) 100%)',
+              background: 'linear-gradient(135deg, rgba(30,30,40,0.85) 0%, rgba(20,20,30,0.95) 100%)',
               backdropFilter: 'blur(20px) saturate(180%)',
               WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-              border: '1px solid rgba(255,255,255,0.15)',
+              border: '1px solid rgba(255,255,255,0.2)',
+              color: '#ffffff',
             }}
           >
             <MessageCircle className="h-4 w-4" />
