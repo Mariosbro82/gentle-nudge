@@ -18,7 +18,7 @@ import { FocalPointPicker } from "@/components/settings/focal-point-picker";
 import { VideoUpload } from "@/components/settings/video-upload";
 import { FileVaultManager } from "@/components/settings/file-vault-manager";
 import { PhonePreview3D } from "@/components/settings/phone-preview-3d";
-import { ModeSwitcher, type DashboardMode } from "@/components/settings/mode-switcher";
+import { ModeSwitcher, ModeContent, type DashboardMode } from "@/components/settings/mode-switcher";
 import { useUsernameAvailability } from "@/hooks/use-username-availability";
 import { Check, AlertCircle } from "lucide-react";
 import type { CustomLink, ProfileUser } from "@/types/profile";
@@ -260,7 +260,9 @@ export default function SettingsPage() {
                     <p className="text-sm text-muted-foreground mt-1">Verwalten Sie Ihr Profil und Integrationen.</p>
                 </div>
 
-                <ModeSwitcher mode={dashboardMode} onChange={setDashboardMode} />
+                <div className="sticky top-0 z-30 py-3 -mx-4 px-4 md:-mx-8 md:px-8 bg-background/80 backdrop-blur-xl border-b border-border/50">
+                    <ModeSwitcher mode={dashboardMode} onChange={setDashboardMode} />
+                </div>
 
                 <form onSubmit={handleSave} className="contents">
 
@@ -505,15 +507,13 @@ export default function SettingsPage() {
                 </Card>
 
                 {/* ═══════ MODE-SPECIFIC SECTIONS ═══════ */}
-
-                {/* ── Vertrieb: Messe & Events ── */}
+                <ModeContent mode={dashboardMode}>
                 {dashboardMode === "corporate" && (
-                <>
+                <div className="space-y-8">
                 <div className="space-y-1 pt-4">
                     <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Messe & Events</h2>
                     <Separator />
                 </div>
-
                 <Card>
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg">Messe-Features</CardTitle>
@@ -539,9 +539,7 @@ export default function SettingsPage() {
                                 </Button>
                             )}
                         </div>
-
                         <Separator />
-
                         {/* Countdown */}
                         <div className="space-y-3">
                             <Label className="text-sm font-medium">Countdown-Timer</Label>
@@ -563,17 +561,15 @@ export default function SettingsPage() {
                         </div>
                     </CardContent>
                 </Card>
-                </>
+                </div>
                 )}
 
-                {/* ── Kampagnen Mode ── */}
                 {dashboardMode === "campaign" && (
-                <>
+                <div className="space-y-8">
                 <div className="space-y-1 pt-4">
                     <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Kampagnen</h2>
                     <Separator />
                 </div>
-
                 <Card>
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg">Kampagnen-Steuerung</CardTitle>
@@ -597,17 +593,15 @@ export default function SettingsPage() {
                         <p className="text-xs text-muted-foreground">Im Kampagnen-Modus werden alle Chips Ihres Teams auf diese URL umgeleitet. Perfekt für Messen und Events.</p>
                     </CardContent>
                 </Card>
-                </>
+                </div>
                 )}
 
-                {/* ── Bewertung Mode ── */}
                 {dashboardMode === "hospitality" && (
-                <>
+                <div className="space-y-8">
                 <div className="space-y-1 pt-4">
                     <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Bewertungen</h2>
                     <Separator />
                 </div>
-
                 <Card>
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg">Review-Einstellungen</CardTitle>
@@ -625,8 +619,9 @@ export default function SettingsPage() {
                         <p className="text-xs text-muted-foreground">Im Bewertungs-Modus werden Kunden direkt zu Ihrem Google-Bewertungsprofil weitergeleitet. Ideal für Gastronomie und Hotels.</p>
                     </CardContent>
                 </Card>
-                </>
+                </div>
                 )}
+                </ModeContent>
 
                 {/* ═══════ VORLAGEN & ERWEITERT ═══════ */}
                 <div className="space-y-1 pt-4">

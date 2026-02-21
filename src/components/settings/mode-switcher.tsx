@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Briefcase, Megaphone, Star } from "lucide-react";
 
 export type DashboardMode = "corporate" | "campaign" | "hospitality";
@@ -15,6 +15,8 @@ const modes: { id: DashboardMode; label: string; icon: typeof Briefcase; color: 
 ];
 
 export function ModeSwitcher({ mode, onChange }: ModeSwitcherProps) {
+  
+
   return (
     <div
       className="relative inline-flex items-center rounded-2xl p-1 gap-0.5"
@@ -34,19 +36,18 @@ export function ModeSwitcher({ mode, onChange }: ModeSwitcherProps) {
             key={m.id}
             type="button"
             onClick={() => onChange(m.id)}
-            className="relative flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-colors duration-200 z-10"
-            style={{ color: isActive ? m.color : "rgba(255,255,255,0.45)" }}
+            className="relative flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-colors duration-300 z-10"
+            style={{ color: isActive ? "#fff" : "rgba(255,255,255,0.4)" }}
           >
             {isActive && (
               <motion.div
                 layoutId="mode-pill"
                 className="absolute inset-0 rounded-xl"
                 style={{
-                  background: `linear-gradient(135deg, ${m.color}15, ${m.color}08)`,
-                  border: `1px solid ${m.color}30`,
-                  boxShadow: `0 0 20px -4px ${m.color}25`,
+                  background: `linear-gradient(135deg, ${m.color}, ${m.color}cc)`,
+                  boxShadow: `0 0 24px -2px ${m.color}50, inset 0 1px 0 rgba(255,255,255,0.2)`,
                 }}
-                transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                transition={{ type: "spring", stiffness: 500, damping: 35 }}
               />
             )}
             <Icon className="w-4 h-4 relative z-10" />
@@ -55,5 +56,22 @@ export function ModeSwitcher({ mode, onChange }: ModeSwitcherProps) {
         );
       })}
     </div>
+  );
+}
+
+/** Wrap mode-dependent content sections for smooth enter/exit */
+export function ModeContent({ mode, children }: { mode: DashboardMode; children: React.ReactNode }) {
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={mode}
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -12 }}
+        transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+      >
+        {children}
+      </motion.div>
+    </AnimatePresence>
   );
 }
