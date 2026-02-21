@@ -1,4 +1,4 @@
-import { Mail, Phone, Globe, Linkedin, UserPlus } from "lucide-react";
+import { Mail, Phone, Globe, Linkedin, UserPlus, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ContactForm } from "@/components/profile/contact-form";
 import { CustomLinksDisplay } from "@/components/profile/shared/custom-links-display";
@@ -34,6 +34,31 @@ function handleAddToContacts(user: { name: string; title: string; company: strin
     a.download = `${user.name.replace(/\s+/g, "_")}.vcf`;
     a.click();
     URL.revokeObjectURL(url);
+}
+
+async function handleShare(userName: string) {
+    const url = window.location.href;
+    const text = `Schau dir das Profil von ${userName} an – könnte interessant für dich sein!`;
+
+    if (navigator.share) {
+        try {
+            await navigator.share({ title: `Profil von ${userName}`, text, url });
+            return;
+        } catch {
+            // User cancelled or share failed, fall through to fallback
+        }
+    }
+
+    // Fallback: show choice between WhatsApp and Email
+    const waText = encodeURIComponent(`${text}\n${url}`);
+    const waUrl = `https://wa.me/?text=${waText}`;
+    const mailSubject = encodeURIComponent(`Profil von ${userName}`);
+    const mailBody = encodeURIComponent(`${text}\n\n${url}`);
+    const mailUrl = `mailto:?subject=${mailSubject}&body=${mailBody}`;
+
+    // Try WhatsApp first (most common on mobile)
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    window.open(isMobile ? waUrl : mailUrl, '_blank');
 }
 
 export function PremiumGradientTemplate({ user }: TemplateProps) {
@@ -141,6 +166,15 @@ export function PremiumGradientTemplate({ user }: TemplateProps) {
                             onClick={() => handleAddToContacts(user)}
                         >
                             <UserPlus className="mr-2 h-4 w-4" /> Kontakt speichern
+                        </Button>
+
+                        {/* Share / Warm Handoff */}
+                        <Button
+                            variant="outline"
+                            className="w-full rounded-xl py-5 text-sm font-semibold mb-4 border-white/15 text-white/90 hover:bg-white/10 hover:text-white bg-transparent"
+                            onClick={() => handleShare(user.name)}
+                        >
+                            <Share2 className="mr-2 h-4 w-4" /> An Kollegen weiterleiten
                         </Button>
 
                         {/* Custom Links */}
