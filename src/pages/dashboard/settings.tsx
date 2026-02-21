@@ -252,27 +252,27 @@ export default function SettingsPage() {
     }
 
     return (
-        <div className="flex flex-col xl:flex-row gap-6 xl:gap-8">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
             {/* Settings Column */}
-            <div className="flex-1 min-w-0 max-w-3xl space-y-8">
-                <div className="glass-card-strong rounded-2xl p-6 mb-2">
-                    <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">Einstellungen</h1>
-                    <p className="text-sm text-muted-foreground mt-1">Verwalten Sie Ihr Profil und Integrationen.</p>
+            <div className="flex-1 min-w-0 space-y-6">
+                <div>
+                    <h1 className="text-2xl font-semibold tracking-tight text-foreground">Einstellungen</h1>
+                    <p className="text-sm text-muted-foreground mt-1">Verwalten Sie Ihr Profil und Ihre Integrationen.</p>
                 </div>
 
-                <div className="sticky top-0 z-30 py-3 -mx-4 px-4 md:-mx-8 md:px-8 glass-card-strong rounded-none border-x-0 border-t-0">
+                <div className="sticky top-0 z-30 py-3 -mx-4 px-4 md:-mx-8 md:px-8 bg-background/80 backdrop-blur-xl border-b border-border/50">
                     <ModeSwitcher mode={dashboardMode} onChange={setDashboardMode} />
                 </div>
 
                 <form onSubmit={handleSave} className="contents">
 
                 {/* ═══════ ERSCHEINUNGSBILD ═══════ */}
-                <div className="glass-section-header">
-                    <h2 className="text-xs font-semibold uppercase tracking-widest text-foreground/70">Erscheinungsbild</h2>
+                <div className="pt-2">
+                    <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Erscheinungsbild</h2>
                 </div>
 
                 {/* ─── Profilbilder ─── */}
-                <Card className="glass-card rounded-2xl">
+                <Card className="rounded-xl border-border/50">
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg">Profilbild</CardTitle>
                         <CardDescription>Wird als rundes Avatar auf Ihrer Visitenkarte angezeigt.</CardDescription>
@@ -292,7 +292,7 @@ export default function SettingsPage() {
                 </Card>
 
                 {/* ─── Banner ─── */}
-                <Card className="glass-card rounded-2xl">
+                <Card className="rounded-xl border-border/50">
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg">Banner</CardTitle>
                         <CardDescription>Der obere Bereich Ihres Profils. Bild oder Farbe wählbar.</CardDescription>
@@ -335,7 +335,7 @@ export default function SettingsPage() {
                 </div>
 
                 {/* ─── Hintergrund ─── */}
-                <Card className="glass-card rounded-2xl">
+                <Card className="rounded-xl border-border/50">
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg">Hintergrund</CardTitle>
                         <CardDescription>Der gesamte Hintergrund hinter der Profilkarte.</CardDescription>
@@ -387,12 +387,12 @@ export default function SettingsPage() {
                 </Card>
 
                 {/* ═══════ PERSÖNLICHE DATEN ═══════ */}
-                <div className="glass-section-header">
-                    <h2 className="text-xs font-semibold uppercase tracking-widest text-foreground/70">Persönliche Daten</h2>
+                <div className="pt-2">
+                    <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Persönliche Daten</h2>
                 </div>
 
                 {/* ─── Persönliches Profil ─── */}
-                <Card className="glass-card rounded-2xl">
+                <Card className="rounded-xl border-border/50">
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg">Persönliches Profil</CardTitle>
                         <CardDescription>Diese Daten erscheinen auf Ihrer digitalen Visitenkarte.</CardDescription>
@@ -464,7 +464,7 @@ export default function SettingsPage() {
                 </Card>
 
                 {/* ─── Custom Links ─── */}
-                <Card className="glass-card rounded-2xl">
+                <Card className="rounded-xl border-border/50">
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg">Zusätzliche Links</CardTitle>
                         <CardDescription>Calendly, Portfolio, Social Media etc.</CardDescription>
@@ -475,7 +475,7 @@ export default function SettingsPage() {
                 </Card>
 
                 {/* ─── Akzentfarbe ─── */}
-                <Card className="glass-card rounded-2xl">
+                <Card className="rounded-xl border-border/50">
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg">Button-Farbe</CardTitle>
                         <CardDescription>Akzentfarbe für Buttons und Icons.</CardDescription>
@@ -508,10 +508,10 @@ export default function SettingsPage() {
                 <ModeContent mode={dashboardMode}>
                 {dashboardMode === "corporate" && (
                 <div className="space-y-8">
-                <div className="glass-section-header">
-                    <h2 className="text-xs font-semibold uppercase tracking-widest text-foreground/70">Messe & Events</h2>
+                <div className="pt-2">
+                    <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Messe & Events</h2>
                 </div>
-                <Card className="glass-card rounded-2xl">
+                <Card className="rounded-xl border-border/50">
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg">Messe-Features</CardTitle>
                         <CardDescription>Gutscheincodes und Countdown-Timer für Events.</CardDescription>
@@ -563,10 +563,10 @@ export default function SettingsPage() {
 
                 {dashboardMode === "campaign" && (
                 <div className="space-y-8">
-                <div className="glass-section-header">
-                    <h2 className="text-xs font-semibold uppercase tracking-widest text-foreground/70">Kampagnen</h2>
+                <div className="pt-2">
+                    <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Kampagnen</h2>
                 </div>
-                <Card className="glass-card rounded-2xl">
+                <Card className="rounded-xl border-border/50">
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg">Kampagnen-Steuerung</CardTitle>
                         <CardDescription>Leiten Sie alle NFC-Chips auf eine zentrale URL um.</CardDescription>
@@ -594,10 +594,10 @@ export default function SettingsPage() {
 
                 {dashboardMode === "hospitality" && (
                 <div className="space-y-8">
-                <div className="glass-section-header">
-                    <h2 className="text-xs font-semibold uppercase tracking-widest text-foreground/70">Bewertungen</h2>
+                <div className="pt-2">
+                    <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Bewertungen</h2>
                 </div>
-                <Card className="glass-card rounded-2xl">
+                <Card className="rounded-xl border-border/50">
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg">Review-Einstellungen</CardTitle>
                         <CardDescription>Konfigurieren Sie Ihre Google-Bewertungsseite und weitere Plattformen.</CardDescription>
@@ -619,12 +619,12 @@ export default function SettingsPage() {
                 </ModeContent>
 
                 {/* ═══════ VORLAGEN & ERWEITERT ═══════ */}
-                <div className="glass-section-header">
-                    <h2 className="text-xs font-semibold uppercase tracking-widest text-foreground/70">Vorlagen & Erweitert</h2>
+                <div className="pt-2">
+                    <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Vorlagen & Erweitert</h2>
                 </div>
 
                 {/* ─── Template ─── */}
-                <Card className="glass-card rounded-2xl">
+                <Card className="rounded-xl border-border/50">
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg">Profil-Vorlage</CardTitle>
                         <CardDescription>
@@ -642,7 +642,7 @@ export default function SettingsPage() {
                 </Card>
 
                 {/* ─── Presets ─── */}
-                <Card className="glass-card rounded-2xl">
+                <Card className="rounded-xl border-border/50">
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg">Profil-Presets</CardTitle>
                         <CardDescription>Konfigurationen speichern und schnell wechseln.</CardDescription>
@@ -660,7 +660,7 @@ export default function SettingsPage() {
                 </Card>
 
                 {/* ─── Video Greeting ─── */}
-                <Card className="glass-card rounded-2xl">
+                <Card className="rounded-xl border-border/50">
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg">Video-Begrüßung</CardTitle>
                         <CardDescription>Kurzes Loom-Style Greeting-Video für Ihr Profil.</CardDescription>
@@ -682,7 +682,7 @@ export default function SettingsPage() {
                 </Card>
 
                 {/* ─── File Vault ─── */}
-                <Card className="glass-card rounded-2xl">
+                <Card className="rounded-xl border-border/50">
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg">Dateien / Ressourcen</CardTitle>
                         <CardDescription>PDFs, Dokumente und Dateien, die auf Ihrem Profil angezeigt werden.</CardDescription>
@@ -695,12 +695,12 @@ export default function SettingsPage() {
                 </Card>
 
                 {/* ═══════ DATENSCHUTZ & INTEGRATIONEN ═══════ */}
-                <div className="glass-section-header">
-                    <h2 className="text-xs font-semibold uppercase tracking-widest text-foreground/70">Datenschutz & Integrationen</h2>
+                <div className="pt-2">
+                    <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Datenschutz & Integrationen</h2>
                 </div>
 
                 {/* ─── Ghost Mode ─── */}
-                <Card className="glass-card rounded-2xl">
+                <Card className="rounded-xl border-border/50">
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg">Ghost-Modus</CardTitle>
                         <CardDescription>Profil temporär unsichtbar für Scanner.</CardDescription>
@@ -711,7 +711,7 @@ export default function SettingsPage() {
                 </Card>
 
                 {/* ─── Integrationen ─── */}
-                <Card className="glass-card rounded-2xl">
+                <Card className="rounded-xl border-border/50">
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg">Integrationen</CardTitle>
                         <CardDescription>Externe Tools wie Zapier oder Make verbinden.</CardDescription>
@@ -723,7 +723,7 @@ export default function SettingsPage() {
 
                 {/* ─── Sticky Save ─── */}
                 <div className="sticky bottom-4 z-50 flex justify-end pb-2">
-                    <Button type="submit" size="lg" className="glass-card-strong rounded-xl shadow-2xl shadow-primary/20 hover:shadow-primary/30 transition-shadow" disabled={saving || (!isAvailable && username !== user?.slug)}>
+                    <Button type="submit" size="lg" className="rounded-xl shadow-lg shadow-primary/10 hover:shadow-primary/20 transition-all" disabled={saving || (!isAvailable && username !== user?.slug)}>
                         {saving && <Loader2 className="animate-spin mr-2 h-4 w-4" />}
                         Profil Speichern
                     </Button>
@@ -733,10 +733,23 @@ export default function SettingsPage() {
             </div>
 
             {/* ─── Sticky 3D Phone Preview (Desktop) ─── */}
-            <div className="hidden xl:block w-[300px] flex-shrink-0">
-                <div className="sticky top-6">
-                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground text-center mb-3 font-medium">Live-Vorschau</p>
-                    <PhonePreview3D user={previewUser} scale={0.95} />
+            <div className="hidden lg:flex w-[340px] flex-shrink-0 flex-col items-center">
+                <div className="sticky top-20">
+                    <div className="flex flex-col items-center gap-4">
+                        <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                            <p className="text-xs text-muted-foreground font-medium">Live-Vorschau</p>
+                        </div>
+                        <PhonePreview3D user={previewUser} scale={1} />
+                        {user?.slug && (
+                            <Button variant="outline" size="sm" className="mt-2 text-xs" asChild>
+                                <a href={`/p/${user.slug}`} target="_blank" rel="noopener noreferrer">
+                                    <ExternalLink className="h-3 w-3 mr-1.5" />
+                                    Profil in neuem Tab öffnen
+                                </a>
+                            </Button>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
