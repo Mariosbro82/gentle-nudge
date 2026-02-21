@@ -1,5 +1,4 @@
-import { Navbar } from "@/components/marketing/navbar";
-import { Hero } from "@/components/marketing/hero";
+import { HeroSection } from "@/components/ui/hero-section-2";
 import { ScrollTextReveal } from "@/components/marketing/scroll-text-reveal";
 import { TrustSection } from "@/components/marketing/trust-section";
 import { IdeaSection } from "@/components/marketing/idea-section";
@@ -16,8 +15,7 @@ import { FeatureBentoGrid } from "@/components/marketing/feature-bento-grid";
 export default function MarketingPage() {
     return (
         <main className="min-h-screen bg-background text-foreground selection:bg-blue-500/30">
-            <Navbar />
-            <Hero />
+            <HeroSection />
             <ScrollTextReveal />
             <TrustSection />
             <IdeaSection />
