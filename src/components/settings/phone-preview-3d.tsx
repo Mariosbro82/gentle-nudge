@@ -57,17 +57,21 @@ export function PhonePreview3D({ user, className = "", scale = 1, rotateY = 0, r
                             </div>
                         </div>
 
-                        {/* Profile Content – scaled to fit */}
+                        {/* Profile Content – scaled to fit inside phone screen */}
                         <div
-                            className="origin-top-left overflow-y-auto overflow-x-hidden pointer-events-none"
-                            style={{
-                                width: CONTENT_W,
-                                height: CONTENT_H,
-                                transform: `scale(${INNER_SCALE})`,
-                                transformOrigin: "top left",
-                            }}
+                            className="absolute inset-0 overflow-hidden"
+                            style={{ borderRadius: "inherit" }}
                         >
-                            <Template user={user} />
+                            <div
+                                className="origin-top-left pointer-events-none"
+                                style={{
+                                    width: CONTENT_W,
+                                    height: CONTENT_H,
+                                    transform: `scale(${INNER_SCALE})`,
+                                }}
+                            >
+                                <Template user={user} />
+                            </div>
                         </div>
                     </div>
 
