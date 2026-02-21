@@ -54,7 +54,7 @@ export function HeroSection() {
                                         to="/pricing"
                                         className="hover:bg-primary/10 glass-card group mx-auto flex max-w-fit items-center gap-4 rounded-full border px-5 py-2 text-sm transition-all duration-300"
                                     >
-                                        <span className="text-foreground">Jetzt Sonderpreis sichern 🏆</span>
+                                        <span className="text-foreground">Sonderpreisträger 2025 🏆</span>
                                         <ChevronRight className="size-4 text-muted-foreground group-hover:translate-x-0.5 transition-transform" />
                                     </Link>
 
