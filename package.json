@@ -11,10 +11,6 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@capacitor/android": "^8.1.0",
-    "@capacitor/cli": "^8.1.0",
-    "@capacitor/core": "^8.1.0",
-    "@capacitor/ios": "^8.1.0",
     "@hookform/resolvers": "^5.2.2",
     "@supabase/supabase-js": "^2.95.3",
     "@types/papaparse": "^5.5.2",
