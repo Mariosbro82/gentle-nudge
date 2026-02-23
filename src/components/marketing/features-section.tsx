@@ -12,16 +12,16 @@ export function FeaturesSection() {
             subtitle: "Vom Hoodie zum Lead-Funnel",
             description: "Automatisiertes Lead-Capturing per NFC-Tap. Jeder Kontakt wird direkt zum CRM-Datensatz – ohne manuelles Abtippen.",
             color: "blue",
-            features: ["Digitale vCard", "Bidirektionales Lead-Capturing", "CRM-Integration", "Automatische Follow-Up E-Mails"],
+            features: ["Digitale vCard", "Bidirektionales Lead-Capturing", "CRM-Integration via Webhooks", "KI-gestützte Follow-Up E-Mails", "Top-Performer Ranking", "CSV Lead Export"],
         },
         {
             id: "campaign",
             icon: Megaphone,
             title: "Kampagnen",
             subtitle: "Marketing direkt am Körper",
-            description: "Steuere alle Chips zentral über das Dashboard. Zeitgesteuerte Redirects, Landing Pages und Kampagnen – skalierbar für jede Teamgröße.",
+            description: "Steuere alle Chips zentral über das Dashboard. Zeitgesteuerte Redirects, Landing Pages und KI-Kampagnen – skalierbar für jede Teamgröße.",
             color: "purple",
-            features: ["Zentrales Campaign Management", "Dynamic Link Routing", "Conversion-optimierte Landing Pages", "Zeitgesteuerte Aktivierung"],
+            features: ["Zentrales Campaign Management", "KI-Kampagnen mit Zeitversatz", "Dynamic Link Routing", "Zeitgesteuerte Aktivierung", "Profil-Presets pro Event"],
         },
         {
             id: "hospitality",
@@ -30,7 +30,7 @@ export function FeaturesSection() {
             subtitle: "Mehr Reviews, weniger Aufwand",
             description: "Google-Bewertungen und Trinkgeld per Scan – direkt am Point of Service. Ideal für Gastronomie und Hotellerie.",
             color: "orange",
-            features: ["Google Review Funnel", "Digitale Speisekarte", "Multi-Platform Reviews", "Integriertes Payment (Stripe)"],
+            features: ["Google Review Funnel", "Digitale Speisekarte", "Video-Begrüßung", "KI-Assistent auf dem Profil", "Ghost Mode (Datenschutz)"],
         },
     ];
 
