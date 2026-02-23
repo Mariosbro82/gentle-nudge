@@ -41,6 +41,7 @@ export const PLAN_FEATURES: Record<PlanType, PlanConfig> = {
             csv_export: false,
             ghost_mode: true,
             campaigns: false,
+            ai_assistant: false,
         },
         limits: {
             maxChips: 5,
@@ -72,6 +73,7 @@ export const PLAN_FEATURES: Record<PlanType, PlanConfig> = {
             csv_export: true,
             ghost_mode: true,
             campaigns: true,
+            ai_assistant: true,
         },
         limits: {
             maxChips: 50,
@@ -103,6 +105,7 @@ export const PLAN_FEATURES: Record<PlanType, PlanConfig> = {
             csv_export: true,
             ghost_mode: true,
             campaigns: true,
+            ai_assistant: true,
         },
         limits: {
             maxChips: Infinity,
@@ -133,6 +136,7 @@ export const FEATURE_LABELS: Record<string, string> = {
     csv_export: "CSV Export",
     ghost_mode: "Ghost Mode",
     campaigns: "KI-Kampagnen",
+    ai_assistant: "KI-Assistent",
 };
 
 export function hasFeature(plan: PlanType | null | undefined, feature: string): boolean {
