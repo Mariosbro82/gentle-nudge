@@ -525,6 +525,7 @@ export default function SettingsPage() {
                 </LockedFieldWrapper>
 
                 {/* ─── Akzentfarbe ─── */}
+                <FeatureGate feature="custom_branding" plan={userPlan} label="Custom Branding">
                 <LockedFieldWrapper locked={fieldLocked("design")}>
                 <Card className="rounded-xl border-border/50">
                     <CardHeader className="pb-4">
@@ -555,6 +556,7 @@ export default function SettingsPage() {
                     </CardContent>
                 </Card>
                 </LockedFieldWrapper>
+                </FeatureGate>
 
                 {/* ═══════ MODE-SPECIFIC SECTIONS ═══════ */}
                 <ModeContent mode={dashboardMode}>
@@ -614,6 +616,7 @@ export default function SettingsPage() {
                 )}
 
                 {dashboardMode === "campaign" && (
+                <FeatureGate feature="campaigns" plan={userPlan} label="KI-Kampagnen">
                 <div className="space-y-8">
                 <div className="pt-2">
                     <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Kampagnen</h2>
@@ -642,6 +645,7 @@ export default function SettingsPage() {
                     </CardContent>
                 </Card>
                 </div>
+                </FeatureGate>
                 )}
 
                 {dashboardMode === "hospitality" && (
@@ -837,6 +841,7 @@ export default function SettingsPage() {
                 </Card>
 
                 {/* ─── KI-Assistent Wissensbasis ─── */}
+                <FeatureGate feature="ai_assistant" plan={userPlan} label="KI-Assistent">
                 <Card className="rounded-xl border-border/50">
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg">🤖 KI-Assistent</CardTitle>
@@ -856,6 +861,7 @@ export default function SettingsPage() {
                         </p>
                     </CardContent>
                 </Card>
+                </FeatureGate>
 
                 {/* ═══════ DATENSCHUTZ & INTEGRATIONEN ═══════ */}
                 <div className="pt-2">
