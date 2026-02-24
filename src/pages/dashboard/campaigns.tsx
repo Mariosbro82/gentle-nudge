@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import DOMPurify from "dompurify";
 import { supabase } from "@/lib/supabase/client";
 import { useAuth } from "@/contexts/auth-context";
 import { Card } from "@/components/ui/card";
@@ -341,7 +342,11 @@ export default function CampaignsPage() {
               <Label className="text-xs mb-2 block">HTML-Vorschau</Label>
               <div
                 className="p-4 rounded-lg bg-muted/50 border border-border text-sm prose prose-sm dark:prose-invert max-w-none"
-                dangerouslySetInnerHTML={{ __html: generatedBody }}
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(generatedBody, {
+                  ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'a', 'h1', 'h2', 'h3', 'ul', 'ol', 'li', 'span', 'div'],
+                  ALLOWED_ATTR: ['href', 'target', 'rel', 'style'],
+                  ALLOWED_URI_REGEXP: /^https?:/i
+                }) }}
               />
             </div>
           )}
