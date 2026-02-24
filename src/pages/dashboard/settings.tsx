@@ -923,6 +923,56 @@ export default function SettingsPage() {
                 </Card>
                 </FeatureGate>
 
+                {/* ─── Account löschen (DSGVO) ─── */}
+                <Card className="rounded-xl border-destructive/30">
+                    <CardHeader className="pb-4">
+                        <CardTitle className="text-lg text-destructive">Konto löschen</CardTitle>
+                        <CardDescription>
+                            Ihr Konto und alle zugehörigen Daten (Profil, Leads, Scans, Dateien) werden unwiderruflich gelöscht.
+                            Dieser Vorgang kann nicht rückgängig gemacht werden.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <Button
+                            type="button"
+                            variant="destructive"
+                            onClick={async () => {
+                                const confirmed = window.confirm(
+                                    "Sind Sie sicher, dass Sie Ihr Konto unwiderruflich löschen möchten? Alle Ihre Daten (Profil, Leads, Scans, Dateien) werden permanent gelöscht."
+                                );
+                                if (!confirmed) return;
+                                const doubleConfirm = window.confirm(
+                                    "Letzte Warnung: Diese Aktion kann NICHT rückgängig gemacht werden. Fortfahren?"
+                                );
+                                if (!doubleConfirm) return;
+
+                                try {
+                                    // Delete user data from public tables first
+                                    if (user?.id) {
+                                        await supabase.from("leads").delete().eq("captured_by_user_id", user.id);
+                                        await supabase.from("profile_views").delete().eq("user_id", user.id);
+                                        await supabase.from("user_files").delete().eq("user_id", user.id);
+                                        await supabase.from("profile_presets").delete().eq("user_id", user.id);
+                                        await supabase.from("follow_up_emails").delete().eq("user_id", user.id);
+                                        await supabase.from("support_tickets").delete().eq("user_id", user.id);
+                                    }
+                                    // Delete user profile
+                                    if (authUser?.id) {
+                                        await supabase.from("users").delete().eq("auth_user_id", authUser.id);
+                                    }
+                                    // Sign out
+                                    await supabase.auth.signOut();
+                                    window.location.href = "/";
+                                } catch (err: any) {
+                                    alert("Fehler beim Löschen: " + (err.message || "Unbekannter Fehler"));
+                                }
+                            }}
+                        >
+                            Konto unwiderruflich löschen
+                        </Button>
+                    </CardContent>
+                </Card>
+
                 {/* ─── Sticky Save ─── */}
                 <div className="sticky bottom-4 z-50 flex justify-end pb-2">
                     <Button type="submit" size="lg" className="rounded-xl shadow-lg shadow-primary/10 hover:shadow-primary/20 transition-all" disabled={saving || (!isAvailable && username !== user?.slug)}>

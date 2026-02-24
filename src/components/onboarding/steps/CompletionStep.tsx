@@ -135,6 +135,9 @@ export function CompletionStep({ data, updateData, onComplete, isSubmitting, err
                             <Zap className="w-3 h-3 shrink-0 mt-0.5 text-primary" />
                             Pro-Tipp: 24h Follow-ups haben 3x höhere Rücklaufquoten. Texte können Sie im Dashboard anpassen.
                         </p>
+                        <p className="text-[10px] text-muted-foreground bg-muted/50 rounded-lg p-2 flex items-start gap-1.5">
+                            🔒 DSGVO-konform: Follow-ups werden nur an Kontakte gesendet, die dem Marketing-Opt-in aktiv zugestimmt haben.
+                        </p>
                     </div>
                 )}
             </div>
