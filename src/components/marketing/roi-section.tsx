@@ -1,6 +1,6 @@
 
 import { motion } from "framer-motion";
-import { BarChart3, Zap } from "lucide-react";
+import { BarChart3, Zap, Star } from "lucide-react";
 
 export function RoiSection() {
     return (
@@ -124,6 +124,29 @@ export function RoiSection() {
                     </motion.div>
 
                 </div>
+
+                {/* Customer Testimonial */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="mt-16 max-w-3xl mx-auto text-center"
+                >
+                    <div className="p-8 rounded-2xl glass-card">
+                        <div className="flex justify-center gap-0.5 mb-4">
+                            {[...Array(5)].map((_, i) => (
+                                <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                            ))}
+                        </div>
+                        <blockquote className="text-lg md:text-xl text-foreground/90 leading-relaxed italic mb-4">
+                            &quot;Die Qualität der Shirts und Sweater ist sehr gut und der Stick ist überragend geworden. Die beiden Jungs leisten wirklich einen hervorragenden Job!&quot;
+                        </blockquote>
+                        <cite className="not-italic text-sm text-muted-foreground">
+                            <span className="text-foreground font-semibold">Szymon Krol</span> — Unternehmenskunde
+                        </cite>
+                    </div>
+                </motion.div>
+
             </div>
         </section>
     );

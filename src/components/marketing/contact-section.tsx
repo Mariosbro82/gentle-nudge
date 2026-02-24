@@ -10,7 +10,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Calendar } from "lucide-react";
+import { Calendar, Star } from "lucide-react";
+import { PressLogosStrip } from "@/components/marketing/social-proof";
 
 export function ContactSection() {
     return (
@@ -57,6 +58,25 @@ export function ContactSection() {
                                         NFC CONNECT
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        {/* Trust Badges */}
+                        <div className="mt-8 space-y-4">
+                            <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                                <div className="flex gap-0.5">
+                                    {[...Array(5)].map((_, i) => (
+                                        <Star key={i} className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
+                                    ))}
+                                </div>
+                                <span>5/5 Kundenbewertung</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                <span>🏆</span>
+                                <span>Gründungspreis U21 Gewinner 2025</span>
+                            </div>
+                            <div className="mt-4">
+                                <PressLogosStrip />
                             </div>
                         </div>
                     </div>

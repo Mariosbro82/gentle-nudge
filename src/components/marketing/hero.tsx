@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { SocialProofBar } from "@/components/marketing/social-proof";
 
 export function Hero() {
     const ref = React.useRef(null);
@@ -71,6 +72,16 @@ export function Hero() {
                                 Mehr erfahren <ArrowRight className="ml-2 w-5 h-5" />
                             </Button>
                         </div>
+
+                        {/* Social Proof Bar */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 1.2, duration: 0.8 }}
+                            className="mt-16 relative z-50"
+                        >
+                            <SocialProofBar />
+                        </motion.div>
                     </motion.div>
                 </div>
             </GoogleGeminiEffect>
