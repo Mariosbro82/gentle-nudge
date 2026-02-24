@@ -41,7 +41,7 @@ function MilestoneCard({ milestone, index }: { milestone: typeof milestones[0]; 
         offset: ["start end", "center center"],
     });
     const opacity = useTransform(scrollYProgress, [0, 0.6], [0, 1]);
-    const y = useTransform(scrollYProgress, [0, 0.6], [40, 0]);
+    const y = useTransform(scrollYProgress, [0, 0.6], [60, 0]);
 
     const isEven = index % 2 === 0;
 
@@ -49,37 +49,40 @@ function MilestoneCard({ milestone, index }: { milestone: typeof milestones[0]; 
         <motion.div
             ref={ref}
             style={{ opacity, y }}
-            className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center"
+            className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-0 items-center"
         >
             {/* Image */}
             <div className={`md:col-span-5 ${isEven ? "md:col-start-1 md:order-1" : "md:col-start-8 md:order-3"}`}>
-                <div className="relative overflow-hidden rounded-2xl aspect-[4/3] group shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
+                <div className="relative overflow-hidden rounded-xl aspect-[4/3] group">
                     <img
                         src={milestone.image}
                         alt={milestone.title}
-                        className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                        className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.03]"
                         loading="lazy"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
-                    <div className="absolute bottom-4 left-4">
-                        <span className="text-white/90 text-6xl font-black tracking-tighter leading-none" style={{ fontFeatureSettings: "'tnum'" }}>
+                    {/* Year badge overlay */}
+                    <div className="absolute top-4 left-4">
+                        <span className="inline-block px-3 py-1 rounded-full bg-background/80 backdrop-blur-sm text-xs font-mono tracking-widest text-foreground border border-border/30">
+                            {milestone.accent}
+                        </span>
+                    </div>
+                    <div className="absolute bottom-0 inset-x-0 h-1/3 bg-gradient-to-t from-black/40 to-transparent" />
+                    <div className="absolute bottom-4 left-5">
+                        <span className="text-white text-5xl md:text-6xl font-black tracking-tighter leading-none drop-shadow-lg" style={{ fontFeatureSettings: "'tnum'" }}>
                             {milestone.year}
                         </span>
                     </div>
                 </div>
             </div>
 
-            {/* Connector dot (desktop) */}
-            <div className="hidden md:flex md:col-span-2 md:col-start-6 md:order-2 items-center justify-center">
-                <div className="w-3 h-3 rounded-full border-2 border-foreground/20 bg-background" />
+            {/* Center connector */}
+            <div className="hidden md:flex md:col-span-2 md:col-start-6 md:order-2 items-center justify-center relative">
+                <div className="w-3.5 h-3.5 rounded-full border-2 border-border bg-background ring-4 ring-background z-10" />
             </div>
 
             {/* Text */}
             <div className={`md:col-span-5 ${isEven ? "md:col-start-8 md:order-3" : "md:col-start-1 md:order-1"}`}>
-                <div className="space-y-3">
-                    <span className="text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground">
-                        {milestone.accent}
-                    </span>
+                <div className="space-y-4 md:py-8">
                     <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground leading-tight">
                         {milestone.title}
                     </h3>
@@ -98,38 +101,42 @@ export function HistorySection() {
         target: containerRef,
         offset: ["start end", "end start"],
     });
-    const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+    const lineHeight = useTransform(scrollYProgress, [0.1, 0.9], ["0%", "100%"]);
 
     return (
-        <section id="history" ref={containerRef} className="py-24 md:py-40 bg-background relative">
+        <section id="history" ref={containerRef} className="py-24 md:py-40 bg-background relative overflow-hidden">
             <div className="container mx-auto px-6">
-                {/* Header */}
-                <div className="max-w-3xl mb-20 md:mb-32">
-                    <span className="text-xs font-mono uppercase tracking-[0.25em] text-muted-foreground mb-4 block">
-                        Unsere Reise
-                    </span>
-                    <h2 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight text-foreground leading-[0.95]">
-                        Von der Schulbank
-                        <br />
-                        zum Startup.
-                    </h2>
-                    <p className="text-muted-foreground text-lg mt-6 max-w-xl leading-relaxed">
-                        Severmore ist der Beweis, dass man mit 16 Jahren
-                        Industrien verändern kann. Kein VC, kein MBA — nur Überzeugung.
-                    </p>
+                {/* Header — asymmetric editorial */}
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-20 md:mb-32">
+                    <div className="md:col-span-7">
+                        <span className="text-xs font-mono uppercase tracking-[0.25em] text-muted-foreground mb-5 block">
+                            Unsere Reise
+                        </span>
+                        <h2 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight text-foreground leading-[0.95]">
+                            Von der Schulbank
+                            <br />
+                            zum Startup.
+                        </h2>
+                    </div>
+                    <div className="md:col-span-4 md:col-start-9 flex items-end">
+                        <p className="text-muted-foreground text-base md:text-lg leading-relaxed">
+                            Severmore ist der Beweis, dass man mit 16 Jahren Industrien verändern kann.
+                            Kein VC, kein MBA — nur Überzeugung und zwei Jungs mit einer Idee.
+                        </p>
+                    </div>
                 </div>
 
                 {/* Timeline */}
                 <div className="relative">
-                    {/* Vertical progress line (desktop only) */}
-                    <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px bg-border/50">
+                    {/* Vertical line (desktop) */}
+                    <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px bg-border/40">
                         <motion.div
-                            className="w-full bg-foreground/20 origin-top"
+                            className="w-full bg-foreground/15 origin-top"
                             style={{ height: lineHeight }}
                         />
                     </div>
 
-                    <div className="space-y-16 md:space-y-28">
+                    <div className="space-y-12 md:space-y-24">
                         {milestones.map((milestone, i) => (
                             <MilestoneCard key={i} milestone={milestone} index={i} />
                         ))}
