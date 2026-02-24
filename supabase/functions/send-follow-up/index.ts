@@ -174,7 +174,7 @@ Deno.serve(async (req) => {
             Authorization: `Bearer ${RESEND_API_KEY}`,
           },
           body: JSON.stringify({
-            from: "NFCwear <noreply@severmore.de>",
+            from: "NFCwear <noreply@nfcwear.de>",
             reply_to: replyToName ? `${replyToName} <${replyToEmail}>` : replyToEmail,
             to: [lead.lead_email],
             subject: finalSubject,
