@@ -881,7 +881,7 @@ export default function SettingsPage() {
                 <FeatureGate feature="hide_branding" plan={userPlan} label="Branding entfernen">
                 <Card className="rounded-xl border-border/50">
                     <CardHeader className="pb-4">
-                        <CardTitle className="text-lg">NFCwear-Branding</CardTitle>
+                        <CardTitle className="text-lg">NFCwear-Branding entfernen</CardTitle>
                         <CardDescription>Der „Powered by NFCwear"-Link wird unter Ihrem Profil angezeigt.</CardDescription>
                     </CardHeader>
                     <CardContent>
