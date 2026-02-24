@@ -85,25 +85,25 @@ export function TopBar({ onMenuClick }: TopBarProps) {
                             <QrCode size={18} />
                         </button>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-xs">
+                    <DialogContent className="sm:max-w-sm">
                         <DialogHeader>
-                            <DialogTitle className="text-center">QR-Code</DialogTitle>
+                            <DialogTitle className="text-center text-lg">Dein QR-Code</DialogTitle>
                         </DialogHeader>
-                        <div className="flex flex-col items-center gap-4 py-4">
-                            <div className="p-4 bg-white rounded-xl" id="qr-code-container">
+                        <div className="flex flex-col items-center gap-5 py-6">
+                            <div className="p-6 bg-white rounded-2xl shadow-lg border border-gray-200" id="qr-code-container">
                                 <QRCodeSVG
                                     value={typeof window !== "undefined" ? window.location.href : ""}
-                                    size={200}
-                                    fgColor="hsl(var(--primary))"
+                                    size={240}
+                                    fgColor="#000000"
                                     bgColor="#ffffff"
-                                    level="M"
+                                    level="H"
                                 />
                             </div>
-                            <p className="text-sm text-muted-foreground text-center max-w-[220px]">
-                                Scanne mich mit der Kamera, falls NFC nicht verfügbar ist.
+                            <p className="text-sm text-muted-foreground text-center max-w-[260px]">
+                                Scanne den Code mit der Kamera, falls NFC nicht verfügbar ist.
                             </p>
-                            <Button variant="outline" size="sm" className="gap-2" onClick={handleDownloadQr}>
-                                <Download size={14} />
+                            <Button variant="outline" size="default" className="gap-2" onClick={handleDownloadQr}>
+                                <Download size={16} />
                                 Als PNG herunterladen
                             </Button>
                         </div>
