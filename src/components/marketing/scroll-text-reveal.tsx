@@ -2,24 +2,115 @@ import React, { useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 
 /**
- * Industrieller NFC Chip SVG
- * Basierend auf dem Referenzbild: Quadratische Spulen, zentraler IC, metallische Pins.
+ * Spektakulärer NFC Chip mit animierten Wellen, Glow und Partikel-Effekten
  */
 const IndustrialNfcChip = ({ progress }: { progress: any }) => {
-    // Rotation gekoppelt an Scroll-Fortschritt
-    const rotation = useTransform(progress, [0.2, 0.8], [-15, 15]);
+    const rotation = useTransform(progress, [0.2, 0.8], [-12, 12]);
     const tilt = useTransform(progress, [0.2, 0.8], [5, -5]);
 
     return (
         <motion.div
-            className="relative w-64 h-64 md:w-80 md:h-80 flex items-center justify-center pointer-events-none"
+            className="relative w-72 h-72 md:w-96 md:h-96 flex items-center justify-center pointer-events-none"
             style={{ rotateZ: rotation, rotateX: tilt }}
         >
-            <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-                {/* Chip Body / Substrat */}
-                <rect x="30" y="30" width="140" height="140" rx="4" fill="#09090b" stroke="#27272a" strokeWidth="1" />
+            {/* Äußere pulsierende NFC-Wellen */}
+            {[0, 1, 2].map((i) => (
+                <motion.div
+                    key={`wave-${i}`}
+                    className="absolute inset-0 rounded-2xl border border-blue-500/30"
+                    animate={{
+                        scale: [1, 1.3 + i * 0.15, 1.6 + i * 0.2],
+                        opacity: [0.4, 0.15, 0],
+                    }}
+                    transition={{
+                        duration: 2.5,
+                        delay: i * 0.6,
+                        repeat: Infinity,
+                        ease: "easeOut",
+                    }}
+                />
+            ))}
 
-                {/* Quadratische Antennen-Spulen (Gold/Kupfer Look für Premium) */}
+            {/* Großer äußerer Glow */}
+            <div className="absolute w-64 h-64 md:w-80 md:h-80 bg-blue-500/8 blur-[80px] rounded-full" />
+
+            {/* Floating Partikel / Sparks */}
+            {[...Array(8)].map((_, i) => {
+                const angle = (i / 8) * 360;
+                const rad = (angle * Math.PI) / 180;
+                const radius = 140;
+                return (
+                    <motion.div
+                        key={`spark-${i}`}
+                        className="absolute w-1 h-1 rounded-full bg-blue-400"
+                        style={{
+                            left: '50%',
+                            top: '50%',
+                        }}
+                        animate={{
+                            x: [Math.cos(rad) * 80, Math.cos(rad) * radius, Math.cos(rad) * 80],
+                            y: [Math.sin(rad) * 80, Math.sin(rad) * radius, Math.sin(rad) * 80],
+                            opacity: [0, 0.8, 0],
+                            scale: [0.5, 1.5, 0.5],
+                        }}
+                        transition={{
+                            duration: 3,
+                            delay: i * 0.35,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                        }}
+                    />
+                );
+            })}
+
+            <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-[0_20px_60px_rgba(59,130,246,0.15)]">
+                <defs>
+                    {/* Animierter Gradient für Spulen */}
+                    <linearGradient id="coil-active" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.9">
+                            <animate attributeName="stopColor" values="#3b82f6;#60a5fa;#fbbf24;#3b82f6" dur="4s" repeatCount="indefinite" />
+                        </stop>
+                        <stop offset="50%" stopColor="#fbbf24" stopOpacity="0.7">
+                            <animate attributeName="stopColor" values="#fbbf24;#3b82f6;#60a5fa;#fbbf24" dur="4s" repeatCount="indefinite" />
+                        </stop>
+                        <stop offset="100%" stopColor="#60a5fa" stopOpacity="0.9">
+                            <animate attributeName="stopColor" values="#60a5fa;#fbbf24;#3b82f6;#60a5fa" dur="4s" repeatCount="indefinite" />
+                        </stop>
+                    </linearGradient>
+
+                    {/* Glow-Filter */}
+                    <filter id="glow">
+                        <feGaussianBlur stdDeviation="2" result="blur" />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+
+                    {/* Starker Glow für den IC */}
+                    <filter id="ic-glow">
+                        <feGaussianBlur stdDeviation="4" result="blur" />
+                        <feMerge>
+                            <feMergeNode in="blur" />
+                            <feMergeNode in="SourceGraphic" />
+                        </feMerge>
+                    </filter>
+
+                    {/* Shine-Gradient */}
+                    <linearGradient id="shine-sweep" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="white" stopOpacity="0">
+                            <animate attributeName="offset" values="-0.5;1.5" dur="3s" repeatCount="indefinite" />
+                        </stop>
+                        <stop offset="15%" stopColor="white" stopOpacity="0.12">
+                            <animate attributeName="offset" values="-0.35;1.65" dur="3s" repeatCount="indefinite" />
+                        </stop>
+                        <stop offset="30%" stopColor="white" stopOpacity="0">
+                            <animate attributeName="offset" values="-0.2;1.8" dur="3s" repeatCount="indefinite" />
+                        </stop>
+                    </linearGradient>
+                </defs>
+
+                {/* Chip-Substrat */}
+                <rect x="30" y="30" width="140" height="140" rx="6" fill="#09090b" stroke="#27272a" strokeWidth="1" />
+
+                {/* Animierte Antennen-Spulen mit Strich-Animation */}
                 {[0, 1, 2, 3, 4, 5].map((i) => (
                     <rect
                         key={i}
@@ -29,27 +120,45 @@ const IndustrialNfcChip = ({ progress }: { progress: any }) => {
                         height={120 - i * 12}
                         rx="2"
                         fill="none"
-                        stroke="#fbbf24"
-                        strokeWidth="1"
-                        opacity={0.6 - i * 0.08}
-                    />
+                        stroke="url(#coil-active)"
+                        strokeWidth="1.5"
+                        opacity={0.7 - i * 0.06}
+                        filter="url(#glow)"
+                        strokeDasharray="480"
+                        strokeDashoffset="0"
+                    >
+                        <animate
+                            attributeName="stroke-dashoffset"
+                            values="480;0"
+                            dur={`${2 + i * 0.3}s`}
+                            repeatCount="indefinite"
+                        />
+                    </rect>
                 ))}
 
-                {/* Die Verbindung zur Mitte */}
-                <path d="M100 40 L100 75" stroke="#fbbf24" strokeWidth="1.5" strokeLinecap="round" opacity="0.8" />
+                {/* Verbindungstrace zur Mitte */}
+                <path d="M100 40 L100 75" stroke="#3b82f6" strokeWidth="1.5" strokeLinecap="round" opacity="0.9" filter="url(#glow)">
+                    <animate attributeName="opacity" values="0.4;1;0.4" dur="2s" repeatCount="indefinite" />
+                </path>
 
-                {/* Zentraler IC (Integrated Circuit) */}
-                <rect x="75" y="75" width="50" height="50" rx="2" fill="#18181b" stroke="#3f3f46" strokeWidth="1" />
+                {/* Zentraler IC mit Glow */}
+                <rect x="75" y="75" width="50" height="50" rx="3" fill="#18181b" stroke="#3b82f6" strokeWidth="0.5" filter="url(#ic-glow)" opacity="0.9">
+                    <animate attributeName="stroke-opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
+                </rect>
 
-                {/* Pins am Rand des ICs */}
+                {/* IC Pins */}
                 {[0, 1, 2, 3].map(i => (
                     <React.Fragment key={i}>
-                        <rect x="70" y={80 + i * 10} width="6" height="3" fill="#a1a1aa" /> {/* Links */}
-                        <rect x="124" y={80 + i * 10} width="6" height="3" fill="#a1a1aa" /> {/* Rechts */}
+                        <rect x="70" y={80 + i * 10} width="6" height="3" rx="0.5" fill="#a1a1aa">
+                            <animate attributeName="fill" values="#a1a1aa;#60a5fa;#a1a1aa" dur="2s" begin={`${i * 0.2}s`} repeatCount="indefinite" />
+                        </rect>
+                        <rect x="124" y={80 + i * 10} width="6" height="3" rx="0.5" fill="#a1a1aa">
+                            <animate attributeName="fill" values="#a1a1aa;#60a5fa;#a1a1aa" dur="2s" begin={`${i * 0.2 + 0.1}s`} repeatCount="indefinite" />
+                        </rect>
                     </React.Fragment>
                 ))}
 
-                {/* NFC Text-Gravur */}
+                {/* NFCWEAR Text */}
                 <text
                     x="100" y="105"
                     textAnchor="middle"
@@ -62,19 +171,17 @@ const IndustrialNfcChip = ({ progress }: { progress: any }) => {
                     NFCWEAR
                 </text>
 
-                {/* Licht-Reflektion (Glanzeffekt) */}
-                <defs>
-                    <linearGradient id="shine" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="white" stopOpacity="0.05" />
-                        <stop offset="50%" stopColor="white" stopOpacity="0" />
-                        <stop offset="100%" stopColor="white" stopOpacity="0.02" />
-                    </linearGradient>
-                </defs>
-                <rect x="30" y="30" width="140" height="140" rx="4" fill="url(#shine)" pointerEvents="none" />
+                {/* Laufender Shine-Effekt */}
+                <rect x="30" y="30" width="140" height="140" rx="6" fill="url(#shine-sweep)" pointerEvents="none" />
             </svg>
 
-            {/* Zentraler hochenergetischer Glow */}
-            <div className="absolute w-32 h-32 bg-blue-500/10 blur-[60px] rounded-full pointer-events-none" />
+            {/* Inner Glow */}
+            <motion.div
+                className="absolute w-24 h-24 rounded-full pointer-events-none"
+                style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.25) 0%, transparent 70%)' }}
+                animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0.8, 0.5] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            />
         </motion.div>
     );
 };
@@ -82,11 +189,9 @@ const IndustrialNfcChip = ({ progress }: { progress: any }) => {
 export function ScrollTextReveal() {
     const containerRef = useRef(null);
 
-    // Always dark mode for this section as requested
     const theme = {
         bg: "bg-background",
         text: "text-foreground",
-        revealBg: "bg-card",
         revealText: "text-foreground",
     };
 
@@ -101,25 +206,13 @@ export function ScrollTextReveal() {
         restDelta: 0.001
     });
 
-    // Unified Y transformation for the main container:
-    // 0 -> 0.5: Slide in from bottom (100vh -> 0vh)
-    // 0.5 -> 0.8: Stay centered (0vh)
-    // 0.8 -> 1.0: Slide up and out to make room (0vh -> -100vh)
     const containerY = useTransform(smoothProgress, [0, 0.5, 0.8, 1], ["100vh", "0vh", "0vh", "-100vh"]);
-
     const circleScale = useTransform(smoothProgress, [0.4, 0.9], [0.8, 1.5]);
     const circleRadius = useTransform(smoothProgress, [0.85, 1], ["50%", "0%"]);
-
     const chipScale = useTransform(smoothProgress, [0.3, 0.7], [0.5, 1.2]);
     const chipOpacity = useTransform(smoothProgress, [0.3, 0.5], [0, 1]);
-
-    // Fade out the background text earlier so it doesn't clash with the chip
     const textOpacity = useTransform(smoothProgress, [0, 0.3], [1, 0]);
-
-    // Scale up the background text as it fades
     const textScale = useTransform(smoothProgress, [0, 0.3], [1, 1.5]);
-
-    // Cleanup phase: Fade out the container content at the end
     const contentFadeOut = useTransform(smoothProgress, [0.8, 0.95], [1, 0]);
 
     return (
@@ -127,10 +220,7 @@ export function ScrollTextReveal() {
             ref={containerRef}
             className={`relative ${theme.bg} ${theme.text} h-[450vh] mb-0 overflow-visible z-10`}
         >
-            {/* Sticky Animation Container */}
             <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
-
-                {/* Hintergrund-Beschriftung (Erscheint nur im initialen Modus) */}
                 <motion.div
                     style={{ opacity: textOpacity, scale: textScale }}
                     className="absolute inset-0 flex items-center justify-center z-0"
@@ -140,22 +230,17 @@ export function ScrollTextReveal() {
                     </h2>
                 </motion.div>
 
-                {/* Der Reveal-Kreis */}
                 <motion.div
                     style={{
                         y: containerY,
                         scale: circleScale,
                         borderRadius: circleRadius,
-                        opacity: contentFadeOut, // Fade out
+                        opacity: contentFadeOut,
                     }}
-                    className={`absolute inset-0 z-20 flex items-center justify-center`}
+                    className="absolute inset-0 z-20 flex items-center justify-center"
                 >
-                    {/* Inhalt innerhalb des Reveal-Kreises */}
                     <motion.div
-                        style={{
-                            scale: chipScale,
-                            opacity: chipOpacity
-                        }}
+                        style={{ scale: chipScale, opacity: chipOpacity }}
                         className="flex flex-col items-center p-6"
                     >
                         <IndustrialNfcChip progress={smoothProgress} />
@@ -169,19 +254,14 @@ export function ScrollTextReveal() {
                             >
                                 NTAG424 DNA Technologie
                             </motion.span>
-
-                            <h2 className="text-4xl md:text-7xl font-bold tracking-tighter mb-6 bg-clip-text text-transparent bg-gradient-to-b from-foreground to-muted-foreground">
+                            <h2 className="text-4xl md:text-7xl font-extrabold tracking-tighter mb-6 bg-clip-text text-transparent bg-gradient-to-b from-foreground to-muted-foreground">
                                 Unfälschbare<br />Identität.
                             </h2>
-
-
                         </div>
                     </motion.div>
                 </motion.div>
-
             </div>
 
-            {/* Scroll-Indikator am Fuß der ersten Sektion */}
             <motion.div
                 style={{ opacity: textOpacity }}
                 className="absolute bottom-10 left-0 right-0 flex flex-col items-center gap-2"
