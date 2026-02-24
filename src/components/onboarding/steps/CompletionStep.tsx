@@ -1,29 +1,28 @@
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { CheckCircle2, Loader2, ArrowRight, Sparkles, Copy, Circle } from "lucide-react";
+import { CheckCircle2, Loader2, ArrowRight, Sparkles, Copy, Zap, Clock, Mail, Smartphone } from "lucide-react";
 import { OnboardingData } from "@/types/onboarding";
 import { QRCodeCanvas } from "qrcode.react";
-import { useAuth } from "@/contexts/auth-context";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 interface CompletionStepProps {
     data: OnboardingData;
+    updateData: (updates: Partial<OnboardingData>) => void;
     onComplete: () => Promise<void>;
     isSubmitting: boolean;
     error?: string | null;
 }
 
-export function CompletionStep({ data, onComplete, isSubmitting, error }: CompletionStepProps) {
-    const { user: _user } = useAuth();
+export function CompletionStep({ data, updateData, onComplete, isSubmitting, error }: CompletionStepProps) {
     const [copied, setCopied] = useState(false);
 
-    // We try to use the slug from user metadata first, but for now we'll construct a likely one
-    // In a real scenario we'd pass the actual slug here
-    const profileUrl = `nfc.severmore.de/p/${data.displayName?.toLowerCase().replace(/\s+/g, '-') || 'user'}`;
+    const slug = data.slug || data.displayName?.toLowerCase().replace(/\s+/g, '-') || 'user';
+    const profileUrl = `nfcwear.de/p/${slug}`;
     const fullUrl = `https://${profileUrl}`;
 
     const handleCopy = () => {
@@ -32,114 +31,126 @@ export function CompletionStep({ data, onComplete, isSubmitting, error }: Comple
         setTimeout(() => setCopied(false), 2000);
     };
 
+    const getDelayLabel = (hours: number) => {
+        if (hours >= 168) return '1 Woche';
+        if (hours >= 48) return `${Math.round(hours / 24)} Tage`;
+        return `${hours} Stunden`;
+    };
+
     return (
-        <div className="text-center space-y-8">
-            {/* Success Animation */}
-            <div className="relative mx-auto w-24 h-24 mb-6">
-                <div className="absolute inset-0 bg-gradient-to-br from-green-400 to-emerald-600 rounded-full blur-2xl opacity-30 animate-pulse" />
-                <div className="relative bg-gradient-to-br from-green-400 to-emerald-600 rounded-full w-full h-full flex items-center justify-center">
-                    <CheckCircle2 className="w-12 h-12 text-white" />
+        <div className="space-y-6">
+            {/* Success header */}
+            <div className="text-center space-y-3">
+                <div className="relative mx-auto w-16 h-16">
+                    <div className="absolute inset-0 bg-green-500/30 rounded-full blur-xl animate-pulse" />
+                    <div className="relative bg-gradient-to-br from-green-400 to-emerald-600 rounded-full w-full h-full flex items-center justify-center">
+                        <CheckCircle2 className="w-8 h-8 text-white" />
+                    </div>
                 </div>
-            </div>
-
-            {/* Congratulations Text */}
-            <div className="space-y-3">
-                <h1 className="text-4xl font-bold text-foreground flex items-center justify-center gap-3">
-                    <Sparkles className="w-8 h-8 text-yellow-400" />
-                    Herzlichen Glückwunsch!
+                <h1 className="text-2xl sm:text-3xl font-bold text-foreground flex items-center justify-center gap-2">
+                    <Sparkles className="w-6 h-6 text-yellow-400" />
+                    Fast geschafft!
                 </h1>
-                <p className="text-lg text-muted-foreground max-w-md mx-auto">
-                    Ihr Profil ist bereit! Hier ist Ihr persönlicher Link.
-                </p>
+                <p className="text-muted-foreground text-sm">Ihr Profil ist bereit. Hier ist Ihr persönlicher Link.</p>
             </div>
 
-            {/* Error Alert */}
             {error && (
-                <Alert variant="destructive" className="max-w-md mx-auto text-left">
+                <Alert variant="destructive" className="text-left">
                     <AlertCircle className="h-4 w-4" />
                     <AlertTitle>Fehler</AlertTitle>
-                    <AlertDescription>
-                        {error}
-                    </AlertDescription>
+                    <AlertDescription>{error}</AlertDescription>
                 </Alert>
             )}
 
-            {/* Link & QR Code Section */}
-            <Card className="bg-card p-6 max-w-md mx-auto overflow-hidden border-border">
-                <div className="flex flex-col items-center gap-6">
-                    <div className="bg-white p-2 rounded-xl shadow-lg border border-gray-100">
-                        <QRCodeCanvas value={fullUrl} size={150} level={"H"} />
-                    </div>
-
-                    <div className="w-full space-y-2">
-                        <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Ihr Profil Link</p>
-                        <div className="flex items-center gap-2 bg-muted border border-border p-1 pl-4 rounded-lg">
-                            <span className="flex-1 text-left text-foreground font-medium truncate">{profileUrl}</span>
-                            <Button
-                                size="sm"
-                                variant={copied ? "default" : "secondary"}
-                                onClick={handleCopy}
-                                className={cn(
-                                    "transition-all",
-                                    copied ? "bg-green-500 hover:bg-green-600 text-white" : ""
-                                )}
-                            >
-                                {copied ? <CheckCircle2 className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                            </Button>
-                        </div>
-                    </div>
+            {/* Profile Link + QR */}
+            <div className="bg-card border border-border rounded-xl p-5 flex flex-col sm:flex-row items-center gap-5">
+                <div className="bg-white p-2 rounded-lg shadow-sm shrink-0">
+                    <QRCodeCanvas value={fullUrl} size={100} level="H" />
                 </div>
-            </Card>
-
-            {/* 3 Quick Wins Checklist */}
-            <div className="max-w-md mx-auto bg-card rounded-lg p-5 border border-border">
-                <h3 className="font-semibold text-foreground mb-4 text-left">3 Quick Wins für den Start:</h3>
-                <div className="space-y-3">
-                    <div className="flex items-center gap-3 text-left">
-                        <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />
-                        <span className="text-muted-foreground">Teilen Sie Ihre Karte mit 3 Personen heute</span>
-                    </div>
-                    {!data.automationInterest && (
-                        <div className="flex items-center gap-3 text-left opacity-70">
-                            <Circle className="w-5 h-5 text-muted-foreground flex-shrink-0" />
-                            <span className="text-muted-foreground">Automatisierung einrichten</span>
-                        </div>
-                    )}
-                    <div className="flex items-center gap-3 text-left opacity-70">
-                        <Circle className="w-5 h-5 text-muted-foreground flex-shrink-0" />
-                        <span className="text-muted-foreground">Bestellen Sie Ihr NFC-Produkt</span>
+                <div className="flex-1 w-full space-y-2">
+                    <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Ihr Profil-Link</p>
+                    <div className="flex items-center gap-2 bg-muted border border-border p-1 pl-3 rounded-lg">
+                        <span className="flex-1 text-foreground text-sm font-medium truncate">{profileUrl}</span>
+                        <Button size="sm" variant={copied ? "default" : "secondary"} onClick={handleCopy}
+                            className={cn("transition-all shrink-0", copied ? "bg-green-500 hover:bg-green-600 text-white" : "")}>
+                            {copied ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                        </Button>
                     </div>
                 </div>
             </div>
 
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-                <Button
-                    onClick={() => window.open(fullUrl, '_blank')}
-                    variant="secondary"
-                    size="lg"
-                    className="w-full sm:w-auto text-lg px-8 py-6"
-                >
-                    Meine Karte ansehen
-                </Button>
+            {/* Follow-up automation */}
+            <div className="bg-card border border-border rounded-xl p-5 space-y-4">
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                            <Zap className="w-4 h-4 text-primary" />
+                        </div>
+                        <div>
+                            <h3 className="text-sm font-semibold text-foreground">Auto Follow-up</h3>
+                            <p className="text-[11px] text-muted-foreground">Automatisch E-Mails nach Kontaktaustausch</p>
+                        </div>
+                    </div>
+                    <Switch
+                        checked={data.automationInterest}
+                        onCheckedChange={(checked) => updateData({ automationInterest: checked })}
+                    />
+                </div>
 
-                <Button
-                    onClick={onComplete}
-                    disabled={isSubmitting}
-                    size="lg"
-                    className="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-6 text-lg font-semibold shadow-lg shadow-purple-500/20"
-                >
+                {data.automationInterest && (
+                    <div className="space-y-3 pt-2 border-t border-border">
+                        {/* Visual flow */}
+                        <div className="flex items-center justify-center gap-3 text-muted-foreground py-2">
+                            <div className="flex flex-col items-center gap-1">
+                                <Smartphone className="w-4 h-4" />
+                                <span className="text-[9px]">Scan</span>
+                            </div>
+                            <div className="w-6 h-px bg-border" />
+                            <div className="flex flex-col items-center gap-1">
+                                <Clock className="w-4 h-4" />
+                                <span className="text-[9px]">{getDelayLabel(data.automationDelayHours || 24)}</span>
+                            </div>
+                            <div className="w-6 h-px bg-border" />
+                            <div className="flex flex-col items-center gap-1 text-primary">
+                                <Mail className="w-4 h-4" />
+                                <span className="text-[9px]">E-Mail</span>
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <div className="flex justify-between text-xs">
+                                <Label className="text-muted-foreground">Verzögerung</Label>
+                                <span className="font-medium text-foreground">{getDelayLabel(data.automationDelayHours || 24)}</span>
+                            </div>
+                            <Slider
+                                defaultValue={[data.automationDelayHours || 24]}
+                                max={168}
+                                min={6}
+                                step={1}
+                                onValueChange={(v) => updateData({ automationDelayHours: v[0], automationInterest: true })}
+                            />
+                        </div>
+
+                        <p className="text-[10px] text-muted-foreground bg-muted rounded-lg p-2 flex items-start gap-1.5">
+                            <Zap className="w-3 h-3 shrink-0 mt-0.5 text-primary" />
+                            Pro-Tipp: 24h Follow-ups haben 3x höhere Rücklaufquoten. Texte können Sie im Dashboard anpassen.
+                        </p>
+                    </div>
+                )}
+            </div>
+
+            {/* CTA */}
+            <div className="flex flex-col gap-3 pt-2">
+                <Button onClick={onComplete} disabled={isSubmitting} size="lg"
+                    className="w-full py-6 text-base font-semibold">
                     {isSubmitting ? (
-                        <>
-                            <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                            Wird gespeichert...
-                        </>
+                        <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Wird gespeichert...</>
                     ) : (
-                        <>
-                            Zum Dashboard
-                            <ArrowRight className="w-5 h-5 ml-2" />
-                        </>
+                        <><ArrowRight className="w-4 h-4 mr-2" /> Zum Dashboard</>
                     )}
+                </Button>
+                <Button variant="ghost" onClick={() => window.open(fullUrl, '_blank')} className="text-muted-foreground text-sm">
+                    Profil-Vorschau öffnen ↗
                 </Button>
             </div>
         </div>
