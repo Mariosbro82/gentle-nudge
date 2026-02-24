@@ -41,14 +41,20 @@ const TESTIMONIALS = [
 
 export function SocialProof() {
     return (
-        <section className="py-24 bg-background border-t border-border relative overflow-hidden">
+        <section className="py-24 bg-background border-t border-border/50 relative overflow-hidden">
             {/* Background Glow */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-blue-500/5 rounded-full blur-[120px] pointer-events-none" />
 
-            <div className="container mx-auto px-4 relative z-10">
+            <div className="container mx-auto px-6 relative z-10">
 
                 {/* Press Section */}
-                <div className="text-center mb-16">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                    className="text-center mb-16"
+                >
                     <p className="text-sm font-medium text-muted-foreground mb-8 uppercase tracking-widest">
                         Bekannt aus
                     </p>
@@ -62,8 +68,8 @@ export function SocialProof() {
                                 initial={{ opacity: 0, y: 10 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
-                                transition={{ delay: idx * 0.1 }}
-                                className="grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition-all duration-300"
+                                transition={{ delay: idx * 0.08 }}
+                                className="grayscale hover:grayscale-0 opacity-50 hover:opacity-100 transition-all duration-300"
                             >
                                 <img
                                     src={logo.src}
@@ -73,24 +79,25 @@ export function SocialProof() {
                             </motion.a>
                         ))}
                     </div>
-                </div>
+                </motion.div>
 
                 {/* Divider */}
-                <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent my-16" />
+                <div className="h-px bg-gradient-to-r from-transparent via-border/50 to-transparent my-16" />
 
                 {/* Stats Bar */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
                     className="grid grid-cols-2 gap-6 mb-16 max-w-2xl mx-auto"
                 >
                     {[
                         { value: "5/5", label: "Kundenbewertung", icon: "⭐" },
                         { value: "🏆", label: "Gründungspreis U21", icon: "" },
                     ].map((stat, i) => (
-                        <div key={i} className="text-center p-4 rounded-xl glass-card">
-                            <p className="text-2xl md:text-3xl font-bold text-foreground mb-1">
+                        <div key={i} className="text-center p-4 rounded-xl glass-card shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+                            <p className="text-2xl md:text-3xl font-extrabold text-foreground mb-1 tracking-tight">
                                 {stat.icon && <span className="mr-1">{stat.icon}</span>}
                                 {stat.value}
                             </p>
@@ -100,8 +107,14 @@ export function SocialProof() {
                 </motion.div>
 
                 {/* Customer Testimonials */}
-                <div className="text-center mb-12">
-                    <h3 className="text-2xl md:text-4xl font-bold text-foreground mb-3">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                    className="text-center mb-12"
+                >
+                    <h3 className="text-2xl md:text-4xl font-extrabold text-foreground mb-3 tracking-tight leading-tight">
                         Das sagen unsere Kunden
                     </h3>
                     <div className="flex items-center justify-center gap-1 mb-2">
@@ -110,7 +123,7 @@ export function SocialProof() {
                         ))}
                     </div>
                     <p className="text-sm text-muted-foreground">Rated 5/5 in Reviews</p>
-                </div>
+                </motion.div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
                     {TESTIMONIALS.map((t, idx) => (
@@ -119,8 +132,8 @@ export function SocialProof() {
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            transition={{ delay: idx * 0.1 }}
-                            className="p-6 rounded-2xl glass-card relative overflow-hidden hover:border-foreground/20 transition-colors"
+                            transition={{ delay: idx * 0.1, duration: 0.5, ease: "easeOut" }}
+                            className="p-6 rounded-2xl glass-card relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:border-foreground/20"
                         >
                             <Quote className="w-8 h-8 text-muted-foreground/20 absolute top-4 right-4" />
                             <div className="flex gap-0.5 mb-3">
@@ -160,7 +173,7 @@ export function SocialProofBar() {
 /** Mini press logos strip for embedding */
 export function PressLogosStrip() {
     return (
-        <div className="flex flex-wrap items-center justify-center gap-6 opacity-40 hover:opacity-70 transition-opacity">
+        <div className="flex flex-wrap items-center justify-center gap-6 opacity-40 hover:opacity-70 transition-opacity duration-300">
             {PRESS_LOGOS.slice(0, 4).map((logo, idx) => (
                 <img key={idx} src={logo.src} alt={logo.alt} className="h-6 w-auto object-contain grayscale" />
             ))}

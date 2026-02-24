@@ -41,7 +41,7 @@ function MilestoneCard({ milestone, index }: { milestone: typeof milestones[0]; 
         offset: ["start end", "center center"],
     });
     const opacity = useTransform(scrollYProgress, [0, 0.6], [0, 1]);
-    const y = useTransform(scrollYProgress, [0, 0.6], [60, 0]);
+    const y = useTransform(scrollYProgress, [0, 0.6], [40, 0]);
 
     const isEven = index % 2 === 0;
 
@@ -53,7 +53,7 @@ function MilestoneCard({ milestone, index }: { milestone: typeof milestones[0]; 
         >
             {/* Image */}
             <div className={`md:col-span-5 ${isEven ? "md:col-start-1 md:order-1" : "md:col-start-8 md:order-3"}`}>
-                <div className="relative overflow-hidden rounded-2xl aspect-[4/3] group">
+                <div className="relative overflow-hidden rounded-2xl aspect-[4/3] group shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
                     <img
                         src={milestone.image}
                         alt={milestone.title}
@@ -80,7 +80,7 @@ function MilestoneCard({ milestone, index }: { milestone: typeof milestones[0]; 
                     <span className="text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground">
                         {milestone.accent}
                     </span>
-                    <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground leading-tight">
+                    <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground leading-tight">
                         {milestone.title}
                     </h3>
                     <p className="text-muted-foreground leading-relaxed text-base max-w-md">
@@ -122,7 +122,7 @@ export function HistorySection() {
                 {/* Timeline */}
                 <div className="relative">
                     {/* Vertical progress line (desktop only) */}
-                    <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px bg-border">
+                    <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px bg-border/50">
                         <motion.div
                             className="w-full bg-foreground/20 origin-top"
                             style={{ height: lineHeight }}

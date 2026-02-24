@@ -22,7 +22,7 @@ const Benefit = ({ text, checked }: BenefitProps) => {
           <X className="size-3" />
         </span>
       )}
-      <span className="text-sm dark:text-zinc-300 text-zinc-600">{text}</span>
+      <span className="text-sm text-muted-foreground">{text}</span>
     </div>
   )
 }
@@ -48,27 +48,29 @@ export const PricingCard = ({
 }: PricingCardProps) => {
   return (
     <motion.div
-      initial={{ filter: "blur(2px)" }}
-      whileInView={{ filter: "blur(0px)" }}
-      transition={{ duration: 0.5, ease: "easeInOut", delay: 0.25 }}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="group"
     >
       <Card
         className={cn(
-          "relative h-full w-full overflow-hidden border",
-          "dark:border-zinc-700 dark:bg-gradient-to-br dark:from-zinc-950/50 dark:to-zinc-900/80",
-          "border-zinc-200 bg-gradient-to-br from-zinc-50/50 to-zinc-100/80",
+          "relative h-full w-full overflow-hidden border transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)]",
+          "dark:border-zinc-700/50 dark:bg-gradient-to-br dark:from-zinc-950/50 dark:to-zinc-900/80",
+          "border-zinc-200/50 bg-gradient-to-br from-zinc-50/50 to-zinc-100/80",
           "p-6",
           className
         )}
       >
-        <div className="flex flex-col items-center border-b pb-6 dark:border-zinc-700 border-zinc-200">
-          <span className="mb-6 inline-block dark:text-zinc-50 text-zinc-900">
+        <div className="flex flex-col items-center border-b pb-6 dark:border-zinc-700/50 border-zinc-200/50">
+          <span className="mb-6 inline-block text-foreground font-bold tracking-tight">
             {tier}
           </span>
-          <span className="mb-3 inline-block text-4xl font-medium">
+          <span className="mb-3 inline-block text-4xl font-extrabold tracking-tight">
             {price}
           </span>
-          <span className="dark:bg-gradient-to-br dark:from-zinc-200 dark:to-zinc-500 bg-gradient-to-br from-zinc-700 to-zinc-900 bg-clip-text text-center text-transparent">
+          <span className="dark:bg-gradient-to-br dark:from-zinc-200 dark:to-zinc-500 bg-gradient-to-br from-zinc-700 to-zinc-900 bg-clip-text text-center text-transparent text-sm">
             {bestFor}
           </span>
         </div>
@@ -80,7 +82,10 @@ export const PricingCard = ({
         {href ? (
           <Link to={href} className="w-full block">
             <Button
-              className="w-full"
+              className={cn(
+                "w-full transition-all duration-300",
+                tier === "Business" && "shadow-[0_4px_14px_rgba(37,99,235,0.25)] hover:shadow-[0_6px_20px_rgba(37,99,235,0.35)]"
+              )}
               variant={tier === "Business" ? "default" : "ghost"}
             >
               {CTA}
@@ -88,7 +93,10 @@ export const PricingCard = ({
           </Link>
         ) : (
           <Button
-            className="w-full"
+            className={cn(
+              "w-full transition-all duration-300",
+              tier === "Business" && "shadow-[0_4px_14px_rgba(37,99,235,0.25)] hover:shadow-[0_6px_20px_rgba(37,99,235,0.35)]"
+            )}
             variant={tier === "Business" ? "default" : "ghost"}
           >
             {CTA}

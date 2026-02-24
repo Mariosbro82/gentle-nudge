@@ -1,7 +1,12 @@
-
-
-
+import { motion } from "framer-motion";
 import { UserX, BarChart3, Keyboard, Cpu, Circle, Layers } from "lucide-react";
+
+const fadeUp = {
+    initial: { opacity: 0, y: 20 } as const,
+    whileInView: { opacity: 1, y: 0 } as const,
+    viewport: { once: true } as const,
+    transition: { duration: 0.5, ease: "easeOut" as const },
+};
 
 export function IdeaSection() {
     return (
@@ -10,52 +15,40 @@ export function IdeaSection() {
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px] pointer-events-none" />
 
             <div className="container mx-auto px-6 relative z-10">
-                <div className="max-w-3xl mx-auto text-center mb-16">
-                    <h2 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground to-muted-foreground mb-6">
+                <motion.div {...fadeUp} className="max-w-3xl mx-auto text-center mb-20">
+                    <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-foreground to-muted-foreground mb-6 leading-tight">
                         Unsere Idee
                     </h2>
                     <p className="text-lg text-muted-foreground leading-relaxed">
                         Corporate Fashion war bisher ein blinder Fleck. Wir denken Textilien als <span className="text-blue-400 font-semibold">digitale Schnittstelle</span>.
                         Was wäre, wenn dein Hoodie gleichzeitig Visitenkarte, Zahlungsterminal und Marketing-Kanal wäre?
                     </p>
-                </div>
+                </motion.div>
 
                 {/* The Problem Grid */}
                 <div className="mb-24">
-                    <h3 className="text-2xl font-bold text-foreground mb-8 text-center">Das Problem</h3>
+                    <motion.h3 {...fadeUp} className="text-2xl font-extrabold text-foreground mb-8 text-center tracking-tight">Das Problem</motion.h3>
                     <div className="grid md:grid-cols-3 gap-8">
-                        {/* Problem 1 */}
-                        <div className="p-8 rounded-3xl glass-card hover:bg-accent/50 transition-all group flex flex-col items-center text-center">
-                            <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center mb-6 group-hover:bg-red-500/30 transition-colors">
-                                <UserX className="w-6 h-6 text-red-400" />
-                            </div>
-                            <h4 className="text-xl font-bold text-foreground mb-3">Leads gehen verloren</h4>
-                            <p className="text-muted-foreground text-sm">
-                                Ohne automatisiertes Capturing gehen bis zu 70% der Kontakte auf Events verloren – ein massiver Revenue Gap.
-                            </p>
-                        </div>
-
-                        {/* Problem 2 */}
-                        <div className="p-8 rounded-3xl glass-card hover:bg-accent/50 transition-all group flex flex-col items-center text-center">
-                            <div className="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center mb-6 group-hover:bg-orange-500/30 transition-colors">
-                                <BarChart3 className="w-6 h-6 text-orange-400" />
-                            </div>
-                            <h4 className="text-xl font-bold text-foreground mb-3">Keine Messbarkeit</h4>
-                            <p className="text-muted-foreground text-sm">
-                                Klassisches Merch liefert keine Daten. Ohne KPIs kein fundiertes Entscheiden – ein blinder Fleck im Marketing.
-                            </p>
-                        </div>
-
-                        {/* Problem 3 */}
-                        <div className="p-8 rounded-3xl glass-card hover:bg-accent/50 transition-all group flex flex-col items-center text-center">
-                            <div className="w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center mb-6 group-hover:bg-yellow-500/30 transition-colors">
-                                <Keyboard className="w-6 h-6 text-yellow-400" />
-                            </div>
-                            <h4 className="text-xl font-bold text-foreground mb-3">Manueller Aufwand</h4>
-                            <p className="text-muted-foreground text-sm">
-                                Visitenkarten müssen mühsam abgetippt werden – ein fehleranfälliger Prozess mit unnötig langer Time-to-CRM.
-                            </p>
-                        </div>
+                        {[
+                            { icon: UserX, color: "red", title: "Leads gehen verloren", desc: "Ohne automatisiertes Capturing gehen bis zu 70% der Kontakte auf Events verloren – ein massiver Revenue Gap." },
+                            { icon: BarChart3, color: "orange", title: "Keine Messbarkeit", desc: "Klassisches Merch liefert keine Daten. Ohne KPIs kein fundiertes Entscheiden – ein blinder Fleck im Marketing." },
+                            { icon: Keyboard, color: "yellow", title: "Manueller Aufwand", desc: "Visitenkarten müssen mühsam abgetippt werden – ein fehleranfälliger Prozess mit unnötig langer Time-to-CRM." },
+                        ].map((item, i) => (
+                            <motion.div
+                                key={item.title}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.1, duration: 0.5, ease: "easeOut" }}
+                                className="p-8 rounded-3xl glass-card transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] group flex flex-col items-center text-center"
+                            >
+                                <div className={`w-12 h-12 rounded-full bg-${item.color}-500/20 flex items-center justify-center mb-6 group-hover:bg-${item.color}-500/30 transition-colors`}>
+                                    <item.icon className={`w-6 h-6 text-${item.color}-400`} />
+                                </div>
+                                <h4 className="text-xl font-bold text-foreground mb-3 tracking-tight">{item.title}</h4>
+                                <p className="text-muted-foreground text-sm">{item.desc}</p>
+                            </motion.div>
+                        ))}
                     </div>
                 </div>
 
@@ -64,8 +57,8 @@ export function IdeaSection() {
                     <div className="absolute inset-0 bg-gradient-to-b from-purple-500/5 to-blue-500/5 rounded-[3rem] blur-3xl -z-10" />
 
                     <div className="grid lg:grid-cols-2 gap-12 items-center">
-                        <div className="text-left">
-                            <h3 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
+                        <motion.div {...fadeUp} className="text-left">
+                            <h3 className="text-3xl md:text-4xl font-extrabold text-foreground mb-6 tracking-tight leading-tight">
                                 Engineering trifft Fashion.
                             </h3>
                             <p className="text-lg text-muted-foreground mb-12">
@@ -73,49 +66,39 @@ export function IdeaSection() {
                             </p>
 
                             <div className="space-y-8">
-                                {/* Feature 1 */}
-                                <div className="flex gap-4">
-                                    <div className="w-12 h-12 rounded-2xl glass-subtle flex items-center justify-center flex-shrink-0">
-                                        <Cpu className="w-6 h-6 text-blue-400" />
-                                    </div>
-                                    <div>
-                                        <h4 className="text-foreground font-bold mb-1">NTAG424 DNA</h4>
-                                        <p className="text-muted-foreground text-sm">
-                                            NFC-Chips mit militärischer Sicherheit und SUN-Authentifizierung. Die sicherste Consumer-NFC-Technologie.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                {/* Feature 2 */}
-                                <div className="flex gap-4">
-                                    <div className="w-12 h-12 rounded-2xl glass-subtle flex items-center justify-center flex-shrink-0">
-                                        <Circle className="w-6 h-6 text-purple-400" />
-                                    </div>
-                                    <div>
-                                        <h4 className="text-foreground font-bold mb-1">35mm Runde Tags</h4>
-                                        <p className="text-muted-foreground text-sm">
-                                            Premium NFC-Tags nahtlos in den Stoff integriert. Unsichtbar, aber immer erreichbar.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                {/* Feature 3 */}
-                                <div className="flex gap-4">
-                                    <div className="w-12 h-12 rounded-2xl glass-subtle flex items-center justify-center flex-shrink-0">
-                                        <Layers className="w-6 h-6 text-pink-400" />
-                                    </div>
-                                    <div>
-                                        <h4 className="text-foreground font-bold mb-1">Double-Woven Tech</h4>
-                                        <p className="text-muted-foreground text-sm">
-                                            Proprietäre Doppelwebtechnologie für Haltbarkeit über 500+ Waschzyklen.
-                                        </p>
-                                    </div>
-                                </div>
+                                {[
+                                    { icon: Cpu, color: "blue", title: "NTAG424 DNA", desc: "NFC-Chips mit militärischer Sicherheit und SUN-Authentifizierung. Die sicherste Consumer-NFC-Technologie." },
+                                    { icon: Circle, color: "purple", title: "35mm Runde Tags", desc: "Premium NFC-Tags nahtlos in den Stoff integriert. Unsichtbar, aber immer erreichbar." },
+                                    { icon: Layers, color: "pink", title: "Double-Woven Tech", desc: "Proprietäre Doppelwebtechnologie für Haltbarkeit über 500+ Waschzyklen." },
+                                ].map((f, i) => (
+                                    <motion.div
+                                        key={f.title}
+                                        initial={{ opacity: 0, x: -20 }}
+                                        whileInView={{ opacity: 1, x: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ delay: i * 0.1, duration: 0.5, ease: "easeOut" }}
+                                        className="flex gap-4"
+                                    >
+                                        <div className="w-12 h-12 rounded-2xl glass-subtle flex items-center justify-center flex-shrink-0">
+                                            <f.icon className={`w-6 h-6 text-${f.color}-400`} />
+                                        </div>
+                                        <div>
+                                            <h4 className="text-foreground font-bold mb-1 tracking-tight">{f.title}</h4>
+                                            <p className="text-muted-foreground text-sm">{f.desc}</p>
+                                        </div>
+                                    </motion.div>
+                                ))}
                             </div>
-                        </div>
+                        </motion.div>
 
                         {/* Technical Drawing Placeholder */}
-                        <div className="relative aspect-[4/5] glass-card rounded-3xl flex items-center justify-center overflow-hidden">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.6, ease: "easeOut" }}
+                            className="relative aspect-[4/5] glass-card rounded-3xl flex items-center justify-center overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.06)]"
+                        >
                             <video
                                 src="/assets/best-render-vid.mp4"
                                 autoPlay
@@ -124,7 +107,7 @@ export function IdeaSection() {
                                 playsInline
                                 className="w-full h-full object-cover"
                             />
-                        </div>
+                        </motion.div>
                     </div>
                 </div>
 

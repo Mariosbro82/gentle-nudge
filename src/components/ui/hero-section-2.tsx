@@ -1,6 +1,5 @@
 'use client'
 
-
 import { Link } from 'react-router-dom'
 import { ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -52,20 +51,20 @@ export function HeroSection() {
                                 >
                                     <Link
                                         to="/pricing"
-                                        className="hover:bg-primary/10 glass-card group mx-auto flex max-w-fit items-center gap-4 rounded-full border px-5 py-2 text-sm transition-all duration-300"
+                                        className="hover:bg-primary/10 glass-card group mx-auto flex max-w-fit items-center gap-4 rounded-full border border-border/50 px-5 py-2 text-sm transition-all duration-300"
                                     >
                                         <span className="text-foreground">Sonderpreisträger 2025 🏆</span>
                                         <ChevronRight className="size-4 text-muted-foreground group-hover:translate-x-0.5 transition-transform" />
                                     </Link>
 
-                                    <h1 className="mt-8 max-w-4xl text-balance text-5xl font-bold md:text-7xl lg:mt-16 text-foreground">
+                                    <h1 className="mt-8 max-w-4xl text-balance text-5xl font-extrabold md:text-7xl lg:mt-16 text-foreground tracking-tight leading-[1.05]">
                                         Kleidung, die{' '}
                                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-zinc-900 dark:from-blue-400 dark:via-purple-400 dark:to-white">
                                             verbindet.
                                         </span>
                                     </h1>
 
-                                    <p className="mx-auto mt-8 max-w-2xl text-balance text-lg text-muted-foreground">
+                                    <p className="mx-auto mt-8 max-w-2xl text-balance text-lg text-muted-foreground leading-relaxed">
                                         Die SaaS-Plattform für smarte Corporate Fashion. Verwandeln Sie jeden Hoodie in eine Revenue Machine mit messbarem ROI.
                                     </p>
 
@@ -73,7 +72,7 @@ export function HeroSection() {
                                         <div>
                                             <Button
                                                 size="lg"
-                                                className="rounded-full px-6 text-base"
+                                                className="rounded-full px-6 text-base shadow-[0_4px_14px_rgba(37,99,235,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(37,99,235,0.35)]"
                                                 asChild
                                             >
                                                 <Link to="/login">
@@ -86,7 +85,7 @@ export function HeroSection() {
                                         <Button
                                             size="lg"
                                             variant="ghost"
-                                            className="rounded-full px-6 text-base"
+                                            className="rounded-full px-6 text-base transition-all duration-300 hover:-translate-y-0.5"
                                             asChild
                                         >
                                             <Link to="/contact">
@@ -119,15 +118,15 @@ export function HeroSection() {
                 <section className="py-16 md:py-24">
                     <div className="mx-auto max-w-7xl px-6">
                         <div className="text-center">
-                            <p className="text-sm font-medium text-muted-foreground">
+                            <p className="text-sm font-medium text-muted-foreground uppercase tracking-widest">
                                 Mögliche Integrationen
                             </p>
                         </div>
-                        <div className="mx-auto mt-10 flex max-w-4xl flex-wrap items-center justify-center gap-x-12 gap-y-8 opacity-60">
-                            <img src="/assets/integrations/salesforce.png" alt="Salesforce" className="h-6 object-contain" />
-                            <img src="/assets/integrations/hubspot.png" alt="HubSpot" className="h-6 object-contain" />
-                            <img src="/assets/integrations/pipedrive.png" alt="Pipedrive" className="h-6 object-contain" />
-                            <img src="/assets/integrations/zapier.png" alt="Zapier" className="h-6 object-contain" />
+                        <div className="mx-auto mt-10 flex max-w-4xl flex-wrap items-center justify-center gap-x-12 gap-y-8 opacity-50 hover:opacity-70 transition-opacity duration-300">
+                            <img src="/assets/integrations/salesforce.png" alt="Salesforce" className="h-6 object-contain grayscale" />
+                            <img src="/assets/integrations/hubspot.png" alt="HubSpot" className="h-6 object-contain grayscale" />
+                            <img src="/assets/integrations/pipedrive.png" alt="Pipedrive" className="h-6 object-contain grayscale" />
+                            <img src="/assets/integrations/zapier.png" alt="Zapier" className="h-6 object-contain grayscale" />
                         </div>
                     </div>
                 </section>
@@ -136,4 +135,3 @@ export function HeroSection() {
         </>
     )
 }
-
