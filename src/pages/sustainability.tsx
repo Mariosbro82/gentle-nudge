@@ -135,36 +135,36 @@ export default function SustainabilityPage() {
             </section>
 
             {/* Social Impact Section */}
-            <section className="py-24 px-6 bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/20 dark:to-orange-950/20">
+            <section className="py-24 px-6 bg-gradient-to-br from-primary/5 to-accent/5">
                 <div className="max-w-7xl mx-auto text-center">
                     <motion.div
                         initial={{ scale: 0.9, opacity: 0 }}
                         whileInView={{ scale: 1, opacity: 1 }}
-                        className="inline-flex items-center justify-center p-4 bg-red-100 dark:bg-red-900/30 rounded-full mb-8"
+                        className="inline-flex items-center justify-center p-4 bg-primary/10 rounded-full mb-8"
                     >
-                        <Heart className="w-12 h-12 text-red-500 fill-current animate-pulse" />
+                        <Heart className="w-12 h-12 text-primary fill-current animate-pulse" />
                     </motion.div>
 
                     <h2 className="text-4xl md:text-6xl font-bold mb-8">
-                        Ein Teil jedes Verkaufs
+                        Nachhaltigkeit als Prinzip
                     </h2>
                     <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-12">
-                        Geht direkt an die <span className="text-red-500 font-semibold">Kinderkrebshilfe Hamburg</span>.
-                        Weil wir glauben, dass Erfolg nur dann wertvoll ist, wenn man ihn teilt.
+                        Wir setzen auf langlebige Materialien und verantwortungsvolle Produktion –
+                        weil gute Produkte nicht auf Kosten der Umwelt entstehen sollten.
                     </p>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-                        <div className="p-8 bg-white dark:bg-card rounded-2xl shadow-sm border border-border">
+                        <div className="p-8 bg-card rounded-2xl shadow-sm border border-border">
                             <div className="text-4xl font-bold text-foreground mb-2">100%</div>
                             <div className="text-muted-foreground">Transparent</div>
                         </div>
-                        <div className="p-8 bg-white dark:bg-card rounded-2xl shadow-sm border border-border">
-                            <div className="text-4xl font-bold text-foreground mb-2">Direkt</div>
-                            <div className="text-muted-foreground">Ohne Umwege</div>
+                        <div className="p-8 bg-card rounded-2xl shadow-sm border border-border">
+                            <div className="text-4xl font-bold text-foreground mb-2">Langlebig</div>
+                            <div className="text-muted-foreground">Premium-Qualität</div>
                         </div>
-                        <div className="p-8 bg-white dark:bg-card rounded-2xl shadow-sm border border-border">
+                        <div className="p-8 bg-card rounded-2xl shadow-sm border border-border">
                             <div className="text-4xl font-bold text-foreground mb-2">Lokal</div>
-                            <div className="text-muted-foreground">Hier in Hamburg</div>
+                            <div className="text-muted-foreground">Aus Hamburg</div>
                         </div>
                     </div>
                 </div>
