@@ -18,6 +18,7 @@ export default function LoginPage() {
     const [ssoMode, setSsoMode] = useState(false);
     const [ssoEmail, setSsoEmail] = useState("");
     const [ssoLoading, setSsoLoading] = useState(false);
+    const [privacyConsent, setPrivacyConsent] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -43,6 +44,10 @@ export default function LoginPage() {
     };
 
     const handleSignUp = async () => {
+        if (!privacyConsent) {
+            setError("Bitte akzeptieren Sie die Datenschutzerklärung, um fortzufahren.");
+            return;
+        }
         setIsLoading(true);
         setError(null);
         setSuccessMessage(null);
@@ -202,6 +207,27 @@ export default function LoginPage() {
                                                 <div className="p-3 rounded-md bg-green-500/10 border border-green-500/20 text-green-500 text-sm">{successMessage}</div>
                                             )}
 
+                                            {/* DSGVO Consent for Registration */}
+                                            <label className="flex items-start gap-2 cursor-pointer">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={privacyConsent}
+                                                    onChange={(e) => setPrivacyConsent(e.target.checked)}
+                                                    className="mt-1 rounded border-border"
+                                                />
+                                                <span className="text-xs text-muted-foreground leading-relaxed">
+                                                    Ich habe die{" "}
+                                                    <Link to="/privacy" className="text-primary hover:underline" target="_blank">
+                                                        Datenschutzerklärung
+                                                    </Link>{" "}
+                                                    und die{" "}
+                                                    <Link to="/terms" className="text-primary hover:underline" target="_blank">
+                                                        AGB
+                                                    </Link>{" "}
+                                                    gelesen und akzeptiere diese.
+                                                </span>
+                                            </label>
+
                                             <div className="flex gap-4 pt-2">
                                                 <Button type="submit" className="flex-1 h-10 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold" disabled={isLoading}>
                                                     {isLoading ? <Loader2 className="animate-spin" /> : "Anmelden"}
@@ -211,7 +237,7 @@ export default function LoginPage() {
                                                     variant="outline"
                                                     className="flex-1 h-10 border-border text-foreground hover:bg-accent font-semibold"
                                                     onClick={handleSignUp}
-                                                    disabled={isLoading}
+                                                    disabled={isLoading || !privacyConsent}
                                                 >
                                                     {isLoading ? <Loader2 className="animate-spin" /> : "Registrieren"}
                                                 </Button>
