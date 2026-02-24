@@ -24,7 +24,7 @@ export function WhatsAppButton() {
     }
     const timer = setTimeout(() => {
       if (!dismissed) setShowPopup(true);
-    }, 4000);
+    }, 8000);
     return () => clearTimeout(timer);
   }, [dismissed, isProfilePage]);
 
