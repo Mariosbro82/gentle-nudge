@@ -1,11 +1,10 @@
-
 import { motion } from "framer-motion";
 import { BarChart3, Zap, Star } from "lucide-react";
 
 export function RoiSection() {
     return (
-        <section id="roi" className="py-24 bg-background border-y border-border">
-            <div className="container mx-auto px-4">
+        <section id="roi" className="py-24 bg-background border-y border-border/50">
+            <div className="container mx-auto px-6">
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
@@ -13,8 +12,9 @@ export function RoiSection() {
                         initial={{ opacity: 0, x: -20 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
+                        transition={{ duration: 0.5, ease: "easeOut" }}
                     >
-                        <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-6">
+                        <h2 className="text-3xl md:text-5xl font-extrabold text-foreground mb-6 tracking-tight leading-tight">
                             Warum <span className="text-purple-400">NFCwear?</span>
                         </h2>
 
@@ -28,35 +28,35 @@ export function RoiSection() {
                             </p>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
-                                <div className="p-4 rounded-lg glass-card hover:border-purple-500/30 transition-colors">
-                                    <h4 className="flex items-center gap-2 text-foreground font-semibold mb-1">
-                                        <Zap className="text-yellow-400" size={18} /> 60% mehr Leads
-                                    </h4>
-                                    <p className="text-sm text-muted-foreground">durch friktionsloses Capturing per NFC-Tap.</p>
-                                </div>
-                                <div className="p-4 rounded-lg glass-card hover:border-purple-500/30 transition-colors">
-                                    <h4 className="flex items-center gap-2 text-foreground font-semibold mb-1">
-                                        <BarChart3 className="text-green-400" size={18} /> Full-Funnel Analytics
-                                    </h4>
-                                    <p className="text-sm text-muted-foreground">ROI-Tracking pro Event, Mitarbeiter und Kampagne.</p>
-                                </div>
+                                {[
+                                    { icon: Zap, color: "yellow", title: "60% mehr Leads", desc: "durch friktionsloses Capturing per NFC-Tap." },
+                                    { icon: BarChart3, color: "green", title: "Full-Funnel Analytics", desc: "ROI-Tracking pro Event, Mitarbeiter und Kampagne." },
+                                ].map((item) => (
+                                    <div key={item.title} className="p-4 rounded-lg glass-card transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:border-purple-500/30">
+                                        <h4 className="flex items-center gap-2 text-foreground font-semibold mb-1">
+                                            <item.icon className={`text-${item.color}-400`} size={18} /> {item.title}
+                                        </h4>
+                                        <p className="text-sm text-muted-foreground">{item.desc}</p>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </motion.div>
 
                     {/* Abstract Graph/Analytics Visual */}
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
+                        initial={{ opacity: 0, scale: 0.95 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
-                        className="relative h-[500px] w-full glass-card rounded-2xl overflow-hidden flex flex-col items-center justify-center p-8 shadow-2xl"
+                        transition={{ duration: 0.6, ease: "easeOut" }}
+                        className="relative h-[500px] w-full glass-card rounded-2xl overflow-hidden flex flex-col items-center justify-center p-8 shadow-[0_8px_30px_rgb(0,0,0,0.06)]"
                     >
                         <div className="absolute inset-0 bg-grid-white/[0.02]" />
 
                         {/* Interactive Chart Visualization */}
-                        <div className="flex items-end gap-4 sm:gap-8 h-64 w-full max-w-md px-2 sm:px-6 pb-6 border-b border-l border-border relative z-10">
+                        <div className="flex items-end gap-4 sm:gap-8 h-64 w-full max-w-md px-2 sm:px-6 pb-6 border-b border-l border-border/50 relative z-10">
 
-                            {/* Bar 1: Papier (4.4% -> ~26% height) */}
+                            {/* Bar 1: Papier */}
                             <div className="w-1/4 h-full flex flex-col justify-end group items-center relative">
                                 <motion.div
                                     initial={{ height: 0 }}
@@ -65,15 +65,14 @@ export function RoiSection() {
                                     transition={{ duration: 0.8 }}
                                     className="w-full bg-zinc-800/50 rounded-t-md relative cursor-pointer"
                                 >
-                                    {/* Tooltip */}
-                                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-popover border border-border px-2 py-1 rounded text-xs text-popover-foreground opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-20">
+                                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-popover border border-border/50 px-2 py-1 rounded text-xs text-popover-foreground opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-20">
                                         4.4% Rate
                                     </div>
                                 </motion.div>
                                 <span className="absolute -bottom-8 text-xs text-muted-foreground font-medium tracking-wide">Papier</span>
                             </div>
 
-                            {/* Bar 2: QR Code (6.4% -> ~38% height) */}
+                            {/* Bar 2: QR Code */}
                             <div className="w-1/4 h-full flex flex-col justify-end group items-center relative">
                                 <motion.div
                                     initial={{ height: 0 }}
@@ -82,15 +81,14 @@ export function RoiSection() {
                                     transition={{ duration: 0.8, delay: 0.2 }}
                                     className="w-full bg-blue-900/30 rounded-t-md relative cursor-pointer"
                                 >
-                                    {/* Tooltip */}
-                                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-popover border border-border px-2 py-1 rounded text-xs text-popover-foreground opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-20">
+                                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-popover border border-border/50 px-2 py-1 rounded text-xs text-popover-foreground opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-20">
                                         6.4% Rate
                                     </div>
                                 </motion.div>
                                 <span className="absolute -bottom-8 text-xs text-muted-foreground font-medium tracking-wide">QR Code</span>
                             </div>
 
-                            {/* Bar 3: NFCwear (13.2% -> ~80% height to leave room for badge) */}
+                            {/* Bar 3: NFCwear */}
                             <div className="w-1/4 h-full flex flex-col justify-end group items-center relative">
                                 <motion.div
                                     initial={{ height: 0 }}
@@ -99,16 +97,14 @@ export function RoiSection() {
                                     transition={{ duration: 0.8, delay: 0.4 }}
                                     className="w-full bg-gradient-to-t from-purple-600 to-blue-500 rounded-t-md relative shadow-[0_0_30px_rgba(168,85,247,0.3)] cursor-pointer z-10"
                                 >
-                                    {/* Persistent Badge that moves on hover */}
                                     <motion.div
                                         whileHover={{ y: -5, scale: 1.1 }}
-                                        className="absolute -top-12 left-1/2 -translate-x-1/2 bg-white text-black text-xs font-bold px-3 py-1.5 rounded-full shadow-lg whitespace-nowrap border border-white/20"
+                                        className="absolute -top-12 left-1/2 -translate-x-1/2 bg-white text-black text-xs font-bold px-3 py-1.5 rounded-full shadow-[0_4px_14px_rgb(0,0,0,0.1)] whitespace-nowrap border border-white/20"
                                     >
                                         +300% Conv.
                                     </motion.div>
 
-                                    {/* Tooltip for NFC - new requirement */}
-                                    <div className="absolute -top-24 left-1/2 -translate-x-1/2 bg-popover border border-border px-2 py-1 rounded text-xs text-popover-foreground opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-20">
+                                    <div className="absolute -top-24 left-1/2 -translate-x-1/2 bg-popover border border-border/50 px-2 py-1 rounded text-xs text-popover-foreground opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-20">
                                         ~13.2% Rate
                                     </div>
 
@@ -130,9 +126,10 @@ export function RoiSection() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
                     className="mt-16 max-w-3xl mx-auto text-center"
                 >
-                    <div className="p-8 rounded-2xl glass-card">
+                    <div className="p-8 rounded-2xl glass-card shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
                         <div className="flex justify-center gap-0.5 mb-4">
                             {[...Array(5)].map((_, i) => (
                                 <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />

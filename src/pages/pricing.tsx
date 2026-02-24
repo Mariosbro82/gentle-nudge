@@ -2,6 +2,7 @@ import { Navbar } from "@/components/marketing/navbar";
 import { Footer } from "@/components/marketing/footer";
 import { PricingCard } from "@/components/ui/dark-gradient-pricing";
 import { RoiCalculator } from "@/components/marketing/roi-calculator";
+import { ShieldCheck, Server, Lock } from "lucide-react";
 
 export default function PricingPage() {
     const tiers = [
@@ -76,11 +77,11 @@ export default function PricingPage() {
 
             <section className="relative pt-32 pb-20 px-6">
                 <div className="container mx-auto">
-                    <div className="mb-16 text-center max-w-3xl mx-auto">
-                        <span className="inline-block px-4 py-2 rounded-full border border-border bg-muted/50 text-sm font-medium mb-6">
+                    <div className="mb-20 text-center max-w-3xl mx-auto">
+                        <span className="inline-block px-4 py-2 rounded-full border border-border/50 bg-muted/50 text-sm font-medium mb-6">
                             Transparente Preise
                         </span>
-                        <h1 className="text-4xl md:text-6xl font-bold mb-6 text-foreground tracking-tight">
+                        <h1 className="text-4xl md:text-6xl font-extrabold mb-6 text-foreground tracking-tight leading-tight">
                             Wählen Sie Ihren Plan
                         </h1>
                         <p className="text-muted-foreground text-lg leading-relaxed">
@@ -94,6 +95,20 @@ export default function PricingPage() {
                             <PricingCard key={index} {...tier} />
                         ))}
                     </div>
+
+                    {/* Trust Badges */}
+                    <div className="flex flex-wrap items-center justify-center gap-6 mt-16">
+                        {[
+                            { icon: ShieldCheck, label: "100% DSGVO konform" },
+                            { icon: Server, label: "Hosted in Germany" },
+                            { icon: Lock, label: "Enterprise-Grade Security" },
+                        ].map(({ icon: Icon, label }) => (
+                            <div key={label} className="flex items-center gap-2 text-xs text-muted-foreground font-medium">
+                                <Icon size={14} className="text-muted-foreground/60" />
+                                <span>{label}</span>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </section>
 
@@ -103,4 +118,3 @@ export default function PricingPage() {
         </main>
     );
 }
-

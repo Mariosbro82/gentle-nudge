@@ -7,7 +7,7 @@ const TrustIcon = ({ children, delay }: { children: React.ReactNode; delay: numb
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay }}
-        className="w-24 h-24 mb-6 rounded-2xl glass-card flex items-center justify-center relative overflow-hidden group shadow-2xl"
+        className="w-24 h-24 mb-6 rounded-2xl glass-card flex items-center justify-center relative overflow-hidden group shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
     >
         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         {children}
@@ -16,18 +16,18 @@ const TrustIcon = ({ children, delay }: { children: React.ReactNode; delay: numb
 
 const TrustCard = ({ icon, title, description, delay }: { icon: React.ReactNode; title: string; description: string; delay: number }) => (
     <motion.div
-        initial={{ opacity: 0, y: 30 }}
+        initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.6, delay }}
-        className="flex flex-col items-center text-center p-8 rounded-3xl glass-card relative overflow-hidden hover:border-foreground/20 transition-colors duration-300"
+        transition={{ duration: 0.5, ease: "easeOut", delay }}
+        className="flex flex-col items-center text-center p-8 rounded-3xl glass-card relative overflow-hidden hover:border-foreground/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)]"
     >
         {/* Glow effect */}
         <div className="absolute -top-20 -right-20 w-64 h-64 bg-blue-500/5 blur-3xl rounded-full pointer-events-none" />
 
         <TrustIcon delay={delay + 0.2}>{icon}</TrustIcon>
 
-        <h3 className="text-xl font-bold text-foreground mb-3 tracking-tight">{title}</h3>
+        <h3 className="text-xl font-extrabold text-foreground mb-3 tracking-tight">{title}</h3>
         <p className="text-muted-foreground leading-relaxed text-sm max-w-sm">{description}</p>
     </motion.div>
 );
@@ -37,12 +37,13 @@ export function TrustSection() {
         <section className="py-24 bg-background relative z-30">
             <div className="container mx-auto px-6">
 
-                <div className="text-center mb-24 max-w-2xl mx-auto">
+                <div className="text-center mb-20 max-w-2xl mx-auto">
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-foreground to-muted-foreground mb-6"
+                        transition={{ duration: 0.5, ease: "easeOut" }}
+                        className="text-3xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-b from-foreground to-muted-foreground mb-6 leading-tight"
                     >
                         Vertrauen ist gut.<br />Technologie ist besser.
                     </motion.h2>
@@ -50,7 +51,7 @@ export function TrustSection() {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        transition={{ delay: 0.1 }}
+                        transition={{ delay: 0.1, duration: 0.5, ease: "easeOut" }}
                         className="text-muted-foreground text-lg"
                     >
                         Höchste Standards bei Sicherheit, Datenschutz und Langlebigkeit.
@@ -122,14 +123,12 @@ export function TrustSection() {
                         description="Unsere NFC-Module überstehen 500+ Waschzyklen. Wir garantieren 365 Tage volle Funktionalität – inklusive Hardware-Warranty."
                         icon={
                             <svg viewBox="0 0 24 24" className="w-10 h-10 text-cyan-400" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                {/* Water drop shape */}
                                 <motion.path
                                     initial={{ pathLength: 0 }}
                                     whileInView={{ pathLength: 1 }}
                                     transition={{ duration: 1.5 }}
                                     d="M12 22a7 7 0 007-7c0-2-1-3.9-3-5.5S12 5 12 5s-4 2.5-4 4.5S8 13 8 15a7 7 0 004 7z"
                                 />
-                                {/* Chip inside drop */}
                                 <motion.rect
                                     initial={{ opacity: 0, scale: 0.5 }}
                                     whileInView={{ opacity: 1, scale: 1 }}
@@ -137,7 +136,6 @@ export function TrustSection() {
                                     x="10" y="12" width="4" height="6" rx="1"
                                     className="fill-cyan-400/20 stroke-cyan-400"
                                 />
-                                {/* Sparkles */}
                                 <motion.path
                                     initial={{ opacity: 0 }}
                                     whileInView={{ opacity: 1 }}
