@@ -14,6 +14,7 @@ import {
     ChevronsRight,
     HelpCircle,
     Shield,
+    ScanLine,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/auth-context";
@@ -63,6 +64,7 @@ export function AdminSidebar({ onClose, collapsed, onToggleCollapse }: AdminSide
         { href: "/dashboard", label: "Übersicht", icon: LayoutDashboard },
         { href: "/dashboard/devices", label: "Geräte", icon: Smartphone },
         { href: "/dashboard/leads", label: "Kontakte", icon: Users },
+        { href: "/dashboard/lanyard-scanner", label: "Lanyard Scanner", icon: ScanLine, badge: true },
         { href: "/dashboard/campaigns", label: "Kampagnen", icon: Megaphone },
         { href: "/dashboard/analytics", label: "Analyse", icon: BarChart },
         ...(isOrgAdmin ? [
@@ -94,7 +96,12 @@ export function AdminSidebar({ onClose, collapsed, onToggleCollapse }: AdminSide
                     <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-full bg-primary" />
                 )}
                 <link.icon className={cn("shrink-0 transition-colors", isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground")} size={18} />
-                {!collapsed && <span>{link.label}</span>}
+                {!collapsed && <span className="flex-1">{link.label}</span>}
+                {!collapsed && (link as any).badge && (
+                    <span className="ml-auto inline-flex items-center px-1.5 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wider bg-primary/15 text-primary border border-primary/20">
+                        Neu
+                    </span>
+                )}
             </Link>
         );
 
