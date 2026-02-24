@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 interface InfiniteLogoScrollProps {
     logos: {
         name: string;
-        logo: React.FC<React.SVGProps<SVGSVGElement>>;
+        logo: React.FC<{ className?: string }>;
     }[];
     speed?: "slow" | "normal" | "fast";
     direction?: "left" | "right";
@@ -87,15 +87,18 @@ export function InfiniteLogoScroll({
                     pauseOnHover && "hover:[animation-play-state:paused]"
                 )}
             >
-                {logos.map((item, idx) => (
-                    <div
-                        className="flex items-center gap-2 text-gray-500 dark:text-gray-400 opacity-70 hover:opacity-100 transition-opacity"
-                        key={item.name + idx}
-                    >
-                        <item.logo className="h-10 w-auto" />
-                        <span className="text-lg font-semibold whitespace-nowrap">{item.name}</span>
-                    </div>
-                ))}
+                {logos.map((item, idx) => {
+                    const LogoIcon = item.logo;
+                    return (
+                        <div
+                            className="flex items-center gap-3 text-muted-foreground opacity-60 hover:opacity-100 transition-opacity"
+                            key={item.name + idx}
+                        >
+                            <LogoIcon className="h-8 w-8 shrink-0" />
+                            <span className="text-lg font-semibold whitespace-nowrap">{item.name}</span>
+                        </div>
+                    );
+                })}
             </div>
         </div>
     );
