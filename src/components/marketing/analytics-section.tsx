@@ -112,7 +112,16 @@ export function AnalyticsSection() {
                     </div>
                 </motion.div>
 
-                <div className="mt-12">
+                <div className="mt-12 flex flex-col items-center gap-4">
+                    <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                        <span className="px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 font-mono">
+                            +60% mehr Leads
+                        </span>
+                        <span className="text-border">|</span>
+                        <span>🏆 Gründungspreis U21 Gewinner</span>
+                        <span className="text-border hidden md:inline">|</span>
+                        <span className="hidden md:inline">Rated 5/5 ⭐</span>
+                    </div>
                     <Link to="/analytics">
                         <Button variant="link" className="text-muted-foreground hover:text-foreground">
                             Alle Analytics Features ansehen <ArrowRight size={16} className="ml-1" />

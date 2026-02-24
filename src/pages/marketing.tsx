@@ -11,6 +11,7 @@ import { HistorySection } from "@/components/marketing/history-section";
 import { ContactSection } from "@/components/marketing/contact-section";
 import { Footer } from "@/components/marketing/footer";
 import { FeatureBentoGrid } from "@/components/marketing/feature-bento-grid";
+import { SocialProof } from "@/components/marketing/social-proof";
 
 export default function MarketingPage() {
     return (
@@ -25,6 +26,7 @@ export default function MarketingPage() {
 
             <AnalyticsSection />
             <FeatureBentoGrid />
+            <SocialProof />
             <FoundersSection />
 
             <RoiSection />
