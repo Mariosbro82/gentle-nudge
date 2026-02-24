@@ -83,13 +83,11 @@ export function SocialProof() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16 max-w-4xl mx-auto"
+                    className="grid grid-cols-2 gap-6 mb-16 max-w-2xl mx-auto"
                 >
                     {[
                         { value: "5/5", label: "Kundenbewertung", icon: "⭐" },
                         { value: "🏆", label: "Gründungspreis U21", icon: "" },
-                        { value: "100%", label: "Made in Germany", icon: "🇩🇪" },
-                        { value: "1€", label: "Pro Artikel für Kinderkrebshilfe", icon: "💛" },
                     ].map((stat, i) => (
                         <div key={i} className="text-center p-4 rounded-xl glass-card">
                             <p className="text-2xl md:text-3xl font-bold text-foreground mb-1">
@@ -155,10 +153,6 @@ export function SocialProofBar() {
             </span>
             <span className="hidden md:inline text-border">|</span>
             <span>🏆 Gründungspreis U21 Gewinner</span>
-            <span className="hidden md:inline text-border">|</span>
-            <span>🇩🇪 Made in Germany</span>
-            <span className="hidden md:inline text-border">|</span>
-            <span>💛 Spendenpartner Kinderkrebshilfe</span>
         </div>
     );
 }
