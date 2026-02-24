@@ -18,6 +18,7 @@ const TopPerformersPage = lazy(() => import("@/pages/dashboard/top-performers"))
 const CampaignsPage = lazy(() => import("@/pages/dashboard/campaigns"));
 const SupportPage = lazy(() => import("@/pages/dashboard/support"));
 const CorporateDesignPage = lazy(() => import("@/pages/dashboard/corporate-design"));
+const LanyardScannerPage = lazy(() => import("@/pages/dashboard/lanyard-scanner"));
 
 // Auth pages
 const LoginPage = lazy(() => import("@/pages/login"));
@@ -186,6 +187,7 @@ export default function App() {
                             <Route path="team" element={<TeamPage />} />
                             <Route path="top-performers" element={<TopPerformersPage />} />
                             <Route path="campaigns" element={<CampaignsPage />} />
+                            <Route path="lanyard-scanner" element={<LanyardScannerPage />} />
                             <Route path="support" element={<SupportPage />} />
                             <Route path="corporate-design" element={<CorporateDesignPage />} />
                         </Route>
