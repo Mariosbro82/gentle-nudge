@@ -25,6 +25,7 @@ import { Check, AlertCircle } from "lucide-react";
 import type { CustomLink, ProfileUser } from "@/types/profile";
 import { FeatureGate } from "@/components/dashboard/feature-gate";
 import type { PlanType } from "@/lib/plan-features";
+import { Switch } from "@/components/ui/switch";
 import { useOrgTemplate, isFieldLocked } from "@/hooks/use-org-template";
 import { LockedFieldWrapper } from "@/components/settings/locked-field-wrapper";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -875,6 +876,28 @@ export default function SettingsPage() {
                     userId={user?.id || ""}
                     onUpdate={(text, color) => setUser({ ...user, live_status_text: text, live_status_color: color })}
                 />
+
+                {/* ─── Branding / Affiliate Link ─── */}
+                <FeatureGate feature="hide_branding" plan={userPlan} label="Branding entfernen">
+                <Card className="rounded-xl border-border/50">
+                    <CardHeader className="pb-4">
+                        <CardTitle className="text-lg">NFCwear-Branding</CardTitle>
+                        <CardDescription>Der „Powered by NFCwear"-Link wird unter Ihrem Profil angezeigt.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="flex items-center justify-between">
+                            <div className="space-y-0.5">
+                                <p className="text-sm font-medium text-foreground">Branding ausblenden</p>
+                                <p className="text-xs text-muted-foreground">Entfernt den Affiliate-Link von Ihrem öffentlichen Profil.</p>
+                            </div>
+                            <Switch
+                                checked={user?.hide_branding || false}
+                                onCheckedChange={(checked) => handleMesfeFeatureSave("hide_branding", checked)}
+                            />
+                        </div>
+                    </CardContent>
+                </Card>
+                </FeatureGate>
 
                 {/* ─── Ghost Mode ─── */}
                 <Card className="rounded-xl border-border/50">

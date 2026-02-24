@@ -762,6 +762,7 @@ export type Database = {
           ghost_mode: boolean | null
           ghost_mode_until: string | null
           has_completed_onboarding: boolean | null
+          hide_branding: boolean | null
           id: string
           job_title: string | null
           linkedin_url: string | null
@@ -814,6 +815,7 @@ export type Database = {
           ghost_mode?: boolean | null
           ghost_mode_until?: string | null
           has_completed_onboarding?: boolean | null
+          hide_branding?: boolean | null
           id?: string
           job_title?: string | null
           linkedin_url?: string | null
@@ -866,6 +868,7 @@ export type Database = {
           ghost_mode?: boolean | null
           ghost_mode_until?: string | null
           has_completed_onboarding?: boolean | null
+          hide_branding?: boolean | null
           id?: string
           job_title?: string | null
           linkedin_url?: string | null
@@ -1041,6 +1044,7 @@ export type Database = {
           custom_links: Json | null
           ghost_mode: boolean | null
           ghost_mode_until: string | null
+          hide_branding: boolean | null
           id: string | null
           job_title: string | null
           linkedin_url: string | null
@@ -1076,6 +1080,7 @@ export type Database = {
           custom_links?: Json | null
           ghost_mode?: boolean | null
           ghost_mode_until?: string | null
+          hide_branding?: boolean | null
           id?: string | null
           job_title?: string | null
           linkedin_url?: string | null
@@ -1111,6 +1116,7 @@ export type Database = {
           custom_links?: Json | null
           ghost_mode?: boolean | null
           ghost_mode_until?: string | null
+          hide_branding?: boolean | null
           id?: string | null
           job_title?: string | null
           linkedin_url?: string | null

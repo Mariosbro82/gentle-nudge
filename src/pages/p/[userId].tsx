@@ -44,6 +44,7 @@ interface PublicProfile {
     background_position: string | null;
     live_status_text?: string | null;
     live_status_color?: string | null;
+    hide_branding?: boolean | null;
 }
 
 export default function ProfilePage() {
@@ -56,6 +57,7 @@ export default function ProfilePage() {
     const [profileId, setProfileId] = useState<string | null>(null);
     const [isReturning, setIsReturning] = useState(false);
     const [showGreeting, setShowGreeting] = useState(true);
+    const [hideBranding, setHideBranding] = useState(false);
 
     const handleGreetingComplete = useCallback(() => setShowGreeting(false), []);
 
@@ -88,6 +90,7 @@ export default function ProfilePage() {
             if (data) {
                 logProfileView(data.id);
                 setProfileId(data.id);
+                setHideBranding(data.hide_branding || false);
                 setLiveStatus({ text: (data as any).live_status_text || null, color: (data as any).live_status_color || null });
 
                 // Fetch org template config for corporate design merging
@@ -210,6 +213,21 @@ export default function ProfilePage() {
             </div>
 
             <Template user={user} lang={lang} />
+
+            {/* Affiliate / Powered by NFCwear footer */}
+            {!hideBranding && (
+                <div className="fixed bottom-0 left-0 right-0 z-40">
+                    <a
+                        href="https://nfcwear.de/contact"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-1.5 py-2.5 bg-black/80 backdrop-blur-sm text-white/70 hover:text-white text-[11px] font-medium tracking-wide transition-colors"
+                    >
+                        <span className="inline-flex items-center justify-center w-4 h-4 rounded bg-white/10 text-[9px] font-bold">N</span>
+                        Powered by NFCwear
+                    </a>
+                </div>
+            )}
 
             {/* AI Chat FAB */}
             {profileId && (
