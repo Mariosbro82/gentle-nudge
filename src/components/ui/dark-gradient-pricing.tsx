@@ -59,7 +59,7 @@ export const PricingCard = ({
           "relative h-full w-full overflow-hidden border transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)]",
           "dark:border-zinc-700/50 dark:bg-gradient-to-br dark:from-zinc-950/50 dark:to-zinc-900/80",
           "border-zinc-200/50 bg-gradient-to-br from-zinc-50/50 to-zinc-100/80",
-          "p-6",
+          "p-6 flex flex-col",
           className
         )}
       >
@@ -74,7 +74,7 @@ export const PricingCard = ({
             {bestFor}
           </span>
         </div>
-        <div className="space-y-4 py-9">
+        <div className="space-y-4 py-9 flex-1">
           {benefits.map((benefit, index) => (
             <Benefit key={index} {...benefit} />
           ))}
