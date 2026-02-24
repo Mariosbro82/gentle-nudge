@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode";
+import { createWorker } from "tesseract.js";
 import { supabase } from "@/lib/supabase/client";
 import { useAuth } from "@/contexts/auth-context";
 import {
     ScanLine, CheckCircle2, XCircle, Camera, CameraOff,
-    Users, Zap, Pause, Play
+    Users, Zap, Pause, Play, CreditCard, QrCode, Loader2, ImageIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -26,10 +27,12 @@ interface ScanResult {
     timestamp: Date;
 }
 
+type ScanMode = "qr" | "card";
+
+// ─── vCard / MeCard / plain text parser ───
 function parseVCard(text: string): ParsedContact {
     const result: ParsedContact = { raw: text };
 
-    // Check if it's a vCard
     if (text.includes("BEGIN:VCARD")) {
         const lines = text.split(/\r?\n/);
         for (const line of lines) {
@@ -54,7 +57,6 @@ function parseVCard(text: string): ParsedContact {
             }
         }
     } else if (text.includes("MECARD:")) {
-        // MeCard format
         const match = (key: string) => {
             const regex = new RegExp(`${key}:([^;]+)`);
             return text.match(regex)?.[1]?.trim();
@@ -64,14 +66,63 @@ function parseVCard(text: string): ParsedContact {
         result.phone = match("TEL");
         result.company = match("ORG");
     } else if (text.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)) {
-        // Plain email
         result.email = text.trim();
     } else if (text.startsWith("http")) {
-        // URL
         result.website = text.trim();
     } else {
-        // Plain text – try to use as name
         result.name = text.trim().substring(0, 200);
+    }
+
+    return result;
+}
+
+// ─── OCR text → contact info parser ───
+function parseBusinessCardText(text: string): ParsedContact {
+    const result: ParsedContact = { raw: text };
+    const lines = text.split(/\n/).map((l) => l.trim()).filter(Boolean);
+
+    // Email
+    const emailMatch = text.match(/[\w.+-]+@[\w-]+\.[\w.-]{2,}/i);
+    if (emailMatch) result.email = emailMatch[0].toLowerCase();
+
+    // Phone: various formats
+    const phoneMatch = text.match(/(?:\+?\d{1,3}[\s.-]?)?\(?\d{2,5}\)?[\s.-]?\d{2,5}[\s.-]?\d{2,6}/);
+    if (phoneMatch) {
+        const cleaned = phoneMatch[0].replace(/[^\d+]/g, "");
+        if (cleaned.length >= 6) result.phone = phoneMatch[0].trim();
+    }
+
+    // Website
+    const urlMatch = text.match(/(?:www\.|https?:\/\/)[\w.-]+\.\w{2,}/i);
+    if (urlMatch) result.website = urlMatch[0].startsWith("http") ? urlMatch[0] : `https://${urlMatch[0]}`;
+
+    // Try to find name: usually the first line that's not a company keyword, phone, email, url
+    const skipPatterns = [/^tel/i, /^fax/i, /^mail/i, /^e-?mail/i, /^www\./i, /^http/i, /@/, /^\+?\d{4,}/, /gmbh|ag|ug|inc|ltd|co\.|kg|ohg|mbh/i];
+
+    for (const line of lines) {
+        if (skipPatterns.some((p) => p.test(line))) continue;
+        // Likely a name: 2-4 words, each capitalized, no digits
+        if (/^[A-ZÄÖÜ][a-zäöüß]+(?:\s+[A-ZÄÖÜ][a-zäöüß]+){0,3}$/.test(line)) {
+            if (!result.name) {
+                result.name = line;
+                continue;
+            }
+        }
+        // Likely a title/position
+        if (!result.title && result.name && /manager|director|ceo|cto|cfo|head|leiter|geschäftsf|berater|consultant|sales|marketing|engineer|developer/i.test(line)) {
+            result.title = line;
+            continue;
+        }
+        // Likely a company name
+        if (!result.company && /gmbh|ag|ug|inc|ltd|co\.|kg|ohg|mbh|group|consulting|solutions|tech|digital|media|services/i.test(line)) {
+            result.company = line;
+        }
+    }
+
+    // Fallback: first non-matched line as name
+    if (!result.name && lines.length > 0) {
+        const candidate = lines.find((l) => !skipPatterns.some((p) => p.test(l)) && l.length > 2 && l.length < 60);
+        if (candidate) result.name = candidate;
     }
 
     return result;
@@ -79,6 +130,7 @@ function parseVCard(text: string): ParsedContact {
 
 export default function LanyardScannerPage() {
     const { user } = useAuth();
+    const [scanMode, setScanMode] = useState<ScanMode>("qr");
     const [scanning, setScanning] = useState(false);
     const [paused, setPaused] = useState(false);
     const [results, setResults] = useState<ScanResult[]>([]);
@@ -88,6 +140,15 @@ export default function LanyardScannerPage() {
     const scannerRef = useRef<Html5Qrcode | null>(null);
     const processedCodes = useRef<Set<string>>(new Set());
     const containerRef = useRef<HTMLDivElement>(null);
+
+    // Card scanner state
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const streamRef = useRef<MediaStream | null>(null);
+    const [cardCameraActive, setCardCameraActive] = useState(false);
+    const [ocrProcessing, setOcrProcessing] = useState(false);
+    const [ocrProgress, setOcrProgress] = useState(0);
+    const [capturedImage, setCapturedImage] = useState<string | null>(null);
 
     // Fetch user profile id
     useEffect(() => {
@@ -106,18 +167,14 @@ export default function LanyardScannerPage() {
         setResults((prev) => [result, ...prev].slice(0, 50));
     }, []);
 
-    const handleScan = useCallback(
-        async (decodedText: string) => {
+    // ─── Save contact as lead ───
+    const saveContact = useCallback(
+        async (contact: ParsedContact, source: string) => {
             if (!userId) return;
 
-            // Deduplicate within session
-            if (processedCodes.current.has(decodedText)) return;
-            processedCodes.current.add(decodedText);
-
-            const contact = parseVCard(decodedText);
             const resultId = crypto.randomUUID();
 
-            // Check for duplicate in DB by email
+            // Duplicate check
             if (contact.email) {
                 const { data: existing } = await supabase
                     .from("leads")
@@ -138,12 +195,11 @@ export default function LanyardScannerPage() {
                 }
             }
 
-            // Build notes from extra fields
             const noteParts: string[] = [];
             if (contact.title) noteParts.push(`Position: ${contact.title}`);
             if (contact.company) noteParts.push(`Firma: ${contact.company}`);
             if (contact.website) noteParts.push(`Web: ${contact.website}`);
-            noteParts.push(`[Lanyard-Scan]`);
+            noteParts.push(`[${source}]`);
 
             const { error } = await supabase.from("leads").insert({
                 captured_by_user_id: userId,
@@ -177,6 +233,19 @@ export default function LanyardScannerPage() {
         [userId, addResult]
     );
 
+    // ─── QR scan handler ───
+    const handleScan = useCallback(
+        async (decodedText: string) => {
+            if (!userId) return;
+            if (processedCodes.current.has(decodedText)) return;
+            processedCodes.current.add(decodedText);
+            const contact = parseVCard(decodedText);
+            await saveContact(contact, "Lanyard-Scan");
+        },
+        [userId, saveContact]
+    );
+
+    // ─── QR Scanner controls ───
     const startScanner = useCallback(async () => {
         if (!containerRef.current) return;
         setCameraError(null);
@@ -200,17 +269,9 @@ export default function LanyardScannerPage() {
 
             await scanner.start(
                 { facingMode: "environment" },
-                {
-                    fps: 10,
-                    qrbox: { width: 280, height: 280 },
-                    aspectRatio: 1,
-                },
-                (decodedText) => {
-                    handleScan(decodedText);
-                },
-                () => {
-                    // scan failure - ignore, keep scanning
-                }
+                { fps: 10, qrbox: { width: 280, height: 280 }, aspectRatio: 1 },
+                (decodedText) => handleScan(decodedText),
+                () => {}
             );
 
             setScanning(true);
@@ -220,7 +281,7 @@ export default function LanyardScannerPage() {
             setCameraError(
                 err?.message?.includes("NotAllowed")
                     ? "Kamera-Zugriff verweigert. Bitte erlauben Sie den Zugriff in den Browser-Einstellungen."
-                    : "Kamera konnte nicht gestartet werden. Stellen Sie sicher, dass ein Gerät mit Kamera verwendet wird."
+                    : "Kamera konnte nicht gestartet werden."
             );
         }
     }, [handleScan]);
@@ -230,9 +291,7 @@ export default function LanyardScannerPage() {
             try {
                 await scannerRef.current.stop();
                 scannerRef.current.clear();
-            } catch {
-                // ignore
-            }
+            } catch {}
             scannerRef.current = null;
         }
         setScanning(false);
@@ -250,12 +309,111 @@ export default function LanyardScannerPage() {
         }
     }, [paused]);
 
+    // ─── Card camera controls ───
+    const startCardCamera = useCallback(async () => {
+        setCameraError(null);
+        setCapturedImage(null);
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: "environment", width: { ideal: 1920 }, height: { ideal: 1080 } },
+            });
+            streamRef.current = stream;
+            if (videoRef.current) {
+                videoRef.current.srcObject = stream;
+                await videoRef.current.play();
+            }
+            setCardCameraActive(true);
+        } catch (err: any) {
+            setCameraError(
+                err?.name === "NotAllowedError"
+                    ? "Kamera-Zugriff verweigert."
+                    : "Kamera konnte nicht gestartet werden."
+            );
+        }
+    }, []);
+
+    const stopCardCamera = useCallback(() => {
+        if (streamRef.current) {
+            streamRef.current.getTracks().forEach((t) => t.stop());
+            streamRef.current = null;
+        }
+        setCardCameraActive(false);
+        setCapturedImage(null);
+    }, []);
+
+    const capturePhoto = useCallback(() => {
+        if (!videoRef.current || !canvasRef.current) return;
+        const video = videoRef.current;
+        const canvas = canvasRef.current;
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+        ctx.drawImage(video, 0, 0);
+        const dataUrl = canvas.toDataURL("image/jpeg", 0.9);
+        setCapturedImage(dataUrl);
+    }, []);
+
+    const runOCR = useCallback(async () => {
+        if (!capturedImage) return;
+        setOcrProcessing(true);
+        setOcrProgress(0);
+
+        try {
+            const worker = await createWorker("deu+eng", undefined, {
+                logger: (m: any) => {
+                    if (m.status === "recognizing text") {
+                        setOcrProgress(Math.round(m.progress * 100));
+                    }
+                },
+            });
+
+            const { data } = await worker.recognize(capturedImage);
+            await worker.terminate();
+
+            const contact = parseBusinessCardText(data.text);
+            await saveContact(contact, "Visitenkarten-Scan");
+            setCapturedImage(null);
+        } catch (err: any) {
+            addResult({
+                id: crypto.randomUUID(),
+                contact: { raw: "" },
+                status: "error",
+                message: `OCR-Fehler: ${err.message || "Unbekannt"}`,
+                timestamp: new Date(),
+            });
+        } finally {
+            setOcrProcessing(false);
+            setOcrProgress(0);
+        }
+    }, [capturedImage, saveContact, addResult]);
+
+    // Handle file upload for business card
+    const handleFileUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+            setCapturedImage(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+        e.target.value = "";
+    }, []);
+
+    // Stop everything when switching modes
+    useEffect(() => {
+        if (scanMode === "qr") {
+            stopCardCamera();
+        } else {
+            stopScanner();
+        }
+    }, [scanMode, stopCardCamera, stopScanner]);
+
     // Cleanup on unmount
     useEffect(() => {
         return () => {
-            if (scannerRef.current) {
-                scannerRef.current.stop().catch(() => {});
-            }
+            scannerRef.current?.stop().catch(() => {});
+            streamRef.current?.getTracks().forEach((t) => t.stop());
         };
     }, []);
 
@@ -271,9 +429,37 @@ export default function LanyardScannerPage() {
                         </span>
                     </div>
                     <p className="text-sm text-muted-foreground mt-0.5">
-                        Scannen Sie QR-Codes und Barcodes auf Event-Badges – Kontakte werden automatisch als Leads gespeichert.
+                        Scannen Sie QR-Codes, Barcodes oder Visitenkarten – Kontakte werden automatisch als Leads gespeichert.
                     </p>
                 </div>
+            </div>
+
+            {/* Mode Switcher */}
+            <div className="flex gap-1 p-1 rounded-xl bg-muted/50 border border-border/50 w-fit">
+                <button
+                    onClick={() => setScanMode("qr")}
+                    className={cn(
+                        "inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all",
+                        scanMode === "qr"
+                            ? "bg-background text-foreground shadow-sm"
+                            : "text-muted-foreground hover:text-foreground"
+                    )}
+                >
+                    <QrCode size={16} />
+                    QR / Barcode
+                </button>
+                <button
+                    onClick={() => setScanMode("card")}
+                    className={cn(
+                        "inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all",
+                        scanMode === "card"
+                            ? "bg-background text-foreground shadow-sm"
+                            : "text-muted-foreground hover:text-foreground"
+                    )}
+                >
+                    <CreditCard size={16} />
+                    Visitenkarte
+                </button>
             </div>
 
             {/* Stats bar */}
@@ -299,67 +485,180 @@ export default function LanyardScannerPage() {
                 <div className="rounded-xl border border-border/50 bg-card overflow-hidden">
                     <div className="p-4 border-b border-border/50 flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                            <Camera size={16} className="text-primary" />
-                            <h3 className="text-sm font-semibold">Kamera</h3>
+                            {scanMode === "qr" ? <QrCode size={16} className="text-primary" /> : <CreditCard size={16} className="text-primary" />}
+                            <h3 className="text-sm font-semibold">
+                                {scanMode === "qr" ? "QR / Barcode Scanner" : "Visitenkartenscanner"}
+                            </h3>
                         </div>
                         <div className="flex items-center gap-2">
-                            {scanning && (
-                                <button
-                                    onClick={togglePause}
-                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-muted hover:bg-muted/80 transition-colors"
-                                >
-                                    {paused ? <Play size={12} /> : <Pause size={12} />}
-                                    {paused ? "Fortsetzen" : "Pausieren"}
-                                </button>
+                            {scanMode === "qr" ? (
+                                <>
+                                    {scanning && (
+                                        <button
+                                            onClick={togglePause}
+                                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-muted hover:bg-muted/80 transition-colors"
+                                        >
+                                            {paused ? <Play size={12} /> : <Pause size={12} />}
+                                            {paused ? "Fortsetzen" : "Pausieren"}
+                                        </button>
+                                    )}
+                                    <button
+                                        onClick={scanning ? stopScanner : startScanner}
+                                        className={cn(
+                                            "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors",
+                                            scanning
+                                                ? "bg-destructive/10 text-destructive hover:bg-destructive/20"
+                                                : "bg-primary text-primary-foreground hover:bg-primary/90"
+                                        )}
+                                    >
+                                        {scanning ? <><CameraOff size={12} /> Stoppen</> : <><Camera size={12} /> Starten</>}
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    {cardCameraActive && !capturedImage && (
+                                        <button
+                                            onClick={capturePhoto}
+                                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+                                        >
+                                            <Camera size={12} /> Foto aufnehmen
+                                        </button>
+                                    )}
+                                    <button
+                                        onClick={cardCameraActive ? stopCardCamera : startCardCamera}
+                                        className={cn(
+                                            "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors",
+                                            cardCameraActive
+                                                ? "bg-destructive/10 text-destructive hover:bg-destructive/20"
+                                                : "bg-primary text-primary-foreground hover:bg-primary/90"
+                                        )}
+                                    >
+                                        {cardCameraActive ? <><CameraOff size={12} /> Stoppen</> : <><Camera size={12} /> Kamera</>}
+                                    </button>
+                                </>
                             )}
-                            <button
-                                onClick={scanning ? stopScanner : startScanner}
-                                className={cn(
-                                    "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors",
-                                    scanning
-                                        ? "bg-destructive/10 text-destructive hover:bg-destructive/20"
-                                        : "bg-primary text-primary-foreground hover:bg-primary/90"
-                                )}
-                            >
-                                {scanning ? (
-                                    <><CameraOff size={12} /> Stoppen</>
-                                ) : (
-                                    <><Camera size={12} /> Starten</>
-                                )}
-                            </button>
                         </div>
                     </div>
 
-                    <div ref={containerRef} className="relative aspect-square bg-black">
-                        <div id="lanyard-scanner-view" className="w-full h-full" />
+                    {/* QR Mode */}
+                    {scanMode === "qr" && (
+                        <div ref={containerRef} className="relative aspect-square bg-black">
+                            <div id="lanyard-scanner-view" className="w-full h-full" />
 
-                        {!scanning && !cameraError && (
-                            <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
-                                <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
-                                    <ScanLine size={36} className="text-primary" />
+                            {!scanning && !cameraError && (
+                                <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
+                                    <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
+                                        <ScanLine size={36} className="text-primary" />
+                                    </div>
+                                    <p className="text-sm font-medium text-white/80">Kamera starten, um Lanyards zu scannen</p>
+                                    <p className="text-xs text-white/50 mt-1">QR-Codes, Barcodes & vCards werden automatisch erkannt</p>
                                 </div>
-                                <p className="text-sm font-medium text-white/80">
-                                    Kamera starten, um Lanyards zu scannen
-                                </p>
-                                <p className="text-xs text-white/50 mt-1">
-                                    QR-Codes, Barcodes & vCards werden automatisch erkannt
-                                </p>
-                            </div>
-                        )}
+                            )}
 
-                        {cameraError && (
-                            <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
-                                <XCircle size={36} className="text-destructive mb-3" />
-                                <p className="text-sm text-white/80">{cameraError}</p>
-                            </div>
-                        )}
+                            {cameraError && (
+                                <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
+                                    <XCircle size={36} className="text-destructive mb-3" />
+                                    <p className="text-sm text-white/80">{cameraError}</p>
+                                </div>
+                            )}
 
-                        {scanning && paused && (
-                            <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                                <p className="text-sm font-medium text-white/80">Pausiert</p>
-                            </div>
-                        )}
-                    </div>
+                            {scanning && paused && (
+                                <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                                    <p className="text-sm font-medium text-white/80">Pausiert</p>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {/* Card Mode */}
+                    {scanMode === "card" && (
+                        <div className="relative aspect-[4/3] bg-black">
+                            {/* Hidden canvas for capture */}
+                            <canvas ref={canvasRef} className="hidden" />
+
+                            {/* Live video feed */}
+                            <video
+                                ref={videoRef}
+                                playsInline
+                                muted
+                                className={cn("w-full h-full object-cover", capturedImage && "hidden")}
+                            />
+
+                            {/* Captured image preview */}
+                            {capturedImage && (
+                                <div className="absolute inset-0">
+                                    <img src={capturedImage} alt="Visitenkarte" className="w-full h-full object-contain bg-black" />
+
+                                    {ocrProcessing && (
+                                        <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center gap-3">
+                                            <Loader2 size={32} className="text-primary animate-spin" />
+                                            <p className="text-sm font-medium text-white">Text wird erkannt… {ocrProgress}%</p>
+                                            <div className="w-48 h-1.5 rounded-full bg-white/20 overflow-hidden">
+                                                <div
+                                                    className="h-full bg-primary rounded-full transition-all duration-300"
+                                                    style={{ width: `${ocrProgress}%` }}
+                                                />
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {!ocrProcessing && (
+                                        <div className="absolute bottom-4 left-4 right-4 flex gap-2">
+                                            <button
+                                                onClick={() => setCapturedImage(null)}
+                                                className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg text-xs font-medium bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm transition-colors"
+                                            >
+                                                Erneut aufnehmen
+                                            </button>
+                                            <button
+                                                onClick={runOCR}
+                                                className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg text-xs font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+                                            >
+                                                <ScanLine size={14} /> Text erkennen
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                            {/* Idle state */}
+                            {!cardCameraActive && !capturedImage && !cameraError && (
+                                <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
+                                    <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
+                                        <CreditCard size={36} className="text-primary" />
+                                    </div>
+                                    <p className="text-sm font-medium text-white/80">
+                                        Visitenkarte scannen
+                                    </p>
+                                    <p className="text-xs text-white/50 mt-1 mb-4">
+                                        Fotografieren Sie eine Visitenkarte – Name, E-Mail & Telefon werden automatisch erkannt
+                                    </p>
+                                    <label className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-medium bg-white/10 text-white/80 hover:bg-white/20 cursor-pointer transition-colors">
+                                        <ImageIcon size={14} />
+                                        Bild hochladen
+                                        <input type="file" accept="image/*" className="hidden" onChange={handleFileUpload} />
+                                    </label>
+                                </div>
+                            )}
+
+                            {/* Camera guide overlay */}
+                            {cardCameraActive && !capturedImage && (
+                                <div className="absolute inset-0 pointer-events-none">
+                                    <div className="absolute inset-8 border-2 border-dashed border-white/30 rounded-2xl" />
+                                    <p className="absolute bottom-4 left-0 right-0 text-center text-xs text-white/60">
+                                        Visitenkarte im Rahmen positionieren
+                                    </p>
+                                </div>
+                            )}
+
+                            {cameraError && (
+                                <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
+                                    <XCircle size={36} className="text-destructive mb-3" />
+                                    <p className="text-sm text-white/80">{cameraError}</p>
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </div>
 
                 {/* Results feed */}
@@ -386,12 +685,8 @@ export default function LanyardScannerPage() {
                         {results.length === 0 ? (
                             <div className="flex flex-col items-center justify-center py-16 text-center">
                                 <ScanLine className="w-10 h-10 text-muted-foreground/30 mb-3" />
-                                <p className="text-sm text-muted-foreground">
-                                    Noch keine Scans
-                                </p>
-                                <p className="text-xs text-muted-foreground/60 mt-0.5">
-                                    Scannen Sie einen Badge, um loszulegen
-                                </p>
+                                <p className="text-sm text-muted-foreground">Noch keine Scans</p>
+                                <p className="text-xs text-muted-foreground/60 mt-0.5">Scannen Sie einen Badge oder eine Visitenkarte</p>
                             </div>
                         ) : (
                             results.map((r) => (
