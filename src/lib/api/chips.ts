@@ -113,12 +113,12 @@ export async function getChipByUid(uid: string) {
 }
 
 /**
- * Verify user password (for sensitive operations)
+ * Verify user password via server-side edge function
  */
-export async function verifyPassword(email: string, password: string): Promise<boolean> {
-    const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+export async function verifyPassword(_email: string, password: string): Promise<boolean> {
+    const { data, error } = await supabase.functions.invoke('verify-user-password', {
+        body: { password },
     });
-    return !error;
+    if (error) return false;
+    return data?.valid === true;
 }
