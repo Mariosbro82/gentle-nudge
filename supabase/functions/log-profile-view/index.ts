@@ -41,7 +41,7 @@ Deno.serve(async (req) => {
         let country = 'Unknown'
         if (ip !== 'unknown' && ip !== '127.0.0.1' && ip !== 'localhost' && !ip.startsWith('192.168.') && !ip.startsWith('10.')) {
             try {
-                const geoResponse = await fetch(`http://ip-api.com/json/${ip}`)
+                const geoResponse = await fetch(`https://ip-api.com/json/${ip}`)
                 const geoData = await geoResponse.json()
                 if (geoData.status === 'success') {
                     country = geoData.country

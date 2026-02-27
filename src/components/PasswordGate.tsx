@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import { supabase } from "@/lib/supabase/client";
 
-const SITE_PASSWORD = "nfcwear2026";
 const STORAGE_KEY = "nfcwear_site_access";
 
 // Realistic code snippets that cycle through
@@ -158,6 +158,7 @@ export function PasswordGate({ children }: { children: React.ReactNode }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (sessionStorage.getItem(STORAGE_KEY) === "granted") {
@@ -165,14 +166,24 @@ export function PasswordGate({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === SITE_PASSWORD) {
-      sessionStorage.setItem(STORAGE_KEY, "granted");
-      setAuthorized(true);
-      setError(false);
-    } else {
+    setLoading(true);
+    setError(false);
+    try {
+      const { data, error: fnError } = await supabase.functions.invoke('verify-site-password', {
+        body: { password },
+      });
+      if (fnError || !data?.valid) {
+        setError(true);
+      } else {
+        sessionStorage.setItem(STORAGE_KEY, "granted");
+        setAuthorized(true);
+      }
+    } catch {
       setError(true);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -240,9 +251,10 @@ export function PasswordGate({ children }: { children: React.ReactNode }) {
           {/* Button */}
           <button
             type="submit"
-            className="w-full py-3 rounded-xl bg-foreground text-background font-medium text-sm hover:opacity-90 transition-opacity"
+            disabled={loading}
+            className="w-full py-3 rounded-xl bg-foreground text-background font-medium text-sm hover:opacity-90 transition-opacity disabled:opacity-50"
           >
-            Authenticate
+            {loading ? "Verifying…" : "Authenticate"}
           </button>
 
           {/* Footer hint */}
