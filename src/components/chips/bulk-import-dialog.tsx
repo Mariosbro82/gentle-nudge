@@ -13,7 +13,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Papa from "papaparse";
-import * as XLSX from "xlsx";
 import { supabase } from "@/lib/supabase/client";
 import { Download, Loader2, Upload, AlertCircle, CheckCircle2 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -50,7 +49,6 @@ export function BulkImportDialog() {
     };
 
     const parseFile = (file: File) => {
-        const reader = new FileReader();
 
         if (file.name.endsWith(".csv")) {
             Papa.parse(file, {
@@ -71,27 +69,9 @@ export function BulkImportDialog() {
                     console.error("CSV Parse Error:", error);
                     alert("Fehler beim Lesen der CSV-Datei.");
                 },
-            });
-        } else if (file.name.endsWith(".xlsx") || file.name.endsWith(".xls")) {
-            reader.onload = (e) => {
-                const data = e.target?.result;
-                const workbook = XLSX.read(data, { type: "binary" });
-                const sheetName = workbook.SheetNames[0];
-                const sheet = workbook.Sheets[sheetName];
-                const rows = XLSX.utils.sheet_to_json(sheet) as any[];
-
-                const validRows = rows
-                    .filter((row) => row.uid)
-                    .map((row) => ({
-                        uid: row.uid.toString().trim(),
-                        mode: row.mode?.toString().trim() || "corporate",
-                        status: "pending" as const,
-                    }));
-                setPreviewData(validRows);
-            };
-            reader.readAsBinaryString(file);
+        });
         } else {
-            alert("Nicht unterstütztes Dateiformat. Bitte nutzen Sie .csv oder .xlsx");
+            alert("Nicht unterstütztes Dateiformat. Bitte nutzen Sie eine .csv Datei.");
         }
     };
 
@@ -183,7 +163,7 @@ export function BulkImportDialog() {
                 <DialogHeader>
                     <DialogTitle>NFC Chips importieren</DialogTitle>
                     <DialogDescription className="text-zinc-400">
-                        Laden Sie eine CSV oder Excel Datei hoch, um mehrere Chips gleichzeitig anzulegen.
+                        Laden Sie eine CSV Datei hoch, um mehrere Chips gleichzeitig anzulegen.
                     </DialogDescription>
                 </DialogHeader>
 
@@ -200,7 +180,7 @@ export function BulkImportDialog() {
                             <Input
                                 id="file"
                                 type="file"
-                                accept=".csv,.xlsx,.xls"
+                                accept=".csv"
                                 onChange={handleFileChange}
                                 ref={fileInputRef}
                                 className="bg-zinc-900 border-zinc-700"
