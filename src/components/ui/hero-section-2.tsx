@@ -1,7 +1,9 @@
 'use client'
 
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronRight } from 'lucide-react'
+import { motion, useMotionValue, useReducedMotion, useSpring } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { AnimatedGroup } from '@/components/ui/animated-group'
 import { Navbar } from '@/components/marketing/navbar'
@@ -28,12 +30,45 @@ const transitionVariants = {
 }
 
 export function HeroSection() {
+    const shouldReduceMotion = useReducedMotion()
+    const [isCursorActive, setIsCursorActive] = useState(false)
+
+    const cursorX = useMotionValue(-200)
+    const cursorY = useMotionValue(-200)
+    const cursorXSpring = useSpring(cursorX, { stiffness: 160, damping: 28, mass: 0.5 })
+    const cursorYSpring = useSpring(cursorY, { stiffness: 160, damping: 28, mass: 0.5 })
+
     return (
         <>
             <Navbar />
             <main className="overflow-hidden">
                 <section>
-                    <div className="relative pt-24 md:pt-36">
+                    <div
+                        className="relative pt-24 md:pt-36"
+                        onMouseMove={(event) => {
+                            if (shouldReduceMotion) return
+                            const rect = event.currentTarget.getBoundingClientRect()
+                            cursorX.set(event.clientX - rect.left)
+                            cursorY.set(event.clientY - rect.top)
+                            setIsCursorActive(true)
+                        }}
+                        onMouseLeave={() => setIsCursorActive(false)}
+                    >
+                        {!shouldReduceMotion && (
+                            <motion.div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden>
+                                <motion.div
+                                    className="absolute h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,hsl(var(--primary)/0.24)_0%,hsl(var(--primary)/0.1)_38%,transparent_72%)] blur-2xl"
+                                    style={{ x: cursorXSpring, y: cursorYSpring, opacity: isCursorActive ? 1 : 0 }}
+                                    transition={{ opacity: { duration: 0.25 } }}
+                                />
+                                <motion.div
+                                    className="absolute h-36 w-36 -translate-x-1/2 -translate-y-1/2 rounded-full border border-primary/35 bg-primary/10"
+                                    style={{ x: cursorXSpring, y: cursorYSpring, opacity: isCursorActive ? 0.85 : 0 }}
+                                    transition={{ opacity: { duration: 0.2 } }}
+                                />
+                            </motion.div>
+                        )}
+
                         <AnimatedGroup
                             variants={transitionVariants}
                             className="absolute inset-0 -z-10"
