@@ -52,7 +52,7 @@ export default function SustainabilityPage() {
 
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
                             {[
-                                { title: "Rohstoffe", desc: "100% Recyceltes Garn & Bio-Baumwolle", icon: Recycle, delay: 0 },
+                                { title: "Rohstoffe", desc: "Hochwertige Materialien & recycelte Alternativen wo möglich", icon: Recycle, delay: 0 },
                                 { title: "Produktion", desc: "Faire Löhne & Zertifizierte Fabriken", icon: Factory, delay: 0.2 },
                                 { title: "Veredelung", desc: "Vegane Farben & Ökostrom", icon: Droplets, delay: 0.4 },
                                 { title: "Ankunft", desc: "Plastikfreier Versand zu Dir", icon: Truck, delay: 0.6 },
@@ -107,8 +107,8 @@ export default function SustainabilityPage() {
                                 color: "text-pink-500"
                             },
                             {
-                                title: "Ressourcenschutz",
-                                description: "Wir sparen bis zu 90% Wasser im Vergleich zu konventioneller Herstellung durch innovative Färbeprozesse.",
+                                title: "Bewusste Produktion",
+                                description: "Wir hinterfragen jeden Schritt unserer Lieferkette und optimieren kontinuierlich – für weniger Verschwendung und mehr Verantwortung.",
                                 icon: Droplets,
                                 color: "text-blue-500"
                             }
