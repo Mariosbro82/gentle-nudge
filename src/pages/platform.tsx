@@ -3,7 +3,7 @@ import { Footer } from "@/components/marketing/footer";
 import { motion } from "framer-motion";
 import { MockDashboard } from "@/components/marketing/ui/mock-dashboard";
 import { InfiniteImageScroll } from "@/components/marketing/ui/infinite-image-scroll";
-import { BarChart3, Users, Shield, Smartphone } from "lucide-react";
+import { PlatformFeaturesTabs } from "@/components/marketing/platform-features-tabs";
 
 const integrationImages = [
     { alt: "Salesforce", src: "/assets/integrations/salesforce.png" },
@@ -49,63 +49,7 @@ export default function PlatformPage() {
                 </div>
             </section>
 
-            {/* Features Grid */}
-            <section className="py-24 px-6 bg-muted/30">
-                <div className="max-w-7xl mx-auto">
-                    <div className="text-center mb-16">
-                        <h2 className="text-3xl md:text-5xl font-bold mb-6">Mächtige Werkzeuge</h2>
-                        <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-                            Alles, was Sie brauchen, um Ihre physischen Produkte mit der digitalen Welt zu verbinden.
-                        </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
-                        {[
-                            {
-                                title: "Echtzeit Analytics",
-                                description: "Verfolgen Sie Scans, Interaktionen und Nutzerverhalten in Echtzeit. Treffen Sie datenbasierte Entscheidungen.",
-                                icon: BarChart3,
-                                color: "text-blue-500"
-                            },
-                            {
-                                title: "NFC Management",
-                                description: "Verwalten Sie tausende von Chips mit einem Klick. Volle Kontrolle über Ihre Assets.",
-                                icon: Smartphone,
-                                color: "text-purple-500"
-                            },
-                            {
-                                title: "Nutzerverwaltung",
-                                description: "Rollenbasierte Zugriffsrechte für Ihr ganzes Team. Skalierbar und sicher.",
-                                icon: Users,
-                                color: "text-green-500"
-                            },
-                            {
-                                title: "Sicherheit & Datenschutz",
-                                description: "DSGVO-konform und verschlüsselt. Ihre Daten gehören Ihnen und sind geschützt.",
-                                icon: Shield,
-                                color: "text-red-500"
-                            }
-                        ].map((feature, i) => (
-                            <motion.div
-                                key={i}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: i * 0.1 }}
-                                className="flex flex-col gap-4"
-                            >
-                                <div className={`w-12 h-12 rounded-2xl bg-muted/50 flex items-center justify-center ${feature.color}`}>
-                                    <feature.icon className="w-6 h-6" />
-                                </div>
-                                <div>
-                                    <h3 className="text-2xl font-bold mb-2">{feature.title}</h3>
-                                    <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            </section>
+            <PlatformFeaturesTabs />
 
             {/* Integrations Section */}
             <section className="py-24 px-6 overflow-hidden">
