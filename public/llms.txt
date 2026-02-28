@@ -1,0 +1,28 @@
+# NFCwear by Severmore
+
+## Was ist NFCwear?
+NFCwear ist eine B2B-SaaS-Plattform, die NFC-Chips (NTAG424 DNA) in hochwertige Corporate Fashion integriert. Unternehmen können damit ihre Kleidung (Hoodies, Workwear) in digitale Touchpoints verwandeln.
+
+## Kernfunktionen
+- **Digitale Visitenkarten**: Kontaktaustausch per NFC-Tap – kein Papier, kein QR-Code nötig
+- **Lead-Erfassung**: Automatische Kontaktdatensammlung auf Messen und Events
+- **CRM-Integration**: Echtzeit-Webhook-API zu Salesforce, HubSpot, Pipedrive, Zapier
+- **Analytics-Dashboard**: Live-Tracking von Scans, Leads und Team-Performance
+- **Ghost-Modus**: Profil temporär deaktivierbar (Datenschutz)
+- **Team-Management**: Zentrale Verwaltung aller NFC-Geräte und Mitarbeiterprofile
+- **Preset-System**: Schnelles Umschalten zwischen Profil-Konfigurationen (z.B. Messe-Modus)
+
+## Zielgruppe
+- B2B-Unternehmen mit Messeauftritten
+- Vertriebsteams
+- Event-Management
+- Corporate Branding
+
+## Technologie
+- NFC-Chip: NTAG424 DNA mit SUN-Authentifizierung
+- Frontend: React + TypeScript + Tailwind CSS
+- Backend: Supabase (PostgreSQL, Auth, Edge Functions, Storage)
+- Hosting: Deutschland (DSGVO-konform)
+
+## Kontakt
+Website: https://nfcwear.de
