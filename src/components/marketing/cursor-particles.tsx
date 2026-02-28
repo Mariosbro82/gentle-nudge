@@ -55,7 +55,8 @@ export function CursorParticles() {
       mouse.current.y = e.clientY - rect.top;
       spawn(mouse.current.x, mouse.current.y);
     };
-    canvas.addEventListener("mousemove", onMove);
+    // Listen on window so pointer-events:none on canvas still works
+    window.addEventListener("mousemove", onMove);
 
     const loop = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -88,7 +89,7 @@ export function CursorParticles() {
 
     return () => {
       window.removeEventListener("resize", resize);
-      canvas.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mousemove", onMove);
       cancelAnimationFrame(animFrame.current);
     };
   }, [spawn]);
@@ -96,8 +97,7 @@ export function CursorParticles() {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 z-10 pointer-events-auto"
-      style={{ cursor: "default" }}
+      className="absolute inset-0 z-10 pointer-events-none"
     />
   );
 }
