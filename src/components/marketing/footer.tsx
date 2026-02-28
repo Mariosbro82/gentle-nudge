@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Twitter, Linkedin, Instagram, ShieldCheck, Server, Lock } from "lucide-react";
+import logoImg from "@/assets/logo.png";
 
 export function Footer() {
     return (
@@ -8,9 +9,12 @@ export function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-12 mb-16">
                     {/* Brand Column */}
                     <div className="lg:col-span-2">
-                        <Link to="/" className="inline-block mb-6">
-                            <span className="text-2xl font-extrabold text-foreground tracking-tight">NFCwear</span>
-                            <span className="text-muted-foreground ml-2">by severmore</span>
+                        <Link to="/" className="inline-flex items-center gap-3 mb-6">
+                            <img src={logoImg} alt="NFCwear Logo" className="w-9 h-9 object-contain" />
+                            <div>
+                                <span className="text-2xl font-extrabold text-foreground tracking-tight">NFCwear</span>
+                                <span className="text-muted-foreground ml-2">by severmore</span>
+                            </div>
                         </Link>
                         <p className="text-muted-foreground text-sm leading-relaxed mb-8 max-w-sm">
                             Wir machen euer Team zur Wachstumsmaschine. <br />
