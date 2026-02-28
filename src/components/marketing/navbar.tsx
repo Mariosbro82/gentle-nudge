@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import logoImg from "@/assets/logo.png";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,9 +16,7 @@ export function Navbar() {
       className="fixed top-0 left-0 right-0 z-50 h-16 bg-background/70 backdrop-blur-xl border-b border-border/50 px-6 flex items-center justify-between"
     >
       <Link to="/" className="flex items-center gap-2">
-        <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-white shadow-[0_0_15px_rgba(37,99,235,0.5)]">
-          N
-        </div>
+        <img src={logoImg} alt="NFCwear Logo" className="w-8 h-8 object-contain" />
         <span className="font-bold text-lg tracking-tight text-foreground">NFCwear</span>
       </Link>
 

@@ -1,4 +1,5 @@
-import { Sparkles, Users, BarChart3, Zap, ArrowRight } from "lucide-react";
+import { Users, BarChart3, Zap, ArrowRight } from "lucide-react";
+import logoImg from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 
 interface WelcomeStepProps {
@@ -29,9 +30,7 @@ export function WelcomeStep({ onNext }: WelcomeStepProps) {
             {/* Logo */}
             <div className="relative mx-auto w-20 h-20">
                 <div className="absolute inset-0 bg-primary/30 rounded-2xl blur-xl opacity-50 animate-pulse" />
-                <div className="relative bg-primary rounded-2xl w-full h-full flex items-center justify-center">
-                    <Sparkles className="w-10 h-10 text-primary-foreground" />
-                </div>
+                <img src={logoImg} alt="NFCwear Logo" className="relative w-full h-full object-contain" />
             </div>
 
             {/* Text */}

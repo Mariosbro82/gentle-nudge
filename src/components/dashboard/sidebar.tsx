@@ -130,16 +130,12 @@ export function AdminSidebar({ onClose, collapsed, onToggleCollapse }: AdminSide
                 )}>
                     {!collapsed && (
                         <div className="flex items-center gap-2.5">
-                            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-                                <span className="text-xs font-bold text-primary-foreground">N</span>
-                            </div>
+                            <img src="/assets/logo.png" alt="NFCwear Logo" className="w-7 h-7 object-contain" />
                             <span className="font-semibold text-sidebar-foreground tracking-tight">NFCwear</span>
                         </div>
                     )}
                     {collapsed && (
-                        <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-                            <span className="text-xs font-bold text-primary-foreground">N</span>
-                        </div>
+                        <img src="/assets/logo.png" alt="NFCwear Logo" className="w-7 h-7 object-contain" />
                     )}
                 </div>
 
