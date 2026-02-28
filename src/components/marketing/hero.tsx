@@ -28,7 +28,7 @@ export function Hero() {
             className="h-[400vh] bg-background w-full dark:border dark:border-white/[0.1] relative pt-0 overflow-clip"
             ref={ref}
         >
-            <CursorParticles />
+            
             <GoogleGeminiEffect
                 pathLengths={[
                     pathLengthFirst,
@@ -38,6 +38,7 @@ export function Hero() {
                     pathLengthFifth,
                 ]}
             >
+                <CursorParticles />
                 <div className="container mx-auto px-6 text-center relative z-20 pt-32">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
