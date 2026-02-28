@@ -54,7 +54,7 @@ export default function SustainabilityPage() {
                             {[
                                 { title: "Rohstoffe", desc: "Hochwertige Materialien & recycelte Alternativen wo möglich", icon: Recycle, delay: 0 },
                                 { title: "Produktion", desc: "Faire Löhne & Zertifizierte Fabriken", icon: Factory, delay: 0.2 },
-                                { title: "Veredelung", desc: "Vegane Farben & Ökostrom", icon: Droplets, delay: 0.4 },
+                                { title: "Veredelung", desc: "Vegane Farben und recycelter Stick", icon: Droplets, delay: 0.4 },
                                 { title: "Ankunft", desc: "Plastikfreier Versand zu Dir", icon: Truck, delay: 0.6 },
                             ].map((step, i) => (
                                 <motion.div
