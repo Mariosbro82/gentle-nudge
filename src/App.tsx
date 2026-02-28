@@ -90,6 +90,7 @@ function NfcLayout() {
 import ScrollToTop from "@/components/ScrollToTop";
 import { PasswordGate } from "@/components/PasswordGate";
 import { WhatsAppButton } from "@/components/marketing/whatsapp-button";
+import { CookieConsent } from "@/components/cookie-consent";
 
 
 // Wrapper that conditionally applies PasswordGate (skip for public NFC routes)
@@ -108,6 +109,7 @@ export default function App() {
             <AuthProvider>
                 <ScrollToTop />
                 <WhatsAppButton />
+                <CookieConsent />
                 
                 <ConditionalPasswordGate>
                     <Routes>
