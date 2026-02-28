@@ -212,30 +212,30 @@ export default function SolutionsPage() {
             <section className="py-24 px-6 bg-gradient-to-b from-transparent to-muted/20">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-16">
-                        <span className="text-sm font-bold text-pink-500 tracking-wider uppercase mb-2 block">Innovation</span>
-                        <h2 className="text-3xl md:text-5xl font-bold mb-6">Interactive Co-Creation</h2>
+                        <span className="text-sm font-bold text-pink-500 tracking-wider uppercase mb-2 block">Self-Service</span>
+                        <h2 className="text-3xl md:text-5xl font-bold mb-6">Volle Kontrolle für Ihre Marke</h2>
                         <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-                            Wir gestalten nicht nur für Sie, sondern mit Ihnen. Werde Teil des Designprozesses.
+                            Von der Konzeption bis zum Go-Live begleiten wir Sie – und danach verwalten Sie alles selbstständig über die Severmore Cloud.
                         </p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {[
                             {
-                                title: "Design Voting",
-                                description: "Lassen Sie Ihre Community über neue Designs abstimmen. Demokratisierung der Mode.",
+                                title: "Co-Design Prozess",
+                                description: "Während der Produktion gestalten wir gemeinsam mit Ihnen – Farben, Materialien und Platzierung des NFC-Chips.",
                                 icon: Vote,
                                 color: "yellow"
                             },
                             {
-                                title: "Live-Feedback",
-                                description: "Direktes Feedback zu Farben, Materialien und Schnitten. Wissen, was gewünscht ist.",
+                                title: "Self-Service Dashboard",
+                                description: "Nach dem Rollout verwalten Sie Regeln, Profile und Designs eigenständig über unser Cloud-Dashboard. Keine Wartezeiten.",
                                 icon: Palette,
                                 color: "pink"
                             },
                             {
-                                title: "Community Iteration",
-                                description: "Schnelle Iterationszyklen basierend auf echten Wünschen. Agil und kundenorientiert.",
+                                title: "Echtzeit-Anpassungen",
+                                description: "Ändern Sie Modi, Weiterleitungen und Inhalte jederzeit selbst – Ihre Änderungen sind sofort live.",
                                 icon: Repeat,
                                 color: "cyan"
                             }
