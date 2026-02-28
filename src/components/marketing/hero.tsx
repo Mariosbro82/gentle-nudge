@@ -8,6 +8,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { SocialProofBar } from "@/components/marketing/social-proof";
+import { CursorParticles } from "@/components/marketing/cursor-particles";
 
 export function Hero() {
     const ref = React.useRef(null);
@@ -27,6 +28,7 @@ export function Hero() {
             className="h-[400vh] bg-background w-full dark:border dark:border-white/[0.1] relative pt-0 overflow-clip"
             ref={ref}
         >
+            <CursorParticles />
             <GoogleGeminiEffect
                 pathLengths={[
                     pathLengthFirst,
