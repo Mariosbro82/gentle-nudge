@@ -2,16 +2,14 @@ import { Navbar } from "@/components/marketing/navbar";
 import { Footer } from "@/components/marketing/footer";
 import { motion } from "framer-motion";
 import { MockDashboard } from "@/components/marketing/ui/mock-dashboard";
-import { InfiniteLogoScroll } from "@/components/marketing/ui/infinite-scroll";
-import { BarChart3, Users, Zap, Shield, Smartphone, Globe, Code2, Database } from "lucide-react";
+import { InfiniteImageScroll } from "@/components/marketing/ui/infinite-image-scroll";
+import { BarChart3, Users, Shield, Smartphone } from "lucide-react";
 
-const integrations = [
-    { name: "Salesforce", logo: ({ className }: { className?: string }) => <Database className={className} /> },
-    { name: "HubSpot", logo: ({ className }: { className?: string }) => <Users className={className} /> },
-    { name: "Slack", logo: ({ className }: { className?: string }) => <Zap className={className} /> },
-    { name: "Shopify", logo: ({ className }: { className?: string }) => <Globe className={className} /> },
-    { name: "Zapier", logo: ({ className }: { className?: string }) => <Code2 className={className} /> },
-    { name: "Mailchimp", logo: ({ className }: { className?: string }) => <Users className={className} /> },
+const integrationImages = [
+    { alt: "Salesforce", src: "/assets/integrations/salesforce.png" },
+    { alt: "HubSpot", src: "/assets/integrations/hubspot.png" },
+    { alt: "Zapier", src: "/assets/integrations/zapier.png" },
+    { alt: "Pipedrive", src: "/assets/integrations/pipedrive.png" },
 ];
 
 export default function PlatformPage() {
@@ -121,7 +119,7 @@ export default function PlatformPage() {
                 <div className="relative w-full">
                     <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent z-10" />
                     <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10" />
-                    <InfiniteLogoScroll logos={integrations} speed="normal" />
+                    <InfiniteImageScroll images={integrationImages} speed="normal" />
                 </div>
             </section>
 
