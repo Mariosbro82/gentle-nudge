@@ -12,10 +12,16 @@ import { ContactSection } from "@/components/marketing/contact-section";
 import { Footer } from "@/components/marketing/footer";
 import { FeatureBentoGrid } from "@/components/marketing/feature-bento-grid";
 import { SocialProof } from "@/components/marketing/social-proof";
+import { SeoHead } from "@/components/seo-head";
 
 export default function MarketingPage() {
     return (
         <main className="min-h-screen bg-background text-foreground selection:bg-blue-500/30">
+            <SeoHead
+                title="NFCwear by Severmore – NFC-Chips in Corporate Fashion"
+                description="NFCwear integriert NFC-Chips in hochwertige Kleidung. Digitale Visitenkarten, Lead-Erfassung, Analytics & CRM-Integration – alles aus der Cloud steuerbar."
+                path="/"
+            />
             <HeroSection />
             <ScrollTextReveal />
             <TrustSection />

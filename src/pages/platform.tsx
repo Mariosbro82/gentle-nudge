@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { MockDashboard } from "@/components/marketing/ui/mock-dashboard";
 import { InfiniteImageScroll } from "@/components/marketing/ui/infinite-image-scroll";
 import { PlatformFeaturesTabs } from "@/components/marketing/platform-features-tabs";
+import { SeoHead } from "@/components/seo-head";
 
 const integrationImages = [
     { alt: "Salesforce", src: "/assets/integrations/salesforce.png" },
@@ -15,6 +16,12 @@ const integrationImages = [
 export default function PlatformPage() {
     return (
         <main className="min-h-screen bg-background text-foreground selection:bg-blue-500/30 overflow-x-hidden">
+            <SeoHead
+                title="Severmore OS – Die NFC-Plattform"
+                description="Verwalten Sie NFC-Produkte, analysieren Sie Interaktionen und skalieren Sie Ihre Vision mit Severmore OS. Integrationen mit Salesforce, HubSpot & mehr."
+                path="/platform"
+            />
+            <Navbar />
             <Navbar />
 
             {/* Custom Intro Section */}

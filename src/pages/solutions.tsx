@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/marketing/navbar";
 import { Footer } from "@/components/marketing/footer";
 import { motion } from "framer-motion";
+import { SeoHead } from "@/components/seo-head";
 import {
     Building2,
     Palette,
@@ -79,6 +80,11 @@ const solutions = [
 export default function SolutionsPage() {
     return (
         <main className="min-h-screen bg-background text-foreground selection:bg-blue-500/30 overflow-x-hidden">
+            <SeoHead
+                title="Lösungen – NFC für Messen, Events & Corporate"
+                description="NFCwear-Lösungen für Messen, Events, Corporate Identity und Gastronomie. NFC-Chips in Kleidung für digitale Visitenkarten, Lead-Erfassung und mehr."
+                path="/solutions"
+            />
             <Navbar />
 
             {/* Header */}

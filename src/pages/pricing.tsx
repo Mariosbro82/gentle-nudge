@@ -3,6 +3,7 @@ import { Footer } from "@/components/marketing/footer";
 import { PricingCard } from "@/components/ui/dark-gradient-pricing";
 import { RoiCalculator } from "@/components/marketing/roi-calculator";
 import { ShieldCheck, Server, Lock } from "lucide-react";
+import { SeoHead } from "@/components/seo-head";
 
 export default function PricingPage() {
     const tiers = [
@@ -73,6 +74,11 @@ export default function PricingPage() {
 
     return (
         <main className="min-h-screen bg-background text-foreground selection:bg-purple-500/30">
+            <SeoHead
+                title="Preise & Pläne – NFCwear"
+                description="Transparente Preise für NFCwear: Starter ab €29/Monat, Business ab €99/Monat, Enterprise auf Anfrage. Keine versteckten Gebühren, jederzeit kündbar."
+                path="/pricing"
+            />
             <Navbar />
 
             <section className="relative pt-32 pb-20 px-6">
