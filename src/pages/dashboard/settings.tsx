@@ -923,6 +923,71 @@ export default function SettingsPage() {
                 </Card>
                 </FeatureGate>
 
+                {/* ─── Datenexport (DSGVO Art. 20) ─── */}
+                <Card className="rounded-xl border-border/50">
+                    <CardHeader className="pb-4">
+                        <CardTitle className="text-lg">Meine Daten exportieren</CardTitle>
+                        <CardDescription>
+                            Laden Sie alle Ihre gespeicherten Daten als JSON-Datei herunter (DSGVO Art. 20 – Recht auf Datenportabilität).
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={async () => {
+                                if (!user?.id) return;
+                                try {
+                                    const [
+                                        { data: profileData },
+                                        { data: leadsData },
+                                        { data: viewsData },
+                                        { data: filesData },
+                                        { data: presetsData },
+                                        { data: followUpsData },
+                                        { data: ticketsData },
+                                        { data: chipsData },
+                                    ] = await Promise.all([
+                                        supabase.from("users").select("name, email, phone, job_title, bio, website, linkedin_url, company_name, slug, active_template, created_at, updated_at").eq("id", user.id).single(),
+                                        supabase.from("leads").select("lead_name, lead_email, lead_phone, notes, sentiment, marketing_consent, created_at").eq("captured_by_user_id", user.id),
+                                        supabase.from("profile_views").select("viewed_at, country, device_type, referrer, is_unique, is_recurring").eq("user_id", user.id),
+                                        supabase.from("user_files").select("file_name, file_type, file_size, created_at, download_count").eq("user_id", user.id),
+                                        supabase.from("profile_presets").select("name, preset_data, is_active, created_at").eq("user_id", user.id),
+                                        supabase.from("follow_up_emails").select("subject, status, scheduled_at, sent_at, delay_hours, created_at").eq("user_id", user.id),
+                                        supabase.from("support_tickets").select("subject, message, status, priority, created_at, admin_reply").eq("user_id", user.id),
+                                        supabase.from("chips").select("uid, active_mode, last_scan, created_at").eq("assigned_user_id", user.id),
+                                    ]);
+
+                                    const exportData = {
+                                        exported_at: new Date().toISOString(),
+                                        profile: profileData,
+                                        leads: leadsData || [],
+                                        profile_views: viewsData || [],
+                                        files: filesData || [],
+                                        presets: presetsData || [],
+                                        follow_up_emails: followUpsData || [],
+                                        support_tickets: ticketsData || [],
+                                        chips: chipsData || [],
+                                    };
+
+                                    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json" });
+                                    const url = URL.createObjectURL(blob);
+                                    const a = document.createElement("a");
+                                    a.href = url;
+                                    a.download = `nfcwear-daten-export-${new Date().toISOString().split("T")[0]}.json`;
+                                    a.click();
+                                    URL.revokeObjectURL(url);
+                                } catch (err: any) {
+                                    alert("Export fehlgeschlagen: " + (err.message || "Unbekannter Fehler"));
+                                }
+                            }}
+                        >
+                            <Upload className="h-4 w-4 mr-2 rotate-180" />
+                            Alle Daten herunterladen (JSON)
+                        </Button>
+                    </CardContent>
+                </Card>
+
                 {/* ─── Account löschen (DSGVO) ─── */}
                 <Card className="rounded-xl border-destructive/30">
                     <CardHeader className="pb-4">
