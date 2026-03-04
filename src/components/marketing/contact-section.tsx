@@ -11,7 +11,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Calendar, ArrowRight, Mail, Building2, MessageSquare, Star, Clock, Shield } from "lucide-react";
+import { Calendar, ArrowRight, Mail, Building2, MessageSquare, Star } from "lucide-react";
 import { PressLogosStrip } from "@/components/marketing/social-proof";
 
 const CALENDLY_URL = "https://calendly.com/solutions-nfcwear/30min";
@@ -57,29 +57,39 @@ export function ContactSection() {
                         transition={{ duration: 0.5, ease: "easeOut" }}
                         className="lg:col-span-2 flex flex-col gap-6"
                     >
+                        {/* Digital Handshake Image */}
+                        <div className="relative rounded-2xl overflow-hidden aspect-[4/3] group">
+                            <img
+                                src="/assets/digital-handshake.png"
+                                alt="Digitaler Handshake – NFC-Kontaktaustausch"
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/20 to-transparent" />
+                            <div className="absolute bottom-0 left-0 right-0 p-6">
+                                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/20 backdrop-blur-md border border-primary/30 text-primary-foreground text-[10px] font-bold uppercase tracking-wider mb-3">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                                    NFC Connect
+                                </div>
+                                <h3 className="text-background text-lg font-extrabold tracking-tight">Der digitale Handshake</h3>
+                                <p className="text-background/70 text-xs mt-1">Kontakte austauschen – ohne Papierkarten.</p>
+                            </div>
+                        </div>
+
                         {/* Calendly Card */}
-                        <div className="group relative p-8 rounded-2xl bg-foreground text-background overflow-hidden transition-all duration-500 hover:shadow-[0_20px_60px_rgb(0,0,0,0.15)]">
+                        <div className="group relative p-7 rounded-2xl bg-foreground text-background overflow-hidden transition-all duration-500 hover:shadow-[0_20px_60px_rgb(0,0,0,0.15)]">
                             <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                             <div className="relative z-10">
-                                <div className="w-12 h-12 rounded-xl bg-background/10 flex items-center justify-center mb-6">
-                                    <Calendar className="w-6 h-6" />
-                                </div>
-                                <h3 className="text-2xl font-extrabold tracking-tight mb-3">Demo buchen</h3>
-                                <p className="text-background/70 text-sm leading-relaxed mb-8">
-                                    30-minütiges Gespräch – wir zeigen Ihnen live, wie NFCwear für Ihr Team funktioniert.
-                                </p>
-                                <div className="flex items-center gap-4 text-xs text-background/50 mb-8">
-                                    <span className="flex items-center gap-1.5">
-                                        <Clock className="w-3.5 h-3.5" />
-                                        30 Min.
-                                    </span>
-                                    <span className="flex items-center gap-1.5">
-                                        <Shield className="w-3.5 h-3.5" />
-                                        Unverbindlich
-                                    </span>
+                                <div className="flex items-center gap-4 mb-4">
+                                    <div className="w-10 h-10 rounded-xl bg-background/10 flex items-center justify-center">
+                                        <Calendar className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-lg font-extrabold tracking-tight">Demo buchen</h3>
+                                        <p className="text-background/50 text-xs">30 Min. · Unverbindlich</p>
+                                    </div>
                                 </div>
                                 <Button
-                                    className="w-full bg-background text-foreground hover:bg-background/90 font-semibold h-12 text-sm transition-all duration-300 group/btn"
+                                    className="w-full bg-background text-foreground hover:bg-background/90 font-semibold h-11 text-sm transition-all duration-300 group/btn"
                                     onClick={() => window.open(CALENDLY_URL, '_blank')}
                                 >
                                     Termin vereinbaren
@@ -89,17 +99,17 @@ export function ContactSection() {
                         </div>
 
                         {/* Trust Badges */}
-                        <div className="p-6 rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm space-y-5">
+                        <div className="p-5 rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm space-y-4">
                             <div className="flex items-center gap-3 text-sm text-foreground">
                                 <div className="flex gap-0.5">
                                     {[...Array(5)].map((_, i) => (
-                                        <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                                        <Star key={i} className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
                                     ))}
                                 </div>
-                                <span className="font-semibold">5/5 Kundenbewertung</span>
+                                <span className="font-semibold text-xs">5/5 Kundenbewertung</span>
                             </div>
-                            <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                                <span className="text-lg">🏆</span>
+                            <div className="flex items-center gap-2.5 text-xs text-muted-foreground">
+                                <span>🏆</span>
                                 <span>Gründungspreis U21 Gewinner 2025</span>
                             </div>
                             <div className="h-px bg-border/50" />
