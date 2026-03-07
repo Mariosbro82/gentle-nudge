@@ -1,4 +1,5 @@
-import { Mail, Phone, Globe, Linkedin } from "lucide-react";
+import { Mail, Phone, Globe, Linkedin, UserPlus, Share2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { ContactForm } from "@/components/profile/contact-form";
 import { CustomLinksDisplay } from "@/components/profile/shared/custom-links-display";
 import { CouponDisplay } from "@/components/profile/shared/coupon-display";
