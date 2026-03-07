@@ -148,6 +148,24 @@ export function EventBadgeTemplate({ user, lang = "de" }: TemplateProps) {
                             </div>
                         )}
 
+                        {/* Add to Contacts Button */}
+                        <Button
+                            className="w-full rounded-xl py-5 text-sm font-semibold mb-3 text-white shadow-lg"
+                            style={{ backgroundColor: accent }}
+                            onClick={() => handleAddToContacts(user)}
+                        >
+                            <UserPlus className="mr-2 h-4 w-4" /> {t("save_contact", lang)}
+                        </Button>
+
+                        {/* Share Button */}
+                        <Button
+                            variant="outline"
+                            className="w-full rounded-xl py-5 text-sm font-semibold mb-4 border-white/15 text-white/90 hover:bg-white/10 hover:text-white bg-transparent"
+                            onClick={() => handleShare(user.name, lang)}
+                        >
+                            <Share2 className="mr-2 h-4 w-4" /> {t("share_forward", lang)}
+                        </Button>
+
                         <ContactForm recipientUserId={user.id} recipientName={user.name} lang={lang} />
 
                         <ResourcesSection userId={user.id} accentColor={accent} lang={lang} />
