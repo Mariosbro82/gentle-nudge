@@ -8,9 +8,40 @@ import { VideoGreeting } from "@/components/profile/shared/video-greeting";
 import { ResourcesSection } from "@/components/profile/shared/resources-section";
 import type { TemplateProps } from "@/types/profile";
 import { ensureAbsoluteUrl } from "@/lib/utils";
-import { t } from "@/lib/i18n";
+import { t, type SupportedLang } from "@/lib/i18n";
 
-export function MinimalistCardTemplate({ user, lang = "de" }: TemplateProps) {
+function generateVCard(user: { name: string; title: string; company: string; email: string; phone: string; website: string; linkedin: string }) {
+    const lines = ["BEGIN:VCARD", "VERSION:3.0", `FN:${user.name}`, `TITLE:${user.title}`, `ORG:${user.company}`];
+    if (user.email) lines.push(`EMAIL:${user.email}`);
+    if (user.phone) lines.push(`TEL:${user.phone}`);
+    if (user.website) lines.push(`URL:${ensureAbsoluteUrl(user.website)}`);
+    if (user.linkedin) lines.push(`URL:${ensureAbsoluteUrl(user.linkedin)}`);
+    lines.push("END:VCARD");
+    return lines.join("\n");
+}
+
+function handleAddToContacts(user: { name: string; title: string; company: string; email: string; phone: string; website: string; linkedin: string }) {
+    const vcard = generateVCard(user);
+    const blob = new Blob([vcard], { type: "text/vcard" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${user.name.replace(/\s+/g, "_")}.vcf`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+async function handleShare(userName: string, lang: SupportedLang) {
+    const url = window.location.href;
+    const text = t("share_text", lang).replace("{{name}}", userName);
+    const title = t("share_title", lang).replace("{{name}}", userName);
+    if (navigator.share) {
+        try { await navigator.share({ title, text, url }); return; } catch {}
+    }
+    const waText = encodeURIComponent(`${text}\n${url}`);
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    window.open(isMobile ? `https://wa.me/?text=${waText}` : `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(`${text}\n\n${url}`)}`, '_blank');
+}
     const bgStyle: React.CSSProperties = user.backgroundImage
         ? { backgroundImage: `url(${user.backgroundImage})`, backgroundSize: 'cover', backgroundPosition: user.backgroundPosition || 'center' }
         : { backgroundColor: user.backgroundColor || '#0a0a0a' };
