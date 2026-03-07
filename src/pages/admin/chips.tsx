@@ -374,6 +374,7 @@ export default function AdminChipsPage() {
                             <TableHead className="text-zinc-400">Mode</TableHead>
                             <TableHead className="text-zinc-400">Assigned To</TableHead>
                             <TableHead className="text-zinc-400">Company</TableHead>
+                            <TableHead className="text-zinc-400">NFC Link</TableHead>
                             <TableHead className="text-zinc-400">Last Scan</TableHead>
                             <TableHead className="text-right text-zinc-400">Actions</TableHead>
                         </TableRow>
