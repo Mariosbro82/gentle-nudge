@@ -421,6 +421,24 @@ export default function AdminChipsPage() {
                                             <span className="text-zinc-600">-</span>
                                         )}
                                     </TableCell>
+                                    <TableCell>
+                                        <div className="flex items-center gap-1.5 max-w-[280px]">
+                                            <code className="text-xs text-blue-400 bg-blue-500/10 px-2 py-1 rounded font-mono truncate select-all cursor-pointer" title={`${PUBLIC_BASE_URL}/t/${chip.uid}`}>
+                                                {PUBLIC_BASE_URL}/t/{chip.uid}
+                                            </code>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="h-6 w-6 p-0 text-zinc-500 hover:text-white shrink-0"
+                                                onClick={() => {
+                                                    navigator.clipboard.writeText(`${PUBLIC_BASE_URL}/t/${chip.uid}`);
+                                                }}
+                                                title="Link kopieren"
+                                            >
+                                                <Copy className="w-3 h-3" />
+                                            </Button>
+                                        </div>
+                                    </TableCell>
                                     <TableCell className="text-zinc-500 text-xs">
                                         {chip.last_scan ? new Date(chip.last_scan).toLocaleString() : 'Never'}
                                     </TableCell>
