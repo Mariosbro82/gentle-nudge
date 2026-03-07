@@ -42,6 +42,8 @@ async function handleShare(userName: string, lang: SupportedLang) {
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     window.open(isMobile ? `https://wa.me/?text=${waText}` : `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(`${text}\n\n${url}`)}`, '_blank');
 }
+
+export function MinimalistCardTemplate({ user, lang = "de" }: TemplateProps) {
     const bgStyle: React.CSSProperties = user.backgroundImage
         ? { backgroundImage: `url(${user.backgroundImage})`, backgroundSize: 'cover', backgroundPosition: user.backgroundPosition || 'center' }
         : { backgroundColor: user.backgroundColor || '#0a0a0a' };
