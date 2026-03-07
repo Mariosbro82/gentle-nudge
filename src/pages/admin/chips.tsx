@@ -382,7 +382,7 @@ export default function AdminChipsPage() {
                     <TableBody>
                         {loading ? (
                             <TableRow>
-                                <TableCell colSpan={6} className="h-24 text-center text-zinc-500">
+                                <TableCell colSpan={7} className="h-24 text-center text-zinc-500">
                                     Loading chips...
                                 </TableCell>
                             </TableRow>
